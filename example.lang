@@ -1,0 +1,1 @@
+PoW := Hasher -> Miner (win : Miner -> Network : createBlock . PoW + lose : Miner -> Network (yes : Network -> Miner : sendBlock . PoW + no : {'checks for blocks'} Miner) . PoW) . PoW
