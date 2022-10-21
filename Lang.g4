@@ -4,19 +4,28 @@ grammar Lang;
  * PARSER RULES
  *------------------------------------------------------------------*/
 
-protocol : protocolID=id ASSIGN statement;
+protocol : protocolID ASSIGN statement;
 
 statement : role FROM role COLON message DOT statement 
-			| role FROM role LPAR message COLON statement (BRANCH message COLON statement)+ RPAR DOT statement 
-			| internalAction 
-			| protocolID=id 
+			| role FROM role LPAR BRANCH SLPAR rateValues+=rate SRPAR message COLON statement (BRANCH SLPAR rateValues+=rate SRPAR message COLON statement)+ RPAR 
+			| internalAction (DOT statement)?
+			| ifThenElse 
+			| protocolID
 			| END ;
 
-internalAction : CLPAR SINGLE_STRING CRPAR role ; //TO DO
+ifThenElse : IF cond THEN CLPAR thenStat=statement CRPAR (ELSE CLPAR elseStat=statement CRPAR)*  ;
 
-message : ID ;
+internalAction : CLPAR DOUBLE_STRING CRPAR role ; 
+
+protocolID : ID ;
+
+rate : ID ;
+
+message : DOUBLE_STRING ;
 
 role : ID ;
+
+cond : DOUBLE_STRING ; 
 
 id : ID ;
 
@@ -32,14 +41,20 @@ BRANCH 		: '+' ;
 FROM 		: '->';
 ASSIGN 		: ':=' ;
 UNDERSCORE 	: '_' ;
+STAR 		: '*' ;
 LPAR   		: '(' ;
 RPAR   		: ')' ;
+SLPAR   	: '[' ;
+SRPAR   	: ']' ;
 CLPAR  		: '{' ;
 CRPAR  		: '}' ;
-END 		: 'end';
+IF 			: 'if';
+THEN		: 'then';
+ELSE		: 'else';
+END 		: 'END';
 WS  		: [ \t\r\n\u00a0]+ -> skip ;
-SINGLE_STRING
-    : '\'' ~('\'')+ '\''
+DOUBLE_STRING
+    : '"' ~('"')+ '"'
     ;
     
 //Numbers
@@ -48,5 +63,5 @@ INTEGER       : DIGIT+;
 
 //IDs
 fragment CHAR  : 'a'..'z' |'A'..'Z' ;
-ID              :  (CHAR | UNDERSCORE)+ (CHAR | DIGIT | UNDERSCORE)* CHAR*;
+ID              :  (CHAR | UNDERSCORE)+ (CHAR | DIGIT | UNDERSCORE | STAR)* CHAR*;
 

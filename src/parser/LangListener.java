@@ -29,6 +29,16 @@ public interface LangListener extends ParseTreeListener {
 	 */
 	void exitStatement(LangParser.StatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LangParser#ifThenElse}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfThenElse(LangParser.IfThenElseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#ifThenElse}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfThenElse(LangParser.IfThenElseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LangParser#internalAction}.
 	 * @param ctx the parse tree
 	 */
@@ -38,6 +48,26 @@ public interface LangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitInternalAction(LangParser.InternalActionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#protocolID}.
+	 * @param ctx the parse tree
+	 */
+	void enterProtocolID(LangParser.ProtocolIDContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#protocolID}.
+	 * @param ctx the parse tree
+	 */
+	void exitProtocolID(LangParser.ProtocolIDContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#rate}.
+	 * @param ctx the parse tree
+	 */
+	void enterRate(LangParser.RateContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#rate}.
+	 * @param ctx the parse tree
+	 */
+	void exitRate(LangParser.RateContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LangParser#message}.
 	 * @param ctx the parse tree
@@ -58,6 +88,16 @@ public interface LangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRole(LangParser.RoleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#cond}.
+	 * @param ctx the parse tree
+	 */
+	void enterCond(LangParser.CondContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#cond}.
+	 * @param ctx the parse tree
+	 */
+	void exitCond(LangParser.CondContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LangParser#id}.
 	 * @param ctx the parse tree
