@@ -1,5 +1,6 @@
 // Generated from java-escape by ANTLR 4.11.1
 package parser;
+
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -118,6 +119,11 @@ public class LangParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof LangListener ) ((LangListener)listener).exitProtocol(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LangVisitor ) return ((LangVisitor<? extends T>)visitor).visitProtocol(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ProtocolContext protocol() throws RecognitionException {
@@ -214,6 +220,11 @@ public class LangParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof LangListener ) ((LangListener)listener).exitStatement(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LangVisitor ) return ((LangVisitor<? extends T>)visitor).visitStatement(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -393,6 +404,11 @@ public class LangParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof LangListener ) ((LangListener)listener).exitIfThenElse(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LangVisitor ) return ((LangVisitor<? extends T>)visitor).visitIfThenElse(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final IfThenElseContext ifThenElse() throws RecognitionException {
@@ -467,6 +483,11 @@ public class LangParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof LangListener ) ((LangListener)listener).exitInternalAction(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LangVisitor ) return ((LangVisitor<? extends T>)visitor).visitInternalAction(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final InternalActionContext internalAction() throws RecognitionException {
@@ -511,6 +532,11 @@ public class LangParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof LangListener ) ((LangListener)listener).exitProtocolID(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LangVisitor ) return ((LangVisitor<? extends T>)visitor).visitProtocolID(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final ProtocolIDContext protocolID() throws RecognitionException {
@@ -548,6 +574,11 @@ public class LangParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof LangListener ) ((LangListener)listener).exitRate(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LangVisitor ) return ((LangVisitor<? extends T>)visitor).visitRate(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -587,6 +618,11 @@ public class LangParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof LangListener ) ((LangListener)listener).exitMessage(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LangVisitor ) return ((LangVisitor<? extends T>)visitor).visitMessage(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final MessageContext message() throws RecognitionException {
@@ -624,6 +660,11 @@ public class LangParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof LangListener ) ((LangListener)listener).exitRole(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LangVisitor ) return ((LangVisitor<? extends T>)visitor).visitRole(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -663,6 +704,11 @@ public class LangParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof LangListener ) ((LangListener)listener).exitCond(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LangVisitor ) return ((LangVisitor<? extends T>)visitor).visitCond(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final CondContext cond() throws RecognitionException {
@@ -700,6 +746,11 @@ public class LangParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof LangListener ) ((LangListener)listener).exitId(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof LangVisitor ) return ((LangVisitor<? extends T>)visitor).visitId(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 

@@ -4,6 +4,8 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
+import ast.LangVisitorImpl;
+import ast.Node;
 import parser.LangLexer;
 import parser.LangParser;
 
@@ -18,6 +20,9 @@ public class Main {
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		LangParser parser = new LangParser(tokens);
 		ParseTree t = parser.protocol();
+		LangVisitorImpl visitor = new LangVisitorImpl();
+		Node ast = visitor.visit(t);
+		System.out.println(ast.toPrint());
 	}
 
 }
