@@ -23,8 +23,8 @@ public class CommunicationNode implements Node {
 	}
 
 	@Override
-	public String codeGenerator(String toRet) {
-		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+	public String codeGenerator(String toRet,int state) {
+		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		StringBuilder salt = new StringBuilder();
 		Random rnd = new Random();
 		int size = 5;
@@ -36,17 +36,17 @@ public class CommunicationNode implements Node {
 		
 		String toFind_A = "module " + roleA + "\n";
 		int index_A = toRet.indexOf(toFind_A);
-		int index = message.indexOf("@");
-		String toInsert_A = "["+label+"] () -> 1: " + message.substring(0,index) + ";\n";
+		int index = message.indexOf("&&");
+		String toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state + ") -> 1: " + message.substring(0,index) + ";\n";
 		toRet = new StringBuilder(toRet).insert(index_A+toFind_A.length(),toInsert_A).toString();
 
 		String toFind_B = "module " + roleB + "\n";
 		int index_B = toRet.indexOf(toFind_B);
-		String toInsert_B = "["+label+"] () -> 1: " + message.substring(index+1,message.length()) + ";\n";
+		String toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state + ") -> 1: " + message.substring(index+2,message.length()) + ";\n";
 		toRet = new StringBuilder(toRet).insert(index_B+toFind_B.length(),toInsert_B).toString();
 
 		if(statement!=null) {
-			toRet = statement.codeGenerator(toRet);
+			toRet = statement.codeGenerator(toRet,state+1);
 		}
 		return toRet;
 	}

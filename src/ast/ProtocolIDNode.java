@@ -15,7 +15,7 @@ public class ProtocolIDNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet) {
+	public String codeGenerator(String toRet, int state) {
 		return toRet;
 	}
 

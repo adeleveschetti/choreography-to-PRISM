@@ -52,13 +52,14 @@ public class BranchNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet) {
+	public String codeGenerator(String toRet, int state) {
 
 
 		int size = 5; 
 		// generating the label
 
-		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		int state2 = state ;
 		for(int i = 0; i<rates.size() ; i++) {
 
 			String toFind_A = "module " + roleA + "\n";
@@ -71,17 +72,18 @@ public class BranchNode implements Node{
 				salt.append(SALTCHARS.charAt(index));
 			}
 			String label = salt.toString();
-			int index = messages.get(i).indexOf("@");
+			int index = messages.get(i).indexOf("&&");
 			int indexRole = rates.get(i).toString().indexOf("*");
-			String toInsert_A = "["+label+"] () -> " + rates.get(i).toString().substring(0,indexRole) + " : " + messages.get(i).substring(0,index) + ";\n";
+			String toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state + ") -> " + rates.get(i).toString().substring(0,indexRole) + " : " + messages.get(i).substring(0,index) + ";\n";
 			toRet = new StringBuilder(toRet).insert(index_A+toFind_A.length(),toInsert_A).toString();
 
 			String toFind_B = "module " + roleB + "\n";
 			int index_B = toRet.indexOf(toFind_B);
 
-			String toInsert_B = "["+label+"] () -> " + rates.get(i).toString().substring(indexRole+1,rates.get(i).toString().length())  + " : " + messages.get(i).substring(index+1,messages.get(i).length()) + ";\n";
+			String toInsert_B = "["+label+"] ("+ roleB+ "_STATE=" + state +") -> " + rates.get(i).toString().substring(indexRole+1,rates.get(i).toString().length())  + " : " + messages.get(i).substring(index+2,messages.get(i).length()) + ";\n";
 			toRet = new StringBuilder(toRet).insert(index_B+toFind_B.length(),toInsert_B).toString();
-			toRet = statements.get(i).codeGenerator(toRet);
+			state2++;
+			toRet = statements.get(i).codeGenerator(toRet,state2);
 		}
 
 

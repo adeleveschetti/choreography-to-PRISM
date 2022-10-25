@@ -13,9 +13,9 @@ statement : role FROM role COLON message DOT statement
 			| protocolID
 			| END ;
 
-ifThenElse : role IF cond THEN CLPAR thenStat=statement CRPAR (ELSE CLPAR elseStat=statement CRPAR)*  ;
+ifThenElse : IF cond AT role THEN CLPAR thenStat=statement CRPAR (ELSE CLPAR elseStat=statement CRPAR)*  ;
 
-internalAction : CLPAR DOUBLE_STRING CRPAR role ; 
+internalAction : CLPAR DOUBLE_STRING CRPAR AT role ; 
 
 protocolID : ID ;
 
@@ -49,6 +49,7 @@ SLPAR   	: '[' ;
 SRPAR   	: ']' ;
 CLPAR  		: '{' ;
 CRPAR  		: '}' ;
+AT 			: '@' ;
 IF 			: 'if';
 THEN		: 'then';
 ELSE		: 'else';

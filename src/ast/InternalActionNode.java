@@ -18,7 +18,7 @@ public class InternalActionNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet) {
+	public String codeGenerator(String toRet, int state) {
 		return message ;
 	}
 

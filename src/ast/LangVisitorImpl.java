@@ -18,11 +18,7 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 
 	@Override
 	public Node visitStatement(StatementContext ctx) {
-	
-		if(ctx.END()!=null) {
-			return null;
-		}
-		else if(ctx.rate().size()>0) {
+		if(ctx.rate().size()>0) {
 			ArrayList<String> messages = new ArrayList<String>();
 			for(MessageContext el : ctx.message()) {
 				messages.add(el.getText().substring(1,el.getText().length()-1));
@@ -54,7 +50,11 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 	}
 	
 	public Node visitIfThenElse(IfThenElseContext ctx) {
-		return new IfThenElseNode(ctx.role().getText(),ctx.cond().getText().substring(1,ctx.cond().getText().length()-1),visitStatement(ctx.thenStat),visitStatement(ctx.elseStat));
+		Node elseStatement = null;
+		if(ctx.elseStat!=null) {
+			elseStatement = visitStatement(ctx.elseStat);
+		}
+		return new IfThenElseNode(ctx.role().getText(),ctx.cond().getText().substring(1,ctx.cond().getText().length()-1),visitStatement(ctx.thenStat),elseStatement);
 	}
 	
 }

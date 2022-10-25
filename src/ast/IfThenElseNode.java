@@ -21,26 +21,26 @@ public class IfThenElseNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet) {
+	public String codeGenerator(String toRet, int state) {
 		String toFind_A = "module " + role + "\n";
 		int index_A = toRet.indexOf(toFind_A);
 
-		String toInsert_A = "[] ("+ cond + ") -> 1:";
+		String toInsert_A = "[] ("+ cond + ")&("+ role +"_STATE=" + state +") -> 1:";
 
 		if(thenStat instanceof ProtocolIDNode) {
-			toInsert_A = "[] ("+ cond + ") -> 1: ;\n" ;
+			toInsert_A = "[] ("+ cond + ")&("+ role +"_STATE=" + state +") -> 1: (" + role +"_STATE'=0);\n" ;
 		}
 		else {
-			toInsert_A = toInsert_A + thenStat.codeGenerator(toRet) + ";\n";
+			toInsert_A = toInsert_A + thenStat.codeGenerator(toRet, state) + ";\n";
 		}
 
 		toRet = new StringBuilder(toRet).insert(index_A+toFind_A.length(),toInsert_A).toString();
 
 		if(elseStat instanceof IfThenElseNode) {
-			toRet = elseStat.codeGenerator(toRet);
+			toRet = elseStat.codeGenerator(toRet,state);
 		}
-		if(thenStat instanceof InternalActionNode) {
-			toRet = thenStat.getStatement().codeGenerator(toRet);
+		if(thenStat instanceof InternalActionNode ) {
+			toRet = thenStat.getStatement().codeGenerator(toRet,state+1);
 		}
 		
 		return toRet;

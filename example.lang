@@ -1,20 +1,23 @@
 PoW, Hasher_i, Miner_i, Network := Hasher_i -> Miner_i
-(+[mR*hR_i] "(Hasher_i_STATE’=0)@(b_i’=createBlock(Miner_i,c_i,L_i))&(c_i’=c_i+1)&(Miner_i_STATE’=Winner)" : 
-			Miner_i -> Network : "(L_i’=addBlockLedger(L_i,b_i))&(Miner_i_STATE ’=Mine)@foreach k in N_i { set_k’=addBlock(set_k,b_i); }".PoW
- +[lR*hR_i] "(Hasher_i_STATE’=0)@(Miner_i_STATE ’=Lost)" : 
- Miner_i if "isEmpty(set_i)||isEmpty(setMiner_i)" then {
+(+[mR*hR_i] "(Hasher_i_STATE'=0)&&(b_i'=createBlock(Miner_i,c_i,L_i))&(c_i'=c_i+1)&(Miner_i_STATE'=Winner)" : 
+			Miner_i -> Network : "(L_i'=addBlockLedger(L_i,b_i))&(Miner_i_STATE'=Mine)&&foreach k in N_i { set_k'=addBlock(set_k,b_i); }".PoW
+ +[lR*hR_i] "(Hasher_i_STATE'=0)&&(Miner_i_STATE'=Lost)" : 
+  if "isEmpty(set_i)||isEmpty(setMiner_i)"@Miner_i then {
  				PoW
  }
  else { 
- 		Miner_i if "!isEmpty(set_i)" then { 
- 			{"(b_i’=extractBlock(set_i))&(Miner_i_STATE ’=Move)"} Miner_i . Miner_i -> Network : "(setMiner_i ’ = addBlock(setMiner_i , b_i))&(Miner_i_STATE ’=Mine)@set_i’ = removeBlock(set_i,b_i)" . PoW 
+ 		 if "!isEmpty(set_i)"@Miner_i then { 
+ 			{"(b_i'=extractBlock(set_i))&(Miner_i_STATE'=Move)"}@Miner_i . Miner_i -> Network : "(setMiner_i' = addBlock(setMiner_i , b_i))&(Miner_i_STATE'=Mine)&&set_i' = removeBlock(set_i,b_i)" . PoW 
  		}
- 		else { Miner_i if "!isEmpty(setMiner_i)" then {
- 		{"(b_i’=extractBlock(setMiner_i))&(Miner_i_STATE ’=Add)"} Miner_i. Miner_i if "canBeInserted(L_i,b_i)" then { 
- 																				{"(L_i’=addBlockLedger(L_i,b_i)&(setMiner_i’=removeBlock(setMiner_i,b_i)) &(Miner_i_STATE ’=Mine)"} Miner_i . Pow 
+ 		else { if "!isEmpty(setMiner_i)"@Miner_i then {
+ 		{"(b_i'=extractBlock(setMiner_i))&(Miner_i_STATE'=Add)"}@Miner_i. if "canBeInserted(L_i,b_i)"@Miner_i then { 
+ 																				{"(L_i'=addBlockLedger(L_i,b_i)&(setMiner_i'=removeBlock(setMiner_i,b_i)) &(Miner_i_STATE'=Mine)"}@Miner_i . Pow 
  																			}
  																			else {
+ 																			if "!canBeInserted(L_i,b_i)"@Miner_i then { 
  																				PoW
+ 																				}
+ 																				
  																			}
  													}
  													else {
