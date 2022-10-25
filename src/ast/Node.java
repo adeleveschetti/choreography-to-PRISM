@@ -4,6 +4,8 @@ public interface Node {
 
 	String toPrint();
 	
-	String codeGenerator();
+	String codeGenerator(String toRet);
+	
+	Node getStatement();
 	
 }

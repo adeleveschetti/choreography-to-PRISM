@@ -12,16 +12,19 @@ public class InternalActionNode implements Node{
 		statement = stat ;
 	}
 	
-	
 	@Override
 	public String toPrint() {
 		return message + "@" + role + " " + statement.toPrint();
 	}
 
 	@Override
-	public String codeGenerator() {
-		// TODO Auto-generated method stub
-		return null;
+	public String codeGenerator(String toRet) {
+		return message ;
+	}
+
+	@Override
+	public Node getStatement() {
+		return statement;
 	}
 
 }

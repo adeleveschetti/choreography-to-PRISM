@@ -15,7 +15,12 @@ public class ProtocolIDNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator() {
+	public String codeGenerator(String toRet) {
+		return toRet;
+	}
+
+	@Override
+	public Node getStatement() {
 		// TODO Auto-generated method stub
 		return null;
 	}

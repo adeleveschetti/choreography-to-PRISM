@@ -22,7 +22,8 @@ public class Main {
 		ParseTree t = parser.protocol();
 		LangVisitorImpl visitor = new LangVisitorImpl();
 		Node ast = visitor.visit(t);
-		System.out.println(ast.toPrint());
+		String toRet = "";
+		System.out.println(ast.codeGenerator(toRet));
 	}
 
 }

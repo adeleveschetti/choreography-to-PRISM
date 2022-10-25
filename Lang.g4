@@ -4,7 +4,7 @@ grammar Lang;
  * PARSER RULES
  *------------------------------------------------------------------*/
 
-protocol : protocolID ASSIGN statement;
+protocol : protocolID COMMA (role (COMMA role)+) ASSIGN statement;
 
 statement : role FROM role COLON message DOT statement 
 			| role FROM role LPAR BRANCH SLPAR rateValues+=rate SRPAR message COLON statement (BRANCH SLPAR rateValues+=rate SRPAR message COLON statement)+ RPAR 
@@ -13,7 +13,7 @@ statement : role FROM role COLON message DOT statement
 			| protocolID
 			| END ;
 
-ifThenElse : IF cond THEN CLPAR thenStat=statement CRPAR (ELSE CLPAR elseStat=statement CRPAR)*  ;
+ifThenElse : role IF cond THEN CLPAR thenStat=statement CRPAR (ELSE CLPAR elseStat=statement CRPAR)*  ;
 
 internalAction : CLPAR DOUBLE_STRING CRPAR role ; 
 
@@ -37,6 +37,7 @@ id : ID ;
 SEMICOLON   : ';' ;
 COLON 		: ':' ;
 DOT 		: '.' ;
+COMMA		: ',' ;
 BRANCH 		: '+' ;
 FROM 		: '->';
 ASSIGN 		: ':=' ;
