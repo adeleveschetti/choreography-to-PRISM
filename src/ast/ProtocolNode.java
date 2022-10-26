@@ -24,12 +24,12 @@ public class ProtocolNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet, int state) {
+	public String codeGenerator(String toRet, int state, int howMany) {
 		String code = ""; 
 		for(String el : roles) {
 			code = code + "module " + el + "\n\nendmodule \n\n"; 
 		}
-		code = statement.codeGenerator(code,state);
+		code = statement.codeGenerator(code,state,howMany);
 		return code ;
 	}
 

@@ -21,8 +21,8 @@ public class IfThenElseNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet, int state) {
-		String toFind_A = "module " + role + "\n";
+	public String codeGenerator(String toRet, int state, int howMany) {
+		String toFind_A = "module " + role + "\n\n";
 		int index_A = toRet.indexOf(toFind_A);
 
 		String toInsert_A = "[] ("+ cond + ")&("+ role +"_STATE=" + state +") -> 1:";
@@ -31,16 +31,15 @@ public class IfThenElseNode implements Node{
 			toInsert_A = "[] ("+ cond + ")&("+ role +"_STATE=" + state +") -> 1: (" + role +"_STATE'=0);\n" ;
 		}
 		else {
-			toInsert_A = toInsert_A + thenStat.codeGenerator(toRet, state) + ";\n";
+			toInsert_A = toInsert_A + thenStat.codeGenerator(toRet, state,0) + ";\n";
 		}
 
 		toRet = new StringBuilder(toRet).insert(index_A+toFind_A.length(),toInsert_A).toString();
-
 		if(elseStat instanceof IfThenElseNode) {
-			toRet = elseStat.codeGenerator(toRet,state);
+			toRet = elseStat.codeGenerator(toRet,state,howMany+1);
 		}
 		if(thenStat instanceof InternalActionNode ) {
-			toRet = thenStat.getStatement().codeGenerator(toRet,state+1);
+			toRet = thenStat.getStatement().codeGenerator(toRet,state+1,0);
 		}
 		
 		return toRet;
