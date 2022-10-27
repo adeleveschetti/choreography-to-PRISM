@@ -1,4 +1,7 @@
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -24,6 +27,14 @@ public class Main {
 		Node ast = visitor.visit(t);
 		String toRet = "";
 		System.out.println(ast.codeGenerator(toRet,0,0));
+		
+		File file = new File("GeneratedCode.prism");
+		if (!file.exists()) {
+            file.createNewFile();
+        }
+		BufferedWriter output = new BufferedWriter(new FileWriter(file));
+	    output.write(toRet);
+	    output.close();
 	}
 
 }
