@@ -1,5 +1,8 @@
 package ast;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class ProtocolIDNode implements Node{
 
 	String id = null;
@@ -15,7 +18,7 @@ public class ProtocolIDNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet, int state, int howMany) {
+	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches) {
 		return toRet;
 	}
 

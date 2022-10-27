@@ -1,6 +1,7 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 public class CommunicationNode implements Node {
@@ -23,7 +24,8 @@ public class CommunicationNode implements Node {
 	}
 
 	@Override
-	public String codeGenerator(String toRet,int state, int howMany) {
+	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches) {
+
 		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		StringBuilder salt = new StringBuilder();
 		Random rnd = new Random();
@@ -36,46 +38,58 @@ public class CommunicationNode implements Node {
 
 		String toFind_A = "module " + roleA + "\n\n";
 
-		String toFindState_A = roleA+"_STATE=";
-		int indexState_A = toRet.indexOf(toFindState_A);
-		int state_A = state;
-		if(indexState_A!=-1) {
-			state_A = Character.getNumericValue(toRet.charAt(indexState_A+toFindState_A.length()));
-			if(state_A!=state) {
-				state_A = state;
-			}
-			else {
-				state_A = state_A+1;
-			}
+		int state_A, state_B;
+		if(mapStates.get(roleA).size()==0) {
+			state_A = 0;
+			mapStates.get(roleA).add(state_A);
 		}
-		
+		else {
+			state_A = mapStates.get(roleA).get(mapStates.get(roleA).size()-1)+1;
+			mapStates.get(roleA).add(state_A+1);
+		}
+
+		if(mapStates.get(roleB).size()==0) {
+			state_B = 0;
+			mapStates.get(roleB).add(state_B);
+		}
+		else {
+			state_B = mapStates.get(roleB).get(mapStates.get(roleB).size()-1)+1;
+			mapStates.get(roleB).add(state_B+1);
+
+		}
+
+
 		int index_A = toRet.indexOf(toFind_A);
 		int index = message.indexOf("&&");
-		int stateNew = state + howMany;
-		String toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> 1: " + message.substring(0,index) + ";\n";
+		int indexBranchA = toRet.indexOf(") -> \n");
+		String toInsert_A = "";
+		if(indexBranchA==-1 && indexBranchA>index_A) {
+			toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> 1: " + message.substring(0,index) + ";\n";
+		}
+		else {
+			state_A  = Character.getNumericValue(toRet.charAt(indexBranchA-1));
+			toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> 1: " + message.substring(0,index) + ";\n";
+		}
 		toRet = new StringBuilder(toRet).insert(index_A+toFind_A.length(),toInsert_A).toString();
 
-		String toFindState_B = roleB+"_STATE=";
-		int indexState_B = toRet.indexOf(toFindState_B);
-		int state_B = state;
-		if(indexState_B!=-1) {
-			state_A = Character.getNumericValue(toRet.charAt(indexState_B+toFindState_B.length()));
-			if(state_B!=state) {
-				state_B = state;
-			}
-			else {
-				state_B = state_B+1;
-			}
-		}
-		
 		String toFind_B = "module " + roleB + "\n\n";
 		int index_B = toRet.indexOf(toFind_B);
-		String toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> 1: " + message.substring(index+2,message.length()) + ";\n";
+		int indexBranchB = toRet.indexOf(") -> \n");
+		String toInsert_B = "";
+		if(indexBranchB==-1 && indexBranchB>index_B) {
+			toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> 1: " + message.substring(index+2,message.length()) + ";\n";
+		}
+		else {
+			state_B = Character.getNumericValue(toRet.charAt(indexBranchB-1));
+			toRet = toRet.replace("[] ("+ roleB+"_STATE="+state_B+") -> \n","");
+			toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> 1: " + message.substring(index+2,message.length()) + ";\n";
+		}
 		toRet = new StringBuilder(toRet).insert(index_B+toFind_B.length(),toInsert_B).toString();
 
 		if(statement!=null) {
-			toRet = statement.codeGenerator(toRet,state+1,howMany);
+			toRet = statement.codeGenerator(toRet,mapStates,mapStatesBranches);
 		}
+
 		return toRet;
 	}
 

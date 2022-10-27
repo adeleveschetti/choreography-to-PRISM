@@ -1,6 +1,7 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ProtocolNode implements Node{
 
@@ -24,12 +25,19 @@ public class ProtocolNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet, int state, int howMany) {
+	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches) {
+		
+		mapStates = new HashMap<String,ArrayList<Integer>>();
+		mapStatesBranches = new HashMap<String,ArrayList<Integer>>();
+
 		String code = ""; 
 		for(String el : roles) {
+			mapStates.put(el,new ArrayList<Integer>());
+			mapStatesBranches.put(el,new ArrayList<Integer>());
+
 			code = code + "module " + el + "\n\nendmodule \n\n"; 
 		}
-		code = statement.codeGenerator(code,state,howMany);
+		code = statement.codeGenerator(code,mapStates,mapStatesBranches);
 		return code ;
 	}
 

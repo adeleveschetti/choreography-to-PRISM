@@ -2,6 +2,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -26,7 +28,9 @@ public class Main {
 		LangVisitorImpl visitor = new LangVisitorImpl();
 		Node ast = visitor.visit(t);
 		String toRet = "";
-		toRet = ast.codeGenerator(toRet,0,0);
+		HashMap<String,ArrayList<Integer>> mapStatesBranches = null ;
+		HashMap<String,ArrayList<Integer>> mapStates = null ;
+		toRet = ast.codeGenerator(toRet,mapStates,mapStatesBranches);
 		//System.out.println(ast.codeGenerator(toRet,0,0));
 		
 		File file = new File("GeneratedCode.prism");
