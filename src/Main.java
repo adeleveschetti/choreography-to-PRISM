@@ -26,7 +26,8 @@ public class Main {
 		LangVisitorImpl visitor = new LangVisitorImpl();
 		Node ast = visitor.visit(t);
 		String toRet = "";
-		System.out.println(ast.codeGenerator(toRet,0,0));
+		toRet = ast.codeGenerator(toRet,0,0);
+		//System.out.println(ast.codeGenerator(toRet,0,0));
 		
 		File file = new File("GeneratedCode.prism");
 		if (!file.exists()) {

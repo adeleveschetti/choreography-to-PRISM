@@ -1,0 +1,25 @@
+module Hasher_i
+
+[FIVMK] (Hasher_i_STATE=0) -> lR : (Hasher_i_STATE'=0);
+[BUEBX] (Hasher_i_STATE=0) -> mR : (Hasher_i_STATE'=0);
+endmodule 
+
+module Miner_i
+
+[ARILP] (Miner_i_STATE=4) -> 1: (setMiner_i' = addBlock(setMiner_i , b_i))&(Miner_i_STATE'=0);
+[] (!canBeInserted(L_i,b_i))&(Miner_i_STATE=3) -> 1: (Miner_i_STATE'=0);
+[] (canBeInserted(L_i,b_i))&(Miner_i_STATE=3) -> 1:(L_i'=addBlockLedger(L_i,b_i)&(setMiner_i'=removeBlock(setMiner_i,b_i)) &(Miner_i_STATE'=0);
+[] (!isEmpty(setMiner_i))&(Miner_i_STATE=2) -> 1:(b_i'=extractBlock(setMiner_i))&(Miner_i_STATE'=3);
+[] (!isEmpty(set_i))&(Miner_i_STATE=2) -> 1:(b_i'=extractBlock(set_i))&(Miner_i_STATE'=4);
+[] (isEmpty(set_i)||isEmpty(setMiner_i))&(Miner_i_STATE=2) -> 1: (Miner_i_STATE'=0);
+[FIVMK] (Miner_i_STATE=0) -> hR_i : (Miner_i_STATE'=2);
+[CWAVH] (Miner_i_STATE=1) -> 1: (L_i'=addBlockLedger(L_i,b_i))&(Miner_i_STATE'=0);
+[BUEBX] (Miner_i_STATE=0) -> hR_i : (b_i'=createBlock(Miner_i,c_i,L_i))&(c_i'=c_i+1)&(Miner_i_STATE'=1);
+endmodule 
+
+module Network
+
+[ARILP] (Network_STATE=4) -> 1: set_i' = removeBlock(set_i,b_i);
+[CWAVH] (Network_STATE=1) -> 1: foreach k in N_i { set_k'=addBlock(set_k,b_i); };
+endmodule 
+
