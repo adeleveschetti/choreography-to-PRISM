@@ -1,12 +1,12 @@
 module Hasher_i
 
-[CRGGO] (Hasher_i_STATE=0) -> lR : (Hasher_i_STATE'=0);
-[BXNZU] (Hasher_i_STATE=0) -> mR : (Hasher_i_STATE'=0);
+[KQHJZ] (Hasher_i_STATE=0) -> lR : (Hasher_i_STATE'=0);
+[SRGBK] (Hasher_i_STATE=0) -> mR : (Hasher_i_STATE'=0);
 endmodule 
 
 module Miner_i
 
-[BATOH] (Miner_i_STATE=0) -> 1: (setMiner_i' = addBlock(setMiner_i , b_i))&(Miner_i_STATE'=0);
+[DOILL] (Miner_i_STATE=7) -> 1: (setMiner_i' = addBlock(setMiner_i , b_i))&(Miner_i_STATE'=0);
 [] (canBeInserted(L_i,b_i))&(Miner_i_STATE=5) -> 1:(L_i'=addBlockLedger(L_i,b_i)&(setMiner_i'=removeBlock(setMiner_i,b_i)) &(Miner_i_STATE'=0);
 [] !(canBeInserted(L_i,b_i))&(Miner_i_STATE=5) -> 1:Miner_i_STATE'=6;
 [] (!isEmpty(setMiner_i))&(Miner_i_STATE=4) -> 1:(b_i'=extractBlock(setMiner_i))&(Miner_i_STATE'=3);
@@ -15,14 +15,14 @@ module Miner_i
 [] !(!isEmpty(set_i))&(Miner_i_STATE=3) -> 1:Miner_i_STATE'=4;
 [] (isEmpty(set_i)||isEmpty(setMiner_i))&(Miner_i_STATE=2) -> 1: (Miner_i_STATE'=0);
 [] !(isEmpty(set_i)||isEmpty(setMiner_i))&(Miner_i_STATE=2) -> 1:Miner_i_STATE'=3;
-[CRGGO] (Miner_i_STATE=0) -> hR_i : (Miner_i_STATE'=2);
-[DGSJB] (Miner_i_STATE=0) -> 1: (L_i'=addBlockLedger(L_i,b_i))&(Miner_i_STATE'=0);
-[BXNZU] (Miner_i_STATE=0) -> hR_i : (b_i'=createBlock(Miner_i,c_i,L_i))&(c_i'=c_i+1)&(Miner_i_STATE'=1);
+[KQHJZ] (Miner_i_STATE=0) -> hR_i : (Miner_i_STATE'=2);
+[GOYYO] (Miner_i_STATE=1) -> 1: (L_i'=addBlockLedger(L_i,b_i))&(Miner_i_STATE'=0);
+[SRGBK] (Miner_i_STATE=0) -> hR_i : (b_i'=createBlock(Miner_i,c_i,L_i))&(c_i'=c_i+1)&(Miner_i_STATE'=1);
 endmodule 
 
 module Network
 
-[BATOH] (Network_STATE=0) -> 1: set_i' = removeBlock(set_i,b_i);
-[DGSJB] (Network_STATE=0) -> 1: foreach k in N_i { set_k'=addBlock(set_k,b_i); };
+[DOILL] (Network_STATE=0) -> 1: set_i' = removeBlock(set_i,b_i);
+[GOYYO] (Network_STATE=0) -> 1: foreach k in N_i { set_k'=addBlock(set_k,b_i); };
 endmodule 
 

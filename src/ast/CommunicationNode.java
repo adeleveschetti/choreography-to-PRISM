@@ -60,23 +60,25 @@ public class CommunicationNode implements Node {
 
 
 		int index_A = toRet.indexOf(toFind_A);
+		String toFind_B = "module " + roleB + "\n\n";
+		int index_B = toRet.indexOf(toFind_B);
+		
 		int index = message.indexOf("&&");
 		int indexBranchA = toRet.indexOf(") -> \n");
 		String toInsert_A = "";
-		if(indexBranchA==-1 && indexBranchA>index_A) {
+		if(indexBranchA==-1 || (indexBranchA>index_A && indexBranchA>index_B)) {
 			toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> 1: " + message.substring(0,index) + ";\n";
 		}
 		else {
 			state_A  = Character.getNumericValue(toRet.charAt(indexBranchA-1));
+			toRet = toRet.replace("[] ("+ roleA+"_STATE="+state_A+") -> \n","");
 			toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> 1: " + message.substring(0,index) + ";\n";
 		}
 		toRet = new StringBuilder(toRet).insert(index_A+toFind_A.length(),toInsert_A).toString();
-
-		String toFind_B = "module " + roleB + "\n\n";
-		int index_B = toRet.indexOf(toFind_B);
+		index_B = toRet.indexOf(toFind_B);
 		int indexBranchB = toRet.indexOf(") -> \n");
 		String toInsert_B = "";
-		if(indexBranchB==-1 && indexBranchB>index_B) {
+		if(indexBranchB==-1 || (indexBranchB<index_B && indexBranchB>index_A)) {
 			toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> 1: " + message.substring(index+2,message.length()) + ";\n";
 		}
 		else {
