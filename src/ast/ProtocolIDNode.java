@@ -16,6 +16,16 @@ public class ProtocolIDNode implements Node{
 		// TODO Auto-generated method stub
 		return " " + id + " " ;
 	}
+	
+	@Override 
+	public String getRoleA() {
+		return "";
+	}
+	
+	@Override 
+	public String getRoleB() {
+		return "";
+	}
 
 	@Override
 	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches) {

@@ -23,6 +23,16 @@ public class ProtocolNode implements Node{
 		}
 		return ret + statement.toPrint();
 	}
+	
+	@Override 
+	public String getRoleA() {
+		return "";
+	}
+	
+	@Override 
+	public String getRoleB() {
+		return "";
+	}
 
 	@Override
 	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches) {
@@ -35,7 +45,7 @@ public class ProtocolNode implements Node{
 			mapStates.put(el,new ArrayList<Integer>());
 			mapStatesBranches.put(el,new ArrayList<Integer>());
 
-			code = code + "module " + el + "\n\nendmodule \n\n"; 
+			code = code + "module " + el + "\n\n"+ el + "_STATE: [0..10] init 0;\n\n\nendmodule \n\n"; 
 		}
 		code = statement.codeGenerator(code,mapStates,mapStatesBranches);
 		return code ;

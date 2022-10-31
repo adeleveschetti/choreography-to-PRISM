@@ -11,4 +11,9 @@ public interface Node {
 	
 	Node getStatement();
 	
+	String getRoleA();
+	
+	String getRoleB();
+
+	
 }

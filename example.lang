@@ -1,26 +1,21 @@
 PoW, Hasher_i, Miner_i, Network := Hasher_i -> Miner_i
-(+[mR*hR_i] "(Hasher_i_STATE'=0)&&(b_i'=createBlock(Miner_i,c_i,L_i))&(c_i'=c_i+1)&(Miner_i_STATE'=1)" : 
-			Miner_i -> Network : "(L_i'=addBlockLedger(L_i,b_i))&(Miner_i_STATE'=0)&&foreach k in N_i { set_k'=addBlock(set_k,b_i); }".PoW
- +[lR*hR_i] "(Hasher_i_STATE'=0)&&(Miner_i_STATE'=2)" : 
-  if "isEmpty(set_i)||isEmpty(setMiner_i)"@Miner_i then {
- 				PoW
+(+[mR*hR_i] "&&(b_i'=createBlock(Miner_i,c_i,L_i))&(c_i'=c_i+1)" : 
+			Miner_i -> Network : "(L_i'=addBlockLedger(L_i,b_i))&&foreach k in N_i { set_k'=addBlock(set_k,b_i); }".PoW
+ +[lR*hR_i] "&&" : 
+  if "!isEmpty(set_i)"@Miner_i then { 
+  		{"(b_i'=extractBlock(set_i))"}@Miner_i . Miner_i -> Network : "(setMiner_i' = addBlock(setMiner_i , b_i))&&set_i' = removeBlock(set_i,b_i)" . PoW 
  }
  else { 
- 		 if "!isEmpty(set_i)"@Miner_i then { 
- 			{"(b_i'=extractBlock(set_i))&(Miner_i_STATE'=4)"}@Miner_i . Miner_i -> Network : "(setMiner_i' = addBlock(setMiner_i , b_i))&(Miner_i_STATE'=0)&&set_i' = removeBlock(set_i,b_i)" . PoW 
+ 	if "isEmpty(setMiner_i)"@Miner_i then{			
+ 			PoW
+ 	}
+ 	else{
+ 		if "canBeInserted(L_i,b_i)"@Miner_i then { 
+ 					{"(L_i'=addBlockLedger(L_i,b_i)&(setMiner_i'=removeBlock(setMiner_i,b_i))"}@Miner_i . Pow 
  		}
- 		else { if "!isEmpty(setMiner_i)"@Miner_i then {
- 		{"(b_i'=extractBlock(setMiner_i))&(Miner_i_STATE'=3)"}@Miner_i. if "canBeInserted(L_i,b_i)"@Miner_i then { 
- 																				{"(L_i'=addBlockLedger(L_i,b_i)&(setMiner_i'=removeBlock(setMiner_i,b_i)) &(Miner_i_STATE'=0)"}@Miner_i . Pow 
- 																			}
- 																			else {
- 																				PoW
- 																				}
- 																				
- 													}
- 													else {
- 														PoW
- 													}
+ 		else{
+ 				PoW
  		}
+ }
 })
 	
