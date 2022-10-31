@@ -1,0 +1,37 @@
+PoS, Validator_i, Network, Vote_Manager := Validator_i -> Validator_i
+(+[mR]  "(b_i'=createBlock(Validator_i,c_i,L_i))&(c_i'=c_i+1)&&" :
+		if "!isCp(b_i)"@Validator_i then{
+			Validator_i -> Network : "(L_i'=addBlockLedger(L_i,b_i))&&foreach k in N_i { set_k'=addBlock(set_k,b_i); }".PoS
+		}
+		else{
+			Validator_i -> Network : "(L_i'=addBlockLedger(L_i,b_i))&&foreach k in N_i { set_k'=addBlock(set_k,b_i); }".
+			Validator_i -> Vote_Manager : "&&(Votes′=addVote(Votes,b_i,Validator_i))".PoS
+		}
+ +[hR] "&&" : if "!isEmpty(set_i)"@Validator_i then {
+ 				  {"(b_i'=extractBlock(set_i))"}@Validator_i . if "!canBeIns(b_i,B_i)"@Validator_i then {
+ 				  															PoS
+ 				  											}
+ 				  											else{
+ 				  												if "isCp(b_i)"@Validator_i then {
+ 				  																Validator_i -> Network : "(setMiner_i' = addBlock(setMiner_i , b_i))&&set_i' = removeBlock(set_i,b_i)" . PoS 
+ 				  														}
+ 				  														else{
+ 				  	 															Validator_i -> Network : "(setMiner_i' = addBlock(setMiner_i , b_i))&&set_i' = removeBlock(set_i,b_i)" . PoS 
+ 				  														}
+ 				  											}
+ 			}
+ 			else{
+ 				PoS
+ 			}
+ +[rC] "(b_i′=lastCP(L_i))&&" : if "isJust(b_i,Votes,Stakes)"@Validator_i then{
+ 									if "(lastJ_i=lastboCP(b_i,L_i))"@Validator_i then{
+ 										{"(lastJ_i'=b_i)&(L_i'= updateHF(L_i,lastJ_i))"}@Validator_i.Validator_i->Vote_Manager : "&&epoch'=height(lastF(L_i))&Stakes'=updateS(Stakes,Votes,lastF(L_i))".PoS
+ 									}
+ 									else{
+ 										{"(lastJ_i'=b_i)"}@Validator_i . PoS
+ 									}
+ 								}
+ 								else{
+ 									PoS
+ 								}
+)

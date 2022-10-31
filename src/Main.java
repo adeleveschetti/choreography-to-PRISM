@@ -17,7 +17,7 @@ import parser.LangParser;
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		String fileName = "example.lang";
+		String fileName = "example2.lang";
 		FileInputStream is = new FileInputStream(fileName);
 		@SuppressWarnings("deprecation")
 		ANTLRInputStream input = new ANTLRInputStream(is);

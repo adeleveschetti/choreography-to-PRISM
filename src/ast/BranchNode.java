@@ -51,12 +51,12 @@ public class BranchNode implements Node{
 		ret = ret + "\n";
 		return  ret;
 	}
-	
+
 	@Override 
 	public String getRoleA() {
 		return roleA;
 	}
-	
+
 	@Override 
 	public String getRoleB() {
 		return roleB;
@@ -88,15 +88,17 @@ public class BranchNode implements Node{
 			mapStates.get(roleB).add(state_B);
 
 		}
-		int stateTmp_A = state_A;
-		int stateTmp_B = state_B;
+
 
 		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		for(int i = 0; i<rates.size() ; i++) {
-
 			String toFind_A = "module " + roleA + "\n\n";
 			int index_A = toRet.indexOf(toFind_A);
 			int indexEnd_A = toRet.indexOf("endmodule",index_A);
+
+			int stateTmp_A = mapStates.get(roleA).get(mapStates.get(roleA).size()-1);
+			int stateTmp_B = mapStates.get(roleB).get(mapStates.get(roleB).size()-1);
+
 
 			StringBuilder salt = new StringBuilder();
 			Random rnd = new Random();
@@ -107,12 +109,21 @@ public class BranchNode implements Node{
 			String label = salt.toString();
 			int index = messages.get(i).indexOf("&&");
 			int indexRole = rates.get(i).toString().indexOf("*");
+			String rateA, rateB = "";
+			if(indexRole == -1) {
+				rateA = rates.get(i).toString().substring(0,rates.get(i).toString().length());
+				rateB = Integer.toString(1);
+			}
+			else {
+				rateA = rates.get(i).toString().substring(0,indexRole);
+				rateB = rates.get(i).toString().substring(indexRole+1,rates.get(i).toString().length());
+			}
 			//String toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rates.get(i).toString().substring(0,indexRole) + " : " + messages.get(i).substring(0,index) +"&"+nextState+ ";\n";
 
 			int indexBranchA = toRet.indexOf(") -> \n");
 			String toInsert_A = "";
 			String nextState = "";			
-			
+
 			if(statements.get(i) instanceof ProtocolIDNode || (!statements.get(i).getRoleA().equals(roleA) && !statements.get(i).getRoleB().equals(roleA))) {
 				nextState = "("+roleA +"_STATE'=" + 0 +")";
 			}
@@ -120,13 +131,15 @@ public class BranchNode implements Node{
 				stateTmp_A++;
 				nextState = "("+roleA+"_STATE'="+stateTmp_A+")";
 			}
-			if(indexBranchA==-1 || !(index_A<=indexBranchA && indexBranchA<=indexEnd_A)) {
-				toInsert_A =  "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rates.get(i).toString().substring(0,indexRole) + " : " + messages.get(i).substring(0,index);// +"&"+nextState+ ";\n";
+
+			if(roleA.equals(roleB)) {label="";}
+			if(roleA.equals(roleB) || indexBranchA==-1 || !(index_A<=indexBranchA && indexBranchA<=indexEnd_A)) {
+				toInsert_A =  "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateA + " : " + messages.get(i).substring(0,index);// +"&"+nextState+ ";\n";
 			}
 			else {
 				state_A  = Character.getNumericValue(toRet.charAt(indexBranchA-1));
 				toRet = toRet.replace("[] ("+ roleA+"_STATE="+state_A+") -> \n","");
-				toInsert_A =  "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rates.get(i).toString().substring(0,indexRole) + " : " + messages.get(i).substring(0,index);// +"&"+nextState+ ";\n";
+				toInsert_A =  "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateA + " : " + messages.get(i).substring(0,index);// +"&"+nextState+ ";\n";
 			}
 			if(messages.get(i).substring(0,index).length()==0) {
 				toInsert_A = toInsert_A + nextState + ";\n";
@@ -136,49 +149,52 @@ public class BranchNode implements Node{
 			}
 			toRet = new StringBuilder(toRet).insert(indexEnd_A-1,toInsert_A).toString();
 
-			
-			String toFind_B = "module " + roleB + "\n\n";
-			int index_B = toRet.indexOf(toFind_B);
-			int indexEnd_B = toRet.indexOf("endmodule",index_B);
 
-			
-			int indexBranchB = toRet.indexOf(") -> \n");
-			if(statements.get(i) instanceof ProtocolIDNode || (!statements.get(i).getRoleA().equals(roleB) && !statements.get(i).getRoleB().equals(roleB))) {
-				nextState = "("+roleB +"_STATE'=" + 0 +")";
-			}
-			else {
-				stateTmp_B++;
-				nextState = "("+roleB+"_STATE'="+stateTmp_B+")";
-			}
-			
-			String toInsert_B = "";
-			if(indexBranchB==-1 || !(index_B<=indexBranchB && indexBranchB<=indexEnd_B)) {
-				toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rates.get(i).toString().substring(indexRole+1,rates.get(i).toString().length())  + " : " + messages.get(i).substring(index+2,messages.get(i).length()) ;
-				
-			}
-			else {
-				state_B = Character.getNumericValue(toRet.charAt(indexBranchB-1));
-				toRet = toRet.replace("[] ("+ roleB+"_STATE="+state_B+") -> \n","");
-				toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rates.get(i).toString().substring(indexRole+1,rates.get(i).toString().length())  + " : " + messages.get(i).substring(index+2,messages.get(i).length()) ;//+ "&"+ nextState +";\n";
-			}
-			if(messages.get(i).substring(index+2,messages.get(i).length()).length()==0) {
-				toInsert_B = toInsert_B + nextState + ";\n";
-			}
-			else {
-				toInsert_B = toInsert_B +"&"+ nextState + ";\n";
-			}
-			indexEnd_B = toRet.indexOf("endmodule",index_B);
+			if(!roleA.equals(roleB)) {
+				String toFind_B = "module " + roleB + "\n\n";
+				int index_B = toRet.indexOf(toFind_B);
+				int indexEnd_B = toRet.indexOf("endmodule",index_B);
 
-			
-			//String toInsert_B = "["+label+"] ("+ roleB+ "_STATE=" + state_B +") -> " + rates.get(i).toString().substring(indexRole+1,rates.get(i).toString().length())  + " : " + messages.get(i).substring(index+2,messages.get(i).length()) + ";\n";
-			toRet = new StringBuilder(toRet).insert(indexEnd_B-1,toInsert_B).toString();
 
+				int indexBranchB = toRet.indexOf(") -> \n");
+				if(statements.get(i) instanceof ProtocolIDNode || (!statements.get(i).getRoleA().equals(roleB) && !statements.get(i).getRoleB().equals(roleB))) {
+					nextState = "("+roleB +"_STATE'=" + 0 +")";
+				}
+				else {
+					stateTmp_B++;
+					nextState = "("+roleB+"_STATE'="+stateTmp_B+")";
+				}
+
+				String toInsert_B = "";
+				if(indexBranchB==-1 || !(index_B<=indexBranchB && indexBranchB<=indexEnd_B)) {
+					toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateB  + " : " + messages.get(i).substring(index+2,messages.get(i).length()) ;
+
+				}
+				else {
+					state_B = Character.getNumericValue(toRet.charAt(indexBranchB-1));
+					toRet = toRet.replace("[] ("+ roleB+"_STATE="+state_B+") -> \n","");
+					toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateB  + " : " + messages.get(i).substring(index+2,messages.get(i).length()) ;//+ "&"+ nextState +";\n";
+				}
+				if(messages.get(i).substring(index+2,messages.get(i).length()).length()==0) {
+					toInsert_B = toInsert_B + nextState + ";\n";
+				}
+				else {
+					toInsert_B = toInsert_B +"&"+ nextState + ";\n";
+				}
+				indexEnd_B = toRet.indexOf("endmodule",index_B);
+
+
+				//String toInsert_B = "["+label+"] ("+ roleB+ "_STATE=" + state_B +") -> " + rates.get(i).toString().substring(indexRole+1,rates.get(i).toString().length())  + " : " + messages.get(i).substring(index+2,messages.get(i).length()) + ";\n";
+				toRet = new StringBuilder(toRet).insert(indexEnd_B-1,toInsert_B).toString();
+			}
 			String roleC = "";
 			for(String el : mapStates.keySet()) {
 				if(!el.equals(roleA) && !el.equals(roleB)) {
 					roleC = el ;
 					String toFind_C = "module " + roleC + "\n\n";
 					int index_C = toRet.indexOf(toFind_C);
+					int indexEnd_C = toRet.indexOf("endmodule",index_C);
+
 					int state_C ;
 					if(mapStatesBranches.get(roleC).size()==0) {
 						if(mapStates.get(roleC).size()==0) {
@@ -195,9 +211,12 @@ public class BranchNode implements Node{
 						state_C = mapStatesBranches.get(roleC).get(mapStatesBranches.get(roleC).size()-1);
 					}
 					String toInsert_C = "[] ("+ roleC + "_STATE=" + state_C +") -> \n" ; 
-					toRet = new StringBuilder(toRet).insert(index_C+toFind_C.length(),toInsert_C).toString();
+					toRet = new StringBuilder(toRet).insert(indexEnd_C-1,toInsert_C).toString();
 				}
 			}
+
+
+			//mapStates.get(roleA).add(stateTmp_A);
 			toRet = statements.get(i).codeGenerator(toRet,mapStates,mapStatesBranches);
 
 		}

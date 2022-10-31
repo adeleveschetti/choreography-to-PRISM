@@ -22,12 +22,12 @@ public class CommunicationNode implements Node {
 	public String toPrint() {
 		return roleA + " " + roleB + " ----> " + message + " \n " + statement.toPrint();
 	}
-	
+
 	@Override 
 	public String getRoleA() {
 		return roleA;
 	}
-	
+
 	@Override 
 	public String getRoleB() {
 		return roleB;
@@ -70,7 +70,7 @@ public class CommunicationNode implements Node {
 		int index_A = toRet.indexOf(toFind_A);
 		int indexEnd_A = toRet.indexOf("endmodule",index_A);
 		String toFind_B = "module " + roleB + "\n\n";
-		
+
 		int index = message.indexOf("&&");
 		int indexBranchA = toRet.indexOf(") -> \n");
 		String toInsert_A = "";
@@ -98,13 +98,27 @@ public class CommunicationNode implements Node {
 			toInsert_A = toInsert_A +"&"+ nextState + ";\n";
 		}
 		toRet = new StringBuilder(toRet).insert(indexEnd_A-1,toInsert_A).toString();
-		
+
 		int index_B = toRet.indexOf(toFind_B);
 		int indexBranchB = toRet.indexOf(") -> \n");
 		int indexEnd_B = toRet.indexOf("endmodule",index_B);
 		int stateTmp_B = state_B;
-
-		if(statement instanceof ProtocolIDNode) {
+		int alreadyDef =  toRet.indexOf(message.substring(index+2,message.length()));
+		if(alreadyDef!=-1) {
+			String toFind = "("+roleB+"_STATE'=";
+			String toFind2 = "("+roleB+"_STATE=";
+			int stateInit_B = -1;
+			for(int k=index_B; k<alreadyDef; k++) {
+				if(toRet.indexOf(toFind2,k)!=-1 && toRet.indexOf(message.substring(index+2,message.length()),k)!=-1) {
+					stateInit_B = k;
+				}
+			}
+			int indexB_def = toRet.indexOf(toFind,alreadyDef);
+			stateTmp_B = Character.getNumericValue(toRet.charAt(indexB_def+toFind.length()));
+			nextState = "("+roleB +"_STATE'=" + stateTmp_B +")";
+			state_B = Character.getNumericValue(toRet.charAt(stateInit_B+toFind2.length()));
+		}
+		else if(statement instanceof ProtocolIDNode) {
 			nextState = "("+roleB +"_STATE'=" + 0 +")";
 		}
 		else {
@@ -129,7 +143,7 @@ public class CommunicationNode implements Node {
 		indexEnd_B = toRet.indexOf("endmodule",index_B);
 
 		toRet = new StringBuilder(toRet).insert(indexEnd_B-1,toInsert_B).toString();
-
+		//}
 		if(statement!=null) {
 			toRet = statement.codeGenerator(toRet,mapStates,mapStatesBranches);
 		}

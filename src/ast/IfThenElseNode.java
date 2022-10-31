@@ -56,7 +56,13 @@ public class IfThenElseNode implements Node{
 		if(thenStat instanceof ProtocolIDNode) {
 			toInsert_A = "[] ("+ cond + ")&("+ role +"_STATE=" + state +") -> 1: (" + role +"_STATE'=0);\n" ;
 		}
+		else if(thenStat instanceof CommunicationNode) {
+			toInsert_A = toInsert_A +"(" + role +"_STATE'=" + (state+1) +");\n" ;
+			flag = true;
+			state++;
+		}
 		else {
+			
 			toInsert_A = toInsert_A + thenStat.codeGenerator(toRet,mapStates,mapStatesBranches)+";\n" ;
 			state++;
 			flag = true;
@@ -90,7 +96,9 @@ public class IfThenElseNode implements Node{
 		if(thenStat instanceof InternalActionNode ) {
 			toRet = thenStat.getStatement().codeGenerator(toRet,mapStates,mapStatesBranches);
 		}
-
+		if(thenStat instanceof CommunicationNode) {
+			toRet = thenStat.codeGenerator(toRet,mapStates,mapStatesBranches);
+		}
 		if(elseStat!=null) {
 			toRet = elseStat.codeGenerator(toRet,mapStates,mapStatesBranches);
 		}
