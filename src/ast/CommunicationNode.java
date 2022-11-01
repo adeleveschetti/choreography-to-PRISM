@@ -72,7 +72,7 @@ public class CommunicationNode implements Node {
 		String toFind_B = "module " + roleB + "\n\n";
 
 		int index = message.indexOf("&&");
-		int indexBranchA = toRet.indexOf(") -> \n");
+		int indexBranchA = toRet.indexOf(") -> 1: ;\n");
 		String toInsert_A = "";
 		String nextState = "";
 		int stateTmp_A = state_A;
@@ -88,7 +88,7 @@ public class CommunicationNode implements Node {
 		}
 		else {
 			state_A  = Character.getNumericValue(toRet.charAt(indexBranchA-1));
-			toRet = toRet.replace("[] ("+ roleA+"_STATE="+state_A+") -> \n","");
+			toRet = toRet.replace("[] ("+ roleA+"_STATE="+state_A+") -> 1: ;\n","");
 			toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> 1: " + message.substring(0,index) ;
 		}
 		if(message.substring(0,index).length()==0) {
@@ -100,7 +100,7 @@ public class CommunicationNode implements Node {
 		toRet = new StringBuilder(toRet).insert(indexEnd_A-1,toInsert_A).toString();
 
 		int index_B = toRet.indexOf(toFind_B);
-		int indexBranchB = toRet.indexOf(") -> \n");
+		int indexBranchB = toRet.indexOf(") -> 1: ;\n");
 		int indexEnd_B = toRet.indexOf("endmodule",index_B);
 		int stateTmp_B = state_B;
 		int alreadyDef =  toRet.indexOf(message.substring(index+2,message.length()));
@@ -131,7 +131,7 @@ public class CommunicationNode implements Node {
 		}
 		else {
 			state_B = Character.getNumericValue(toRet.charAt(indexBranchB-1));
-			toRet = toRet.replace("[] ("+ roleB+"_STATE="+state_B+") -> \n","");
+			toRet = toRet.replace("[] ("+ roleB+"_STATE="+state_B+") -> 1: ;\n","");
 			toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> 1: " + message.substring(index+2,message.length()); 
 		}
 		if(message.substring(index+2,message.length()).length()==0) {

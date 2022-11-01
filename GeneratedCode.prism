@@ -1,25 +1,26 @@
-module Validator_i
+module Hasher_i
 
-Validator_i_STATE: [0..10] init 0;
+Hasher_i_STATE: [0..10] init 0;
 
-[] (Validator_i_STATE=0) -> mR : (b_i'=createBlock(Validator_i,c_i,L_i))&(c_i'=c_i+1)&(Validator_i_STATE'=2);
-[] (!isCp(b_i))&(Validator_i_STATE=2) -> 1:(Validator_i_STATE'=3);
-[] !(!isCp(b_i))&(Validator_i_STATE=2) -> 1:(Validator_i_STATE'=4);
-[PSFFD] (Validator_i_STATE=3) -> 1: (L_i'=addBlockLedger(L_i,b_i))&(Validator_i_STATE'=0);
-[JBLIN] (Validator_i_STATE=4) -> 1: (L_i'=addBlockLedger(L_i,b_i))&(Validator_i_STATE'=5);
-[AKBDO] (Validator_i_STATE=5) -> 1: (Validator_i_STATE'=0);
-[] (Validator_i_STATE=0) -> hR : (Validator_i_STATE'=6);
-[] (!isEmpty(set_i))&(Validator_i_STATE=6) -> 1:(b_i'=extractBlock(set_i))&(Validator_i_STATE'=10);
-[] !(!isEmpty(set_i))&(Validator_i_STATE=6) -> 1:(Validator_i_STATE'=0);
-[] (!canBeIns(b_i,B_i))&(Validator_i_STATE=10) -> 1: (Validator_i_STATE'=0);
-[] !(!canBeIns(b_i,B_i))&(Validator_i_STATE=10) -> 1:(Validator_i_STATE'=11);
-[] (isCp(b_i))&(Validator_i_STATE=11) -> 1:(Validator_i_STATE'=12);
-[] !(isCp(b_i))&(Validator_i_STATE=11) -> 1:(Validator_i_STATE'=13);
-[JTCTA] (Validator_i_STATE=12) -> 1: (setMiner_i' = addBlock(setMiner_i , b_i))&(Validator_i_STATE'=0);
-[FIMSF] (Validator_i_STATE=13) -> 1: (setMiner_i' = addBlock(setMiner_i , b_i))&(Validator_i_STATE'=0);
-[] (Validator_i_STATE=0) -> rC : (b_i′=lastCP(L_i))&(Validator_i_STATE'=14);
-[] (isJust(b_i,Votes,Stakes))&(Validator_i_STATE=14) -> 1:(lastJ_i'=b_i)&(Validator_i_STATE'=0);
-[] !(isJust(b_i,Votes,Stakes))&(Validator_i_STATE=14) -> 1:(Validator_i_STATE'=0);
+[IFAEU] (Hasher_i_STATE=0) -> mR : (Hasher_i_STATE'=0);
+[MLJRB] (Hasher_i_STATE=0) -> lR : (Hasher_i_STATE'=0);
+
+endmodule 
+
+module Miner_i
+
+Miner_i_STATE: [0..10] init 0;
+
+[IFAEU] (Miner_i_STATE=0) -> hR_i : (b_i'=createBlock(Miner_i,c_i,L_i))&(c_i'=c_i+1)&(Miner_i_STATE'=1);
+[WMRJY] (Miner_i_STATE=1) -> 1: (L_i'=addBlockLedger(L_i,b_i))&(Miner_i_STATE'=0);
+[MLJRB] (Miner_i_STATE=0) -> hR_i : (Miner_i_STATE'=2);
+[] (!isEmpty(set_i))&(Miner_i_STATE=2) -> 1:(b_i'=extractBlock(set_i))&(Miner_i_STATE'=3);
+[] !(!isEmpty(set_i))&(Miner_i_STATE=2) -> 1:(Miner_i_STATE'=4);
+[PBXJS] (Miner_i_STATE=3) -> 1: (setMiner_i' = addBlock(setMiner_i , b_i))&(Miner_i_STATE'=0);
+[] (isEmpty(setMiner_i))&(Miner_i_STATE=4) -> 1: (Miner_i_STATE'=0);
+[] !(isEmpty(setMiner_i))&(Miner_i_STATE=4) -> 1:(Miner_i_STATE'=5);
+[] (canBeInserted(L_i,b_i))&(Miner_i_STATE=5) -> 1:(L_i'=addBlockLedger(L_i,b_i)&(setMiner_i'=removeBlock(setMiner_i,b_i))&(Miner_i_STATE'=0);
+[] !(canBeInserted(L_i,b_i))&(Miner_i_STATE=5) -> 1:(Miner_i_STATE'=0);
 
 endmodule 
 
@@ -27,21 +28,8 @@ module Network
 
 Network_STATE: [0..10] init 0;
 
-[PSFFD] (Network_STATE=0) -> 1: foreach k in N_i { set_k'=addBlock(set_k,b_i); }&(Network_STATE'=0);
-[JBLIN] (Network_STATE=0) -> 1: foreach k in N_i { set_k'=addBlock(set_k,b_i); }&(Network_STATE'=0);
-[JTCTA] (Network_STATE=0) -> 1: set_i' = removeBlock(set_i,b_i)&(Network_STATE'=0);
-[FIMSF] (Network_STATE=0) -> 1: set_i' = removeBlock(set_i,b_i)&(Network_STATE'=0);
-[] (Network_STATE=0) -> 
-
-endmodule 
-
-module Vote_Manager
-
-Vote_Manager_STATE: [0..10] init 0;
-
-[AKBDO] (Vote_Manager_STATE=0) -> 1: (Votes′=addVote(Votes,b_i,Validator_i))&(Vote_Manager_STATE'=0);
-[] (Vote_Manager_STATE=0) -> 
-[] (Vote_Manager_STATE=0) -> 
+[WMRJY] (Network_STATE=0) -> 1: foreach k in N_i { set_k'=addBlock(set_k,b_i); }&(Network_STATE'=0);
+[PBXJS] (Network_STATE=0) -> 1: set_i' = removeBlock(set_i,b_i)&(Network_STATE'=0);
 
 endmodule 
 

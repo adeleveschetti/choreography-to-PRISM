@@ -210,7 +210,7 @@ public class BranchNode implements Node{
 					else {
 						state_C = mapStatesBranches.get(roleC).get(mapStatesBranches.get(roleC).size()-1);
 					}
-					String toInsert_C = "[] ("+ roleC + "_STATE=" + state_C +") -> \n" ; 
+					String toInsert_C = "[] ("+ roleC + "_STATE=" + state_C +") -> 1: ;\n" ; 
 					toRet = new StringBuilder(toRet).insert(indexEnd_C-1,toInsert_C).toString();
 				}
 			}
