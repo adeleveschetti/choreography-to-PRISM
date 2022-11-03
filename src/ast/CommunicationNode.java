@@ -34,7 +34,20 @@ public class CommunicationNode implements Node {
 	}
 
 	@Override
-	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches) {
+	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles) {
+		String roleAtmp = roleA;
+		String roleBtmp = roleB;
+
+		for(String el : roles) {
+			if(el.contains(roleA.substring(0,roleA.length()-2))) {
+				roleA = el;
+			}
+			if(el.contains(roleB.substring(0,roleB.length()-2))) {
+				roleB = el;
+			}
+		}
+		
+
 		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		StringBuilder salt = new StringBuilder();
 		Random rnd = new Random();
@@ -83,13 +96,33 @@ public class CommunicationNode implements Node {
 			stateTmp_A++;
 			nextState = "("+roleA+"_STATE'="+stateTmp_A+")";
 		}
+		
+		String messageToAdd = message.substring(0,index);
+		if(roleA.matches(".*\\d.*")|| messageToAdd.contains("_i")) {
+			int indexDigit = -1;
+			String role ;
+			if(roleB.matches(".*\\d.*")) {
+				role = roleB;
+			}
+			else {
+				role = roleA;
+			}
+			for(int k=0; k<role.length(); k++) {
+				if(Character.isDigit(role.charAt(k))) {
+					indexDigit = k;
+				}
+			}
+			String toReplaceA = "_"+role.charAt(indexDigit);
+			messageToAdd = message.substring(0,index).substring(0,index).replaceAll("_i",toReplaceA);
+		}
+		
 		if(indexBranchA==-1 || !(index_A<=indexBranchA && indexBranchA<=indexEnd_A)) {
-			toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> 1: " + message.substring(0,index);
+			toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> 1: " + messageToAdd;
 		}
 		else {
 			state_A  = Character.getNumericValue(toRet.charAt(indexBranchA-1));
 			toRet = toRet.replace("[] ("+ roleA+"_STATE="+state_A+") -> 1: ;\n","");
-			toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> 1: " + message.substring(0,index) ;
+			toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> 1: " + messageToAdd ;
 		}
 		if(message.substring(0,index).length()==0) {
 			toInsert_A = toInsert_A + nextState + ";\n";
@@ -125,14 +158,34 @@ public class CommunicationNode implements Node {
 			stateTmp_B++;
 			nextState = "("+roleB+"_STATE'="+stateTmp_B+")";
 		}
+		
+		messageToAdd = message.substring(index+2,message.length());
+		if(roleB.matches(".*\\d.*") || messageToAdd.contains("_i")) {
+			int indexDigit = -1;
+			String role ;
+			if(roleB.matches(".*\\d.*")) {
+				role = roleB;
+			}
+			else {
+				role = roleA;
+			}
+			for(int k=0; k<role.length(); k++) {
+				if(Character.isDigit(role.charAt(k))) {
+					indexDigit = k;
+				}
+			}
+			String toReplaceB = "_"+role.charAt(indexDigit);
+			messageToAdd = message.substring(index+2,message.length()).replaceAll("_i",toReplaceB);
+		}
+		
 		String toInsert_B = "";
 		if(indexBranchB==-1 || !(index_B<=indexBranchB && indexBranchB<=indexEnd_B)) {
-			toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> 1: " + message.substring(index+2,message.length()); 
+			toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> 1: " + messageToAdd; 
 		}
 		else {
 			state_B = Character.getNumericValue(toRet.charAt(indexBranchB-1));
 			toRet = toRet.replace("[] ("+ roleB+"_STATE="+state_B+") -> 1: ;\n","");
-			toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> 1: " + message.substring(index+2,message.length()); 
+			toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> 1: " + messageToAdd; 
 		}
 		if(message.substring(index+2,message.length()).length()==0) {
 			toInsert_B = toInsert_B + nextState + ";\n";
@@ -145,8 +198,11 @@ public class CommunicationNode implements Node {
 		toRet = new StringBuilder(toRet).insert(indexEnd_B-1,toInsert_B).toString();
 		//}
 		if(statement!=null) {
-			toRet = statement.codeGenerator(toRet,mapStates,mapStatesBranches);
+			toRet = statement.codeGenerator(toRet,mapStates,mapStatesBranches,roles);
 		}
+		
+		roleA = roleAtmp;
+		roleB = roleBtmp;
 
 		return toRet;
 	}

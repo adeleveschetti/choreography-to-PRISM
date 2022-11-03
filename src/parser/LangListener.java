@@ -19,6 +19,16 @@ public interface LangListener extends ParseTreeListener {
 	 */
 	void exitProtocol(LangParser.ProtocolContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LangParser#preamble}.
+	 * @param ctx the parse tree
+	 */
+	void enterPreamble(LangParser.PreambleContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#preamble}.
+	 * @param ctx the parse tree
+	 */
+	void exitPreamble(LangParser.PreambleContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LangParser#statement}.
 	 * @param ctx the parse tree
 	 */
@@ -79,6 +89,36 @@ public interface LangListener extends ParseTreeListener {
 	 */
 	void exitMessage(LangParser.MessageContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LangParser#roleDef}.
+	 * @param ctx the parse tree
+	 */
+	void enterRoleDef(LangParser.RoleDefContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#roleDef}.
+	 * @param ctx the parse tree
+	 */
+	void exitRoleDef(LangParser.RoleDefContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#roleSpec}.
+	 * @param ctx the parse tree
+	 */
+	void enterRoleSpec(LangParser.RoleSpecContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#roleSpec}.
+	 * @param ctx the parse tree
+	 */
+	void exitRoleSpec(LangParser.RoleSpecContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#roleGroup}.
+	 * @param ctx the parse tree
+	 */
+	void enterRoleGroup(LangParser.RoleGroupContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#roleGroup}.
+	 * @param ctx the parse tree
+	 */
+	void exitRoleGroup(LangParser.RoleGroupContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LangParser#role}.
 	 * @param ctx the parse tree
 	 */
@@ -88,6 +128,26 @@ public interface LangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRole(LangParser.RoleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#roleVar}.
+	 * @param ctx the parse tree
+	 */
+	void enterRoleVar(LangParser.RoleVarContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#roleVar}.
+	 * @param ctx the parse tree
+	 */
+	void exitRoleVar(LangParser.RoleVarContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#variableDecl}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariableDecl(LangParser.VariableDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#variableDecl}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariableDecl(LangParser.VariableDeclContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LangParser#cond}.
 	 * @param ctx the parse tree

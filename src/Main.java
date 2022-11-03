@@ -30,8 +30,8 @@ public class Main {
 		String toRet = "";
 		HashMap<String,ArrayList<Integer>> mapStatesBranches = null ;
 		HashMap<String,ArrayList<Integer>> mapStates = null ;
-		toRet = ast.codeGenerator(toRet,mapStates,mapStatesBranches);
-		//System.out.println(ast.codeGenerator(toRet,0,0));
+		ArrayList<String> roles = null;
+		toRet = ast.codeGenerator(toRet,mapStates,mapStatesBranches,roles);
 		
 		File file = new File("GeneratedCode.prism");
 		if (!file.exists()) {

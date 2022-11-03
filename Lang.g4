@@ -4,7 +4,9 @@ grammar Lang;
  * PARSER RULES
  *------------------------------------------------------------------*/
 
-protocol : protocolID COMMA (role (COMMA role)+) ASSIGN statement;
+protocol : (preamble)? (roleDef)+ protocolID ASSIGN statement;
+
+preamble : PREAMBLE (variableDecl)* ENDPREAMBLE ;
 
 statement : role FROM role COLON message DOT statement 
 			| role FROM role LPAR BRANCH SLPAR rateValues+=rate SRPAR message COLON statement (BRANCH SLPAR rateValues+=rate SRPAR message COLON statement)+ RPAR 
@@ -23,7 +25,17 @@ rate : ID ;
 
 message : DOUBLE_STRING ;
 
+roleDef : roleGroup FROM roleSpec+;
+
+roleSpec : (role (COLON (roleVar (COMMA roleVar)+))? SEMICOLON);
+
+roleGroup : ID ;
+
 role : ID ;
+
+roleVar : DOUBLE_STRING;
+
+variableDecl : DOUBLE_STRING;
 
 cond : DOUBLE_STRING ; 
 
@@ -54,6 +66,9 @@ IF 			: 'if';
 THEN		: 'then';
 ELSE		: 'else';
 END 		: 'END';
+PREAMBLE	: 'preamble';
+ENDPREAMBLE : 'endpreamble';
+CONST 		: 'const';
 WS  		: [ \t\r\n\u00a0]+ -> skip ;
 DOUBLE_STRING
     : '"' ~('"')+ '"'

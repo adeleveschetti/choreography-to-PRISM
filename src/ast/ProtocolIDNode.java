@@ -28,7 +28,7 @@ public class ProtocolIDNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches) {
+	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles) {
 		return toRet;
 	}
 

@@ -17,6 +17,12 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitProtocol(LangParser.ProtocolContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link LangParser#preamble}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPreamble(LangParser.PreambleContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link LangParser#statement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -53,11 +59,41 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMessage(LangParser.MessageContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link LangParser#roleDef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRoleDef(LangParser.RoleDefContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#roleSpec}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRoleSpec(LangParser.RoleSpecContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#roleGroup}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRoleGroup(LangParser.RoleGroupContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link LangParser#role}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitRole(LangParser.RoleContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#roleVar}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRoleVar(LangParser.RoleVarContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#variableDecl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariableDecl(LangParser.VariableDeclContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LangParser#cond}.
 	 * @param ctx the parse tree
