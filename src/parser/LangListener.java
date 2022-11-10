@@ -129,6 +129,16 @@ public interface LangListener extends ParseTreeListener {
 	 */
 	void exitRole(LangParser.RoleContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LangParser#forLoop}.
+	 * @param ctx the parse tree
+	 */
+	void enterForLoop(LangParser.ForLoopContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#forLoop}.
+	 * @param ctx the parse tree
+	 */
+	void exitForLoop(LangParser.ForLoopContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LangParser#roleVar}.
 	 * @param ctx the parse tree
 	 */

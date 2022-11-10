@@ -40,7 +40,7 @@ public class ProtocolNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> rolesTot) {
+	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> rolesTot, ArrayList<String> allRoles) {
 
 
 
@@ -49,7 +49,7 @@ public class ProtocolNode implements Node{
 
 		String code = ""; 
 		if(preamble!=null) {
-			code = preamble.codeGenerator(code,mapStates,mapStatesBranches,roles);
+			code = preamble.codeGenerator(code,mapStates,mapStatesBranches,roles,allRoles);
 		}
 
 		for(ArrayList<String> list : roleGroups) {
@@ -58,6 +58,14 @@ public class ProtocolNode implements Node{
 				code = code + "module " + el + "\n\n"+ el + "_STATE: [0..10] init 0;\n\n\nendmodule \n\n"; 
 			}
 		}
+		
+		allRoles = new ArrayList<String>();
+		for(ArrayList<String> list : roleGroups) {
+			for(String el : list) {
+				allRoles.add(el);
+			}
+		}
+		
 
 		int maxLen = 0;
 		for(ArrayList<String> list : roleGroups) {
@@ -83,7 +91,7 @@ public class ProtocolNode implements Node{
 				mapStates.put(list.get(i),new ArrayList<Integer>());
 				mapStatesBranches.put(list.get(i),new ArrayList<Integer>());
 			}
-			code = statement.codeGenerator(code,mapStates,mapStatesBranches,roles);
+			code = statement.codeGenerator(code,mapStates,mapStatesBranches,roles,allRoles);
 		}
 
 		for(String module : rolesVars.keySet()) {

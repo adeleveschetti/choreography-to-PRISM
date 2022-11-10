@@ -83,6 +83,12 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRole(LangParser.RoleContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link LangParser#forLoop}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForLoop(LangParser.ForLoopContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link LangParser#roleVar}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

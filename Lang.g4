@@ -8,7 +8,7 @@ protocol : (preamble)? (roleDef)+ protocolID ASSIGN statement;
 
 preamble : PREAMBLE (variableDecl)* ENDPREAMBLE ;
 
-statement : role FROM role COLON message DOT statement 
+statement : role FROM role COLON message (forLoop)? DOT statement 
 			| role FROM role LPAR BRANCH SLPAR rateValues+=rate SRPAR message COLON statement (BRANCH SLPAR rateValues+=rate SRPAR message COLON statement)+ RPAR 
 			| internalAction (DOT statement)?
 			| ifThenElse 
@@ -33,6 +33,8 @@ roleGroup : ID ;
 
 role : ID ;
 
+forLoop : FOREACH LPAR role NEQ role RPAR message AT role;
+
 roleVar : DOUBLE_STRING;
 
 variableDecl : DOUBLE_STRING;
@@ -53,6 +55,7 @@ COMMA		: ',' ;
 BRANCH 		: '+' ;
 FROM 		: '->';
 ASSIGN 		: ':=' ;
+NEQ 		: '!=' ;
 UNDERSCORE 	: '_' ;
 STAR 		: '*' ;
 LPAR   		: '(' ;
@@ -69,6 +72,8 @@ END 		: 'END';
 PREAMBLE	: 'preamble';
 ENDPREAMBLE : 'endpreamble';
 CONST 		: 'const';
+FOREACH		: 'foreach';
+IN			: 'in' ;
 WS  		: [ \t\r\n\u00a0]+ -> skip ;
 DOUBLE_STRING
     : '"' ~('"')+ '"'

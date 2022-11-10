@@ -29,7 +29,7 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 			}
 			rolesGroups.add(tmpRoles);
 		}
-		
+
 
 		Node preamble = null;
 		if(ctx.preamble()!=null) {
@@ -77,7 +77,11 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 		else if(ctx.protocolID()!=null) {
 			return new ProtocolIDNode(ctx.protocolID().ID().getText());
 		}
+		if(ctx.forLoop()!=null) {
+			return new CommunicationNode(ctx.role(0).ID().getText(), ctx.role(1).ID().getText(), ctx.message(0).getText().substring(1,ctx.message(0).getText().length()-1), visitStatement(ctx.statement(0)), visitForLoop(ctx.forLoop()));
+		}
 		return new CommunicationNode(ctx.role(0).ID().getText(), ctx.role(1).ID().getText(), ctx.message(0).getText().substring(1,ctx.message(0).getText().length()-1), visitStatement(ctx.statement(0)));
+
 	}
 
 	public Node visitIfThenElse(IfThenElseContext ctx) {
@@ -86,6 +90,10 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 			elseStatement = visitStatement(ctx.elseStat);
 		}
 		return new IfThenElseNode(ctx.role().getText(),ctx.cond().getText().substring(1,ctx.cond().getText().length()-1),visitStatement(ctx.thenStat),elseStatement);
+	}
+	
+	public Node visitForLoop(ForLoopContext ctx) {
+		return new ForLoopNode(ctx.message().DOUBLE_STRING().getText().substring(1,ctx.message().DOUBLE_STRING().getText().length()-1),ctx.role(2).getText(),ctx.role(0).getText(),ctx.role(1).getText());
 	}
 
 }

@@ -1,5 +1,7 @@
 preamble
 
+"ctmc"
+
 "const k;"
 "const T=k*1000;"
 
@@ -23,12 +25,12 @@ Miner2 : "b_2 : block {m_2,0;genesis,0};", "B_2 : blockchain [{genesis,0;genesis
 Miner3 : "b_3 : block {m_3,0;genesis,0};", "B_3 : blockchain [{genesis,0;genesis,0}];", "c_3 : [0..N] init 0;", "setMiner_3 : list [];";
 
 Network ->
-Network : "set_1 : list [];", "set_2 : list [];", "set_3 : list [];";
+Network : "set_1 : list [];", "set_2 : list [];", "set_3 : list [];"; 
 	
 
 PoW := Hasher_i -> Miner_i
 (+[mR*hR_i] "&&(b_i'=createB(b_i,B_i,c_i))&(c_i'=c_i+1)" : 
-			Miner_i -> Network : "(B_i'=addBlock(B_i,b_i))&&foreach k in N_i { set_k'=addBlockSet(set_k,b_i); }".PoW
+			Miner_i -> Network : "(B_i'=addBlock(B_i,b_i))&&" foreach(Miner_k != Miner_i) "set_k'=addBlockSet(set_k,b_i)" @Network .PoW
  +[lR*hR_i] "&&" : 
   if "!isEmpty(set_i)"@Miner_i then { 
   		{"(b_i'=extractBlock(set_i))"}@Miner_i . Miner_i -> Network : "(setMiner_i' = addBlockSet(setMiner_i , b_i))&&(set_i' = removeBlock(set_i,b_i))" . PoW 

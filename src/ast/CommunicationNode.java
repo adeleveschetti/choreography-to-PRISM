@@ -10,12 +10,21 @@ public class CommunicationNode implements Node {
 	private String roleB = null;
 	private String message;
 	private Node statement;
+	private Node forLoop = null;
 
 	public CommunicationNode(String A, String B, String mex, Node stat) {
 		roleA = A;
 		roleB = B;
 		message = mex;
 		statement = stat;
+	}
+	
+	public CommunicationNode(String A, String B, String mex, Node stat, Node loop) {
+		roleA = A;
+		roleB = B;
+		message = mex;
+		statement = stat;
+		forLoop = loop ;
 	}
 
 	@Override
@@ -34,10 +43,10 @@ public class CommunicationNode implements Node {
 	}
 
 	@Override
-	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles) {
+	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles) {
 		String roleAtmp = roleA;
 		String roleBtmp = roleB;
-
+		
 		for(String el : roles) {
 			if(el.contains(roleA.substring(0,roleA.length()-2))) {
 				roleA = el;
@@ -96,6 +105,10 @@ public class CommunicationNode implements Node {
 			stateTmp_A++;
 			nextState = "("+roleA+"_STATE'="+stateTmp_A+")";
 		}
+		String messageForLoop = "";
+		if(forLoop!=null) {
+			messageForLoop = forLoop.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
+		}
 		
 		String messageToAdd = message.substring(0,index);
 		if(roleA.matches(".*\\d.*")|| messageToAdd.contains("_i")) {
@@ -136,7 +149,12 @@ public class CommunicationNode implements Node {
 		int indexBranchB = toRet.indexOf(") -> 1: ;\n");
 		int indexEnd_B = toRet.indexOf("endmodule",index_B);
 		int stateTmp_B = state_B;
-		int alreadyDef =  toRet.indexOf(message.substring(index+2,message.length()));
+		messageToAdd = message.substring(index+2,message.length());
+		if(forLoop!=null && forLoop.getRoleA().equals(roleB)) {
+			messageToAdd = messageToAdd+messageForLoop;
+		}
+		int alreadyDef = toRet.indexOf(messageToAdd);
+		
 		if(alreadyDef!=-1) {
 			String toFind = "("+roleB+"_STATE'=";
 			String toFind2 = "("+roleB+"_STATE=";
@@ -149,6 +167,7 @@ public class CommunicationNode implements Node {
 			int indexB_def = toRet.indexOf(toFind,alreadyDef);
 			stateTmp_B = Character.getNumericValue(toRet.charAt(indexB_def+toFind.length()));
 			nextState = "("+roleB +"_STATE'=" + stateTmp_B +")";
+			
 			state_B = Character.getNumericValue(toRet.charAt(stateInit_B+toFind2.length()));
 		}
 		else if(statement instanceof ProtocolIDNode) {
@@ -159,7 +178,7 @@ public class CommunicationNode implements Node {
 			nextState = "("+roleB+"_STATE'="+stateTmp_B+")";
 		}
 		
-		messageToAdd = message.substring(index+2,message.length());
+		
 		if(roleB.matches(".*\\d.*") || messageToAdd.contains("_i")) {
 			int indexDigit = -1;
 			String role ;
@@ -198,7 +217,7 @@ public class CommunicationNode implements Node {
 		toRet = new StringBuilder(toRet).insert(indexEnd_B-1,toInsert_B).toString();
 		//}
 		if(statement!=null) {
-			toRet = statement.codeGenerator(toRet,mapStates,mapStatesBranches,roles);
+			toRet = statement.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
 		}
 		
 		roleA = roleAtmp;

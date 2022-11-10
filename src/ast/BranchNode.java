@@ -63,7 +63,7 @@ public class BranchNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles) {
+	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles) {
 		String roleAtmp = roleA;
 		String roleBtmp = roleB;
 
@@ -281,7 +281,7 @@ public class BranchNode implements Node{
 
 
 			//mapStates.get(roleA).add(stateTmp_A);
-			toRet = statements.get(i).codeGenerator(toRet,mapStates,mapStatesBranches,roles);
+			toRet = statements.get(i).codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
 
 
 		}

@@ -1,3 +1,4 @@
+ctmc
 const k;
 const T=k*1000;
 const double rb ;
@@ -12,8 +13,8 @@ module Hasher1
 
 Hasher1_STATE: [0..10] init 0;
 
-[DHUEA] (Hasher1_STATE=0) -> mR : (Hasher1_STATE'=0);
-[WFOUC] (Hasher1_STATE=0) -> lR : (Hasher1_STATE'=0);
+[PBEJE] (Hasher1_STATE=0) -> mR : (Hasher1_STATE'=0);
+[CAXAM] (Hasher1_STATE=0) -> lR : (Hasher1_STATE'=0);
 
 endmodule 
 
@@ -21,8 +22,8 @@ module Hasher2
 
 Hasher2_STATE: [0..10] init 0;
 
-[ECMPR] (Hasher2_STATE=0) -> mR : (Hasher2_STATE'=0);
-[KQIYI] (Hasher2_STATE=0) -> lR : (Hasher2_STATE'=0);
+[CCZLW] (Hasher2_STATE=0) -> mR : (Hasher2_STATE'=0);
+[TWDFU] (Hasher2_STATE=0) -> lR : (Hasher2_STATE'=0);
 
 endmodule 
 
@@ -30,8 +31,8 @@ module Hasher3
 
 Hasher3_STATE: [0..10] init 0;
 
-[SYQGD] (Hasher3_STATE=0) -> mR : (Hasher3_STATE'=0);
-[SXYIF] (Hasher3_STATE=0) -> lR : (Hasher3_STATE'=0);
+[NZVCK] (Hasher3_STATE=0) -> mR : (Hasher3_STATE'=0);
+[GKPGG] (Hasher3_STATE=0) -> lR : (Hasher3_STATE'=0);
 
 endmodule 
 
@@ -43,12 +44,12 @@ setMiner_1 : list [];
 
 Miner1_STATE: [0..10] init 0;
 
-[DHUEA] (Miner1_STATE=0) -> hR_1 : (b_1'=createB(b_1,B_1,c_1))&(c_1'=c_1+1)&(Miner1_STATE'=1);
-[DQETB] (Miner1_STATE=1) -> 1: (B_1'=addBlock(B_1,b_1))&(Miner1_STATE'=0);
-[WFOUC] (Miner1_STATE=0) -> hR_1 : (Miner1_STATE'=2);
+[PBEJE] (Miner1_STATE=0) -> hR_1 : (b_1'=createB(b_1,B_1,c_1))&(c_1'=c_1+1)&(Miner1_STATE'=1);
+[HXNJC] (Miner1_STATE=1) -> 1: (B_1'=addBlock(B_1,b_1))&(Miner1_STATE'=0);
+[CAXAM] (Miner1_STATE=0) -> hR_1 : (Miner1_STATE'=2);
 [] (!isEmpty(set_1))&(Miner1_STATE=2) -> 1:(b_1'=extractBlock(set_1))&(Miner1_STATE'=3);
 [] !(!isEmpty(set_1))&(Miner1_STATE=2) -> 1:(Miner1_STATE'=4);
-[PEYJV] (Miner1_STATE=3) -> 1: (setMiner_1' = addBlockSet(setMiner_1 , b_1))&(Miner1_STATE'=0);
+[SRYJD] (Miner1_STATE=3) -> 1: (setMiner_1' = addBlockSet(setMiner_1 , b_1))&(Miner1_STATE'=0);
 [] (isEmpty(setMiner_1))&(Miner1_STATE=4) -> 1: (Miner1_STATE'=0);
 [] !(isEmpty(setMiner_1))&(Miner1_STATE=4) -> 1:(Miner1_STATE'=5);
 [] (canBeInserted(B_1,b_1))&(Miner1_STATE=5) -> 1:(B_1'=addBlock(B_1,b_1))&(setMiner_1'=removeBlock(setMiner_1,b_1))&(Miner1_STATE'=0);
@@ -64,12 +65,12 @@ setMiner_2 : list [];
 
 Miner2_STATE: [0..10] init 0;
 
-[ECMPR] (Miner2_STATE=0) -> hR_2 : (b_2'=createB(b_2,B_2,c_2))&(c_2'=c_2+1)&(Miner2_STATE'=1);
-[JKPCV] (Miner2_STATE=1) -> 1: (B_2'=addBlock(B_2,b_2))&(Miner2_STATE'=0);
-[KQIYI] (Miner2_STATE=0) -> hR_2 : (Miner2_STATE'=2);
+[CCZLW] (Miner2_STATE=0) -> hR_2 : (b_2'=createB(b_2,B_2,c_2))&(c_2'=c_2+1)&(Miner2_STATE'=1);
+[DPADH] (Miner2_STATE=1) -> 1: (B_2'=addBlock(B_2,b_2))&(Miner2_STATE'=0);
+[TWDFU] (Miner2_STATE=0) -> hR_2 : (Miner2_STATE'=2);
 [] (!isEmpty(set_1))&(Miner2_STATE=2) -> 1:(b_2'=extractBlock(set_2))&(Miner2_STATE'=3);
 [] !(!isEmpty(set_1))&(Miner2_STATE=2) -> 1:(Miner2_STATE'=4);
-[SDCGN] (Miner2_STATE=3) -> 1: (setMiner_2' = addBlockSet(setMiner_2 , b_2))&(Miner2_STATE'=0);
+[KVRTS] (Miner2_STATE=3) -> 1: (setMiner_2' = addBlockSet(setMiner_2 , b_2))&(Miner2_STATE'=0);
 [] (isEmpty(setMiner_1))&(Miner2_STATE=4) -> 1: (Miner2_STATE'=0);
 [] !(isEmpty(setMiner_1))&(Miner2_STATE=4) -> 1:(Miner2_STATE'=5);
 [] (canBeInserted(B_1,b_1))&(Miner2_STATE=5) -> 1:(B_2'=addBlock(B_2,b_2))&(setMiner_2'=removeBlock(setMiner_2,b_2))&(Miner2_STATE'=0);
@@ -85,12 +86,12 @@ setMiner_3 : list [];
 
 Miner3_STATE: [0..10] init 0;
 
-[SYQGD] (Miner3_STATE=0) -> hR_3 : (b_3'=createB(b_3,B_3,c_3))&(c_3'=c_3+1)&(Miner3_STATE'=1);
-[LYEDH] (Miner3_STATE=1) -> 1: (B_3'=addBlock(B_3,b_3))&(Miner3_STATE'=0);
-[SXYIF] (Miner3_STATE=0) -> hR_3 : (Miner3_STATE'=2);
+[NZVCK] (Miner3_STATE=0) -> hR_3 : (b_3'=createB(b_3,B_3,c_3))&(c_3'=c_3+1)&(Miner3_STATE'=1);
+[OUDBN] (Miner3_STATE=1) -> 1: (B_3'=addBlock(B_3,b_3))&(Miner3_STATE'=0);
+[GKPGG] (Miner3_STATE=0) -> hR_3 : (Miner3_STATE'=2);
 [] (!isEmpty(set_1))&(Miner3_STATE=2) -> 1:(b_3'=extractBlock(set_3))&(Miner3_STATE'=3);
 [] !(!isEmpty(set_1))&(Miner3_STATE=2) -> 1:(Miner3_STATE'=4);
-[LLRDS] (Miner3_STATE=3) -> 1: (setMiner_3' = addBlockSet(setMiner_3 , b_3))&(Miner3_STATE'=0);
+[WOJAI] (Miner3_STATE=3) -> 1: (setMiner_3' = addBlockSet(setMiner_3 , b_3))&(Miner3_STATE'=0);
 [] (isEmpty(setMiner_1))&(Miner3_STATE=4) -> 1: (Miner3_STATE'=0);
 [] !(isEmpty(setMiner_1))&(Miner3_STATE=4) -> 1:(Miner3_STATE'=5);
 [] (canBeInserted(B_1,b_1))&(Miner3_STATE=5) -> 1:(B_3'=addBlock(B_3,b_3))&(setMiner_3'=removeBlock(setMiner_3,b_3))&(Miner3_STATE'=0);
@@ -105,12 +106,12 @@ set_3 : list [];
 
 Network_STATE: [0..10] init 0;
 
-[DQETB] (Network_STATE=0) -> 1: foreach k in N_1 { set_k'=addBlockSet(set_k,b_1); }&(Network_STATE'=0);
-[PEYJV] (Network_STATE=0) -> 1: (set_1' = removeBlock(set_1,b_1))&(Network_STATE'=0);
-[JKPCV] (Network_STATE=0) -> 1: foreach k in N_2 { set_k'=addBlockSet(set_k,b_2); }&(Network_STATE'=0);
-[SDCGN] (Network_STATE=0) -> 1: (set_2' = removeBlock(set_2,b_2))&(Network_STATE'=0);
-[LYEDH] (Network_STATE=0) -> 1: foreach k in N_3 { set_k'=addBlockSet(set_k,b_3); }&(Network_STATE'=0);
-[LLRDS] (Network_STATE=0) -> 1: (set_3' = removeBlock(set_3,b_3))&(Network_STATE'=0);
+[HXNJC] (Network_STATE=0) -> 1: (set_2'=addBlockSet(set_2,b_1))&(set_3'=addBlockSet(set_3,b_1))&(Network_STATE'=0);
+[SRYJD] (Network_STATE=0) -> 1: (set_1' = removeBlock(set_1,b_1))&(Network_STATE'=0);
+[DPADH] (Network_STATE=0) -> 1: (set_1'=addBlockSet(set_1,b_2))&(set_3'=addBlockSet(set_3,b_2))&(Network_STATE'=0);
+[KVRTS] (Network_STATE=0) -> 1: (set_2' = removeBlock(set_2,b_2))&(Network_STATE'=0);
+[OUDBN] (Network_STATE=0) -> 1: (set_1'=addBlockSet(set_1,b_3))&(set_2'=addBlockSet(set_2,b_3))&(Network_STATE'=0);
+[WOJAI] (Network_STATE=0) -> 1: (set_3' = removeBlock(set_3,b_3))&(Network_STATE'=0);
 
 endmodule 
 

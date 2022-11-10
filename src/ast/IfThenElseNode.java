@@ -34,7 +34,7 @@ public class IfThenElseNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles) {
+	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles) {
 
 
 		String roleTmp = role;
@@ -84,7 +84,7 @@ public class IfThenElseNode implements Node{
 		}
 		else {
 
-			toInsert_A = toInsert_A + thenStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles)+";\n" ;
+			toInsert_A = toInsert_A + thenStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles)+";\n" ;
 			state++;
 			flag = true;
 		}
@@ -107,7 +107,7 @@ public class IfThenElseNode implements Node{
 		}
 
 		if(elseStat instanceof InternalActionNode) {
-			toInsert_A = toInsert_A + elseStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles) + ";\n";
+			toInsert_A = toInsert_A + elseStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles) + ";\n";
 		}
 
 		int indexEnd_A = toRet.indexOf("endmodule",index_A);
@@ -115,13 +115,13 @@ public class IfThenElseNode implements Node{
 		toRet = new StringBuilder(toRet).insert(indexEnd_A-1,toInsert_A).toString();
 
 		if(thenStat instanceof InternalActionNode ) {
-			toRet = thenStat.getStatement().codeGenerator(toRet,mapStates,mapStatesBranches,roles);
+			toRet = thenStat.getStatement().codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
 		}
 		if(thenStat instanceof CommunicationNode) {
-			toRet = thenStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles);
+			toRet = thenStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
 		}
 		if(elseStat!=null) {
-			toRet = elseStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles);
+			toRet = elseStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
 		}
 
 		role = roleTmp;

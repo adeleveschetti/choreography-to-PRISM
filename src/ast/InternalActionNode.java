@@ -31,7 +31,7 @@ public class InternalActionNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles) {
+	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles) {
 		
 		int state = 0;
 
@@ -60,7 +60,7 @@ public class InternalActionNode implements Node{
 			ret = ret + "&("+role+"_STATE'=0)";
 		}
 		else {
-			String toRet2 = statement.codeGenerator(toRet,mapStates,mapStatesBranches,roles);
+			String toRet2 = statement.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
 			if(mapStates.get(role).size()==0) {
 				state = 0;
 				mapStates.get(role).add(state);
