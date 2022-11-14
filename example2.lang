@@ -31,10 +31,10 @@ Vote_Manager -> Vote_Manager ;
 PoS := Validator_i -> Validator_i
 (+[mR]  "(b_i'=createBlock(Validator_i,c_i,L_i))&(c_i'=c_i+1)&&" :
 		if "!isCp(b_i)"@Validator_i then{
-			Validator_i -> Network : "(L_i'=addBlockLedger(L_i,b_i))&&foreach k in N_i { set_k'=addBlock(set_k,b_i); }".PoS
+			Validator_i -> Network : "(L_i'=addBlockLedger(L_i,b_i))&&" foreach(Validator_k != Validator_i) "set_k'=addBlock(set_k,b_i)"@Network .PoS
 		}
 		else{
-			Validator_i -> Network : "(L_i'=addBlockLedger(L_i,b_i))&&foreach k in N_i { set_k'=addBlock(set_k,b_i); }".
+			Validator_i -> Network : "(L_i'=addBlockLedger(L_i,b_i))&&" foreach(Validator_k != Validator_i) "set_k'=addBlock(set_k,b_i)"@Network.
 			Validator_i -> Vote_Manager : "&&(Votes′=addVote(Votes,b_i,Validator_i))".PoS
 		}
  +[hR] "&&" : if "!isEmpty(set_i)"@Validator_i then {
@@ -42,11 +42,11 @@ PoS := Validator_i -> Validator_i
  				  															PoS
  				  											}
  				  											else{
- 				  												if "isCp(b_i)"@Validator_i then {
- 				  																Validator_i -> Network : "(setMiner_i' = addBlock(setMiner_i , b_i))&&set_i' = removeBlock(set_i,b_i)" . PoS 
+ 				  												if "!isCp(b_i)"@Validator_i then {
+ 				  																Validator_i -> Network : "(setMiner_i' = addBlock(setMiner_i , b_i))&&(set_i' = removeBlock(set_i,b_i))" . PoS
  				  														}
  				  														else{
- 				  	 															Validator_i -> Network : "(setMiner_i' = addBlock(setMiner_i , b_i))&&set_i' = removeBlock(set_i,b_i)" . PoS 
+ 				  	 															Validator_i -> Network : "(setMiner_i' = addBlock(setMiner_i , b_i))&&(set_i' = removeBlock(set_i,b_i))" . Validator_i -> Vote_Manager : "&&(Votes′=addVote(Votes,b_i,Validator_i))".PoS 
  				  														}
  				  											}
  			}

@@ -2,8 +2,9 @@ package ast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import ast.*;
 import parser.LangBaseVisitor;
+import parser.LangParser;
 import parser.LangParser.*;
 
 public class LangVisitorImpl extends LangBaseVisitor<Node>{
@@ -49,10 +50,18 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 
 	@Override
 	public Node visitStatement(StatementContext ctx) {
-		if(ctx.rate().size()>0) {
+		if(ctx.BRANCH()!=null  && ctx.BRANCH().size()>0 ) {
 			ArrayList<String> messages = new ArrayList<String>();
+			ArrayList<Node> loops = new ArrayList<Node>();
+
 			for(MessageContext el : ctx.message()) {
-				messages.add(el.getText().substring(1,el.getText().length()-1));
+				messages.add(el.actions().getText().substring(1,el.actions().getText().length()-1));
+				if(el.forLoop()!=null) {
+					loops.add(visitForLoop(el.forLoop()));
+				}
+				else {
+					loops.add(null);
+				}
 			}
 			ArrayList<String> rates = new ArrayList<String>();
 			for(RateContext el : ctx.rateValues) {
@@ -62,7 +71,8 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 			for(StatementContext el : ctx.statement()) {
 				stats.add(visitStatement(el));
 			}
-			return new BranchNode(ctx.role(0).ID().getText(),ctx.role(1).ID().getText(),rates,messages,stats);
+			// TODO: aggiungere forloop
+			return new BranchNode(ctx.role(0).ID().getText(),ctx.role(1).ID().getText(),rates,messages,stats,loops);
 		}
 		else if(ctx.internalAction()!=null) {
 			Node stat = null;
@@ -77,10 +87,14 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 		else if(ctx.protocolID()!=null) {
 			return new ProtocolIDNode(ctx.protocolID().ID().getText());
 		}
-		if(ctx.forLoop()!=null) {
-			return new CommunicationNode(ctx.role(0).ID().getText(), ctx.role(1).ID().getText(), ctx.message(0).getText().substring(1,ctx.message(0).getText().length()-1), visitStatement(ctx.statement(0)), visitForLoop(ctx.forLoop()));
+		String rate = "";
+		if(ctx.rate()!=null && ctx.rate().size()==1) {
+			rate = ctx.rate().get(0).getText();
 		}
-		return new CommunicationNode(ctx.role(0).ID().getText(), ctx.role(1).ID().getText(), ctx.message(0).getText().substring(1,ctx.message(0).getText().length()-1), visitStatement(ctx.statement(0)));
+		if(ctx.message(0).forLoop()!=null) {
+			return new CommunicationNode(ctx.role(0).ID().getText(), ctx.role(1).ID().getText(), ctx.message(0).actions().getText().substring(1,ctx.message(0).actions().getText().length()-1), visitStatement(ctx.statement(0)), visitForLoop(ctx.message(0).forLoop()),rate);
+		}
+		return new CommunicationNode(ctx.role(0).ID().getText(), ctx.role(1).ID().getText(), ctx.message(0).actions().getText().substring(1,ctx.message(0).actions().getText().length()-1), visitStatement(ctx.statement(0)),rate);
 
 	}
 
@@ -91,9 +105,9 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 		}
 		return new IfThenElseNode(ctx.role().getText(),ctx.cond().getText().substring(1,ctx.cond().getText().length()-1),visitStatement(ctx.thenStat),elseStatement);
 	}
-	
+
 	public Node visitForLoop(ForLoopContext ctx) {
-		return new ForLoopNode(ctx.message().DOUBLE_STRING().getText().substring(1,ctx.message().DOUBLE_STRING().getText().length()-1),ctx.role(2).getText(),ctx.role(0).getText(),ctx.role(1).getText());
+		return new ForLoopNode(ctx.actions().DOUBLE_STRING().getText().substring(1,ctx.actions().DOUBLE_STRING().getText().length()-1),ctx.role(2).getText(),ctx.role(0).getText(),ctx.role(1).getText());
 	}
 
 }

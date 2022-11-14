@@ -59,6 +59,12 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMessage(LangParser.MessageContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link LangParser#actions}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitActions(LangParser.ActionsContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link LangParser#roleDef}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
