@@ -59,6 +59,12 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMessage(LangParser.MessageContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link LangParser#varDef}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVarDef(LangParser.VarDefContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link LangParser#actions}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -82,6 +88,18 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitRoleGroup(LangParser.RoleGroupContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#roleIndex}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRoleIndex(LangParser.RoleIndexContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#indexSpec}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndexSpec(LangParser.IndexSpecContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LangParser#role}.
 	 * @param ctx the parse tree
@@ -112,6 +130,12 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCond(LangParser.CondContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#index}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIndex(LangParser.IndexContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LangParser#id}.
 	 * @param ctx the parse tree

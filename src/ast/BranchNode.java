@@ -5,16 +5,16 @@ import java.util.HashMap;
 import java.util.Random;
 
 public class BranchNode implements Node{
+	static final int lenIndex = 3;
 
 	private String roleA = null;
 	private String roleB = null;
 	private ArrayList<String> rates = null;
-	private ArrayList<String> messages = null;
+	private ArrayList<ArrayList<String>> messages = null;
 	private ArrayList<Node> forLoops = null;
-
 	private ArrayList<Node> statements = null;
 
-	public BranchNode(String A, String B, ArrayList<String> listRates, ArrayList<String> listMessages, ArrayList<Node> listStatements, ArrayList<Node> loops) {
+	public BranchNode(String A, String B, ArrayList<String> listRates, ArrayList<ArrayList<String>> listMessages, ArrayList<Node> listStatements, ArrayList<Node> loops) {
 		roleA = A;
 		roleB = B;
 		if(listRates!=null) {
@@ -24,9 +24,13 @@ public class BranchNode implements Node{
 			}
 		}
 		if(listMessages!=null) {
-			messages = new ArrayList<String>();
-			for(String el : listMessages) {
-				messages.add(el);
+			messages = new ArrayList<ArrayList<String>>();
+			for(ArrayList<String> list : listMessages) {
+				ArrayList<String> tmp = new ArrayList<String> ();
+				for(String el : list) {
+					tmp.add(el);
+				}
+				messages.add(tmp);
 			}
 		}
 		if(listStatements!=null) {
@@ -35,7 +39,7 @@ public class BranchNode implements Node{
 				statements.add(el);
 			}
 		}
-		
+
 		if(loops!=null) {
 			forLoops = new ArrayList<Node>();
 			for(Node el : loops) {
@@ -72,34 +76,36 @@ public class BranchNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles) {
+	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles, int currIndex, int totIndex) {
 		String roleAtmp = roleA;
 		String roleBtmp = roleB;
-
 		for(String el : roles) {
-			if(el.contains(roleA.substring(0,roleA.length()-2))) {
+			if(el.contains(roleA.substring(0,roleA.length()-lenIndex))) {
 				roleA = el;
 			}
-			if(el.contains(roleB.substring(0,roleB.length()-2))) {
+			if(el.contains(roleB.substring(0,roleB.length()-lenIndex))) {
 				roleB = el;
 			}
 		}
 		int size = 5; 
 		// generating the label
 		int state_A, state_B;
-		if(mapStates.get(roleA).size()==0) {
+		if(mapStates.get(roleA)==null || mapStates.get(roleA).size()==0) {
 			state_A = 0;
-			mapStates.get(roleA).add(state_A);
+			ArrayList<Integer> tmp = new ArrayList<Integer>();
+			tmp.add(state_A);
+			mapStates.put(roleA,tmp);
 		}
 		else {
 			state_A = mapStates.get(roleA).get(mapStates.get(roleA).size()-1)+1;
 			mapStates.get(roleA).add(state_A);
 		}
 
-		if(mapStates.get(roleB).size()==0) {
+		if(mapStates.get(roleB)==null || mapStates.get(roleB).size()==0) {
 			state_B = 0;
-			mapStates.get(roleB).add(state_B);
-
+			ArrayList<Integer> tmp = new ArrayList<Integer>();
+			tmp.add(state_B);
+			mapStates.put(roleB,tmp);
 		}
 		else {
 			state_B = mapStates.get(roleB).get(mapStates.get(roleB).size()-1)+1;
@@ -110,6 +116,7 @@ public class BranchNode implements Node{
 
 		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		for(int i = 0; i<rates.size() ; i++) {
+			ArrayList<String> tmpMessage = messages.get(i);
 
 			String toFind_A = "module " + roleA + "\n\n";
 			int index_A = toRet.indexOf(toFind_A);
@@ -126,9 +133,8 @@ public class BranchNode implements Node{
 				salt.append(SALTCHARS.charAt(index));
 			}
 			String label = salt.toString();
-			int index = messages.get(i).indexOf("&&");
 			int indexRole = rates.get(i).toString().indexOf("*");
-			
+
 			String rateA, rateB = "";
 			if(indexRole == -1) {
 				rateA = rates.get(i).toString().substring(0,rates.get(i).toString().length());
@@ -138,25 +144,25 @@ public class BranchNode implements Node{
 				rateA = rates.get(i).toString().substring(0,indexRole);
 				rateB = rates.get(i).toString().substring(indexRole+1,rates.get(i).toString().length());
 			}
-			if(rateA.contains("_i")) {
+			if(rateA.contains("\\[i\\]")) {
 				int indexDigit = -1;
 				for(int k=0; k<roleA.length(); k++) {
 					if(Character.isDigit(roleA.charAt(k))) {
 						indexDigit = k;
 					}
 				}
-				rateA=rateA.replace("_i","_"+roleA.charAt(indexDigit));
+				rateA=rateA.replace("\\[i\\]",""+roleA.charAt(indexDigit));
 			}
-			if(rateB.contains("_i")) {
+			if(rateB.contains("\\[i\\]")) {
 				int indexDigit = -1;
 				for(int k=0; k<roleB.length(); k++) {
 					if(Character.isDigit(roleB.charAt(k))) {
 						indexDigit = k;
 					}
 				}
-				rateB=rateB.replace("_i","_"+roleB.charAt(indexDigit));
+				rateB=rateB.replace("\\[i\\]",""+roleB.charAt(indexDigit));
 			}
-			
+
 			int indexBranchA = toRet.indexOf(") -> \n");
 			String toInsert_A = "";
 			String nextState = "";			
@@ -168,16 +174,15 @@ public class BranchNode implements Node{
 				stateTmp_A++;
 				nextState = "("+roleA+"_STATE'="+stateTmp_A+")";
 			}
-			
+
 			String messageForLoop = "";
 			if(forLoops.get(i)!=null) {
-				messageForLoop = forLoops.get(i).codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
+				messageForLoop = forLoops.get(i).codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
 			}
-			
-			String messageToAdd = messages.get(i).substring(0,index);
-			
-			
-			if(roleA.matches(".*\\d.*")|| messageToAdd.contains("_i")) {
+			String messageToAdd = tmpMessage.get(0);
+
+
+			if(roleA.matches(".*\\d.*")|| messageToAdd.contains("[i]")) {
 				int indexDigit = -1;
 				String role ;
 				if(roleB.matches(".*\\d.*")) {
@@ -192,18 +197,18 @@ public class BranchNode implements Node{
 					}
 				}
 				String toReplaceA = "_"+role.charAt(indexDigit);
-				messageToAdd = messages.get(i).substring(0,index).replaceAll("_i",toReplaceA);
+				messageToAdd = tmpMessage.get(0).replaceAll("\\[i\\]",toReplaceA);
 			}
-			
+
 			if(forLoops.get(i)!=null && forLoops.get(i).getRoleA().contains(roleA.substring(0,roleA.length()-1))) {
-				if(messageToAdd.equals("")) {
+				if(messageToAdd.equals(" ")) {
 					messageToAdd = messageToAdd+messageForLoop;
 				}
 				else {
 					messageToAdd = messageToAdd+"&"+messageForLoop;
 				}
 			}
-			
+
 			if(roleA.equals(roleB)) {label="";}
 			if(roleA.equals(roleB) || indexBranchA==-1 || !(index_A<=indexBranchA && indexBranchA<=indexEnd_A)) {
 				toInsert_A =  "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateA + " : " + messageToAdd;// +"&"+nextState+ ";\n";
@@ -213,7 +218,7 @@ public class BranchNode implements Node{
 				toRet = toRet.replace("[] ("+ roleA+"_STATE="+state_A+") -> \n","");
 				toInsert_A =  "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateA + " : " + messageToAdd;// +"&"+nextState+ ";\n";
 			}
-			if(messages.get(i).substring(0,index).length()==0) {
+			if(tmpMessage.get(0).length()==1) {
 				toInsert_A = toInsert_A + nextState + ";\n";
 			}
 			else {
@@ -236,10 +241,14 @@ public class BranchNode implements Node{
 					stateTmp_B++;
 					nextState = "("+roleB+"_STATE'="+stateTmp_B+")";
 				}
+				if(tmpMessage.size()>1) {
+					messageToAdd = tmpMessage.get(1);
+				}
+				else {
+					messageToAdd = "";
+				}
 
-				messageToAdd = messages.get(i).substring(index+2,messages.get(i).length());
-			
-				if(roleB.matches(".*\\d.*")|| messageToAdd.contains("_i")) {
+				if(roleB.matches(".*\\d.*")|| messageToAdd.contains("[i]")) {
 					int indexDigit = -1;
 					String role ;
 					if(roleB.matches(".*\\d.*")) {
@@ -253,13 +262,13 @@ public class BranchNode implements Node{
 							indexDigit = k;
 						}
 					}
-					String toReplaceB = "_"+role.charAt(indexDigit);
+					String toReplaceB = ""+role.charAt(indexDigit);
 
-					messageToAdd = messages.get(i).substring(index+2,messages.get(i).length()).replaceAll("_i",toReplaceB);
+					messageToAdd = messageToAdd.replaceAll("\\[i\\]",toReplaceB);
 
 				}
 				if(forLoops.get(i)!=null && forLoops.get(i).getRoleA().contains(roleB.substring(0,roleB.length()-1))) {
-					if(messageToAdd.equals("")) {
+					if(messageToAdd.equals(" ")) {
 						messageToAdd = messageToAdd+messageForLoop;
 					}
 					else {
@@ -276,7 +285,7 @@ public class BranchNode implements Node{
 					toRet = toRet.replace("[] ("+ roleB+"_STATE="+state_B+") -> \n","");
 					toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateB  + " : " + messageToAdd ;//+ "&"+ nextState +";\n";
 				}
-				if(messages.get(i).substring(index+2,messages.get(i).length()).length()==0) {
+				if(tmpMessage.size()==1) {
 					toInsert_B = toInsert_B + nextState + ";\n";
 				}
 				else {
@@ -317,7 +326,7 @@ public class BranchNode implements Node{
 
 
 			//mapStates.get(roleA).add(stateTmp_A);
-			toRet = statements.get(i).codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
+			toRet = statements.get(i).codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
 
 
 		}

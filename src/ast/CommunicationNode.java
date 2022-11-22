@@ -6,24 +6,28 @@ import java.util.Random;
 
 public class CommunicationNode implements Node {
 
+	static final int lenIndex = 3;
+	
 	private String roleA = null;
 	private String roleB = null;
-	private String message;
+	private ArrayList<String> message = null;
 	private Node statement;
 	private Node forLoop = null;
 	private String rate ;
 
-	public CommunicationNode(String A, String B, String mex, Node stat, String r) {
+	public CommunicationNode(String A, String B, ArrayList<String> mex, Node stat, String r) {
 		roleA = A;
 		roleB = B;
+		message = new ArrayList<String>();
 		message = mex;
 		statement = stat;
 		rate = r;
 	}
 
-	public CommunicationNode(String A, String B, String mex, Node stat, Node loop, String r) {
+	public CommunicationNode(String A, String B, ArrayList<String> mex, Node stat, Node loop, String r) {
 		roleA = A;
 		roleB = B;
+		message = new ArrayList<String>();
 		message = mex;
 		statement = stat;
 		forLoop = loop ;
@@ -46,7 +50,7 @@ public class CommunicationNode implements Node {
 	}
 
 	@Override
-	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles) {
+	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles, int currIndex, int totIndex) {
 		String roleAtmp = roleA;
 		String roleBtmp = roleB;
 		String rateToPrintA = "";
@@ -70,10 +74,10 @@ public class CommunicationNode implements Node {
 		}
 
 		for(String el : roles) {
-			if(el.contains(roleA.substring(0,roleA.length()-2))) {
+			if(el.contains(roleA.substring(0,roleA.length()-lenIndex))) {
 				roleA = el;
 			}
-			if(el.contains(roleB.substring(0,roleB.length()-2))) {
+			if(el.contains(roleB.substring(0,roleB.length()-lenIndex))) {
 				roleB = el;
 			}
 		}
@@ -92,18 +96,22 @@ public class CommunicationNode implements Node {
 		String toFind_A = "module " + roleA + "\n\n";
 
 		int state_A, state_B;
-		if(mapStates.get(roleA).size()==0) {
+		if(mapStates.get(roleA)==null || mapStates.get(roleA).size()==0) {
 			state_A = 0;
-			mapStates.get(roleA).add(state_A);
+			ArrayList<Integer> tmp = new ArrayList<Integer>();
+			tmp.add(state_A);
+			mapStates.put(roleA,tmp);
 		}
 		else {
 			state_A = mapStates.get(roleA).get(mapStates.get(roleA).size()-1)+1;
 			mapStates.get(roleA).add(state_A);
 		}
 
-		if(mapStates.get(roleB).size()==0) {
+		if(mapStates.get(roleB)==null ||mapStates.get(roleB).size()==0) {
 			state_B = 0;
-			mapStates.get(roleB).add(state_B);
+			ArrayList<Integer> tmp = new ArrayList<Integer>();
+			tmp.add(state_B);
+			mapStates.put(roleB,tmp);
 		}
 		else {
 			state_B = mapStates.get(roleB).get(mapStates.get(roleB).size()-1)+1;
@@ -115,7 +123,6 @@ public class CommunicationNode implements Node {
 		int indexEnd_A = toRet.indexOf("endmodule",index_A);
 		String toFind_B = "module " + roleB + "\n\n";
 
-		int index = message.indexOf("&&");
 		int indexBranchA = toRet.indexOf(") -> 1: ;\n");
 		String toInsert_A = "";
 		String nextState = "";
@@ -129,13 +136,13 @@ public class CommunicationNode implements Node {
 		}
 		String messageForLoop = "";
 		if(forLoop!=null) {
-			messageForLoop = forLoop.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
+			messageForLoop = forLoop.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
 		}
 
-		String messageToAdd = message.substring(0,index);
+		String messageToAdd = message.get(0);
 
 
-		if(roleA.matches(".*\\d.*")|| messageToAdd.contains("_i")) {
+		if(roleA.matches(".*\\d.*")|| messageToAdd.contains("[i]")) {
 			int indexDigit = -1;
 			String role ;
 			if(roleB.matches(".*\\d.*")) {
@@ -149,13 +156,15 @@ public class CommunicationNode implements Node {
 					indexDigit = k;
 				}
 			}
-			String toReplaceA = "_"+role.charAt(indexDigit);
-			messageToAdd = message.substring(0,index).replaceAll("_i",toReplaceA);
+			String toReplaceA = ""+role.charAt(indexDigit);
+			messageToAdd =  message.get(0).replaceAll("\\[i\\]",toReplaceA);
+		
+
 
 		}
 
 		if(forLoop!=null && forLoop.getRoleA().contains(roleA.substring(0,roleA.length()-2))) {
-			if(messageToAdd.equals("")) {
+			if(messageToAdd.equals(" ")) {
 				messageToAdd = messageToAdd+messageForLoop;
 			}
 			else {
@@ -171,7 +180,7 @@ public class CommunicationNode implements Node {
 			toRet = toRet.replace("[] ("+ roleA+"_STATE="+state_A+") -> 1: ;\n","");
 			toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateToPrintA + ": " + messageToAdd ;
 		}
-		if(message.substring(0,index).length()==0) {
+		if(message.get(0).length()==1) {
 			toInsert_A = toInsert_A + nextState + ";\n";
 		}
 		else {
@@ -184,10 +193,15 @@ public class CommunicationNode implements Node {
 		int indexBranchB = toRet.indexOf(") -> 1: ;\n");
 		int indexEnd_B = toRet.indexOf("endmodule",index_B);
 		int stateTmp_B = state_B;
-		messageToAdd = message.substring(index+2,message.length());
+		if(message.size()>1) {
+			messageToAdd = message.get(1);
+		}
+		else {
+			messageToAdd = " ";
+		}
 
 
-		if(roleB.matches(".*\\d.*") || messageToAdd.contains("_i")) {
+		if(roleB.matches(".*\\d.*") || messageToAdd.contains("[i]")) {
 			int indexDigit = -1;
 			String role ;
 			if(roleB.matches(".*\\d.*")) {
@@ -201,12 +215,12 @@ public class CommunicationNode implements Node {
 					indexDigit = k;
 				}
 			}
-			String toReplaceB = "_"+role.charAt(indexDigit);
-			messageToAdd = message.substring(index+2,message.length()).replaceAll("_i",toReplaceB);
+			String toReplaceB = ""+role.charAt(indexDigit);
+			messageToAdd = messageToAdd.replaceAll("\\[i\\]",toReplaceB);
 
 		}
 		if(forLoop!=null && forLoop.getRoleA().contains(roleB.substring(0,roleB.length()-1))) {
-			if(messageToAdd.equals("")) {
+			if(messageToAdd.equals(" ")) {
 				messageToAdd = messageToAdd+messageForLoop;
 			}
 			else {
@@ -250,7 +264,7 @@ public class CommunicationNode implements Node {
 			toRet = toRet.replace("[] ("+ roleB+"_STATE="+state_B+") -> 1: ;\n","");
 			toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateToPrintB + ": " + messageToAdd; 
 		}
-		if(message.substring(index+2,message.length()).length()==0) {
+		if(messageToAdd.length()==1) {
 			toInsert_B = toInsert_B + nextState + ";\n";
 		}
 		else {
@@ -261,7 +275,7 @@ public class CommunicationNode implements Node {
 		toRet = new StringBuilder(toRet).insert(indexEnd_B-1,toInsert_B).toString();
 		//}
 		if(statement!=null) {
-			toRet = statement.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
+			toRet = statement.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
 		}
 
 		roleA = roleAtmp;

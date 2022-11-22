@@ -17,31 +17,31 @@ preamble
 
 endpreamble
 
-Hasher_i -> Hasher1; Hasher2; Hasher3; 
+n = 3;
 
-Miner_i -> 
-Miner1 : "b_1 : block {m_1,0;genesis,0};", "B_1 : blockchain [{genesis,0;genesis,0}];", "c_1 : [0..N] init 0;", "setMiner_1 : list [];";
-Miner2 : "b_2 : block {m_2,0;genesis,0};", "B_2 : blockchain [{genesis,0;genesis,0}];", "c_2 : [0..N] init 0;", "setMiner_2 : list [];";
-Miner3 : "b_3 : block {m_3,0;genesis,0};", "B_3 : blockchain [{genesis,0;genesis,0}];", "c_3 : [0..N] init 0;", "setMiner_3 : list [];";
+Hasher[i] -> i in [1...n] ;
+
+Miner[i] -> i in [1...n]
+Miner[i] : "b[i] : block {m[i],0;genesis,0} ;", "b[i] : blockchain [{genesis,0;genesis,0}];" ,"c[i] : [0..N] init 0;", "setMiner[i] : list [];" ;
 
 Network ->
-Network : "set_1 : list [];", "set_2 : list [];", "set_3 : list [];"; 
+Network : "set1 : list [];", "set2 : list [];", "set3 : list [];"; 
 	
 
-PoW := Hasher_i -> Miner_i
-(+[mR*hR_i] "&&(b_i'=createB(b_i,B_i,c_i))&(c_i'=c_i+1)" : 
-			Miner_i -> Network :[rB] "(B_i'=addBlock(B_i,b_i))&&" foreach(Miner_k != Miner_i) "set_k'=addBlockSet(set_k,b_i)" @Network .PoW
- +[lR*hR_i] "&&" : 
-  if "!isEmpty(set_i)"@Miner_i then { 
-  		{"(b_i'=extractBlock(set_i))"}@Miner_i . Miner_i -> Network : "(setMiner_i' = addBlockSet(setMiner_i , b_i))&&(set_i' = removeBlock(set_i,b_i))" . PoW 
+PoW := Hasher[i] -> Miner[i]
+(+[mR*hRi] " "&&"(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" : 
+			Miner[i] -> Network :[rB] "(B[i]'=addBlock(B[i],b[i]))" foreach(k != i) "set[k]'=addBlockSet(set[k],b[i])" @Network .PoW
+ +[lR*hRi] " " : 
+  if "!isEmpty(set[i])"@Miner_i then { 
+  		{"(b[i]'=extractBlock(set[i]))"}@Miner[i] . Miner[i] -> Network : "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . PoW 
  }
  else { 
- 	if "isEmpty(setMiner_i)"@Miner_i then{			
+ 	if "isEmpty(setMiner[i])"@Miner_i then{			
  			PoW
  	}
  	else{
- 		if "canBeInserted(B_i,b_i)"@Miner_i then { 
- 					{"(B_i'=addBlock(B_i,b_i))&(setMiner_i'=removeBlock(setMiner_i,b_i))"}@Miner_i . Pow 
+ 		if "canBeInserted(B[i],b[i])"@Miner[i] then { 
+ 					{"(B[i]'=addBlock(B[i],b[i]))&(setMiner[i]'=removeBlock(setMiner[i],b[i]))"}@Miner[i] . Pow 
  		}
  		else{
  				PoW

@@ -22,7 +22,7 @@ public class PreambleNode implements Node{
 
 	@Override
 	public String codeGenerator(String toRet, HashMap<String, ArrayList<Integer>> mapStates,
-			HashMap<String, ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles) {
+			HashMap<String, ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles, int currIndex, int totIndex) {
 		String code = "";
 		for(String el : variables) {
 			code = code + el.substring(1, el.length()-1) + "\n";

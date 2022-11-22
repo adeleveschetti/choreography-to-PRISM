@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class InternalActionNode implements Node{
+	static final int lenIndex = 3;
 
 	private String message = null;
 	private String role = null;
@@ -31,39 +32,41 @@ public class InternalActionNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles) {
+	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles, int currIndex, int totIndex) {
 		
 		int state = 0;
 
 		String roleTmp = role;
 
 		for(String el : roles) {
-			if(el.contains(role.substring(0,role.length()-2))) {
+			if(el.contains(role.substring(0,role.length()-lenIndex))) {
 				role = el;
 			}
 
 		}
 		String ret = message;
 
-		if(role.matches(".*\\d.*")) {
+		if(role.matches(".*\\d.*") || message.contains("[i]")) {
 			int indexDigit = -1;
 			for(int k=0; k<role.length(); k++) {
 				if(Character.isDigit(role.charAt(k))) {
 					indexDigit = k;
 				}
 			}
-			String toReplace = "_"+role.charAt(indexDigit);
-			ret = message.replaceAll("_i",toReplace);
+			String toReplace = ""+role.charAt(indexDigit);
+			ret = message.replaceAll("\\[i\\]",toReplace);
 		}
 
 		if(statement instanceof ProtocolIDNode) {
 			ret = ret + "&("+role+"_STATE'=0)";
 		}
 		else {
-			String toRet2 = statement.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
-			if(mapStates.get(role).size()==0) {
+			String toRet2 = statement.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles, currIndex,  totIndex);
+			if(mapStates.get(role)==null || mapStates.get(role).size()==0) {
 				state = 0;
-				mapStates.get(role).add(state);
+				ArrayList<Integer> tmp = new ArrayList<Integer>();
+				tmp.add(state);
+				mapStates.put(role,tmp);
 			}
 			else {
 				state = mapStates.get(role).get(mapStates.get(role).size()-1);

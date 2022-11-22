@@ -89,6 +89,16 @@ public interface LangListener extends ParseTreeListener {
 	 */
 	void exitMessage(LangParser.MessageContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LangParser#varDef}.
+	 * @param ctx the parse tree
+	 */
+	void enterVarDef(LangParser.VarDefContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#varDef}.
+	 * @param ctx the parse tree
+	 */
+	void exitVarDef(LangParser.VarDefContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LangParser#actions}.
 	 * @param ctx the parse tree
 	 */
@@ -128,6 +138,26 @@ public interface LangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitRoleGroup(LangParser.RoleGroupContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#roleIndex}.
+	 * @param ctx the parse tree
+	 */
+	void enterRoleIndex(LangParser.RoleIndexContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#roleIndex}.
+	 * @param ctx the parse tree
+	 */
+	void exitRoleIndex(LangParser.RoleIndexContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#indexSpec}.
+	 * @param ctx the parse tree
+	 */
+	void enterIndexSpec(LangParser.IndexSpecContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#indexSpec}.
+	 * @param ctx the parse tree
+	 */
+	void exitIndexSpec(LangParser.IndexSpecContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LangParser#role}.
 	 * @param ctx the parse tree
@@ -178,6 +208,16 @@ public interface LangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCond(LangParser.CondContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#index}.
+	 * @param ctx the parse tree
+	 */
+	void enterIndex(LangParser.IndexContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#index}.
+	 * @param ctx the parse tree
+	 */
+	void exitIndex(LangParser.IndexContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LangParser#id}.
 	 * @param ctx the parse tree

@@ -4,7 +4,7 @@ grammar Lang;
  * PARSER RULES
  *------------------------------------------------------------------*/
 
-protocol : (preamble)? (roleDef)+ protocolID ASSIGN statement;
+protocol : (preamble)? (varDef)? SEMICOLON (roleDef)+ protocolID ASSIGN statement;
 
 preamble : PREAMBLE (variableDecl)* ENDPREAMBLE ;
 
@@ -25,23 +25,31 @@ rate : ID ;
 
 message : actions (forLoop)? ;
 
-actions : DOUBLE_STRING ;
+varDef : CHAR EQ INTEGER;
 
-roleDef : roleGroup FROM roleSpec+;
+actions : (action+=DOUBLE_STRING)? (AND action+=DOUBLE_STRING)*  ;
 
-roleSpec : (role (COLON (roleVar (COMMA roleVar)+))? SEMICOLON);
+roleDef : role FROM (indexSpec)? roleSpec* SEMICOLON;
 
-roleGroup : ID ;
+roleSpec : (role (COLON (roleVar (COMMA roleVar)+))?);
 
-role : ID ;
+roleGroup : ID  ;
 
-forLoop : FOREACH LPAR role NEQ role RPAR actions AT role;
+roleIndex : ID SLPAR index SRPAR ;
+
+indexSpec : index IN SLPAR INTEGER DOTS upperBound=CHAR SRPAR ; 
+
+role : (roleGroup | roleIndex) ;
+
+forLoop : FOREACH LPAR indexIteration=index op=(EQ | LE | GE | LEQ | GEQ | NEQ ) upperBound=index RPAR actions AT role;
 
 roleVar : DOUBLE_STRING;
 
 variableDecl : DOUBLE_STRING;
 
 cond : DOUBLE_STRING ; 
+
+index : CHAR ;
 
 id : ID ;
 
@@ -53,11 +61,17 @@ id : ID ;
 SEMICOLON   : ';' ;
 COLON 		: ':' ;
 DOT 		: '.' ;
+DOTS 		: '...' ;
 COMMA		: ',' ;
 BRANCH 		: '+' ;
 FROM 		: '->';
 ASSIGN 		: ':=' ;
 NEQ 		: '!=' ;
+EQ 			: '=' ;
+LEQ			: '<=';
+GEQ			: '>=';
+LE			: '<';
+GE			: '>';
 UNDERSCORE 	: '_' ;
 STAR 		: '*' ;
 LPAR   		: '(' ;
@@ -71,6 +85,7 @@ IF 			: 'if';
 THEN		: 'then';
 ELSE		: 'else';
 END 		: 'END';
+AND			: '&&' ;
 PREAMBLE	: 'preamble';
 ENDPREAMBLE : 'endpreamble';
 CONST 		: 'const';
@@ -86,6 +101,6 @@ fragment DIGIT : '0'..'9';
 INTEGER       : DIGIT+;
 
 //IDs
-fragment CHAR  : 'a'..'z' |'A'..'Z' ;
+CHAR  : 'a'..'z' |'A'..'Z' ;
 ID              :  (CHAR | UNDERSCORE)+ (CHAR | DIGIT | UNDERSCORE | STAR)* CHAR*;
 

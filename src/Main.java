@@ -32,7 +32,7 @@ public class Main {
 		HashMap<String,ArrayList<Integer>> mapStates = null ;
 		ArrayList<String> roles = null;
 		ArrayList<String> allRoles = null;
-		toRet = ast.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
+		toRet = ast.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,0,0);
 		
 		File file = new File("GeneratedCode.prism");
 		if (!file.exists()) {

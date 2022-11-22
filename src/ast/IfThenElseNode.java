@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class IfThenElseNode implements Node{
+	static final int lenIndex = 3;
 
 	private String role;
 	private String cond; 
@@ -34,13 +35,13 @@ public class IfThenElseNode implements Node{
 	}
 
 	@Override
-	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles) {
+	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles, int currIndex, int totIndex) {
 
 
 		String roleTmp = role;
 
 		for(String el : roles) {
-			if(el.contains(role.substring(0,role.length()-2))) {
+			if(el.contains(role.substring(0,role.length()-lenIndex))) {
 				role = el;
 			}
 
@@ -51,15 +52,16 @@ public class IfThenElseNode implements Node{
 
 		int state;
 
-		if(mapStates.get(role).size()==0) {
+		if(mapStates.get(role)==null || mapStates.get(role).size()==0) {
 			state = 0;
-			mapStates.get(role).add(state);
+			ArrayList<Integer> tmp = new ArrayList<Integer>();
+			tmp.add(state);
+			mapStates.put(role,tmp);
 		}
 		else {
 			state = mapStates.get(role).get(mapStates.get(role).size()-1)+1;
 			mapStates.get(role).add(state);
 		}
-		
 		if(role.matches(".*\\d.*")) {
 			int indexDigit = -1;
 			for(int k=0; k<role.length(); k++) {
@@ -67,8 +69,8 @@ public class IfThenElseNode implements Node{
 					indexDigit = k;
 				}
 			}
-			String toReplace = "_"+role.charAt(indexDigit);
-			cond = cond.replaceAll("_i",toReplace);
+			String toReplace = ""+role.charAt(indexDigit);
+			cond = cond.replaceAll("\\[i\\]",toReplace);
 		}
 
 		String toInsert_A = "[] ("+ cond + ")&("+ role +"_STATE=" + state +") -> 1:";
@@ -84,7 +86,7 @@ public class IfThenElseNode implements Node{
 		}
 		else {
 
-			toInsert_A = toInsert_A + thenStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles)+";\n" ;
+			toInsert_A = toInsert_A + thenStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex)+";\n" ;
 			state++;
 			flag = true;
 		}
@@ -107,7 +109,7 @@ public class IfThenElseNode implements Node{
 		}
 
 		if(elseStat instanceof InternalActionNode) {
-			toInsert_A = toInsert_A + elseStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles) + ";\n";
+			toInsert_A = toInsert_A + elseStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex) + ";\n";
 		}
 
 		int indexEnd_A = toRet.indexOf("endmodule",index_A);
@@ -115,13 +117,13 @@ public class IfThenElseNode implements Node{
 		toRet = new StringBuilder(toRet).insert(indexEnd_A-1,toInsert_A).toString();
 
 		if(thenStat instanceof InternalActionNode ) {
-			toRet = thenStat.getStatement().codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
+			toRet = thenStat.getStatement().codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
 		}
 		if(thenStat instanceof CommunicationNode) {
-			toRet = thenStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
+			toRet = thenStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
 		}
 		if(elseStat!=null) {
-			toRet = elseStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles);
+			toRet = elseStat.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
 		}
 
 		role = roleTmp;
