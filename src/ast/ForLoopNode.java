@@ -34,7 +34,7 @@ public class ForLoopNode implements Node{
 	public String codeGenerator(String toRet, HashMap<String, ArrayList<Integer>> mapStates,
 			HashMap<String, ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles, int currIndex, int totIndex) { 
 		// TODO : fare altri operatori
-		
+
 		String ret = "";
 		switch(op) {
 		case "=":
@@ -42,16 +42,23 @@ public class ForLoopNode implements Node{
 		case "!=":
 			for(int i=1; i<=totIndex; i++) {
 				String messageTmp = message;
-
 				if(i!=(currIndex+1)) {
 					if(messageTmp.contains("["+indexIteration+"]")) {
 						String toReplaceA = ""+Integer.toString(i);
 						messageTmp = messageTmp.replaceAll("\\["+indexIteration+"\\]",toReplaceA);
 					}
-					ret = ret+"("+messageTmp+")&";
-				}
-
-
+					ret = ret+"("+messageTmp+")";
+					if(currIndex+1==totIndex) {
+						if(i!=currIndex) {
+							ret = ret + "&";
+						}
+					}
+					else {
+						if(i!=totIndex ) {
+							ret = ret + "&";
+						}
+					}
+				}	
 			}
 			if(ret.contains("["+upperBound+"]")) {
 				String toReplaceA = ""+Integer.toString(currIndex+1);

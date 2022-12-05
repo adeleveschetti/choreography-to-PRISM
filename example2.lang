@@ -7,6 +7,7 @@ preamble
 "const double rMw = 1/12.6;"
 "const epochs = 0;"
 "const double T;"
+"const int N = 100;"
 
 
 "const double rC = 1/(14*EpochSize);"
@@ -16,49 +17,49 @@ preamble
 
 endpreamble
 
+n = 5;
 
-Validator_i -> 
-Validator1 : "b_1 : block {m_1,0;genesis,0};", "B_1 : blockchain [{genesis,0;genesis,0}];", "c_1 : [0..N] init 0;", "setMiner_1 : list [];";
-Validator2 : "b_2 : block {m_2,0;genesis,0};", "B_2 : blockchain [{genesis,0;genesis,0}];", "c_2 : [0..N] init 0;", "setMiner_2 : list [];";
-Validator3 : "b_3 : block {m_3,0;genesis,0};", "B_3 : blockchain [{genesis,0;genesis,0}];", "c_3 : [0..N] init 0;", "setMiner_3 : list [];";
+Validator[i] -> i in [1...n]
+Validator[i] : "b[i] : block {m[i],0;genesis,0};", "lastJ[i] : block {m[i],0;genesis,0};", "L[i] : blockchain [{genesis,0;genesis,0}];", "c[i] : [0..N] init 0;", "setMiner[i] : list [];", "heightCheckpoint[i] : [0..N] init 0;", "heightLast[i] : [0..N] init 0;", "lastFinalized[i] : block {genesis,0;genesis,0};", "lastJustified[i] : block {genesis,0;genesis,0};", "lastCheck[i] : block {genesis,0;genesis,0};", "votes[i] : [0..1000] init 0;", "listCheckpoints[i] : list [];";
 
 Network ->
-Network : "set_1 : list [];", "set_2 : list [];", "set_3 : list [];";
+Network : "set1 : list [];", "set2 : list [];", "set3 : list [];" , "set4 : list [];" , "set5 : list [];";
 	
-Vote_Manager -> Vote_Manager ;
+Vote_Manager -> 
+Vote_Manager : "Votes : hash []; ", "tot_stake : [0..120000] init 50;", "stake1 : [0..N] init 10;", "stake2 : [0..N] init 10;", "stake3 : [0..N] init 10;", "stake4 : [0..N] init 10;", "stake5 : [0..N] init 10;";
 
 
-PoS := Validator_i -> Validator_i
-(+[mR]  "(b_i'=createBlock(Validator_i,c_i,L_i))&(c_i'=c_i+1)&&" :
-		if "!isCp(b_i)"@Validator_i then{
-			Validator_i -> Network : "(L_i'=addBlockLedger(L_i,b_i))&&" foreach(Validator_k != Validator_i) "set_k'=addBlock(set_k,b_i)"@Network .PoS
+PoS := Validator[i] -> Validator[i]
+(+["mR"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"&&" " :
+		if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{
+			Validator[i] -> Network : "(L[i]'=addBlock(L[i],b[i]))" foreach(k!=i) "set[k]'=addBlockSet(set[k],b[i])"@Network .PoS
 		}
 		else{
-			Validator_i -> Network : "(L_i'=addBlockLedger(L_i,b_i))&&" foreach(Validator_k != Validator_i) "set_k'=addBlock(set_k,b_i)"@Network.
-			Validator_i -> Vote_Manager : "&&(Votes′=addVote(Votes,b_i,Validator_i))".PoS
+			Validator[i] -> Network : "(L[i]'=addBlock(L[i],b[i]))" foreach(k!=i) "set[k]'=addBlockSet(set[k],b[i])"@Network.
+			Validator[i] -> Vote_Manager : " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS
 		}
- +[hR] "&&" : if "!isEmpty(set_i)"@Validator_i then {
- 				  {"(b_i'=extractBlock(set_i))"}@Validator_i . if "!canBeIns(b_i,B_i)"@Validator_i then {
+ +["hR"] " "&&" " : if "!isEmpty(set[i])"@Validator[i] then {
+ 				  {"(b[i]'=extractBlock(set[i]))"}@Validator[i] . if "!canBeInserted(L[i],b[i])"@Validator[i] then {
  				  															PoS
  				  											}
  				  											else{
- 				  												if "!isCp(b_i)"@Validator_i then {
- 				  																Validator_i -> Network : "(setMiner_i' = addBlock(setMiner_i , b_i))&&(set_i' = removeBlock(set_i,b_i))" . PoS
+ 				  												if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then {
+ 				  																Validator[i] -> Network : "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . PoS
  				  														}
  				  														else{
- 				  	 															Validator_i -> Network : "(setMiner_i' = addBlock(setMiner_i , b_i))&&(set_i' = removeBlock(set_i,b_i))" . Validator_i -> Vote_Manager : "&&(Votes′=addVote(Votes,b_i,Validator_i))".PoS 
+ 				  	 															Validator[i] -> Network : "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . Validator[i] -> Vote_Manager : " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS 
  				  														}
  				  											}
  			}
  			else{
  				PoS
  			}
- +[rC] "(b_i′=lastCP(L_i))&&" : if "isJust(b_i,Votes,Stakes)"@Validator_i then{
- 									if "(lastJ_i=lastboCP(b_i,L_i))"@Validator_i then{
- 										{"(lastJ_i'=b_i)&(L_i'= updateHF(L_i,lastJ_i))"}@Validator_i.Validator_i->Vote_Manager : "&&epoch'=height(lastF(L_i))&Stakes'=updateS(Stakes,Votes,lastF(L_i))".PoS
+ +["rC"] "(lastCheck[i]'=extractCheckpoint(listCheckpoints[i],lastCheck[i]))&(heightLast[i]'=getHeight(extractCheckpoint(listCheckpoints[i],lastCheck[i])))&(votes[i]'=calcVotes(Votes,extractCheckpoint(listCheckpoints[i],lastCheck[i])))"&&" " : if "(heightLast[i]=heightCheckpoint[i]+EpochSize)&(votes[i]>=2/3*tot_stake)"@Validator[i] then{
+ 									if "(heightLast[i]=heightCheckpoint[i]+EpochSize)"@Validator[i] then{
+ 										{"(lastJ[i]'=b[i])&(L[i]'= updateHF(L[i],lastJ[i]))"}@Validator[i].Validator[i]->Vote_Manager :" "&&"epoch'=height(lastF(L[i]))&Stakes'=addVote(Votes,b[i],stake[i]))".PoS
  									}
  									else{
- 										{"(lastJ_i'=b_i)"}@Validator_i . PoS
+ 										{"(lastJ[i]'=b[i])"}@Validator[i] . PoS
  									}
  								}
  								else{

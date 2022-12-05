@@ -11,10 +11,10 @@ public class BranchNode implements Node{
 	private String roleB = null;
 	private ArrayList<String> rates = null;
 	private ArrayList<ArrayList<String>> messages = null;
-	private ArrayList<Node> forLoops = null;
+	private ArrayList<ArrayList<Node>> forLoops = null;
 	private ArrayList<Node> statements = null;
 
-	public BranchNode(String A, String B, ArrayList<String> listRates, ArrayList<ArrayList<String>> listMessages, ArrayList<Node> listStatements, ArrayList<Node> loops) {
+	public BranchNode(String A, String B, ArrayList<String> listRates, ArrayList<ArrayList<String>> listMessages, ArrayList<Node> listStatements, ArrayList<ArrayList<Node>> loops) {
 		roleA = A;
 		roleB = B;
 		if(listRates!=null) {
@@ -41,8 +41,8 @@ public class BranchNode implements Node{
 		}
 
 		if(loops!=null) {
-			forLoops = new ArrayList<Node>();
-			for(Node el : loops) {
+			forLoops = new ArrayList<ArrayList<Node>>();
+			for(ArrayList el : loops) {
 				forLoops.add(el);
 			}
 		}
@@ -144,23 +144,25 @@ public class BranchNode implements Node{
 				rateA = rates.get(i).toString().substring(0,indexRole);
 				rateB = rates.get(i).toString().substring(indexRole+1,rates.get(i).toString().length());
 			}
-			if(rateA.contains("\\[i\\]")) {
+			if(rateA.contains("[i]")) {
 				int indexDigit = -1;
 				for(int k=0; k<roleA.length(); k++) {
 					if(Character.isDigit(roleA.charAt(k))) {
 						indexDigit = k;
 					}
 				}
-				rateA=rateA.replace("\\[i\\]",""+roleA.charAt(indexDigit));
+				rateA=rateA.replace("[i]",""+roleA.charAt(indexDigit));
 			}
-			if(rateB.contains("\\[i\\]")) {
+
+			if(rateB.contains("[i]")) {
+
 				int indexDigit = -1;
 				for(int k=0; k<roleB.length(); k++) {
 					if(Character.isDigit(roleB.charAt(k))) {
 						indexDigit = k;
 					}
 				}
-				rateB=rateB.replace("\\[i\\]",""+roleB.charAt(indexDigit));
+				rateB=rateB.replace("[i]",""+roleB.charAt(indexDigit));
 			}
 
 			int indexBranchA = toRet.indexOf(") -> \n");
@@ -175,9 +177,14 @@ public class BranchNode implements Node{
 				nextState = "("+roleA+"_STATE'="+stateTmp_A+")";
 			}
 
-			String messageForLoop = "";
-			if(forLoops.get(i)!=null) {
-				messageForLoop = forLoops.get(i).codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
+			String messageForLoop_1 = "";
+			String messageForLoop_2 = "";
+
+			if(forLoops.get(i).size()>0 && forLoops.get(i).get(0)!=null) {
+				messageForLoop_1 = forLoops.get(i).get(0).codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
+			}
+			if(forLoops.get(i).size()>0 && forLoops.get(i).get(1)!=null) {
+				messageForLoop_2 = forLoops.get(i).get(1).codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
 			}
 			String messageToAdd = tmpMessage.get(0);
 
@@ -196,16 +203,24 @@ public class BranchNode implements Node{
 						indexDigit = k;
 					}
 				}
-				String toReplaceA = "_"+role.charAt(indexDigit);
+				String toReplaceA = ""+role.charAt(indexDigit);
 				messageToAdd = tmpMessage.get(0).replaceAll("\\[i\\]",toReplaceA);
 			}
 
-			if(forLoops.get(i)!=null && forLoops.get(i).getRoleA().contains(roleA.substring(0,roleA.length()-1))) {
+			if(forLoops.get(i).size()>0  && forLoops.get(i).get(0).getRoleA().contains(roleA.substring(0,roleA.length()-1))) {
 				if(messageToAdd.equals(" ")) {
-					messageToAdd = messageToAdd+messageForLoop;
+					messageToAdd = messageToAdd+messageForLoop_1;
 				}
 				else {
-					messageToAdd = messageToAdd+"&"+messageForLoop;
+					messageToAdd = messageToAdd+"&"+messageForLoop_1;
+				}
+			}
+			if(forLoops.get(i).size()>0  && forLoops.get(i).get(1).getRoleA().contains(roleA.substring(0,roleA.length()-1))) {
+				if(messageToAdd.equals(" ")) {
+					messageToAdd = messageToAdd+messageForLoop_2;
+				}
+				else {
+					messageToAdd = messageToAdd+"&"+messageForLoop_2;
 				}
 			}
 
@@ -267,12 +282,20 @@ public class BranchNode implements Node{
 					messageToAdd = messageToAdd.replaceAll("\\[i\\]",toReplaceB);
 
 				}
-				if(forLoops.get(i)!=null && forLoops.get(i).getRoleA().contains(roleB.substring(0,roleB.length()-1))) {
+				if(forLoops.get(i).size()>0  && forLoops.get(i).get(0).getRoleA().contains(roleB.substring(0,roleB.length()-1))) {
 					if(messageToAdd.equals(" ")) {
-						messageToAdd = messageToAdd+messageForLoop;
+						messageToAdd = messageToAdd+messageForLoop_1;
 					}
 					else {
-						messageToAdd = messageToAdd+"&"+messageForLoop;
+						messageToAdd = messageToAdd+"&"+messageForLoop_1;
+					}
+				}
+				if(forLoops.get(i).size()>0  && forLoops.get(i).get(1).getRoleA().contains(roleB.substring(0,roleB.length()-1))) {
+					if(messageToAdd.equals(" ")) {
+						messageToAdd = messageToAdd+messageForLoop_2;
+					}
+					else {
+						messageToAdd = messageToAdd+"&"+messageForLoop_2;
 					}
 				}
 				String toInsert_B = "";

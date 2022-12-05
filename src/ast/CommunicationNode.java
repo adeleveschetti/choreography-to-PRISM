@@ -7,12 +7,12 @@ import java.util.Random;
 public class CommunicationNode implements Node {
 
 	static final int lenIndex = 3;
-	
+
 	private String roleA = null;
 	private String roleB = null;
 	private ArrayList<String> message = null;
 	private Node statement;
-	private Node forLoop = null;
+	private ArrayList<Node> forLoop = null;
 	private String rate ;
 
 	public CommunicationNode(String A, String B, ArrayList<String> mex, Node stat, String r) {
@@ -24,7 +24,7 @@ public class CommunicationNode implements Node {
 		rate = r;
 	}
 
-	public CommunicationNode(String A, String B, ArrayList<String> mex, Node stat, Node loop, String r) {
+	public CommunicationNode(String A, String B, ArrayList<String> mex, Node stat, ArrayList<Node> loop, String r) {
 		roleA = A;
 		roleB = B;
 		message = new ArrayList<String>();
@@ -134,9 +134,16 @@ public class CommunicationNode implements Node {
 			stateTmp_A++;
 			nextState = "("+roleA+"_STATE'="+stateTmp_A+")";
 		}
-		String messageForLoop = "";
+		String messageForLoop_1 = "";
+		String messageForLoop_2 = "";
+
 		if(forLoop!=null) {
-			messageForLoop = forLoop.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
+			if(forLoop.size()>0 && forLoop.get(0)!=null) {
+				messageForLoop_1 = forLoop.get(0).codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
+			}
+			if(forLoop.size()>1 && forLoop.get(1)!=null) {
+				messageForLoop_2 = forLoop.get(1).codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
+			}
 		}
 
 		String messageToAdd = message.get(0);
@@ -158,17 +165,25 @@ public class CommunicationNode implements Node {
 			}
 			String toReplaceA = ""+role.charAt(indexDigit);
 			messageToAdd =  message.get(0).replaceAll("\\[i\\]",toReplaceA);
-		
+
 
 
 		}
 
-		if(forLoop!=null && forLoop.getRoleA().contains(roleA.substring(0,roleA.length()-2))) {
+		if(forLoop!=null && forLoop.size()>0 && forLoop.get(0).getRoleA().contains(roleA.substring(0,roleA.length()-2))) {
 			if(messageToAdd.equals(" ")) {
-				messageToAdd = messageToAdd+messageForLoop;
+				messageToAdd = messageToAdd+messageForLoop_1;
 			}
 			else {
-				messageToAdd = messageToAdd+"&"+messageForLoop;
+				messageToAdd = messageToAdd+"&"+messageForLoop_1;
+			}
+		}
+		if(forLoop!=null && forLoop.size()>1 && forLoop.get(1).getRoleA().contains(roleA.substring(0,roleA.length()-2))) {
+			if(messageToAdd.equals(" ")) {
+				messageToAdd = messageToAdd+messageForLoop_2;
+			}
+			else {
+				messageToAdd = messageToAdd+"&"+messageForLoop_2;
 			}
 		}
 
@@ -219,12 +234,20 @@ public class CommunicationNode implements Node {
 			messageToAdd = messageToAdd.replaceAll("\\[i\\]",toReplaceB);
 
 		}
-		if(forLoop!=null && forLoop.getRoleA().contains(roleB.substring(0,roleB.length()-1))) {
+		if(forLoop!=null && forLoop.size()>0 && forLoop.get(0).getRoleA().contains(roleB.substring(0,roleB.length()-1))) {
 			if(messageToAdd.equals(" ")) {
-				messageToAdd = messageToAdd+messageForLoop;
+				messageToAdd = messageToAdd+messageForLoop_1;
 			}
 			else {
-				messageToAdd = messageToAdd+"&"+messageForLoop;
+				messageToAdd = messageToAdd+"&"+messageForLoop_1;
+			}
+		}
+		if(forLoop!=null && forLoop.size()>1 && forLoop.get(1).getRoleA().contains(roleB.substring(0,roleB.length()-1))) {
+			if(messageToAdd.equals(" ")) {
+				messageToAdd = messageToAdd+messageForLoop_2;
+			}
+			else {
+				messageToAdd = messageToAdd+"&"+messageForLoop_2;
 			}
 		}
 		int alreadyDef = toRet.indexOf(messageToAdd);

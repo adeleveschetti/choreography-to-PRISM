@@ -70,7 +70,7 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 	public Node visitStatement(StatementContext ctx) {
 		if(ctx.BRANCH()!=null  && ctx.BRANCH().size()>0 ) {
 			ArrayList<ArrayList<String>> messages = new ArrayList<ArrayList<String>>();
-			ArrayList<Node> loops = new ArrayList<Node>();
+			ArrayList<ArrayList<Node>> loops = new ArrayList<ArrayList<Node>>();
 
 			for(MessageContext el : ctx.message()) {
 				ArrayList<String> tmp = new ArrayList<String>();
@@ -78,16 +78,20 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 					tmp.add(el2.getText().substring(1,el2.getText().length()-1));
 				}
 				messages.add(tmp);
-				if(el.forLoop()!=null) {
-					loops.add(visitForLoop(el.forLoop()));
+				ArrayList<Node> tmpLoop = new ArrayList<Node>();
+				for(ForLoopContext el2 : el.forLoop()) {
+					if(el2!=null) {
+						tmpLoop.add(visitForLoop(el2));
+					}
+					else {
+						tmpLoop.add(null);
+					}
 				}
-				else {
-					loops.add(null);
-				}
+				loops.add(tmpLoop);
 			}
 			ArrayList<String> rates = new ArrayList<String>();
 			for(RateContext el : ctx.rateValues) {
-				rates.add(el.getText());
+				rates.add(el.getText().substring(1,el.getText().length()-1));
 			}
 			ArrayList<Node> stats = new ArrayList<Node>();
 			for(StatementContext el : ctx.statement()) {
@@ -132,7 +136,7 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 		}
 		String rate = "";
 		if(ctx.rate()!=null && ctx.rate().size()==1) {
-			rate = ctx.rate().get(0).getText();
+			rate = ctx.rate().get(0).getText().substring(1,ctx.rate().get(0).getText().length()-1);
 		}
 		String roleA = "";
 		String roleB = "";
@@ -153,7 +157,16 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 			message.add(el.getText().substring(1,el.getText().length()-1));
 		}
 		if(ctx.message(0).forLoop()!=null) {
-			return new CommunicationNode(roleA,roleB, message, visitStatement(ctx.statement(0)), visitForLoop(ctx.message(0).forLoop()),rate);
+			ArrayList<Node> loops = new ArrayList<Node>();
+			for(ForLoopContext el2 : ctx.message(0).forLoop()) {
+				if(el2!=null) {
+					loops.add(visitForLoop(el2));
+				}
+				else {
+					loops.add(null);
+				}
+			}
+			return new CommunicationNode(roleA,roleB, message, visitStatement(ctx.statement(0)), loops,rate);
 		}
 		return new CommunicationNode(roleA,roleB, message, visitStatement(ctx.statement(0)),rate);
 

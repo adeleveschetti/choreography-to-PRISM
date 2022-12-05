@@ -21,9 +21,9 @@ internalAction : CLPAR DOUBLE_STRING CRPAR AT role ;
 
 protocolID : ID ;
 
-rate : ID ;
+rate : DOUBLE_STRING ;
 
-message : actions (forLoop)? ;
+message : actions (forLoop)* ;
 
 varDef : CHAR EQ INTEGER;
 

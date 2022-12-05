@@ -1,101 +1,201 @@
 ctmc
-const k;
-const T=k*1000;
-const double rb ;
-const double mR = 1/600;
-const double lR = 1-mR;
-const double hR_1 = 0.33;
-const double hR_2 = 0.33;
-const double hR_3 = 0.33;
+const int EpochSize = 2;
+const k = 1;
+const double rMw = 1/12.6;
+const epochs = 0;
+const double T;
 const int N = 100;
+const double rC = 1/(14*EpochSize);
+const double mR =1/14;
+const double hR = 10;
 
-module Hasher1
-
-Hasher1_STATE: [0..10] init 0;
-
-[FIIOM] (Hasher1_STATE=0) -> mR :  (Hasher1_STATE'=0);
-[DALBZ] (Hasher1_STATE=0) -> lR :  (Hasher1_STATE'=0);
-
-endmodule 
-
-module Hasher2
-
-Hasher2_STATE: [0..10] init 0;
-
-[BXKRQ] (Hasher2_STATE=0) -> mR :  (Hasher2_STATE'=0);
-[FPVYY] (Hasher2_STATE=0) -> lR :  (Hasher2_STATE'=0);
-
-endmodule 
-
-module Hasher3
-
-Hasher3_STATE: [0..10] init 0;
-
-[RDHHX] (Hasher3_STATE=0) -> mR :  (Hasher3_STATE'=0);
-[ZHEMJ] (Hasher3_STATE=0) -> lR :  (Hasher3_STATE'=0);
-
-endmodule 
-
-module Miner1
-b1 : block {m1,0;genesis,0} ;
-b1 : blockchain [{genesis,0;genesis,0}];
+module Validator1
+b1 : block {m1,0;genesis,0};
+lastJ1 : block {m1,0;genesis,0};
+L1 : blockchain [{genesis,0;genesis,0}];
 c1 : [0..N] init 0;
 setMiner1 : list [];
+heightCheckpoint1 : [0..N] init 0;
+heightLast1 : [0..N] init 0;
+lastFinalized1 : block {genesis,0;genesis,0};
+lastJustified1 : block {genesis,0;genesis,0};
+lastCheck1 : block {genesis,0;genesis,0};
+votes1 : [0..1000] init 0;
+listCheckpoints1 : list [];
 
-Miner1_STATE: [0..10] init 0;
+Validator1_STATE: [0..10] init 0;
 
-[FIIOM] (Miner1_STATE=0) -> hRi : (b1'=createB(b1,B1,c1))&(c1'=c1+1)&(Miner1_STATE'=1);
-[HPLBP] (Miner1_STATE=1) -> rB: (B1'=addBlock(B1,b1))&(Miner1_STATE'=0);
-[DALBZ] (Miner1_STATE=0) -> hRi : (Miner1_STATE'=2);
-[] (!isEmpty(set1))&(Miner1_STATE=2) -> 1:(b1'=extractBlock(set1))&(Miner1_STATE'=3);
-[] !(!isEmpty(set1))&(Miner1_STATE=2) -> 1:(Miner1_STATE'=4);
-[DAHAW] (Miner1_STATE=3) -> 1: (setMiner1' = addBlockSet(setMiner1 , b1))&(Miner1_STATE'=0);
-[] (isEmpty(setMiner1))&(Miner1_STATE=4) -> 1: (Miner1_STATE'=0);
-[] !(isEmpty(setMiner1))&(Miner1_STATE=4) -> 1:(Miner1_STATE'=5);
-[] (canBeInserted(B1,b1))&(Miner1_STATE=5) -> 1:(B1'=addBlock(B1,b1))&(setMiner1'=removeBlock(setMiner1,b1))&(Miner1_STATE'=0);
-[] !(canBeInserted(B1,b1))&(Miner1_STATE=5) -> 1:(Miner1_STATE'=0);
+[] (Validator1_STATE=0) -> mR : (b1'=createB(b1,L1,c1))&(c1'=c1+1)&(Validator1_STATE'=2);
+[] (!(mod(getHeight(b1),EpochSize)=0))&(Validator1_STATE=2) -> 1:(Validator1_STATE'=3);
+[] !(!(mod(getHeight(b1),EpochSize)=0))&(Validator1_STATE=2) -> 1:(Validator1_STATE'=4);
+[DDUWB] (Validator1_STATE=3) -> 1: (L1'=addBlock(L1,b1))&(Validator1_STATE'=0);
+[NOWYB] (Validator1_STATE=4) -> 1: (L1'=addBlock(L1,b1))&(Validator1_STATE'=5);
+[CFETB] (Validator1_STATE=5) -> 1:  (Validator1_STATE'=0);
+[] (Validator1_STATE=0) -> hR :  (Validator1_STATE'=6);
+[] (!isEmpty(set1))&(Validator1_STATE=6) -> 1:(b1'=extractBlock(set1))&(Validator1_STATE'=11);
+[] !(!isEmpty(set1))&(Validator1_STATE=6) -> 1:(Validator1_STATE'=0);
+[] (!canBeInserted(L1,b1))&(Validator1_STATE=11) -> 1: (Validator1_STATE'=0);
+[] !(!canBeInserted(L1,b1))&(Validator1_STATE=11) -> 1:(Validator1_STATE'=12);
+[] (!(mod(getHeight(b1),EpochSize)=0))&(Validator1_STATE=12) -> 1:(Validator1_STATE'=13);
+[] !(!(mod(getHeight(b1),EpochSize)=0))&(Validator1_STATE=12) -> 1:(Validator1_STATE'=14);
+[UDQJC] (Validator1_STATE=13) -> 1: (setMiner1' = addBlockSet(setMiner1 , b1))&(Validator1_STATE'=0);
+[ZJQZZ] (Validator1_STATE=14) -> 1: (setMiner1' = addBlockSet(setMiner1 , b1))&(Validator1_STATE'=15);
+[DAIHI] (Validator1_STATE=15) -> 1:  (Validator1_STATE'=0);
+[] (Validator1_STATE=0) -> rC : (lastCheck1'=extractCheckpoint(listCheckpoints1,lastCheck1))&(heightLast1'=getHeight(extractCheckpoint(listCheckpoints1,lastCheck1)))&(votes1'=calcVotes(Votes,extractCheckpoint(listCheckpoints1,lastCheck1)))&(Validator1_STATE'=16);
+[] ((heightLast1=heightCheckpoint1+EpochSize)&(votes1>=2/3*tot_stake))&(Validator1_STATE=16) -> 1:(lastJ1'=b1)&(Validator1_STATE'=0);
+[] !((heightLast1=heightCheckpoint1+EpochSize)&(votes1>=2/3*tot_stake))&(Validator1_STATE=16) -> 1:(Validator1_STATE'=0);
 
 endmodule 
 
-module Miner2
-b2 : block {m2,0;genesis,0} ;
-b2 : blockchain [{genesis,0;genesis,0}];
+module Validator2
+b2 : block {m2,0;genesis,0};
+lastJ2 : block {m2,0;genesis,0};
+L2 : blockchain [{genesis,0;genesis,0}];
 c2 : [0..N] init 0;
 setMiner2 : list [];
+heightCheckpoint2 : [0..N] init 0;
+heightLast2 : [0..N] init 0;
+lastFinalized2 : block {genesis,0;genesis,0};
+lastJustified2 : block {genesis,0;genesis,0};
+lastCheck2 : block {genesis,0;genesis,0};
+votes2 : [0..1000] init 0;
+listCheckpoints2 : list [];
 
-Miner2_STATE: [0..10] init 0;
+Validator2_STATE: [0..10] init 0;
 
-[BXKRQ] (Miner2_STATE=0) -> hRi : (b2'=createB(b2,B2,c2))&(c2'=c2+1)&(Miner2_STATE'=1);
-[UKLIU] (Miner2_STATE=1) -> rB: (B2'=addBlock(B2,b2))&(Miner2_STATE'=0);
-[FPVYY] (Miner2_STATE=0) -> hRi : (Miner2_STATE'=2);
-[] (!isEmpty(set1))&(Miner2_STATE=2) -> 1:(b2'=extractBlock(set2))&(Miner2_STATE'=3);
-[] !(!isEmpty(set1))&(Miner2_STATE=2) -> 1:(Miner2_STATE'=4);
-[EBXNA] (Miner2_STATE=3) -> 1: (setMiner2' = addBlockSet(setMiner2 , b2))&(Miner2_STATE'=0);
-[] (isEmpty(setMiner1))&(Miner2_STATE=4) -> 1: (Miner2_STATE'=0);
-[] !(isEmpty(setMiner1))&(Miner2_STATE=4) -> 1:(Miner2_STATE'=5);
-[] (canBeInserted(B1,b1))&(Miner2_STATE=5) -> 1:(B2'=addBlock(B2,b2))&(setMiner2'=removeBlock(setMiner2,b2))&(Miner2_STATE'=0);
-[] !(canBeInserted(B1,b1))&(Miner2_STATE=5) -> 1:(Miner2_STATE'=0);
+[] (Validator2_STATE=0) -> mR : (b2'=createB(b2,L2,c2))&(c2'=c2+1)&(Validator2_STATE'=2);
+[] (!(mod(getHeight(b2),EpochSize)=0))&(Validator2_STATE=2) -> 1:(Validator2_STATE'=3);
+[] !(!(mod(getHeight(b2),EpochSize)=0))&(Validator2_STATE=2) -> 1:(Validator2_STATE'=4);
+[JPBRP] (Validator2_STATE=3) -> 1: (L2'=addBlock(L2,b2))&(Validator2_STATE'=0);
+[SBTDB] (Validator2_STATE=4) -> 1: (L2'=addBlock(L2,b2))&(Validator2_STATE'=5);
+[GCYFW] (Validator2_STATE=5) -> 1:  (Validator2_STATE'=0);
+[] (Validator2_STATE=0) -> hR :  (Validator2_STATE'=6);
+[] (!isEmpty(set2))&(Validator2_STATE=6) -> 1:(b2'=extractBlock(set2))&(Validator2_STATE'=11);
+[] !(!isEmpty(set2))&(Validator2_STATE=6) -> 1:(Validator2_STATE'=0);
+[] (!canBeInserted(L2,b2))&(Validator2_STATE=11) -> 1: (Validator2_STATE'=0);
+[] !(!canBeInserted(L2,b2))&(Validator2_STATE=11) -> 1:(Validator2_STATE'=12);
+[] (!(mod(getHeight(b2),EpochSize)=0))&(Validator2_STATE=12) -> 1:(Validator2_STATE'=13);
+[] !(!(mod(getHeight(b2),EpochSize)=0))&(Validator2_STATE=12) -> 1:(Validator2_STATE'=14);
+[GHOFN] (Validator2_STATE=13) -> 1: (setMiner2' = addBlockSet(setMiner2 , b2))&(Validator2_STATE'=0);
+[SIDNW] (Validator2_STATE=14) -> 1: (setMiner2' = addBlockSet(setMiner2 , b2))&(Validator2_STATE'=15);
+[UJOUV] (Validator2_STATE=15) -> 1:  (Validator2_STATE'=0);
+[] (Validator2_STATE=0) -> rC : (lastCheck2'=extractCheckpoint(listCheckpoints2,lastCheck2))&(heightLast2'=getHeight(extractCheckpoint(listCheckpoints2,lastCheck2)))&(votes2'=calcVotes(Votes,extractCheckpoint(listCheckpoints2,lastCheck2)))&(Validator2_STATE'=16);
+[] ((heightLast2=heightCheckpoint2+EpochSize)&(votes2>=2/3*tot_stake))&(Validator2_STATE=16) -> 1:(lastJ2'=b2)&(Validator2_STATE'=0);
+[] !((heightLast2=heightCheckpoint2+EpochSize)&(votes2>=2/3*tot_stake))&(Validator2_STATE=16) -> 1:(Validator2_STATE'=0);
 
 endmodule 
 
-module Miner3
-b3 : block {m3,0;genesis,0} ;
-b3 : blockchain [{genesis,0;genesis,0}];
+module Validator3
+b3 : block {m3,0;genesis,0};
+lastJ3 : block {m3,0;genesis,0};
+L3 : blockchain [{genesis,0;genesis,0}];
 c3 : [0..N] init 0;
 setMiner3 : list [];
+heightCheckpoint3 : [0..N] init 0;
+heightLast3 : [0..N] init 0;
+lastFinalized3 : block {genesis,0;genesis,0};
+lastJustified3 : block {genesis,0;genesis,0};
+lastCheck3 : block {genesis,0;genesis,0};
+votes3 : [0..1000] init 0;
+listCheckpoints3 : list [];
 
-Miner3_STATE: [0..10] init 0;
+Validator3_STATE: [0..10] init 0;
 
-[RDHHX] (Miner3_STATE=0) -> hRi : (b3'=createB(b3,B3,c3))&(c3'=c3+1)&(Miner3_STATE'=1);
-[ADZWF] (Miner3_STATE=1) -> rB: (B3'=addBlock(B3,b3))&(Miner3_STATE'=0);
-[ZHEMJ] (Miner3_STATE=0) -> hRi : (Miner3_STATE'=2);
-[] (!isEmpty(set1))&(Miner3_STATE=2) -> 1:(b3'=extractBlock(set3))&(Miner3_STATE'=3);
-[] !(!isEmpty(set1))&(Miner3_STATE=2) -> 1:(Miner3_STATE'=4);
-[OTQMG] (Miner3_STATE=3) -> 1: (setMiner3' = addBlockSet(setMiner3 , b3))&(Miner3_STATE'=0);
-[] (isEmpty(setMiner1))&(Miner3_STATE=4) -> 1: (Miner3_STATE'=0);
-[] !(isEmpty(setMiner1))&(Miner3_STATE=4) -> 1:(Miner3_STATE'=5);
-[] (canBeInserted(B1,b1))&(Miner3_STATE=5) -> 1:(B3'=addBlock(B3,b3))&(setMiner3'=removeBlock(setMiner3,b3))&(Miner3_STATE'=0);
-[] !(canBeInserted(B1,b1))&(Miner3_STATE=5) -> 1:(Miner3_STATE'=0);
+[] (Validator3_STATE=0) -> mR : (b3'=createB(b3,L3,c3))&(c3'=c3+1)&(Validator3_STATE'=2);
+[] (!(mod(getHeight(b3),EpochSize)=0))&(Validator3_STATE=2) -> 1:(Validator3_STATE'=3);
+[] !(!(mod(getHeight(b3),EpochSize)=0))&(Validator3_STATE=2) -> 1:(Validator3_STATE'=4);
+[TJSUQ] (Validator3_STATE=3) -> 1: (L3'=addBlock(L3,b3))&(Validator3_STATE'=0);
+[YGNJZ] (Validator3_STATE=4) -> 1: (L3'=addBlock(L3,b3))&(Validator3_STATE'=5);
+[YXDKQ] (Validator3_STATE=5) -> 1:  (Validator3_STATE'=0);
+[] (Validator3_STATE=0) -> hR :  (Validator3_STATE'=6);
+[] (!isEmpty(set3))&(Validator3_STATE=6) -> 1:(b3'=extractBlock(set3))&(Validator3_STATE'=11);
+[] !(!isEmpty(set3))&(Validator3_STATE=6) -> 1:(Validator3_STATE'=0);
+[] (!canBeInserted(L3,b3))&(Validator3_STATE=11) -> 1: (Validator3_STATE'=0);
+[] !(!canBeInserted(L3,b3))&(Validator3_STATE=11) -> 1:(Validator3_STATE'=12);
+[] (!(mod(getHeight(b3),EpochSize)=0))&(Validator3_STATE=12) -> 1:(Validator3_STATE'=13);
+[] !(!(mod(getHeight(b3),EpochSize)=0))&(Validator3_STATE=12) -> 1:(Validator3_STATE'=14);
+[AROHX] (Validator3_STATE=13) -> 1: (setMiner3' = addBlockSet(setMiner3 , b3))&(Validator3_STATE'=0);
+[KQTSI] (Validator3_STATE=14) -> 1: (setMiner3' = addBlockSet(setMiner3 , b3))&(Validator3_STATE'=15);
+[TJTRX] (Validator3_STATE=15) -> 1:  (Validator3_STATE'=0);
+[] (Validator3_STATE=0) -> rC : (lastCheck3'=extractCheckpoint(listCheckpoints3,lastCheck3))&(heightLast3'=getHeight(extractCheckpoint(listCheckpoints3,lastCheck3)))&(votes3'=calcVotes(Votes,extractCheckpoint(listCheckpoints3,lastCheck3)))&(Validator3_STATE'=16);
+[] ((heightLast3=heightCheckpoint3+EpochSize)&(votes3>=2/3*tot_stake))&(Validator3_STATE=16) -> 1:(lastJ3'=b3)&(Validator3_STATE'=0);
+[] !((heightLast3=heightCheckpoint3+EpochSize)&(votes3>=2/3*tot_stake))&(Validator3_STATE=16) -> 1:(Validator3_STATE'=0);
+
+endmodule 
+
+module Validator4
+b4 : block {m4,0;genesis,0};
+lastJ4 : block {m4,0;genesis,0};
+L4 : blockchain [{genesis,0;genesis,0}];
+c4 : [0..N] init 0;
+setMiner4 : list [];
+heightCheckpoint4 : [0..N] init 0;
+heightLast4 : [0..N] init 0;
+lastFinalized4 : block {genesis,0;genesis,0};
+lastJustified4 : block {genesis,0;genesis,0};
+lastCheck4 : block {genesis,0;genesis,0};
+votes4 : [0..1000] init 0;
+listCheckpoints4 : list [];
+
+Validator4_STATE: [0..10] init 0;
+
+[] (Validator4_STATE=0) -> mR : (b4'=createB(b4,L4,c4))&(c4'=c4+1)&(Validator4_STATE'=2);
+[] (!(mod(getHeight(b4),EpochSize)=0))&(Validator4_STATE=2) -> 1:(Validator4_STATE'=3);
+[] !(!(mod(getHeight(b4),EpochSize)=0))&(Validator4_STATE=2) -> 1:(Validator4_STATE'=4);
+[WGAOA] (Validator4_STATE=3) -> 1: (L4'=addBlock(L4,b4))&(Validator4_STATE'=0);
+[EIAVN] (Validator4_STATE=4) -> 1: (L4'=addBlock(L4,b4))&(Validator4_STATE'=5);
+[RHBAO] (Validator4_STATE=5) -> 1:  (Validator4_STATE'=0);
+[] (Validator4_STATE=0) -> hR :  (Validator4_STATE'=6);
+[] (!isEmpty(set4))&(Validator4_STATE=6) -> 1:(b4'=extractBlock(set4))&(Validator4_STATE'=11);
+[] !(!isEmpty(set4))&(Validator4_STATE=6) -> 1:(Validator4_STATE'=0);
+[] (!canBeInserted(L4,b4))&(Validator4_STATE=11) -> 1: (Validator4_STATE'=0);
+[] !(!canBeInserted(L4,b4))&(Validator4_STATE=11) -> 1:(Validator4_STATE'=12);
+[] (!(mod(getHeight(b4),EpochSize)=0))&(Validator4_STATE=12) -> 1:(Validator4_STATE'=13);
+[] !(!(mod(getHeight(b4),EpochSize)=0))&(Validator4_STATE=12) -> 1:(Validator4_STATE'=14);
+[NYTGZ] (Validator4_STATE=13) -> 1: (setMiner4' = addBlockSet(setMiner4 , b4))&(Validator4_STATE'=0);
+[ZADQM] (Validator4_STATE=14) -> 1: (setMiner4' = addBlockSet(setMiner4 , b4))&(Validator4_STATE'=15);
+[TGKPL] (Validator4_STATE=15) -> 1:  (Validator4_STATE'=0);
+[] (Validator4_STATE=0) -> rC : (lastCheck4'=extractCheckpoint(listCheckpoints4,lastCheck4))&(heightLast4'=getHeight(extractCheckpoint(listCheckpoints4,lastCheck4)))&(votes4'=calcVotes(Votes,extractCheckpoint(listCheckpoints4,lastCheck4)))&(Validator4_STATE'=16);
+[] ((heightLast4=heightCheckpoint4+EpochSize)&(votes4>=2/3*tot_stake))&(Validator4_STATE=16) -> 1:(lastJ4'=b4)&(Validator4_STATE'=0);
+[] !((heightLast4=heightCheckpoint4+EpochSize)&(votes4>=2/3*tot_stake))&(Validator4_STATE=16) -> 1:(Validator4_STATE'=0);
+
+endmodule 
+
+module Validator5
+b5 : block {m5,0;genesis,0};
+lastJ5 : block {m5,0;genesis,0};
+L5 : blockchain [{genesis,0;genesis,0}];
+c5 : [0..N] init 0;
+setMiner5 : list [];
+heightCheckpoint5 : [0..N] init 0;
+heightLast5 : [0..N] init 0;
+lastFinalized5 : block {genesis,0;genesis,0};
+lastJustified5 : block {genesis,0;genesis,0};
+lastCheck5 : block {genesis,0;genesis,0};
+votes5 : [0..1000] init 0;
+listCheckpoints5 : list [];
+
+Validator5_STATE: [0..10] init 0;
+
+[] (Validator5_STATE=0) -> mR : (b5'=createB(b5,L5,c5))&(c5'=c5+1)&(Validator5_STATE'=2);
+[] (!(mod(getHeight(b5),EpochSize)=0))&(Validator5_STATE=2) -> 1:(Validator5_STATE'=3);
+[] !(!(mod(getHeight(b5),EpochSize)=0))&(Validator5_STATE=2) -> 1:(Validator5_STATE'=4);
+[KQDHN] (Validator5_STATE=3) -> 1: (L5'=addBlock(L5,b5))&(Validator5_STATE'=0);
+[DXQPW] (Validator5_STATE=4) -> 1: (L5'=addBlock(L5,b5))&(Validator5_STATE'=5);
+[IUCNT] (Validator5_STATE=5) -> 1:  (Validator5_STATE'=0);
+[] (Validator5_STATE=0) -> hR :  (Validator5_STATE'=6);
+[] (!isEmpty(set5))&(Validator5_STATE=6) -> 1:(b5'=extractBlock(set5))&(Validator5_STATE'=11);
+[] !(!isEmpty(set5))&(Validator5_STATE=6) -> 1:(Validator5_STATE'=0);
+[] (!canBeInserted(L5,b5))&(Validator5_STATE=11) -> 1: (Validator5_STATE'=0);
+[] !(!canBeInserted(L5,b5))&(Validator5_STATE=11) -> 1:(Validator5_STATE'=12);
+[] (!(mod(getHeight(b5),EpochSize)=0))&(Validator5_STATE=12) -> 1:(Validator5_STATE'=13);
+[] !(!(mod(getHeight(b5),EpochSize)=0))&(Validator5_STATE=12) -> 1:(Validator5_STATE'=14);
+[ZOYNV] (Validator5_STATE=13) -> 1: (setMiner5' = addBlockSet(setMiner5 , b5))&(Validator5_STATE'=0);
+[VKAAW] (Validator5_STATE=14) -> 1: (setMiner5' = addBlockSet(setMiner5 , b5))&(Validator5_STATE'=15);
+[OUMHP] (Validator5_STATE=15) -> 1:  (Validator5_STATE'=0);
+[] (Validator5_STATE=0) -> rC : (lastCheck5'=extractCheckpoint(listCheckpoints5,lastCheck5))&(heightLast5'=getHeight(extractCheckpoint(listCheckpoints5,lastCheck5)))&(votes5'=calcVotes(Votes,extractCheckpoint(listCheckpoints5,lastCheck5)))&(Validator5_STATE'=16);
+[] ((heightLast5=heightCheckpoint5+EpochSize)&(votes5>=2/3*tot_stake))&(Validator5_STATE=16) -> 1:(lastJ5'=b5)&(Validator5_STATE'=0);
+[] !((heightLast5=heightCheckpoint5+EpochSize)&(votes5>=2/3*tot_stake))&(Validator5_STATE=16) -> 1:(Validator5_STATE'=0);
 
 endmodule 
 
@@ -103,15 +203,57 @@ module Network
 set1 : list [];
 set2 : list [];
 set3 : list [];
+set4 : list [];
+set5 : list [];
 
 Network_STATE: [0..10] init 0;
 
-[HPLBP] (Network_STATE=0) -> 1:  (set2'=addBlockSet(set2,b1))&(set3'=addBlockSet(set3,b1))&&(Network_STATE'=0);
-[DAHAW] (Network_STATE=0) -> 1: (set1' = removeBlock(set1,b1))&(Network_STATE'=0);
-[UKLIU] (Network_STATE=0) -> 1:  (set1'=addBlockSet(set1,b2))&(set3'=addBlockSet(set3,b2))&&(Network_STATE'=0);
-[EBXNA] (Network_STATE=0) -> 1: (set2' = removeBlock(set2,b2))&(Network_STATE'=0);
-[ADZWF] (Network_STATE=0) -> 1:  (set1'=addBlockSet(set1,b3))&(set2'=addBlockSet(set2,b3))&&(Network_STATE'=0);
-[OTQMG] (Network_STATE=0) -> 1: (set3' = removeBlock(set3,b3))&(Network_STATE'=0);
+[DDUWB] (Network_STATE=0) -> 1:  (set2'=addBlockSet(set2,b1))&(set3'=addBlockSet(set3,b1))&(set4'=addBlockSet(set4,b1))&(set5'=addBlockSet(set5,b1))&(Network_STATE'=0);
+[NOWYB] (Network_STATE=0) -> 1:  (set2'=addBlockSet(set2,b1))&(set3'=addBlockSet(set3,b1))&(set4'=addBlockSet(set4,b1))&(set5'=addBlockSet(set5,b1))&(Network_STATE'=0);
+[UDQJC] (Network_STATE=0) -> 1: (set1' = removeBlock(set1,b1))&(Network_STATE'=0);
+[ZJQZZ] (Network_STATE=0) -> 1: (set1' = removeBlock(set1,b1))&(Network_STATE'=0);
+[JPBRP] (Network_STATE=0) -> 1:  (set1'=addBlockSet(set1,b2))&(set3'=addBlockSet(set3,b2))&(set4'=addBlockSet(set4,b2))&(set5'=addBlockSet(set5,b2))&(Network_STATE'=0);
+[SBTDB] (Network_STATE=0) -> 1:  (set1'=addBlockSet(set1,b2))&(set3'=addBlockSet(set3,b2))&(set4'=addBlockSet(set4,b2))&(set5'=addBlockSet(set5,b2))&(Network_STATE'=0);
+[GHOFN] (Network_STATE=0) -> 1: (set2' = removeBlock(set2,b2))&(Network_STATE'=0);
+[SIDNW] (Network_STATE=0) -> 1: (set2' = removeBlock(set2,b2))&(Network_STATE'=0);
+[TJSUQ] (Network_STATE=0) -> 1:  (set1'=addBlockSet(set1,b3))&(set2'=addBlockSet(set2,b3))&(set4'=addBlockSet(set4,b3))&(set5'=addBlockSet(set5,b3))&(Network_STATE'=0);
+[YGNJZ] (Network_STATE=0) -> 1:  (set1'=addBlockSet(set1,b3))&(set2'=addBlockSet(set2,b3))&(set4'=addBlockSet(set4,b3))&(set5'=addBlockSet(set5,b3))&(Network_STATE'=0);
+[AROHX] (Network_STATE=0) -> 1: (set3' = removeBlock(set3,b3))&(Network_STATE'=0);
+[KQTSI] (Network_STATE=0) -> 1: (set3' = removeBlock(set3,b3))&(Network_STATE'=0);
+[WGAOA] (Network_STATE=0) -> 1:  (set1'=addBlockSet(set1,b4))&(set2'=addBlockSet(set2,b4))&(set3'=addBlockSet(set3,b4))&(set5'=addBlockSet(set5,b4))&(Network_STATE'=0);
+[EIAVN] (Network_STATE=0) -> 1:  (set1'=addBlockSet(set1,b4))&(set2'=addBlockSet(set2,b4))&(set3'=addBlockSet(set3,b4))&(set5'=addBlockSet(set5,b4))&(Network_STATE'=0);
+[NYTGZ] (Network_STATE=0) -> 1: (set4' = removeBlock(set4,b4))&(Network_STATE'=0);
+[ZADQM] (Network_STATE=0) -> 1: (set4' = removeBlock(set4,b4))&(Network_STATE'=0);
+[KQDHN] (Network_STATE=0) -> 1:  (set1'=addBlockSet(set1,b5))&(set2'=addBlockSet(set2,b5))&(set3'=addBlockSet(set3,b5))&(set4'=addBlockSet(set4,b5))&(Network_STATE'=0);
+[DXQPW] (Network_STATE=0) -> 1:  (set1'=addBlockSet(set1,b5))&(set2'=addBlockSet(set2,b5))&(set3'=addBlockSet(set3,b5))&(set4'=addBlockSet(set4,b5))&(Network_STATE'=0);
+[ZOYNV] (Network_STATE=0) -> 1: (set5' = removeBlock(set5,b5))&(Network_STATE'=0);
+[VKAAW] (Network_STATE=0) -> 1: (set5' = removeBlock(set5,b5))&(Network_STATE'=0);
+[] (Network_STATE=0) -> 1: ;
+
+endmodule 
+
+module Vote_Manager
+Votes : hash []; 
+tot_stake : [0..120000] init 50;
+stake1 : [0..N] init 10;
+stake2 : [0..N] init 10;
+stake3 : [0..N] init 10;
+stake4 : [0..N] init 10;
+stake5 : [0..N] init 10;
+
+Vote_Manager_STATE: [0..10] init 0;
+
+[CFETB] (Vote_Manager_STATE=0) -> 1: (Votes'=addVote(Votes,b1,stake1))&(Vote_Manager_STATE'=0);
+[DAIHI] (Vote_Manager_STATE=0) -> 1: (Votes'=addVote(Votes,b1,stake1))&(Vote_Manager_STATE'=0);
+[GCYFW] (Vote_Manager_STATE=0) -> 1: (Votes'=addVote(Votes,b2,stake2))&(Vote_Manager_STATE'=0);
+[UJOUV] (Vote_Manager_STATE=0) -> 1: (Votes'=addVote(Votes,b2,stake2))&(Vote_Manager_STATE'=0);
+[YXDKQ] (Vote_Manager_STATE=0) -> 1: (Votes'=addVote(Votes,b3,stake3))&(Vote_Manager_STATE'=0);
+[TJTRX] (Vote_Manager_STATE=0) -> 1: (Votes'=addVote(Votes,b3,stake3))&(Vote_Manager_STATE'=0);
+[RHBAO] (Vote_Manager_STATE=0) -> 1: (Votes'=addVote(Votes,b4,stake4))&(Vote_Manager_STATE'=0);
+[TGKPL] (Vote_Manager_STATE=0) -> 1: (Votes'=addVote(Votes,b4,stake4))&(Vote_Manager_STATE'=0);
+[IUCNT] (Vote_Manager_STATE=0) -> 1: (Votes'=addVote(Votes,b5,stake5))&(Vote_Manager_STATE'=0);
+[OUMHP] (Vote_Manager_STATE=0) -> 1: (Votes'=addVote(Votes,b5,stake5))&(Vote_Manager_STATE'=0);
+[] (Vote_Manager_STATE=0) -> 1: ;
 
 endmodule 
 

@@ -1,0 +1,21 @@
+preamble
+
+"ctmc"
+
+"const int N=5;"
+
+"const double mu= 1;"
+"const double gamma= 200;"
+"const double lambda= mu/N;"
+
+endpreamble
+
+n = 5;
+
+Server -> 
+Server : "s : [1..5];", "a : [0..1];" ;
+
+Station[i] -> i in [1...n]
+Station[i] : 	"s[i] : [0..1];"; 
+
+Polling := Station[i] -> Server : ;
