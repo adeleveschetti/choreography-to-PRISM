@@ -18,4 +18,6 @@ Server : "s : [1..5];", "a : [0..1];" ;
 Station[i] -> i in [1...n]
 Station[i] : 	"s[i] : [0..1];"; 
 
-Polling := Station[i] -> Server : ;
+PoW := Server -> Station[i] 
+		(+["gamma"] "(s=[i])" -> "(s'=s+1)"&&" " : PoW 
+		+["gamma"] " "&&" " :  Server -> Station[i] : ["mu"] "(s'=s+1)"&&" ". PoW)  

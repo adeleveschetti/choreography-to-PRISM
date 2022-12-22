@@ -14,17 +14,20 @@ public class CommunicationNode implements Node {
 	private Node statement;
 	private ArrayList<Node> forLoop = null;
 	private String rate ;
+	private ArrayList<String> actions = null;
 
-	public CommunicationNode(String A, String B, ArrayList<String> mex, Node stat, String r) {
+	public CommunicationNode(String A, String B, ArrayList<String> mex, Node stat, String r, ArrayList<String> act) {
 		roleA = A;
 		roleB = B;
 		message = new ArrayList<String>();
 		message = mex;
 		statement = stat;
 		rate = r;
+		actions = new ArrayList<String>();
+		actions = act;
 	}
 
-	public CommunicationNode(String A, String B, ArrayList<String> mex, Node stat, ArrayList<Node> loop, String r) {
+	public CommunicationNode(String A, String B, ArrayList<String> mex, Node stat, ArrayList<Node> loop, String r, ArrayList<String> act) {
 		roleA = A;
 		roleB = B;
 		message = new ArrayList<String>();
@@ -32,6 +35,8 @@ public class CommunicationNode implements Node {
 		statement = stat;
 		forLoop = loop ;
 		rate = r;
+		actions = new ArrayList<String>();
+		actions = act;
 	}
 
 	@Override
@@ -55,7 +60,6 @@ public class CommunicationNode implements Node {
 		String roleBtmp = roleB;
 		String rateToPrintA = "";
 		String rateToPrintB = "";
-
 		if(!rate.equals("")) {
 			int indexRole = rate.toString().indexOf("*");
 			if(indexRole!=-1) {
@@ -73,12 +77,53 @@ public class CommunicationNode implements Node {
 			rateToPrintB = "1" ;
 		}
 
-		for(String el : roles) {
-			if(el.contains(roleA.substring(0,roleA.length()-lenIndex))) {
-				roleA = el;
+		if(rateToPrintA.contains("[i]")) {
+			rateToPrintA=rateToPrintA.replace("[i]",""+Integer.toString(currIndex+1));
+		}
+		if(rateToPrintA.contains("[i+1]")) {
+			int indexToPrint = -1;
+			if(currIndex+2>totIndex) {
+				indexToPrint = 1;
 			}
-			if(el.contains(roleB.substring(0,roleB.length()-lenIndex))) {
-				roleB = el;
+			else {
+				indexToPrint = currIndex+2;
+			}
+			rateToPrintA=rateToPrintA.replace("[i+1]",""+Integer.toString(indexToPrint));
+		}
+		if(rateToPrintB.contains("[i]")) {
+			rateToPrintB=rateToPrintB.replace("[i]",""+Integer.toString(currIndex+1));
+		}
+		if(rateToPrintB.contains("[i+1]")) {
+			int indexToPrint = -1;
+			if(currIndex+2>totIndex) {
+				indexToPrint = 1;
+			}
+			else {
+				indexToPrint = currIndex+2;
+			}
+			rateToPrintB=rateToPrintB.replace("[i+1]",""+Integer.toString(indexToPrint));
+		}
+
+		boolean flag = false;
+
+		if(roleA.charAt(roleA.length()-lenIndex) == '+' || roleB.charAt(roleB.length()-lenIndex) == '+'){
+			roleA = roleA.replace("[i]",Integer.toString(currIndex+1));
+			if(currIndex+2>totIndex) {
+				roleB = roleB.replace("[i+1]",Integer.toString(1));
+			}
+			else {
+				roleB = roleB.replace("[i+1]",Integer.toString(currIndex+2));
+			}
+			flag = true;
+		}
+		if(!flag) {
+			for(String el : roles) {
+				if(el.contains(roleA.substring(0,roleA.length()-lenIndex))) {
+					roleA = el;
+				}
+				if(el.contains(roleB.substring(0,roleB.length()-lenIndex))) {
+					roleB = el;
+				}
 			}
 		}
 
@@ -149,22 +194,35 @@ public class CommunicationNode implements Node {
 		String messageToAdd = message.get(0);
 
 
-		if(roleA.matches(".*\\d.*")|| messageToAdd.contains("[i]")) {
-			int indexDigit = -1;
-			String role ;
-			if(roleB.matches(".*\\d.*")) {
-				role = roleB;
-			}
-			else {
-				role = roleA;
-			}
-			for(int k=0; k<role.length(); k++) {
-				if(Character.isDigit(role.charAt(k))) {
-					indexDigit = k;
+		if(roleA.matches(".*\\d.*")|| messageToAdd.contains("[i]") || messageToAdd.contains("[i+1]")) {
+
+			if(flag) {
+				messageToAdd = message.get(0).replace("[i]",Integer.toString(currIndex+1));
+				if(currIndex+2>totIndex) {
+					messageToAdd = messageToAdd.replace("[i+1]",Integer.toString(1));
+				}
+				else {
+					messageToAdd = messageToAdd.replace("[i+1]",Integer.toString(currIndex+2));
 				}
 			}
-			String toReplaceA = ""+role.charAt(indexDigit);
-			messageToAdd =  message.get(0).replaceAll("\\[i\\]",toReplaceA);
+			else {
+				int indexDigit = -1;
+				String role ;
+				if(roleB.matches(".*\\d.*")) {
+					role = roleB;
+				}
+				else {
+					role = roleA;
+				}
+				for(int k=0; k<role.length(); k++) {
+					if(Character.isDigit(role.charAt(k))) {
+						indexDigit = k;
+					}
+				}
+				String toReplaceA = ""+role.charAt(indexDigit);
+				messageToAdd =  message.get(0).replaceAll("\\[i\\]",toReplaceA);
+				messageToAdd =  messageToAdd.replaceAll("\\[i+1\\]",toReplaceA);
+			}
 
 
 
@@ -186,14 +244,44 @@ public class CommunicationNode implements Node {
 				messageToAdd = messageToAdd+"&"+messageForLoop_2;
 			}
 		}
+		String precond = null;
+		if(actions!=null && actions.size()>0) {
+			precond = actions.get(0);
+			if(actions.get(0).contains("[i]")){
+				if(currIndex+1>totIndex) {
+					precond = precond.replace("[i]",Integer.toString(1));
+				}
+				else {
+					precond = precond.replace("[i]",Integer.toString(currIndex+1));
+				}			
+			}
+			if(actions.get(0).contains("[i+1]")){
+				if(currIndex+2>totIndex) {
+					precond = precond.replace("[i+1]",Integer.toString(1));
+				}
+				else {
+					precond = precond.replace("[i+1]",Integer.toString(currIndex+2));
+				}			
+			}
+		}
 
 		if(indexBranchA==-1 || !(index_A<=indexBranchA && indexBranchA<=indexEnd_A)) {
-			toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateToPrintA + ": " + messageToAdd;
+			if(precond!=null) {
+				toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ")&"+precond+"-> " + rateToPrintA + ": " + messageToAdd;
+			}
+			else {
+				toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateToPrintA + ": " + messageToAdd;
+			}
 		}
 		else {
 			state_A  = Character.getNumericValue(toRet.charAt(indexBranchA-1));
 			toRet = toRet.replace("[] ("+ roleA+"_STATE="+state_A+") -> 1: ;\n","");
-			toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateToPrintA + ": " + messageToAdd ;
+			if(precond!=null) {
+				toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ")&"+precond+"-> " + rateToPrintA + ": " + messageToAdd;
+			}
+			else {
+				toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateToPrintA + ": " + messageToAdd;
+			}
 		}
 		if(message.get(0).length()==1) {
 			toInsert_A = toInsert_A + nextState + ";\n";
@@ -216,23 +304,34 @@ public class CommunicationNode implements Node {
 		}
 
 
-		if(roleB.matches(".*\\d.*") || messageToAdd.contains("[i]")) {
-			int indexDigit = -1;
-			String role ;
-			if(roleB.matches(".*\\d.*")) {
-				role = roleB;
-			}
-			else {
-				role = roleA;
-			}
-			for(int k=0; k<role.length(); k++) {
-				if(Character.isDigit(role.charAt(k))) {
-					indexDigit = k;
+		if(roleB.matches(".*\\d.*") || messageToAdd.contains("[i]") || messageToAdd.contains("[i+1]")) {
+			if(flag) {
+				messageToAdd = message.get(1).replace("[i]",Integer.toString(currIndex+1));
+				if(currIndex+2>totIndex) {
+					messageToAdd = messageToAdd.replace("[i+1]",Integer.toString(1));
+				}
+				else {
+					messageToAdd = messageToAdd.replace("[i+1]",Integer.toString(currIndex+2));
 				}
 			}
-			String toReplaceB = ""+role.charAt(indexDigit);
-			messageToAdd = messageToAdd.replaceAll("\\[i\\]",toReplaceB);
-
+			else {
+				int indexDigit = -1;
+				String role ;
+				if(roleB.matches(".*\\d.*")) {
+					role = roleB;
+				}
+				else {
+					role = roleA;
+				}
+				for(int k=0; k<role.length(); k++) {
+					if(Character.isDigit(role.charAt(k))) {
+						indexDigit = k;
+					}
+				}
+				String toReplaceA = ""+role.charAt(indexDigit);
+				messageToAdd =  message.get(1).replaceAll("\\[i\\]",toReplaceA);
+				messageToAdd =  messageToAdd.replaceAll("\\[i+1\\]",toReplaceA);
+			}
 		}
 		if(forLoop!=null && forLoop.size()>0 && forLoop.get(0).getRoleA().contains(roleB.substring(0,roleB.length()-1))) {
 			if(messageToAdd.equals(" ")) {
@@ -252,7 +351,7 @@ public class CommunicationNode implements Node {
 		}
 		int alreadyDef = toRet.indexOf(messageToAdd);
 
-		if(alreadyDef!=-1) {
+		if(alreadyDef!=-1 && messageToAdd.length()>1) {
 			String toFind = "("+roleB+"_STATE'=";
 			String toFind2 = "("+roleB+"_STATE=";
 			int stateInit_B = -1;
@@ -264,9 +363,7 @@ public class CommunicationNode implements Node {
 			int indexB_def = toRet.indexOf(toFind,alreadyDef);
 			stateTmp_B = Character.getNumericValue(toRet.charAt(indexB_def+toFind.length()));
 			nextState = "("+roleB +"_STATE'=" + stateTmp_B +")";
-
 			state_B = Character.getNumericValue(toRet.charAt(stateInit_B+toFind2.length()));
-
 		}
 		else if(statement instanceof ProtocolIDNode) {
 			nextState = "("+roleB +"_STATE'=" + 0 +")";
@@ -276,18 +373,47 @@ public class CommunicationNode implements Node {
 			nextState = "("+roleB+"_STATE'="+stateTmp_B+")";
 		}
 
-
+		String precond_B = null;
+		if(actions!=null && actions.size()>1) {
+			precond_B = actions.get(1);
+			if(actions.get(1).contains("[i]")){
+				if(currIndex+1>totIndex) {
+					precond_B = precond_B.replace("[i]",Integer.toString(1));
+				}
+				else {
+					precond_B = precond_B.replace("[i]",Integer.toString(currIndex+1));
+				}			
+			}
+			if(actions.get(1).contains("[i+1]")){
+				if(currIndex+2>totIndex) {
+					precond_B = precond_B.replace("[i+1]",Integer.toString(1));
+				}
+				else {
+					precond_B = precond_B.replace("[i+1]",Integer.toString(currIndex+2));
+				}			
+			}
+		}
 
 		String toInsert_B = "";
 		if(indexBranchB==-1 || !(index_B<=indexBranchB && indexBranchB<=indexEnd_B)) {
-			toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateToPrintB + ": " + messageToAdd; 
+			if(precond_B!=null) {
+				toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ")&"+precond_B+" -> " + rateToPrintB + ": " + messageToAdd; 
+			}
+			else {
+				toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateToPrintB + ": " + messageToAdd; 
+			}
 		}
 		else {
 			state_B = Character.getNumericValue(toRet.charAt(indexBranchB-1));
 			toRet = toRet.replace("[] ("+ roleB+"_STATE="+state_B+") -> 1: ;\n","");
-			toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateToPrintB + ": " + messageToAdd; 
+			if(precond_B!=null) {
+				toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ")&"+precond_B+" -> " + rateToPrintB + ": " + messageToAdd; 
+			}
+			else {
+				toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateToPrintB + ": " + messageToAdd; 
+			}
 		}
-		if(messageToAdd.length()==1) {
+		if(messageToAdd.length()<=1) {
 			toInsert_B = toInsert_B + nextState + ";\n";
 		}
 		else {

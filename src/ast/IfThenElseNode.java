@@ -40,11 +40,24 @@ public class IfThenElseNode implements Node{
 
 		String roleTmp = role;
 		String condTmp = cond;
-		for(String el : roles) {
-			if(el.contains(role.substring(0,role.length()-lenIndex))) {
-				role = el;
-			}
+		boolean flagName = false;
 
+		if(role.charAt(role.length()-lenIndex) == '+'){
+			if(currIndex+2>totIndex) {
+				role = role.replace("[i+1]",Integer.toString(1));
+			}
+			else {
+				role = role.replace("[i+1]",Integer.toString(currIndex+2));
+			}
+			flagName = true;
+		}
+		if(!flagName) {
+			for(String el : roles) {
+				if(el.contains(role.substring(0,role.length()-lenIndex))) {
+					role = el;
+				}
+
+			}
 		}
 
 		String toFind_A = "module " + role + "\n\n";
@@ -63,18 +76,26 @@ public class IfThenElseNode implements Node{
 			mapStates.get(role).add(state);
 		}
 		if(role.matches(".*\\d.*")) {
-			int indexDigit = -1;
-			for(int k=0; k<role.length(); k++) {
-				if(Character.isDigit(role.charAt(k))) {
-					indexDigit = k;
+			if(flagName) {
+				condTmp = condTmp.replace("[i]",Integer.toString(currIndex+1));
+				if(currIndex+2>totIndex) {
+					condTmp = condTmp.replace("[i+1]",Integer.toString(1));
+				}
+				else {
+					condTmp = condTmp.replace("[i+1]",Integer.toString(currIndex+2));
 				}
 			}
-			String toReplace = ""+role.charAt(indexDigit);
-			System.out.println(toReplace);
-			condTmp = condTmp.replaceAll("\\[i\\]",toReplace);
-			System.out.println(condTmp);
+			else {
+				int indexDigit = -1;
+				for(int k=0; k<role.length(); k++) {
+					if(Character.isDigit(role.charAt(k))) {
+						indexDigit = k;
+					}
+				}
+				String toReplace = ""+role.charAt(indexDigit);
+				condTmp = condTmp.replaceAll("\\[i\\]",toReplace);
+			}
 		}
-
 		String toInsert_A = "[] ("+ condTmp + ")&("+ role +"_STATE=" + state +") -> 1:";
 
 		boolean flag = false;

@@ -8,8 +8,8 @@ protocol : (preamble)? (varDef)? SEMICOLON (roleDef)+ protocolID ASSIGN statemen
 
 preamble : PREAMBLE (variableDecl)* ENDPREAMBLE ;
 
-statement : role FROM role COLON (SLPAR rate SRPAR)? message DOT statement 
-			| role FROM role LPAR BRANCH SLPAR rateValues+=rate SRPAR message COLON statement (BRANCH SLPAR rateValues+=rate SRPAR message COLON statement)+ RPAR 
+statement : role FROM role COLON (SLPAR rate SRPAR)? (actions FROM)? message DOT statement 
+			| role FROM role LPAR BRANCH SLPAR rateValues+=rate SRPAR (actions FROM)? message COLON statement (BRANCH SLPAR rateValues+=rate SRPAR message COLON statement)+ RPAR 
 			| internalAction (DOT statement)?
 			| ifThenElse 
 			| protocolID
@@ -31,11 +31,11 @@ actions : (action+=DOUBLE_STRING)? (AND action+=DOUBLE_STRING)*  ;
 
 roleDef : role FROM (indexSpec)? roleSpec* SEMICOLON;
 
-roleSpec : (role (COLON (roleVar (COMMA roleVar)+))?);
+roleSpec : (role (COLON (roleVar (COMMA roleVar)*))?);
 
 roleGroup : ID  ;
 
-roleIndex : ID SLPAR index SRPAR ;
+roleIndex : ID SLPAR (index | (index BRANCH INTEGER)) SRPAR ;
 
 indexSpec : index IN SLPAR INTEGER DOTS upperBound=CHAR SRPAR ; 
 

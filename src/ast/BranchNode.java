@@ -13,8 +13,9 @@ public class BranchNode implements Node{
 	private ArrayList<ArrayList<String>> messages = null;
 	private ArrayList<ArrayList<Node>> forLoops = null;
 	private ArrayList<Node> statements = null;
+	private ArrayList<String> actions = null;
 
-	public BranchNode(String A, String B, ArrayList<String> listRates, ArrayList<ArrayList<String>> listMessages, ArrayList<Node> listStatements, ArrayList<ArrayList<Node>> loops) {
+	public BranchNode(String A, String B, ArrayList<String> listRates, ArrayList<ArrayList<String>> listMessages, ArrayList<Node> listStatements, ArrayList<ArrayList<Node>> loops, ArrayList<String> act) {
 		roleA = A;
 		roleB = B;
 		if(listRates!=null) {
@@ -45,6 +46,10 @@ public class BranchNode implements Node{
 			for(ArrayList el : loops) {
 				forLoops.add(el);
 			}
+		}
+		if(act!=null) {
+			actions = new ArrayList<String>();
+			actions = act;
 		}
 
 	}
@@ -79,12 +84,26 @@ public class BranchNode implements Node{
 	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles, int currIndex, int totIndex) {
 		String roleAtmp = roleA;
 		String roleBtmp = roleB;
-		for(String el : roles) {
-			if(el.contains(roleA.substring(0,roleA.length()-lenIndex))) {
-				roleA = el;
+		boolean flag = false;
+
+		if(roleA.charAt(roleA.length()-lenIndex) == '+' || roleB.charAt(roleB.length()-lenIndex) == '+'){
+			roleA = roleA.replace("[i]",Integer.toString(currIndex+1));
+			if(currIndex+2>totIndex) {
+				roleB = roleB.replace("[i+1]",Integer.toString(1));
 			}
-			if(el.contains(roleB.substring(0,roleB.length()-lenIndex))) {
-				roleB = el;
+			else {
+				roleB = roleB.replace("[i+1]",Integer.toString(currIndex+2));
+			}
+			flag = true;
+		}
+		if(!flag) {
+			for(String el : roles) {
+				if(el.contains(roleA.substring(0,roleA.length()-lenIndex))) {
+					roleA = el;
+				}
+				if(el.contains(roleB.substring(0,roleB.length()-lenIndex))) {
+					roleB = el;
+				}
 			}
 		}
 		int size = 5; 
@@ -145,24 +164,31 @@ public class BranchNode implements Node{
 				rateB = rates.get(i).toString().substring(indexRole+1,rates.get(i).toString().length());
 			}
 			if(rateA.contains("[i]")) {
-				int indexDigit = -1;
-				for(int k=0; k<roleA.length(); k++) {
-					if(Character.isDigit(roleA.charAt(k))) {
-						indexDigit = k;
-					}
+				rateA=rateA.replace("[i]",""+Integer.toString(currIndex+1));
+			}
+			if(rateA.contains("[i+1]")) {
+				int indexToPrint = -1;
+				if(currIndex+2>totIndex) {
+					indexToPrint = 1;
 				}
-				rateA=rateA.replace("[i]",""+roleA.charAt(indexDigit));
+				else {
+					indexToPrint = currIndex+2;
+				}
+				rateA=rateA.replace("[i+1]",""+Integer.toString(indexToPrint));
 			}
 
 			if(rateB.contains("[i]")) {
-
-				int indexDigit = -1;
-				for(int k=0; k<roleB.length(); k++) {
-					if(Character.isDigit(roleB.charAt(k))) {
-						indexDigit = k;
-					}
+				rateB=rateB.replace("[i]",""+Integer.toString(currIndex+1));
+			}
+			if(rateB.contains("[i+1]")) {
+				int indexToPrint = -1;
+				if(currIndex+2>totIndex) {
+					indexToPrint = 1;
 				}
-				rateB=rateB.replace("[i]",""+roleB.charAt(indexDigit));
+				else {
+					indexToPrint = currIndex+2;
+				}
+				rateB=rateB.replace("[i+1]",""+Integer.toString(indexToPrint));
 			}
 
 			int indexBranchA = toRet.indexOf(") -> \n");
@@ -189,22 +215,34 @@ public class BranchNode implements Node{
 			String messageToAdd = tmpMessage.get(0);
 
 
-			if(roleA.matches(".*\\d.*")|| messageToAdd.contains("[i]")) {
-				int indexDigit = -1;
-				String role ;
-				if(roleB.matches(".*\\d.*")) {
-					role = roleB;
-				}
-				else {
-					role = roleA;
-				}
-				for(int k=0; k<role.length(); k++) {
-					if(Character.isDigit(role.charAt(k))) {
-						indexDigit = k;
+			if(roleA.matches(".*\\d.*")|| messageToAdd.contains("[i]") || messageToAdd.contains("[i+1]")) {
+				if(flag) {
+					messageToAdd = tmpMessage.get(0).replace("[i]",Integer.toString(currIndex+1));
+					if(currIndex+2>totIndex) {
+						messageToAdd = messageToAdd.replace("[i+1]",Integer.toString(1));
+					}
+					else {
+						messageToAdd = messageToAdd.replace("[i+1]",Integer.toString(currIndex+2));
 					}
 				}
-				String toReplaceA = ""+role.charAt(indexDigit);
-				messageToAdd = tmpMessage.get(0).replaceAll("\\[i\\]",toReplaceA);
+				else {
+					int indexDigit = -1;
+					String role ;
+					if(roleB.matches(".*\\d.*")) {
+						role = roleB;
+					}
+					else {
+						role = roleA;
+					}
+					for(int k=0; k<role.length(); k++) {
+						if(Character.isDigit(role.charAt(k))) {
+							indexDigit = k;
+						}
+					}
+					String toReplaceA = ""+role.charAt(indexDigit);
+					messageToAdd =  tmpMessage.get(0).replaceAll("\\[i\\]",toReplaceA);
+					messageToAdd =  messageToAdd.replaceAll("\\[i+1\\]",toReplaceA);
+				}
 			}
 
 			if(forLoops.get(i).size()>0  && forLoops.get(i).get(0).getRoleA().contains(roleA.substring(0,roleA.length()-1))) {
@@ -223,17 +261,46 @@ public class BranchNode implements Node{
 					messageToAdd = messageToAdd+"&"+messageForLoop_2;
 				}
 			}
+			String precond = null;
+			if(actions!=null && actions.size()>0) {
+				precond = actions.get(0);
+				if(actions.get(0).contains("[i]")){
+					if(currIndex+1>totIndex) {
+						precond = precond.replace("[i]",Integer.toString(1));
+					}
+					else {
+						precond = precond.replace("[i]",Integer.toString(currIndex+1));
+					}			
+				}
+				if(actions.get(0).contains("[i+1]")){
+					if(currIndex+2>totIndex) {
+						precond = precond.replace("[i+1]",Integer.toString(1));
+					}
+					else {
+						precond = precond.replace("[i+1]",Integer.toString(currIndex+2));
+					}			
+				}
+			}
 
 			if(roleA.equals(roleB)) {label="";}
 			if(roleA.equals(roleB) || indexBranchA==-1 || !(index_A<=indexBranchA && indexBranchA<=indexEnd_A)) {
-				toInsert_A =  "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateA + " : " + messageToAdd;// +"&"+nextState+ ";\n";
+				if(precond!=null) {
+					toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ")&"+precond+"-> " + rateA + ": " + messageToAdd;
+				}
+				else {
+					toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateA + ": " + messageToAdd;
+				}
 			}
 			else {
 				state_A  = Character.getNumericValue(toRet.charAt(indexBranchA-1));
 				toRet = toRet.replace("[] ("+ roleA+"_STATE="+state_A+") -> \n","");
-				toInsert_A =  "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateA + " : " + messageToAdd;// +"&"+nextState+ ";\n";
-			}
-			if(tmpMessage.get(0).length()==1) {
+				if(precond!=null) {
+					toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ")&"+precond+"-> " + rateA + ": " + messageToAdd;
+				}
+				else {
+					toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateA + ": " + messageToAdd;
+				}			}
+			if(tmpMessage.get(0).length()<=1) {
 				toInsert_A = toInsert_A + nextState + ";\n";
 			}
 			else {
@@ -263,23 +330,34 @@ public class BranchNode implements Node{
 					messageToAdd = "";
 				}
 
-				if(roleB.matches(".*\\d.*")|| messageToAdd.contains("[i]")) {
-					int indexDigit = -1;
-					String role ;
-					if(roleB.matches(".*\\d.*")) {
-						role = roleB;
-					}
-					else {
-						role = roleA;
-					}
-					for(int k=0; k<role.length(); k++) {
-						if(Character.isDigit(role.charAt(k))) {
-							indexDigit = k;
+				if(roleB.matches(".*\\d.*")|| messageToAdd.contains("[i]") || messageToAdd.contains("[i+1]")) {
+					if(flag) {
+						messageToAdd = messageToAdd.replace("[i]",Integer.toString(currIndex+1));
+						if(currIndex+2>totIndex) {
+							messageToAdd = messageToAdd.replace("[i+1]",Integer.toString(1));
+						}
+						else {
+							messageToAdd = messageToAdd.replace("[i+1]",Integer.toString(currIndex+2));
 						}
 					}
-					String toReplaceB = ""+role.charAt(indexDigit);
-
-					messageToAdd = messageToAdd.replaceAll("\\[i\\]",toReplaceB);
+					else {
+						int indexDigit = -1;
+						String role ;
+						if(roleB.matches(".*\\d.*")) {
+							role = roleB;
+						}
+						else {
+							role = roleA;
+						}
+						for(int k=0; k<role.length(); k++) {
+							if(Character.isDigit(role.charAt(k))) {
+								indexDigit = k;
+							}
+						}
+						String toReplaceA = ""+role.charAt(indexDigit);
+						messageToAdd =  messageToAdd.replaceAll("\\[i\\]",toReplaceA);
+						messageToAdd =  messageToAdd.replaceAll("\\[i+1\\]",toReplaceA);
+					}
 
 				}
 				if(forLoops.get(i).size()>0  && forLoops.get(i).get(0).getRoleA().contains(roleB.substring(0,roleB.length()-1))) {
@@ -298,17 +376,45 @@ public class BranchNode implements Node{
 						messageToAdd = messageToAdd+"&"+messageForLoop_2;
 					}
 				}
+				String precond_B = null;
+				if(actions!=null && actions.size()>1) {
+					precond_B = actions.get(1);
+					if(actions.get(1).contains("[i]")){
+						if(currIndex+1>totIndex) {
+							precond_B = precond_B.replace("[i]",Integer.toString(1));
+						}
+						else {
+							precond_B = precond_B.replace("[i]",Integer.toString(currIndex+1));
+						}			
+					}
+					if(actions.get(1).contains("[i+1]")){
+						if(currIndex+2>totIndex) {
+							precond_B = precond_B.replace("[i+1]",Integer.toString(1));
+						}
+						else {
+							precond_B = precond_B.replace("[i+1]",Integer.toString(currIndex+2));
+						}			
+					}
+				}
 				String toInsert_B = "";
 				if(indexBranchB==-1 || !(index_B<=indexBranchB && indexBranchB<=indexEnd_B)) {
-					toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateB  + " : " + messageToAdd ;
-
+					if(precond_B!=null) {
+						toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ")&"+precond_B+" -> " + rateB + ": " + messageToAdd; 
+					}
+					else {
+						toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateB + ": " + messageToAdd; 
+					}
 				}
 				else {
 					state_B = Character.getNumericValue(toRet.charAt(indexBranchB-1));
 					toRet = toRet.replace("[] ("+ roleB+"_STATE="+state_B+") -> \n","");
-					toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateB  + " : " + messageToAdd ;//+ "&"+ nextState +";\n";
-				}
-				if(tmpMessage.size()==1) {
+					if(precond_B!=null) {
+						toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ")&"+precond_B+" -> " + rateB + ": " + messageToAdd; 
+					}
+					else {
+						toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateB + ": " + messageToAdd; 
+					}				}
+				if(tmpMessage.size()==1 || tmpMessage.get(1).length()<=1) {
 					toInsert_B = toInsert_B + nextState + ";\n";
 				}
 				else {
@@ -320,14 +426,24 @@ public class BranchNode implements Node{
 			}
 			String roleC = "";
 			for(String el : mapStates.keySet()) {
+				if(el.matches(".*\\d.*")) {
+					el = el.replace("[i]",Integer.toString(currIndex+1));
+					if(currIndex+2>totIndex) {
+						el = el.replace("[i+1]",Integer.toString(1));
+					}
+					else {
+						el = el.replace("[i+1]",Integer.toString(currIndex+2));
+					}
+				}
 				if(!el.equals(roleA) && !el.equals(roleB)) {
 					roleC = el ;
 					String toFind_C = "module " + roleC + "\n\n";
 					int index_C = toRet.indexOf(toFind_C);
 					int indexEnd_C = toRet.indexOf("endmodule",index_C);
 
-					int state_C ;
+					int state_C = -1;
 					if(mapStatesBranches.get(roleC).size()==0) {
+
 						if(mapStates.get(roleC).size()==0) {
 							state_C = 0;
 							mapStates.get(roleC).add(state_C);
@@ -336,11 +452,13 @@ public class BranchNode implements Node{
 							state_C = mapStates.get(roleC).get(mapStates.get(roleC).size()-1)+1;
 							mapStates.get(roleC).add(state_C);
 						}
+
 						mapStatesBranches.get(roleC).add(state_C);
 					}
 					else {
 						state_C = mapStatesBranches.get(roleC).get(mapStatesBranches.get(roleC).size()-1);
 					}
+
 					String toInsert_C = "[] ("+ roleC + "_STATE=" + state_C +") -> 1: ;\n" ; 
 					toRet = new StringBuilder(toRet).insert(indexEnd_C-1,toInsert_C).toString();
 

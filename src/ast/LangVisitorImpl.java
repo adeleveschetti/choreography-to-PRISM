@@ -71,7 +71,13 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 		if(ctx.BRANCH()!=null  && ctx.BRANCH().size()>0 ) {
 			ArrayList<ArrayList<String>> messages = new ArrayList<ArrayList<String>>();
 			ArrayList<ArrayList<Node>> loops = new ArrayList<ArrayList<Node>>();
-
+			ArrayList<String> actions = null;
+			if(ctx.actions()!=null ) {
+				actions = new ArrayList<String>();
+				for(Token el : ctx.actions().action) {
+					actions.add(el.getText().substring(1,el.getText().length()-1));
+				}
+			}
 			for(MessageContext el : ctx.message()) {
 				ArrayList<String> tmp = new ArrayList<String>();
 				for(Token el2 : el.actions().action) {
@@ -100,18 +106,25 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 			String roleA = "";
 			String roleB = "";
 			if(ctx.role(0).roleIndex()!=null) {
+
 				roleA = ctx.role(0).roleIndex().ID().getText()+"["+ctx.role(0).roleIndex().index().CHAR().getText()+"]";
 			}
 			else {
 				roleA = ctx.role(0).roleGroup().ID().getText();
 			}
 			if(ctx.role(1).roleIndex()!=null) {
-				roleB = ctx.role(1).roleIndex().ID().getText()+"["+ctx.role(1).roleIndex().index().CHAR().getText()+"]";
+
+				if(ctx.role(1).roleIndex().BRANCH()!=null) {
+					roleB = ctx.role(1).roleIndex().ID().getText()+"["+ctx.role(1).roleIndex().index().CHAR().getText()+"+"+ctx.role(1).roleIndex().INTEGER().toString()+"]";
+				}
+				else {
+					roleB = ctx.role(1).roleIndex().ID().getText()+"["+ctx.role(1).roleIndex().index().CHAR().getText()+"]";
+				}
 			}
 			else {
 				roleB = ctx.role(1).roleGroup().ID().getText();
 			}
-			return new BranchNode(roleA,roleB,rates,messages,stats,loops);
+			return new BranchNode(roleA,roleB,rates,messages,stats,loops,actions);
 		}
 		else if(ctx.internalAction()!=null) {
 			Node stat = null;
@@ -120,7 +133,12 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 			}
 			String role = "";
 			if(ctx.internalAction().role().roleIndex()!=null) {
-				role = ctx.internalAction().role().roleIndex().ID().getText()+"["+ctx.internalAction().role().roleIndex().index().CHAR().getText()+"]";
+				if(ctx.internalAction().role().roleIndex().BRANCH()!=null) {
+					role = ctx.internalAction().role().roleIndex().ID().getText()+"["+ctx.internalAction().role().roleIndex().index().CHAR().getText()+"+"+ctx.internalAction().role().roleIndex().INTEGER().toString()+"]";
+				}
+				else {
+					role = ctx.internalAction().role().roleIndex().ID().getText()+"["+ctx.internalAction().role().roleIndex().index().CHAR().getText()+"]";
+				}			
 			}
 			else {
 				role = ctx.internalAction().role().roleGroup().ID().getText();
@@ -141,16 +159,32 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 		String roleA = "";
 		String roleB = "";
 		if(ctx.role(0).roleIndex()!=null) {
-			roleA = ctx.role(0).roleIndex().ID().getText()+"["+ctx.role(0).roleIndex().index().CHAR().getText()+"]";
+			if(ctx.role(0).roleIndex().BRANCH()!=null) {
+				roleA = ctx.role(0).roleIndex().ID().getText()+"["+ctx.role(0).roleIndex().index().CHAR().getText()+"+"+ctx.role(0).roleIndex().INTEGER().toString()+"]";
+			}
+			else {
+				roleA = ctx.role(0).roleIndex().ID().getText()+"["+ctx.role(0).roleIndex().index().CHAR().getText()+"]";
+			}
 		}
 		else {
 			roleA = ctx.role(0).roleGroup().ID().getText();
 		}
 		if(ctx.role(1).roleIndex()!=null) {
-			roleB = ctx.role(1).roleIndex().ID().getText()+"["+ctx.role(1).roleIndex().index().CHAR().getText()+"]";
-		}
+			if(ctx.role(1).roleIndex().BRANCH()!=null) {
+				roleB = ctx.role(1).roleIndex().ID().getText()+"["+ctx.role(1).roleIndex().index().CHAR().getText()+"+"+ctx.role(1).roleIndex().INTEGER().toString()+"]";
+			}
+			else {
+				roleB = ctx.role(1).roleIndex().ID().getText()+"["+ctx.role(1).roleIndex().index().CHAR().getText()+"]";
+			}		}
 		else {
 			roleB = ctx.role(1).roleGroup().ID().getText();
+		}
+		ArrayList<String> actions = null;
+		if(ctx.actions()!=null ) {
+			actions = new ArrayList<String>();
+			for(Token el : ctx.actions().action) {
+				actions.add(el.getText().substring(1,el.getText().length()-1));
+			}
 		}
 		ArrayList<String> message = new ArrayList<String>();
 		for(Token el : ctx.message(0).actions().action) {
@@ -166,9 +200,9 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 					loops.add(null);
 				}
 			}
-			return new CommunicationNode(roleA,roleB, message, visitStatement(ctx.statement(0)), loops,rate);
+			return new CommunicationNode(roleA,roleB, message, visitStatement(ctx.statement(0)), loops,rate,actions);
 		}
-		return new CommunicationNode(roleA,roleB, message, visitStatement(ctx.statement(0)),rate);
+		return new CommunicationNode(roleA,roleB, message, visitStatement(ctx.statement(0)),rate,actions);
 
 	}
 

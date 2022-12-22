@@ -33,30 +33,51 @@ public class InternalActionNode implements Node{
 
 	@Override
 	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles, int currIndex, int totIndex) {
-		
+
 		int state = 0;
 
 		String roleTmp = role;
-
-		for(String el : roles) {
-			if(el.contains(role.substring(0,role.length()-lenIndex))) {
-				role = el;
+		boolean flagName = false;
+		if(role.charAt(role.length()-lenIndex) == '+'){
+			if(currIndex+2>totIndex) {
+				role = role.replace("[i+1]",Integer.toString(1));
 			}
-
+			else {
+				role = role.replace("[i+1]",Integer.toString(currIndex+2));
+			}
+			flagName = true;
 		}
-		String ret = message;
+		if(!flagName) {
+			for(String el : roles) {
+				if(el.contains(role.substring(0,role.length()-lenIndex))) {
+					role = el;
+				}
 
-		if(role.matches(".*\\d.*") || message.contains("[i]")) {
-			int indexDigit = -1;
-			for(int k=0; k<role.length(); k++) {
-				if(Character.isDigit(role.charAt(k))) {
-					indexDigit = k;
+			}
+		}
+
+		String ret = message;
+		if(role.matches(".*\\d.*") || message.contains("[i]") || message.contains("[i+1]")) {
+			if(message.contains("[i+1]")) {
+				ret = ret.replace("[i]",Integer.toString(currIndex+1));
+				if(currIndex+2>totIndex) {
+					ret = ret.replace("[i+1]",Integer.toString(1));
+				}
+				else {
+					ret = ret.replace("[i+1]",Integer.toString(currIndex+2));
 				}
 			}
-			String toReplace = ""+role.charAt(indexDigit);
-			ret = message.replaceAll("\\[i\\]",toReplace);
+			else {
+				int indexDigit = -1;
+				for(int k=0; k<role.length(); k++) {
+					if(Character.isDigit(role.charAt(k))) {
+						indexDigit = k;
+					}
+				}
+				String toReplace = ""+role.charAt(indexDigit);
+				ret = message.replaceAll("\\[i\\]",toReplace);
+			}
 		}
-
 		if(statement instanceof ProtocolIDNode) {
 			ret = ret + "&("+role+"_STATE'=0)";
 		}
