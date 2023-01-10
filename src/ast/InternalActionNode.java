@@ -9,11 +9,19 @@ public class InternalActionNode implements Node{
 	private String message = null;
 	private String role = null;
 	private Node statement = null;
+	private String rate = null;
 
 	public InternalActionNode(String mex, String n, Node stat) {
 		message = mex;
 		role = n;
 		statement = stat ;
+	}
+
+	public InternalActionNode(String mex, String n, Node stat, String r) {
+		message = mex;
+		role = n;
+		statement = stat ;
+		rate = r;
 	}
 
 	@Override
@@ -31,9 +39,21 @@ public class InternalActionNode implements Node{
 		return "";
 	}
 
+	@Override 
+	public ArrayList<String> getRate() {
+		if(rate!=null) {
+			ArrayList<String> rates = new ArrayList<String>();
+			rates.add(rate);
+			return rates;
+		}
+		else {
+			return null;
+		}
+	}
+
 	@Override
 	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles, int currIndex, int totIndex) {
-
+		System.out.println("sono qui");
 		int state = 0;
 
 		String roleTmp = role;
@@ -57,8 +77,11 @@ public class InternalActionNode implements Node{
 		}
 
 		String ret = message;
-		if(role.matches(".*\\d.*") || message.contains("[i]") || message.contains("[i+1]")) {
-			if(message.contains("[i+1]")) {
+		if(rate != null) {
+			ret = rate + " : " + ret;
+		}
+		if(role.matches(".*\\d.*") || ret.contains("[i]") || ret.contains("[i+1]")) {
+			if(ret.contains("[i+1]")) {
 				ret = ret.replace("[i]",Integer.toString(currIndex+1));
 				if(currIndex+2>totIndex) {
 					ret = ret.replace("[i+1]",Integer.toString(1));
@@ -75,7 +98,7 @@ public class InternalActionNode implements Node{
 					}
 				}
 				String toReplace = ""+role.charAt(indexDigit);
-				ret = message.replaceAll("\\[i\\]",toReplace);
+				ret = ret.replaceAll("\\[i\\]",toReplace);
 			}
 		}
 		if(statement instanceof ProtocolIDNode) {

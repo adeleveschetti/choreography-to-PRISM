@@ -26,6 +26,12 @@ public class ProtocolIDNode implements Node{
 	public String getRoleB() {
 		return "";
 	}
+	
+	@Override 
+	public ArrayList<String> getRate() {
+		return null;
+	}
+
 
 	@Override
 	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles, int currIndex, int totIndex) {

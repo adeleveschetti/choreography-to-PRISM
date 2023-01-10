@@ -80,6 +80,11 @@ public class BranchNode implements Node{
 		return roleB;
 	}
 
+	@Override 
+	public ArrayList<String> getRate() {
+		return rates;
+	}
+
 	@Override
 	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles, int currIndex, int totIndex) {
 		String roleAtmp = roleA;
@@ -214,7 +219,6 @@ public class BranchNode implements Node{
 			}
 			String messageToAdd = tmpMessage.get(0);
 
-
 			if(roleA.matches(".*\\d.*")|| messageToAdd.contains("[i]") || messageToAdd.contains("[i+1]")) {
 				if(flag) {
 					messageToAdd = tmpMessage.get(0).replace("[i]",Integer.toString(currIndex+1));
@@ -284,7 +288,7 @@ public class BranchNode implements Node{
 
 			if(roleA.equals(roleB)) {label="";}
 			if(roleA.equals(roleB) || indexBranchA==-1 || !(index_A<=indexBranchA && indexBranchA<=indexEnd_A)) {
-				if(precond!=null) {
+				if(precond!=null && precond.length()>1) {
 					toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ")&"+precond+"-> " + rateA + ": " + messageToAdd;
 				}
 				else {
@@ -294,12 +298,13 @@ public class BranchNode implements Node{
 			else {
 				state_A  = Character.getNumericValue(toRet.charAt(indexBranchA-1));
 				toRet = toRet.replace("[] ("+ roleA+"_STATE="+state_A+") -> \n","");
-				if(precond!=null) {
+				if(precond!=null && precond.length()>1) {
 					toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ")&"+precond+"-> " + rateA + ": " + messageToAdd;
 				}
 				else {
 					toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateA + ": " + messageToAdd;
-				}			}
+				}			
+			}
 			if(tmpMessage.get(0).length()<=1) {
 				toInsert_A = toInsert_A + nextState + ";\n";
 			}
@@ -398,7 +403,7 @@ public class BranchNode implements Node{
 				}
 				String toInsert_B = "";
 				if(indexBranchB==-1 || !(index_B<=indexBranchB && indexBranchB<=indexEnd_B)) {
-					if(precond_B!=null) {
+					if(precond_B!=null && precond_B.length()>1) {
 						toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ")&"+precond_B+" -> " + rateB + ": " + messageToAdd; 
 					}
 					else {
@@ -408,7 +413,7 @@ public class BranchNode implements Node{
 				else {
 					state_B = Character.getNumericValue(toRet.charAt(indexBranchB-1));
 					toRet = toRet.replace("[] ("+ roleB+"_STATE="+state_B+") -> \n","");
-					if(precond_B!=null) {
+					if(precond_B!=null && precond_B.length()>1) {
 						toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ")&"+precond_B+" -> " + rateB + ": " + messageToAdd; 
 					}
 					else {

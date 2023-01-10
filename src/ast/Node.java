@@ -15,5 +15,6 @@ public interface Node {
 	
 	String getRoleB();
 
+	ArrayList<String> getRate();
 	
 }

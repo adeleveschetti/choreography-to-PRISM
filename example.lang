@@ -35,7 +35,7 @@ PoW := Hasher[i] -> Miner[i]
 			Miner[i] -> Network :["rB"] "(B[i]'=addBlock(B[i],b[i]))" foreach(k != i) "set[k]'=addBlockSet(set[k],b[i])" @Network .PoW
  +["lR*hR[i]"] " " : 
   if "!isEmpty(set[i])"@Miner[i] then { 
-  		{"(b[i]'=extractBlock(set[i]))"}@Miner[i] . Miner[i] -> Network : "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . PoW 
+  		["cacca[i]"]{"(b[i]'=extractBlock(set[i]))"}@Miner[i] . Miner[i] -> Network : "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . PoW 
  }
  else { 
  	if "isEmpty(setMiner[i])"@Miner_i then{			

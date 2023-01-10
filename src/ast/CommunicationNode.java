@@ -39,6 +39,14 @@ public class CommunicationNode implements Node {
 		actions = act;
 	}
 
+
+	@Override 
+	public ArrayList<String> getRate() {
+		ArrayList<String> rates = new ArrayList<String>();
+		rates.add(rate);
+		return rates;
+	}
+
 	@Override
 	public String toPrint() {
 		return roleA + " " + roleB + " ----> " + message + " \n " + statement.toPrint();

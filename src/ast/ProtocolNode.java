@@ -27,6 +27,11 @@ public class ProtocolNode implements Node{
 	public String toPrint() {
 		return null;
 	}
+	
+	@Override 
+	public ArrayList<String> getRate() {
+		return null;
+	}
 
 	@Override 
 	public String getRoleA() {

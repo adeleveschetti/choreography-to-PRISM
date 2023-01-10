@@ -29,6 +29,11 @@ public class ForLoopNode implements Node{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override 
+	public ArrayList<String> getRate() {
+		return null;
+	}
 
 	@Override
 	public String codeGenerator(String toRet, HashMap<String, ArrayList<Integer>> mapStates,

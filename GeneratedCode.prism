@@ -10,21 +10,21 @@ a : [0..1];
 
 Server_STATE: [0..10] init 0;
 
-[KDSFA] (Server_STATE=0)&(s=1)-> gamma: (s'=s+1)&(Server_STATE'=0);
-[ZJQKD] (Server_STATE=0)&(s=1)-> gamma:  (Server_STATE'=1);
-[VHIAO] (Server_STATE=1) -> mu: (s'=s+1)&(Server_STATE'=0);
-[AOMRP] (Server_STATE=0)&(s=2)-> gamma: (s'=s+1)&(Server_STATE'=0);
-[OICMI] (Server_STATE=0)&(s=2)-> gamma:  (Server_STATE'=1);
-[EBRFW] (Server_STATE=1) -> mu: (s'=s+1)&(Server_STATE'=0);
-[GBGWU] (Server_STATE=0)&(s=3)-> gamma: (s'=s+1)&(Server_STATE'=0);
-[KZISV] (Server_STATE=0)&(s=3)-> gamma:  (Server_STATE'=1);
-[NXFBY] (Server_STATE=1) -> mu: (s'=s+1)&(Server_STATE'=0);
-[PQQVS] (Server_STATE=0)&(s=4)-> gamma: (s'=s+1)&(Server_STATE'=0);
-[RDGNS] (Server_STATE=0)&(s=4)-> gamma:  (Server_STATE'=1);
-[AUKFF] (Server_STATE=1) -> mu: (s'=s+1)&(Server_STATE'=0);
-[CJRUS] (Server_STATE=0)&(s=5)-> gamma: (s'=s+1)&(Server_STATE'=0);
-[YKKKM] (Server_STATE=0)&(s=5)-> gamma:  (Server_STATE'=1);
-[HKFIA] (Server_STATE=1) -> mu: (s'=s+1)&(Server_STATE'=0);
+[KGEGW] (Server_STATE=0)&(s=1)-> gamma: (s'=s+1)&(Server_STATE'=0);
+[XIZCE] (Server_STATE=0)&(s=1)-> gamma:  (Server_STATE'=1);
+[WMJGQ] (Server_STATE=1)&(s=1)-> mu: (s'=s+1)&(Server_STATE'=0);
+[GIPQB] (Server_STATE=0)&(s=2)-> gamma: (s'=s+1)&(Server_STATE'=0);
+[BPXZB] (Server_STATE=0)&(s=2)-> gamma:  (Server_STATE'=1);
+[SCPAS] (Server_STATE=1)&(s=2)-> mu: (s'=s+1)&(Server_STATE'=0);
+[ZFFAK] (Server_STATE=0)&(s=3)-> gamma: (s'=s+1)&(Server_STATE'=0);
+[WTMLY] (Server_STATE=0)&(s=3)-> gamma:  (Server_STATE'=1);
+[CJNNB] (Server_STATE=1)&(s=3)-> mu: (s'=s+1)&(Server_STATE'=0);
+[GZQJG] (Server_STATE=0)&(s=4)-> gamma: (s'=s+1)&(Server_STATE'=0);
+[AGOPO] (Server_STATE=0)&(s=4)-> gamma:  (Server_STATE'=1);
+[MGKWN] (Server_STATE=1)&(s=4)-> mu: (s'=s+1)&(Server_STATE'=0);
+[VFUTJ] (Server_STATE=0)&(s=5)-> gamma: (s'=s+1)&(Server_STATE'=0);
+[WFLOU] (Server_STATE=0)&(s=5)-> gamma:  (Server_STATE'=1);
+[DFMYD] (Server_STATE=1)&(s=5)-> mu: (s'=s+1)&(Server_STATE'=0);
 
 endmodule 
 
@@ -33,9 +33,9 @@ s1 : [0..1];
 
 Station1_STATE: [0..10] init 0;
 
-[KDSFA] (Station1_STATE=0) -> 1:  (Station1_STATE'=0);
-[ZJQKD] (Station1_STATE=0) -> 1:  (Station1_STATE'=1);
-[VHIAO] (Station1_STATE=1) -> 1:  (Station1_STATE'=0);
+[KGEGW] (Station1_STATE=0) -> 1:  (Station1_STATE'=0);
+[XIZCE] (Station1_STATE=0) -> 1:  (Station1_STATE'=1);
+[WMJGQ] (Station1_STATE=1) -> 1:  (Station1_STATE'=0);
 
 endmodule 
 
@@ -44,9 +44,9 @@ s2 : [0..1];
 
 Station2_STATE: [0..10] init 0;
 
-[AOMRP] (Station2_STATE=0) -> 1:  (Station2_STATE'=0);
-[OICMI] (Station2_STATE=0) -> 1:  (Station2_STATE'=1);
-[EBRFW] (Station2_STATE=1) -> 1:  (Station2_STATE'=0);
+[GIPQB] (Station2_STATE=0) -> 1:  (Station2_STATE'=0);
+[BPXZB] (Station2_STATE=0) -> 1:  (Station2_STATE'=1);
+[SCPAS] (Station2_STATE=1) -> 1:  (Station2_STATE'=0);
 
 endmodule 
 
@@ -55,9 +55,9 @@ s3 : [0..1];
 
 Station3_STATE: [0..10] init 0;
 
-[GBGWU] (Station3_STATE=0) -> 1:  (Station3_STATE'=0);
-[KZISV] (Station3_STATE=0) -> 1:  (Station3_STATE'=1);
-[NXFBY] (Station3_STATE=1) -> 1:  (Station3_STATE'=0);
+[ZFFAK] (Station3_STATE=0) -> 1:  (Station3_STATE'=0);
+[WTMLY] (Station3_STATE=0) -> 1:  (Station3_STATE'=1);
+[CJNNB] (Station3_STATE=1) -> 1:  (Station3_STATE'=0);
 
 endmodule 
 
@@ -66,9 +66,9 @@ s4 : [0..1];
 
 Station4_STATE: [0..10] init 0;
 
-[PQQVS] (Station4_STATE=0) -> 1:  (Station4_STATE'=0);
-[RDGNS] (Station4_STATE=0) -> 1:  (Station4_STATE'=1);
-[AUKFF] (Station4_STATE=1) -> 1:  (Station4_STATE'=0);
+[GZQJG] (Station4_STATE=0) -> 1:  (Station4_STATE'=0);
+[AGOPO] (Station4_STATE=0) -> 1:  (Station4_STATE'=1);
+[MGKWN] (Station4_STATE=1) -> 1:  (Station4_STATE'=0);
 
 endmodule 
 
@@ -77,9 +77,9 @@ s5 : [0..1];
 
 Station5_STATE: [0..10] init 0;
 
-[CJRUS] (Station5_STATE=0) -> 1:  (Station5_STATE'=0);
-[YKKKM] (Station5_STATE=0) -> 1:  (Station5_STATE'=1);
-[HKFIA] (Station5_STATE=1) -> 1:  (Station5_STATE'=0);
+[VFUTJ] (Station5_STATE=0) -> 1:  (Station5_STATE'=0);
+[WFLOU] (Station5_STATE=0) -> 1:  (Station5_STATE'=1);
+[DFMYD] (Station5_STATE=1) -> 1:  (Station5_STATE'=0);
 
 endmodule 
 

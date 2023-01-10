@@ -20,4 +20,4 @@ Station[i] : 	"s[i] : [0..1];";
 
 PoW := Server -> Station[i] 
 		(+["gamma"] "(s=[i])" -> "(s'=s+1)"&&" " : PoW 
-		+["gamma"] " "&&" " :  Server -> Station[i] : ["mu"] "(s'=s+1)"&&" ". PoW)  
+		+["gamma"] " "&&" " :  Server -> Station[i] : ["mu"] "(s=[i])" -> "(s'=s+1)"&&" ".PoW)  

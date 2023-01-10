@@ -106,7 +106,6 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 			String roleA = "";
 			String roleB = "";
 			if(ctx.role(0).roleIndex()!=null) {
-
 				roleA = ctx.role(0).roleIndex().ID().getText()+"["+ctx.role(0).roleIndex().index().CHAR().getText()+"]";
 			}
 			else {
@@ -143,7 +142,10 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 			else {
 				role = ctx.internalAction().role().roleGroup().ID().getText();
 			}
-
+			if(ctx.rate()!=null && ctx.rate().size()>0) {
+				String rate = ctx.rate().get(0).getText().substring(1,ctx.rate().get(0).getText().length()-1);
+				return new InternalActionNode(ctx.internalAction().DOUBLE_STRING().getText().substring(1,ctx.internalAction().DOUBLE_STRING().getText().length()-1),role,stat,rate);
+			}
 			return new InternalActionNode(ctx.internalAction().DOUBLE_STRING().getText().substring(1,ctx.internalAction().DOUBLE_STRING().getText().length()-1),role,stat);
 		}
 		else if(ctx.ifThenElse()!=null) {
