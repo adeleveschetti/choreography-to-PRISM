@@ -49,6 +49,16 @@ public interface LangListener extends ParseTreeListener {
 	 */
 	void exitIfThenElse(LangParser.IfThenElseContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link LangParser#ifElse}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfElse(LangParser.IfElseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#ifElse}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfElse(LangParser.IfElseContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link LangParser#internalAction}.
 	 * @param ctx the parse tree
 	 */
@@ -208,6 +218,16 @@ public interface LangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitCond(LangParser.CondContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link LangParser#condIf}.
+	 * @param ctx the parse tree
+	 */
+	void enterCondIf(LangParser.CondIfContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link LangParser#condIf}.
+	 * @param ctx the parse tree
+	 */
+	void exitCondIf(LangParser.CondIfContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link LangParser#index}.
 	 * @param ctx the parse tree

@@ -8,14 +8,17 @@ protocol : (preamble)? (varDef)? SEMICOLON (roleDef)+ protocolID ASSIGN statemen
 
 preamble : PREAMBLE (variableDecl)* ENDPREAMBLE ;
 
-statement : role FROM role COLON (SLPAR rate SRPAR)? (actions FROM)? message DOT statement 
-			| role FROM role LPAR BRANCH SLPAR rateValues+=rate SRPAR (actions FROM)? message COLON statement (BRANCH SLPAR rateValues+=rate SRPAR message COLON statement)+ RPAR 
+statement :  role FROM role COLON (SLPAR rate SRPAR)? (actions FROM)? message DOT statement 
+			| role FROM role LPAR BRANCH SLPAR rateValues+=rate SRPAR (actions FROM)? message COLON statement (BRANCH SLPAR rateValues+=rate SRPAR (actions FROM)? message COLON statement)+ RPAR 
 			| (SLPAR rate SRPAR)? internalAction (DOT statement)?
 			| ifThenElse 
 			| protocolID
+			| ifElse
 			| END ;
 
 ifThenElse : IF cond AT role THEN CLPAR thenStat=statement CRPAR (ELSE CLPAR elseStat=statement CRPAR)*  ;
+
+ifElse : IFplus LPAR condIf RPAR CLPAR thenStat=statement CRPAR (ELSEplus CLPAR elseStat=statement CRPAR)*  ;
 
 internalAction : CLPAR DOUBLE_STRING CRPAR AT role ; 
 
@@ -48,6 +51,8 @@ roleVar : DOUBLE_STRING;
 variableDecl : DOUBLE_STRING;
 
 cond : DOUBLE_STRING ; 
+
+condIf : index op=(EQ | LE | GE | LEQ | GEQ | NEQ ) (INTEGER | ID) ; 
 
 index : CHAR ;
 
@@ -84,6 +89,8 @@ AT 			: '@' ;
 IF 			: 'if';
 THEN		: 'then';
 ELSE		: 'else';
+IFplus  	: 'IF' ;
+ELSEplus	: 'ELSE';
 END 		: 'END';
 AND			: '&&' ;
 PREAMBLE	: 'preamble';

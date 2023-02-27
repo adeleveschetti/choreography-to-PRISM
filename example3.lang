@@ -18,6 +18,13 @@ Server : "s : [1..5];", "a : [0..1];" ;
 Station[i] -> i in [1...n]
 Station[i] : 	"s[i] : [0..1];"; 
 
-PoW := Server -> Station[i] 
+PoW := IF(i!=4){
+	Server -> Station[i] 
 		(+["gamma"] "(s=[i])" -> "(s'=s+1)"&&" " : PoW 
-		+["gamma"] " "&&" " :  Server -> Station[i] : ["mu"] "(s=[i])" -> "(s'=s+1)"&&" ".PoW)  
+		+["gamma*lambda"] " "&&" " :  Server -> Station[i] : ["mu"] "(s=[i])" -> "(s'=s+1)"&&" ".PoW)  
+		}
+		ELSE{
+		Server -> Station[i] 
+		(+["gamma"] "(s=[i])" -> "(s'=1)"&&" " : PoW 
+		+["gamma*lambda"] " "&&" " :  Server -> Station[i] : ["mu"] "(s=[i])" -> "(s'=1)"&&" ".PoW)  
+		}

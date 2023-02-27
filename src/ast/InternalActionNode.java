@@ -53,7 +53,6 @@ public class InternalActionNode implements Node{
 
 	@Override
 	public String codeGenerator(String toRet, HashMap<String,ArrayList<Integer>> mapStates, HashMap<String,ArrayList<Integer>> mapStatesBranches, ArrayList<String> roles, ArrayList<String> allRoles, int currIndex, int totIndex) {
-		System.out.println("sono qui");
 		int state = 0;
 
 		String roleTmp = role;

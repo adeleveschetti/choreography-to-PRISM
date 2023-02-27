@@ -35,6 +35,12 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIfThenElse(LangParser.IfThenElseContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link LangParser#ifElse}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfElse(LangParser.IfElseContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link LangParser#internalAction}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -130,6 +136,12 @@ public interface LangVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitCond(LangParser.CondContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link LangParser#condIf}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCondIf(LangParser.CondIfContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link LangParser#index}.
 	 * @param ctx the parse tree

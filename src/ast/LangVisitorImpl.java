@@ -68,14 +68,29 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 
 	@Override
 	public Node visitStatement(StatementContext ctx) {
-		if(ctx.BRANCH()!=null  && ctx.BRANCH().size()>0 ) {
+		if(ctx.ifElse()!=null) {
+			String id = ctx.ifElse().condIf().index().getText();
+			String op = ctx.ifElse().condIf().op.getText();
+			if(ctx.ifElse().condIf().INTEGER()!=null) {
+				int integer =  Integer.parseInt(ctx.ifElse().condIf().INTEGER().getText());
+				return new IfElseNode(id,op,integer,visitStatement(ctx.ifElse().thenStat),visitStatement(ctx.ifElse().elseStat));
+			}
+			else {
+				String par =  ctx.ifElse().condIf().ID().getText();
+				return new IfElseNode(id,op,par,visitStatement(ctx.ifElse().thenStat),visitStatement(ctx.ifElse().elseStat));
+			}
+
+		}
+		else if(ctx.BRANCH()!=null  && ctx.BRANCH().size()>0 ) {
 			ArrayList<ArrayList<String>> messages = new ArrayList<ArrayList<String>>();
 			ArrayList<ArrayList<Node>> loops = new ArrayList<ArrayList<Node>>();
 			ArrayList<String> actions = null;
 			if(ctx.actions()!=null ) {
 				actions = new ArrayList<String>();
-				for(Token el : ctx.actions().action) {
-					actions.add(el.getText().substring(1,el.getText().length()-1));
+				for(ActionsContext el : ctx.actions()) {
+					for(Token el2 : el.action) {
+						actions.add(el2.getText().substring(1,el2.getText().length()-1));
+					}
 				}
 			}
 			for(MessageContext el : ctx.message()) {
@@ -184,8 +199,10 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 		ArrayList<String> actions = null;
 		if(ctx.actions()!=null ) {
 			actions = new ArrayList<String>();
-			for(Token el : ctx.actions().action) {
-				actions.add(el.getText().substring(1,el.getText().length()-1));
+			for(ActionsContext el : ctx.actions()) {
+				for(Token el2 : el.action) {
+					actions.add(el2.getText().substring(1,el2.getText().length()-1));
+				}
 			}
 		}
 		ArrayList<String> message = new ArrayList<String>();

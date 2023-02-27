@@ -13,6 +13,8 @@ public class ProtocolNode implements Node{
 	private HashMap<String,ArrayList<String>> rolesVars = new HashMap<String,ArrayList<String>> ();
 	private ArrayList<Pair<String,String>> roles = new ArrayList<Pair<String,String>> ();
 	private Node preamble ;
+	private Node statementIF = null;
+	private String cond ;
 
 	public ProtocolNode(String id, Node stat, ArrayList<Pair<String,String>>  rol, Node pream, HashMap<String,ArrayList<String>> roleVars, int var) {
 		protocolID = id;
@@ -22,6 +24,7 @@ public class ProtocolNode implements Node{
 		rolesVars = roleVars;
 		varValue = var;
 	}
+	
 
 	@Override
 	public String toPrint() {
@@ -102,8 +105,7 @@ public class ProtocolNode implements Node{
 			}
 		}
 
-
-
+		
 		for(int i=0; i<varValue; i++) {
 			ArrayList<String> subRoles = new ArrayList<String>();
 			mapStates = new HashMap<String,ArrayList<Integer>>();
