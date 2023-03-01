@@ -2,22 +2,27 @@ preamble
 
 "mdp"
 
-"const N=4;"
+"const N=3;"
 
 endpreamble
 
-n = 4;
+n = 2;
 
-Process[i] -> i in [1...n]
-Process[i] : 	"s[i] : [0..1];", "c[i] : [0..N-1];", "receive[i] : [0..2];", "sent[i] : [0..2];";
+die[i] -> i in [1...n]
+die[i] : 	"s[i] : [0..7];", "d[i] : [0..6];";
 
-LeaderElection := Process[i] -> Process[i] 
-				(+["0.5"] "(s[i]=0)" -> "(s[i]'=1)&(p[i]'=0)"&&" " : 
-					Process[i] -> Process[i+1] 
-					(+["1"] "(s[i]=1) & (receive[i]=0) & !( (p[i]=0) & (p[i+1]=1) )"  -> "(s[i]'=2) & (receive[i]'=1)"&&"(sent[i+1]'=1) & (p[i+1]'=0)" : LeaderElection
-					+["1"] "(s[i]=1) & (receive[i]=0) & (p[i]=0) & (p[i+1]=1)"  -> "(s[i]'=2) & (receive[i]'=1)"&&"(sent[i+1]'=1) & (p[i+1]'=0)" : LeaderElection )
-					 
-				+["0.5"] "(s[i]=0)" -> "(s[i]'=1)&(p[i]'=1)"&&" " : LeaderElection )  
-				
-				
-				
+die := die[i] -> die[i] 
+	(+["1/2"] " " -> " "&&" " : die[i] -> die[i] 
+								(+["1/2"] " " -> " "&&" " : die[i] -> die[i] 
+												(+["1/2"] " " -> " "&&" " : die
+												+["1/2"] " " -> "(d[i]'=1)" && " " : die)
+								+["1/2"] " " -> " " && " " :die[i] -> die[i] 
+												(+["1/2"] " " -> "(d[i]'=2)"&&" " : die
+												+["1/2"] " " -> "(d[i]'=3)" && " " : die) )
+	+["1/2"] " " -> " " && " " : die[i] -> die[i] 
+								(+["1/2"] " " -> " "&&" " :die[i] -> die[i] 
+											(+["1/2"] " " -> "(d1'=4)"&&" " : die
+											+["1/2"] " " -> "(d1'=5)" && " " : die) 
+								 +["1/2"] " " -> " " && " " :die[i] -> die[i] 
+											(+["1/2"] " " -> " "&&" " : die
+											+["1/2"] " " -> "(d1'=6)" && " " : die)))
