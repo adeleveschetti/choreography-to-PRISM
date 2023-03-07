@@ -31,9 +31,9 @@ Network : "set1 : list [];", "set2 : list [];", "set3 : list [];" , "set4 : list
 	
 
 PoW := Hasher[i] -> Miner[i]
-(+["mR*hR[i]"] " "&&"(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" : 
+(+["mR*hR[i]"] "(Hasher[i]_STATE=0)"&&"(Miner[i]_STATE=0)" -> "(Hasher[i]_STATE'=0)"&&"(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)&(Miner[i]_STATE'=1)" : 
 			Miner[i] -> Network :["rB"] "(B[i]'=addBlock(B[i],b[i]))" foreach(k != i) "set[k]'=addBlockSet(set[k],b[i])" @Network .PoW
- +["lR*hR[i]"] " " : 
+ +["lR*hR[i]"] "(Hasher[i]_STATE'=0)" && "(Miner[i]_STATE'=2)": 
   if "!isEmpty(set[i])"@Miner[i] then { 
   		["rate[i]"]{"(b[i]'=extractBlock(set[i]))"}@Miner[i] . Miner[i] -> Network : "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . PoW 
  }

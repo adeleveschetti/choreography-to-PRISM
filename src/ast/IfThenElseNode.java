@@ -101,14 +101,14 @@ public class IfThenElseNode implements Node{
 				condTmp = condTmp.replaceAll("\\[i\\]",toReplace);
 			}
 		}
-		String toInsert_A = "[] ("+ condTmp + ")&("+ role +"_STATE=" + state +") -> 1:";
+		String toInsert_A = "[] ("+ condTmp + ")"/*("+ role +"_STATE=" + state +") */+"-> 1:";
 
 		boolean flag = false;
 		if(thenStat instanceof ProtocolIDNode) {
-			toInsert_A = "[] ("+ condTmp + ")&("+ role +"_STATE=" + state +") -> 1: (" + role +"_STATE'=0);\n" ;
+			toInsert_A = "[] ("+ condTmp + ")&"/*("+ role +"_STATE=" + state +") */+"-> 1: (" + role +"_STATE'=0);\n" ;
 		}
 		else if(thenStat instanceof CommunicationNode) {
-			toInsert_A = toInsert_A +"(" + role +"_STATE'=" + (state+1) +");\n" ;
+			toInsert_A = toInsert_A /* +"(" + role +"_STATE'=" + (state+1) +")*/+";\n" ;
 			flag = true;
 			state++;
 		}
@@ -121,18 +121,18 @@ public class IfThenElseNode implements Node{
 
 		if(elseStat instanceof ProtocolIDNode) {
 			if(flag) {
-				toInsert_A = toInsert_A + "[] !("+ condTmp + ")&("+ role +"_STATE=" + (state-1) +") -> 1:(" + role + "_STATE'=0);\n";
+				toInsert_A = toInsert_A + "[] !("+ condTmp + ")"/*("+ role +"_STATE=" + (state-1) +")*/+" -> 1:(" + role + "_STATE'=0);\n";
 			}
 			else {
-				toInsert_A = toInsert_A + "[] !("+ condTmp + ")&("+ role +"_STATE=" + state +") -> 1:(" + role + "_STATE'=0);\n";
+				toInsert_A = toInsert_A + "[] !("+ condTmp + ")"/*("+ role +"_STATE=" + state +")*/+" -> 1:(" + role + "_STATE'=0);\n";
 			}
 		}
 		else {
 			if(flag) {
-				toInsert_A = toInsert_A + "[] !("+ condTmp + ")&("+ role +"_STATE=" + (state-1) +") -> 1:(" + role + "_STATE'="+(state+1)+");\n";
+				toInsert_A = toInsert_A + "[] !("+ condTmp + ")"/*("+ role +"_STATE=" + (state-1) +")*/+" -> 1:"/*(" + role + "_STATE'="+(state+1)+")*/+";\n";
 			}
 			else {
-				toInsert_A = toInsert_A + "[] !("+ condTmp + ")&("+ role +"_STATE=" + state +") -> 1:(" + role + "_STATE'="+(state+1)+");\n";
+				toInsert_A = toInsert_A + "[] !("+ condTmp + ")"/*("+ role +"_STATE=" + state +")*/+" -> 1:"/*(" + role + "_STATE'="+(state+1)+")*/+";\n";
 			}
 		}
 

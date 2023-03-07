@@ -115,7 +115,7 @@ public class InternalActionNode implements Node{
 				state = mapStates.get(role).get(mapStates.get(role).size()-1);
 				mapStates.get(role).remove(mapStates.get(role).size()-1);
 			}
-			ret = ret + "&("+role+"_STATE'="+state+")";
+			/*"&("+role+"_STATE'="+state+")";*/
 		}
 
 		role = roleTmp;

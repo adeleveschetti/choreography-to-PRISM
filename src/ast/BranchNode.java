@@ -199,7 +199,7 @@ public class BranchNode implements Node{
 			int indexBranchA = toRet.indexOf(") -> \n");
 			String toInsert_A = "";
 			String nextState = "";			
-
+			/*
 			if(statements.get(i) instanceof ProtocolIDNode || !statements.get(i).getRoleA().contains(roleA.substring(0,roleA.length()-2)) && !statements.get(i).getRoleB().contains(roleA.substring(0,roleA.length()-2))) {
 				nextState = "("+roleA +"_STATE'=" + 0 +")";
 			}
@@ -207,7 +207,7 @@ public class BranchNode implements Node{
 				stateTmp_A++;
 				nextState = "("+roleA+"_STATE'="+stateTmp_A+")";
 			}
-
+			 */
 			String messageForLoop_1 = "";
 			String messageForLoop_2 = "";
 
@@ -289,28 +289,24 @@ public class BranchNode implements Node{
 			if(roleA.equals(roleB)) {label="";}
 			if(roleA.equals(roleB) || indexBranchA==-1 || !(index_A<=indexBranchA && indexBranchA<=indexEnd_A)) {
 				if(precond!=null && precond.length()>1) {
-					toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ")&"+precond+"-> " + rateA + ": " + messageToAdd;
+					toInsert_A = "["+label+"] "+/*("+ roleA+"_STATE=" + state_A + ")&"*/precond+"-> " + rateA + ": " + messageToAdd;
 				}
 				else {
-					toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateA + ": " + messageToAdd;
+					toInsert_A = "["+label+"] "+/* ("+ roleA+"_STATE=" + state_A + ")"*/" -> " + rateA + ": " + messageToAdd;
 				}
 			}
 			else {
 				state_A  = Character.getNumericValue(toRet.charAt(indexBranchA-1));
 				toRet = toRet.replace("[] ("+ roleA+"_STATE="+state_A+") -> \n","");
 				if(precond!=null && precond.length()>1) {
-					toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ")&"+precond+"-> " + rateA + ": " + messageToAdd;
+					toInsert_A = "["+label+"] "/*("+ roleA+"_STATE=" + state_A + ")&"*/+precond+"-> " + rateA + ": " + messageToAdd;
 				}
 				else {
-					toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateA + ": " + messageToAdd;
+					toInsert_A = "["+label+"] "/*("+ roleA+"_STATE=" + state_A + ")*/+" -> " + rateA + ": " + messageToAdd;
 				}			
 			}
-			if(tmpMessage.get(0).length()<=1) {
-				toInsert_A = toInsert_A + nextState + ";\n";
-			}
-			else {
-				toInsert_A = toInsert_A +"&"+ nextState + ";\n";
-			}
+			toInsert_A = toInsert_A + ";\n";
+			
 			toRet = new StringBuilder(toRet).insert(indexEnd_A-1,toInsert_A).toString();
 
 
@@ -321,13 +317,13 @@ public class BranchNode implements Node{
 
 
 				int indexBranchB = toRet.indexOf(") -> \n");
-				if(statements.get(i) instanceof ProtocolIDNode || !statements.get(i).getRoleA().contains(roleB.substring(0,roleB.length()-2)) && !statements.get(i).getRoleB().contains(roleB.substring(0,roleB.length()-2))) {
+				/*if(statements.get(i) instanceof ProtocolIDNode || !statements.get(i).getRoleA().contains(roleB.substring(0,roleB.length()-2)) && !statements.get(i).getRoleB().contains(roleB.substring(0,roleB.length()-2))) {
 					nextState = "("+roleB +"_STATE'=" + 0 +")";
 				}
 				else {
 					stateTmp_B++;
 					nextState = "("+roleB+"_STATE'="+stateTmp_B+")";
-				}
+				}*/
 				if(tmpMessage.size()>1) {
 					messageToAdd = tmpMessage.get(1);
 				}
@@ -404,28 +400,22 @@ public class BranchNode implements Node{
 				String toInsert_B = "";
 				if(indexBranchB==-1 || !(index_B<=indexBranchB && indexBranchB<=indexEnd_B)) {
 					if(precond_B!=null && precond_B.length()>1) {
-						toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ")&"+precond_B+" -> " + rateB + ": " + messageToAdd; 
+						toInsert_B = "["+label+"] "/* ("+ roleB+"_STATE=" + state_B + ")&"*/+precond_B+" -> " + rateB + ": " + messageToAdd; 
 					}
 					else {
-						toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateB + ": " + messageToAdd; 
+						toInsert_B = "["+label+"]"/* ("+ roleB+"_STATE=" + state_B + ")*/+" -> " + rateB + ": " + messageToAdd; 
 					}
 				}
 				else {
 					state_B = Character.getNumericValue(toRet.charAt(indexBranchB-1));
 					toRet = toRet.replace("[] ("+ roleB+"_STATE="+state_B+") -> \n","");
 					if(precond_B!=null && precond_B.length()>1) {
-						toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ")&"+precond_B+" -> " + rateB + ": " + messageToAdd; 
+						toInsert_B = "["+label+"] "/*("+ roleB+"_STATE=" + state_B + ")&"*/+precond_B+" -> " + rateB + ": " + messageToAdd; 
 					}
 					else {
-						toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateB + ": " + messageToAdd; 
+						toInsert_B = "["+label+"] "/*("+ roleB+"_STATE=" + state_B + ")*/ +" -> " + rateB + ": " + messageToAdd; 
 					}				}
-				if(tmpMessage.size()==1 || tmpMessage.get(1).length()<=1) {
-					toInsert_B = toInsert_B + nextState + ";\n";
-				}
-				else {
-					toInsert_B = toInsert_B +"&"+ nextState + ";\n";
-				}
-
+				toInsert_B = toInsert_B + ";\n";
 				indexEnd_B = toRet.indexOf("endmodule",index_B);
 				toRet = new StringBuilder(toRet).insert(indexEnd_B-1,toInsert_B).toString();
 			}
