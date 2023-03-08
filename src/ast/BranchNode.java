@@ -459,6 +459,8 @@ public class BranchNode implements Node{
 
 				}
 			}
+
+
 			//mapStates.get(roleA).add(stateTmp_A);
 			toRet = statements.get(i).codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
 

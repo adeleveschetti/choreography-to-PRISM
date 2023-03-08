@@ -9,7 +9,7 @@ protocol : (preamble)? (varDef)? SEMICOLON (roleDef)+ protocolID ASSIGN statemen
 preamble : PREAMBLE (variableDecl)* ENDPREAMBLE ;
 
 statement :  role FROM role COLON (SLPAR rate SRPAR)? (actions FROM)? message DOT statement 
-			| role FROM role LPAR BRANCH SLPAR rateValues+=rate SRPAR (actions FROM)? message COLON statement (BRANCH SLPAR rateValues+=rate SRPAR (actions FROM)? message COLON statement)+ RPAR 
+			| role FROM role (COMMA role)* LPAR BRANCH SLPAR rateValues+=rate SRPAR (actions FROM)? message COLON statement (BRANCH SLPAR rateValues+=rate SRPAR (actions FROM)? message COLON statement)+ RPAR 
 			| (SLPAR rate SRPAR)? internalAction (DOT statement)?
 			| ifThenElse 
 			| protocolID
