@@ -10,15 +10,18 @@ public class CommunicationNode implements Node {
 
 	private String roleA = null;
 	private String roleB = null;
+
+	private ArrayList<String> rolesB = null;
 	private ArrayList<String> message = null;
 	private Node statement;
 	private ArrayList<Node> forLoop = null;
 	private String rate ;
 	private ArrayList<String> actions = null;
 
-	public CommunicationNode(String A, String B, ArrayList<String> mex, Node stat, String r, ArrayList<String> act) {
+	public CommunicationNode(String A, ArrayList<String> B, ArrayList<String> mex, Node stat, String r, ArrayList<String> act) {
 		roleA = A;
-		roleB = B;
+		roleB = B.get(0);
+		rolesB = B;
 		message = new ArrayList<String>();
 		message = mex;
 		statement = stat;
@@ -27,9 +30,10 @@ public class CommunicationNode implements Node {
 		actions = act;
 	}
 
-	public CommunicationNode(String A, String B, ArrayList<String> mex, Node stat, ArrayList<Node> loop, String r, ArrayList<String> act) {
+	public CommunicationNode(String A, ArrayList<String> B, ArrayList<String> mex, Node stat, ArrayList<Node> loop, String r, ArrayList<String> act) {
 		roleA = A;
-		roleB = B;
+		roleB = B.get(0);
+		rolesB = B;
 		message = new ArrayList<String>();
 		message = mex;
 		statement = stat;
@@ -78,7 +82,6 @@ public class CommunicationNode implements Node {
 				rateToPrintA = rate ;
 				rateToPrintB = "1";
 			}
-
 		}
 		else {
 			rateToPrintA = "1" ;
@@ -114,27 +117,23 @@ public class CommunicationNode implements Node {
 
 		boolean flag = false;
 
-		if(roleA.charAt(roleA.length()-lenIndex) == '+' || roleB.charAt(roleB.length()-lenIndex) == '+'){
+		if(roleA.charAt(roleA.length()-lenIndex) == '+' || roleA.contains("[i]")) {
 			roleA = roleA.replace("[i]",Integer.toString(currIndex+1));
-			if(currIndex+2>totIndex) {
-				roleB = roleB.replace("[i+1]",Integer.toString(1));
-			}
-			else {
-				roleB = roleB.replace("[i+1]",Integer.toString(currIndex+2));
-			}
-			flag = true;
-		}
-		if(!flag) {
-			for(String el : roles) {
-				if(el.contains(roleA.substring(0,roleA.length()-lenIndex))) {
-					roleA = el;
-				}
-				if(el.contains(roleB.substring(0,roleB.length()-lenIndex))) {
-					roleB = el;
-				}
-			}
-		}
 
+		}
+		int tmpIndex = currIndex;
+		for(int i = 0; i<rolesB.size(); i++) {
+			if(rolesB.get(i).charAt(rolesB.get(i).length()-lenIndex) == '+') {
+				int indexStart = rolesB.get(i).indexOf("[");
+				int indexEnd = rolesB.get(i).indexOf("]");
+				String index = Character.toString(rolesB.get(i).charAt(indexEnd-1));
+				rolesB.set(i,rolesB.get(i).substring(0,indexStart)+Integer.toString((tmpIndex+Integer.parseInt(index))%totIndex+1)+rolesB.get(i).substring(indexEnd+1,rolesB.get(i).length()));
+				flag = true;
+			}
+			else if(rolesB.get(i).contains("[i]")) {
+				rolesB.set(i,rolesB.get(i).replace("[i]",Integer.toString(currIndex+1)));
+			}
+		}
 
 		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		StringBuilder salt = new StringBuilder();

@@ -4,11 +4,11 @@ grammar Lang;
  * PARSER RULES
  *------------------------------------------------------------------*/
 
-protocol : (preamble)? (varDef)? SEMICOLON (roleDef)+ protocolID ASSIGN statement;
+protocol : (preamble)? (varDef)? SEMICOLON (roleDef)+ (protocolID ASSIGN statement);
 
 preamble : PREAMBLE (variableDecl)* ENDPREAMBLE ;
 
-statement :  role FROM role COLON (SLPAR rate SRPAR)? (actions FROM)? message DOT statement 
+statement :  role FROM role (COMMA role)* COLON (SLPAR rate SRPAR)? (actions FROM)? message DOT statement 
 			| role FROM role (COMMA role)* LPAR BRANCH SLPAR rateValues+=rate SRPAR (actions FROM)? message COLON statement (BRANCH SLPAR rateValues+=rate SRPAR (actions FROM)? message COLON statement)+ RPAR 
 			| (SLPAR rate SRPAR)? internalAction (DOT statement)?
 			| ifThenElse 

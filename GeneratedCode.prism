@@ -7,20 +7,48 @@ d1 : [0..6];
 
 die1_STATE: [0..10] init 0;
 
-[] (die1_STATE=0) -> 1/2:  (die1_STATE'=2);
-[] (die1_STATE=2) -> 1/2:  (die1_STATE'=4);
-[] (die1_STATE=4) -> 1/2:  (die1_STATE'=0);
-[] (die1_STATE=4) -> 1/2: (d1'=1)&(die1_STATE'=0);
-[] (die1_STATE=2) -> 1/2:  (die1_STATE'=6);
-[] (die1_STATE=6) -> 1/2: (d1'=2)&(die1_STATE'=0);
-[] (die1_STATE=6) -> 1/2: (d1'=3)&(die1_STATE'=0);
-[] (die1_STATE=0) -> 1/2:  (die1_STATE'=8);
-[] (die1_STATE=8) -> 1/2:  (die1_STATE'=10);
-[] (die1_STATE=10) -> 1/2: (d1'=4)&(die1_STATE'=0);
-[] (die1_STATE=10) -> 1/2: (d1'=5)&(die1_STATE'=0);
-[] (die1_STATE=8) -> 1/2:  (die1_STATE'=12);
-[] (die1_STATE=12) -> 1/2:  (die1_STATE'=0);
-[] (die1_STATE=12) -> 1/2: (d1'=6)&(die1_STATE'=0);
+[UNWPO] (die1_STATE=0) -> 1/2:  (die1_STATE'=1);
+[IURSI] (die1_STATE=1) -> 1/2:  (die1_STATE'=2);
+[SVAAH] (die1_STATE=2) -> 1/2:  (die1_STATE'=0);
+[SVAAH] (die1_STATE=2) -> 1/2: (d1'=1)&(die1_STATE'=0);
+[IURSI] (die1_STATE=1) -> 1/2:  (die1_STATE'=3);
+[PKMHP] (die1_STATE=3) -> 1/2: (d1'=2)&(die1_STATE'=0);
+[PKMHP] (die1_STATE=3) -> 1/2: (d1'=3)&(die1_STATE'=0);
+[UNWPO] (die1_STATE=0) -> 1/2:  (die1_STATE'=4);
+[ILLRY] (die1_STATE=4) -> 1/2:  (die1_STATE'=5);
+[SRBPE] (die1_STATE=5) -> 1/2: (d1'=4)&(die1_STATE'=0);
+[SRBPE] (die1_STATE=5) -> 1/2: (d1'=5)&(die1_STATE'=0);
+[ILLRY] (die1_STATE=4) -> 1/2:  (die1_STATE'=6);
+[YTFCR] (die1_STATE=6) -> 1/2:  (die1_STATE'=0);
+[YTFCR] (die1_STATE=6) -> 1/2: (d1'=6)&(die1_STATE'=0);
+[PSTWP] (die1_STATE=0) -> 1:  (die1_STATE'=2);
+[DNDRI] (die1_STATE=1) -> 1:  (die1_STATE'=3);
+[SEVKI] (die1_STATE=2) -> 1:  (die1_STATE'=0);
+[SEVKI] (die1_STATE=2) -> 1:  (die1_STATE'=0);
+[DNDRI] (die1_STATE=1) -> 1:  (die1_STATE'=4);
+[YRBBJ] (die1_STATE=3) -> 1:  (die1_STATE'=0);
+[YRBBJ] (die1_STATE=3) -> 1:  (die1_STATE'=0);
+[PSTWP] (die1_STATE=0) -> 1:  (die1_STATE'=5);
+[KXAUS] (die1_STATE=4) -> 1:  (die1_STATE'=6);
+[FDBZG] (die1_STATE=5) -> 1:  (die1_STATE'=0);
+[FDBZG] (die1_STATE=5) -> 1:  (die1_STATE'=0);
+[KXAUS] (die1_STATE=4) -> 1:  (die1_STATE'=7);
+[LKPOA] (die1_STATE=6) -> 1:  (die1_STATE'=0);
+[LKPOA] (die1_STATE=6) -> 1:  (die1_STATE'=0);
+[AZCWJ] (die1_STATE=0) -> 1:  (die1_STATE'=1);
+[WBWUU] (die1_STATE=1) -> 1:  (die1_STATE'=2);
+[TMCMA] (die1_STATE=2) -> 1:  (die1_STATE'=0);
+[TMCMA] (die1_STATE=2) -> 1:  (die1_STATE'=0);
+[WBWUU] (die1_STATE=1) -> 1:  (die1_STATE'=3);
+[ZFPJD] (die1_STATE=3) -> 1:  (die1_STATE'=0);
+[ZFPJD] (die1_STATE=3) -> 1:  (die1_STATE'=0);
+[AZCWJ] (die1_STATE=0) -> 1:  (die1_STATE'=4);
+[ICBYD] (die1_STATE=4) -> 1:  (die1_STATE'=5);
+[FVVLT] (die1_STATE=5) -> 1:  (die1_STATE'=0);
+[FVVLT] (die1_STATE=5) -> 1:  (die1_STATE'=0);
+[ICBYD] (die1_STATE=4) -> 1:  (die1_STATE'=6);
+[YECMF] (die1_STATE=6) -> 1:  (die1_STATE'=0);
+[YECMF] (die1_STATE=6) -> 1:  (die1_STATE'=0);
 
 endmodule 
 
@@ -30,20 +58,201 @@ d2 : [0..6];
 
 die2_STATE: [0..10] init 0;
 
-[] (die2_STATE=0) -> 1/2:  (die2_STATE'=2);
-[] (die2_STATE=2) -> 1/2:  (die2_STATE'=4);
-[] (die2_STATE=4) -> 1/2:  (die2_STATE'=0);
-[] (die2_STATE=4) -> 1/2: (d2'=1)&(die2_STATE'=0);
-[] (die2_STATE=2) -> 1/2:  (die2_STATE'=6);
-[] (die2_STATE=6) -> 1/2: (d2'=2)&(die2_STATE'=0);
-[] (die2_STATE=6) -> 1/2: (d2'=3)&(die2_STATE'=0);
-[] (die2_STATE=0) -> 1/2:  (die2_STATE'=8);
-[] (die2_STATE=8) -> 1/2:  (die2_STATE'=10);
-[] (die2_STATE=10) -> 1/2: (d1'=4)&(die2_STATE'=0);
-[] (die2_STATE=10) -> 1/2: (d1'=5)&(die2_STATE'=0);
-[] (die2_STATE=8) -> 1/2:  (die2_STATE'=12);
-[] (die2_STATE=12) -> 1/2:  (die2_STATE'=0);
-[] (die2_STATE=12) -> 1/2: (d1'=6)&(die2_STATE'=0);
+[UNWPO] (die2_STATE=0) -> 1:  (die2_STATE'=1);
+[IURSI] (die2_STATE=1) -> 1:  (die2_STATE'=2);
+[SVAAH] (die2_STATE=2) -> 1:  (die2_STATE'=0);
+[SVAAH] (die2_STATE=2) -> 1:  (die2_STATE'=0);
+[IURSI] (die2_STATE=1) -> 1:  (die2_STATE'=3);
+[PKMHP] (die2_STATE=3) -> 1:  (die2_STATE'=0);
+[PKMHP] (die2_STATE=3) -> 1:  (die2_STATE'=0);
+[UNWPO] (die2_STATE=0) -> 1:  (die2_STATE'=4);
+[ILLRY] (die2_STATE=4) -> 1:  (die2_STATE'=5);
+[SRBPE] (die2_STATE=5) -> 1:  (die2_STATE'=0);
+[SRBPE] (die2_STATE=5) -> 1:  (die2_STATE'=0);
+[ILLRY] (die2_STATE=4) -> 1:  (die2_STATE'=6);
+[YTFCR] (die2_STATE=6) -> 1:  (die2_STATE'=0);
+[YTFCR] (die2_STATE=6) -> 1:  (die2_STATE'=0);
+[PGOGL] (die2_STATE=0) -> 1/2:  (die2_STATE'=1);
+[MBBNK] (die2_STATE=1) -> 1/2:  (die2_STATE'=2);
+[XRPIA] (die2_STATE=2) -> 1/2:  (die2_STATE'=0);
+[XRPIA] (die2_STATE=2) -> 1/2: (d2'=1)&(die2_STATE'=0);
+[MBBNK] (die2_STATE=1) -> 1/2:  (die2_STATE'=3);
+[UFVRG] (die2_STATE=3) -> 1/2: (d2'=2)&(die2_STATE'=0);
+[UFVRG] (die2_STATE=3) -> 1/2: (d2'=3)&(die2_STATE'=0);
+[PGOGL] (die2_STATE=0) -> 1/2:  (die2_STATE'=4);
+[ECMME] (die2_STATE=4) -> 1/2:  (die2_STATE'=5);
+[SHUGH] (die2_STATE=5) -> 1/2: (d1'=4)&(die2_STATE'=0);
+[SHUGH] (die2_STATE=5) -> 1/2: (d1'=5)&(die2_STATE'=0);
+[ECMME] (die2_STATE=4) -> 1/2:  (die2_STATE'=6);
+[ANYKJ] (die2_STATE=6) -> 1/2:  (die2_STATE'=0);
+[ANYKJ] (die2_STATE=6) -> 1/2: (d1'=6)&(die2_STATE'=0);
+[AZCWJ] (die2_STATE=0) -> 1:  (die2_STATE'=2);
+[WBWUU] (die2_STATE=1) -> 1:  (die2_STATE'=3);
+[TMCMA] (die2_STATE=2) -> 1:  (die2_STATE'=0);
+[TMCMA] (die2_STATE=2) -> 1:  (die2_STATE'=0);
+[WBWUU] (die2_STATE=1) -> 1:  (die2_STATE'=4);
+[ZFPJD] (die2_STATE=3) -> 1:  (die2_STATE'=0);
+[ZFPJD] (die2_STATE=3) -> 1:  (die2_STATE'=0);
+[AZCWJ] (die2_STATE=0) -> 1:  (die2_STATE'=5);
+[ICBYD] (die2_STATE=4) -> 1:  (die2_STATE'=6);
+[FVVLT] (die2_STATE=5) -> 1:  (die2_STATE'=0);
+[FVVLT] (die2_STATE=5) -> 1:  (die2_STATE'=0);
+[ICBYD] (die2_STATE=4) -> 1:  (die2_STATE'=7);
+[YECMF] (die2_STATE=6) -> 1:  (die2_STATE'=0);
+[YECMF] (die2_STATE=6) -> 1:  (die2_STATE'=0);
+
+endmodule 
+
+module die3
+s3 : [0..7];
+d3 : [0..6];
+
+die3_STATE: [0..10] init 0;
+
+[UNWPO] (die3_STATE=0) -> 1:  (die3_STATE'=2);
+[IURSI] (die3_STATE=1) -> 1:  (die3_STATE'=3);
+[SVAAH] (die3_STATE=2) -> 1:  (die3_STATE'=0);
+[SVAAH] (die3_STATE=2) -> 1:  (die3_STATE'=0);
+[IURSI] (die3_STATE=1) -> 1:  (die3_STATE'=4);
+[PKMHP] (die3_STATE=3) -> 1:  (die3_STATE'=0);
+[PKMHP] (die3_STATE=3) -> 1:  (die3_STATE'=0);
+[UNWPO] (die3_STATE=0) -> 1:  (die3_STATE'=5);
+[ILLRY] (die3_STATE=4) -> 1:  (die3_STATE'=6);
+[SRBPE] (die3_STATE=5) -> 1:  (die3_STATE'=0);
+[SRBPE] (die3_STATE=5) -> 1:  (die3_STATE'=0);
+[ILLRY] (die3_STATE=4) -> 1:  (die3_STATE'=7);
+[YTFCR] (die3_STATE=6) -> 1:  (die3_STATE'=0);
+[YTFCR] (die3_STATE=6) -> 1:  (die3_STATE'=0);
+[PGOGL] (die3_STATE=0) -> 1:  (die3_STATE'=1);
+[MBBNK] (die3_STATE=1) -> 1:  (die3_STATE'=2);
+[XRPIA] (die3_STATE=2) -> 1:  (die3_STATE'=0);
+[XRPIA] (die3_STATE=2) -> 1:  (die3_STATE'=0);
+[MBBNK] (die3_STATE=1) -> 1:  (die3_STATE'=3);
+[UFVRG] (die3_STATE=3) -> 1:  (die3_STATE'=0);
+[UFVRG] (die3_STATE=3) -> 1:  (die3_STATE'=0);
+[PGOGL] (die3_STATE=0) -> 1:  (die3_STATE'=4);
+[ECMME] (die3_STATE=4) -> 1:  (die3_STATE'=5);
+[SHUGH] (die3_STATE=5) -> 1:  (die3_STATE'=0);
+[SHUGH] (die3_STATE=5) -> 1:  (die3_STATE'=0);
+[ECMME] (die3_STATE=4) -> 1:  (die3_STATE'=6);
+[ANYKJ] (die3_STATE=6) -> 1:  (die3_STATE'=0);
+[ANYKJ] (die3_STATE=6) -> 1:  (die3_STATE'=0);
+[ZCBMY] (die3_STATE=0) -> 1/2:  (die3_STATE'=1);
+[BVERB] (die3_STATE=1) -> 1/2:  (die3_STATE'=2);
+[PVSIY] (die3_STATE=2) -> 1/2:  (die3_STATE'=0);
+[PVSIY] (die3_STATE=2) -> 1/2: (d3'=1)&(die3_STATE'=0);
+[BVERB] (die3_STATE=1) -> 1/2:  (die3_STATE'=3);
+[SKGKR] (die3_STATE=3) -> 1/2: (d3'=2)&(die3_STATE'=0);
+[SKGKR] (die3_STATE=3) -> 1/2: (d3'=3)&(die3_STATE'=0);
+[ZCBMY] (die3_STATE=0) -> 1/2:  (die3_STATE'=4);
+[QDLLC] (die3_STATE=4) -> 1/2:  (die3_STATE'=5);
+[UVUQT] (die3_STATE=5) -> 1/2: (d1'=4)&(die3_STATE'=0);
+[UVUQT] (die3_STATE=5) -> 1/2: (d1'=5)&(die3_STATE'=0);
+[QDLLC] (die3_STATE=4) -> 1/2:  (die3_STATE'=6);
+[QDQAW] (die3_STATE=6) -> 1/2:  (die3_STATE'=0);
+[QDQAW] (die3_STATE=6) -> 1/2: (d1'=6)&(die3_STATE'=0);
+
+endmodule 
+
+module die4
+s4 : [0..7];
+d4 : [0..6];
+
+die4_STATE: [0..10] init 0;
+
+[PGOGL] (die4_STATE=0) -> 1:  (die4_STATE'=2);
+[MBBNK] (die4_STATE=1) -> 1:  (die4_STATE'=3);
+[XRPIA] (die4_STATE=2) -> 1:  (die4_STATE'=0);
+[XRPIA] (die4_STATE=2) -> 1:  (die4_STATE'=0);
+[MBBNK] (die4_STATE=1) -> 1:  (die4_STATE'=4);
+[UFVRG] (die4_STATE=3) -> 1:  (die4_STATE'=0);
+[UFVRG] (die4_STATE=3) -> 1:  (die4_STATE'=0);
+[PGOGL] (die4_STATE=0) -> 1:  (die4_STATE'=5);
+[ECMME] (die4_STATE=4) -> 1:  (die4_STATE'=6);
+[SHUGH] (die4_STATE=5) -> 1:  (die4_STATE'=0);
+[SHUGH] (die4_STATE=5) -> 1:  (die4_STATE'=0);
+[ECMME] (die4_STATE=4) -> 1:  (die4_STATE'=7);
+[ANYKJ] (die4_STATE=6) -> 1:  (die4_STATE'=0);
+[ANYKJ] (die4_STATE=6) -> 1:  (die4_STATE'=0);
+[ZCBMY] (die4_STATE=0) -> 1:  (die4_STATE'=1);
+[BVERB] (die4_STATE=1) -> 1:  (die4_STATE'=2);
+[PVSIY] (die4_STATE=2) -> 1:  (die4_STATE'=0);
+[PVSIY] (die4_STATE=2) -> 1:  (die4_STATE'=0);
+[BVERB] (die4_STATE=1) -> 1:  (die4_STATE'=3);
+[SKGKR] (die4_STATE=3) -> 1:  (die4_STATE'=0);
+[SKGKR] (die4_STATE=3) -> 1:  (die4_STATE'=0);
+[ZCBMY] (die4_STATE=0) -> 1:  (die4_STATE'=4);
+[QDLLC] (die4_STATE=4) -> 1:  (die4_STATE'=5);
+[UVUQT] (die4_STATE=5) -> 1:  (die4_STATE'=0);
+[UVUQT] (die4_STATE=5) -> 1:  (die4_STATE'=0);
+[QDLLC] (die4_STATE=4) -> 1:  (die4_STATE'=6);
+[QDQAW] (die4_STATE=6) -> 1:  (die4_STATE'=0);
+[QDQAW] (die4_STATE=6) -> 1:  (die4_STATE'=0);
+[PSTWP] (die4_STATE=0) -> 1/2:  (die4_STATE'=1);
+[DNDRI] (die4_STATE=1) -> 1/2:  (die4_STATE'=2);
+[SEVKI] (die4_STATE=2) -> 1/2:  (die4_STATE'=0);
+[SEVKI] (die4_STATE=2) -> 1/2: (d4'=1)&(die4_STATE'=0);
+[DNDRI] (die4_STATE=1) -> 1/2:  (die4_STATE'=3);
+[YRBBJ] (die4_STATE=3) -> 1/2: (d4'=2)&(die4_STATE'=0);
+[YRBBJ] (die4_STATE=3) -> 1/2: (d4'=3)&(die4_STATE'=0);
+[PSTWP] (die4_STATE=0) -> 1/2:  (die4_STATE'=4);
+[KXAUS] (die4_STATE=4) -> 1/2:  (die4_STATE'=5);
+[FDBZG] (die4_STATE=5) -> 1/2: (d1'=4)&(die4_STATE'=0);
+[FDBZG] (die4_STATE=5) -> 1/2: (d1'=5)&(die4_STATE'=0);
+[KXAUS] (die4_STATE=4) -> 1/2:  (die4_STATE'=6);
+[LKPOA] (die4_STATE=6) -> 1/2:  (die4_STATE'=0);
+[LKPOA] (die4_STATE=6) -> 1/2: (d1'=6)&(die4_STATE'=0);
+
+endmodule 
+
+module die5
+s5 : [0..7];
+d5 : [0..6];
+
+die5_STATE: [0..10] init 0;
+
+[ZCBMY] (die5_STATE=0) -> 1:  (die5_STATE'=2);
+[BVERB] (die5_STATE=1) -> 1:  (die5_STATE'=3);
+[PVSIY] (die5_STATE=2) -> 1:  (die5_STATE'=0);
+[PVSIY] (die5_STATE=2) -> 1:  (die5_STATE'=0);
+[BVERB] (die5_STATE=1) -> 1:  (die5_STATE'=4);
+[SKGKR] (die5_STATE=3) -> 1:  (die5_STATE'=0);
+[SKGKR] (die5_STATE=3) -> 1:  (die5_STATE'=0);
+[ZCBMY] (die5_STATE=0) -> 1:  (die5_STATE'=5);
+[QDLLC] (die5_STATE=4) -> 1:  (die5_STATE'=6);
+[UVUQT] (die5_STATE=5) -> 1:  (die5_STATE'=0);
+[UVUQT] (die5_STATE=5) -> 1:  (die5_STATE'=0);
+[QDLLC] (die5_STATE=4) -> 1:  (die5_STATE'=7);
+[QDQAW] (die5_STATE=6) -> 1:  (die5_STATE'=0);
+[QDQAW] (die5_STATE=6) -> 1:  (die5_STATE'=0);
+[PSTWP] (die5_STATE=0) -> 1:  (die5_STATE'=1);
+[DNDRI] (die5_STATE=1) -> 1:  (die5_STATE'=2);
+[SEVKI] (die5_STATE=2) -> 1:  (die5_STATE'=0);
+[SEVKI] (die5_STATE=2) -> 1:  (die5_STATE'=0);
+[DNDRI] (die5_STATE=1) -> 1:  (die5_STATE'=3);
+[YRBBJ] (die5_STATE=3) -> 1:  (die5_STATE'=0);
+[YRBBJ] (die5_STATE=3) -> 1:  (die5_STATE'=0);
+[PSTWP] (die5_STATE=0) -> 1:  (die5_STATE'=4);
+[KXAUS] (die5_STATE=4) -> 1:  (die5_STATE'=5);
+[FDBZG] (die5_STATE=5) -> 1:  (die5_STATE'=0);
+[FDBZG] (die5_STATE=5) -> 1:  (die5_STATE'=0);
+[KXAUS] (die5_STATE=4) -> 1:  (die5_STATE'=6);
+[LKPOA] (die5_STATE=6) -> 1:  (die5_STATE'=0);
+[LKPOA] (die5_STATE=6) -> 1:  (die5_STATE'=0);
+[AZCWJ] (die5_STATE=0) -> 1/2:  (die5_STATE'=1);
+[WBWUU] (die5_STATE=1) -> 1/2:  (die5_STATE'=2);
+[TMCMA] (die5_STATE=2) -> 1/2:  (die5_STATE'=0);
+[TMCMA] (die5_STATE=2) -> 1/2: (d5'=1)&(die5_STATE'=0);
+[WBWUU] (die5_STATE=1) -> 1/2:  (die5_STATE'=3);
+[ZFPJD] (die5_STATE=3) -> 1/2: (d5'=2)&(die5_STATE'=0);
+[ZFPJD] (die5_STATE=3) -> 1/2: (d5'=3)&(die5_STATE'=0);
+[AZCWJ] (die5_STATE=0) -> 1/2:  (die5_STATE'=4);
+[ICBYD] (die5_STATE=4) -> 1/2:  (die5_STATE'=5);
+[FVVLT] (die5_STATE=5) -> 1/2: (d1'=4)&(die5_STATE'=0);
+[FVVLT] (die5_STATE=5) -> 1/2: (d1'=5)&(die5_STATE'=0);
+[ICBYD] (die5_STATE=4) -> 1/2:  (die5_STATE'=6);
+[YECMF] (die5_STATE=6) -> 1/2:  (die5_STATE'=0);
+[YECMF] (die5_STATE=6) -> 1/2: (d1'=6)&(die5_STATE'=0);
 
 endmodule 
 

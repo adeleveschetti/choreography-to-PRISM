@@ -119,13 +119,32 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 				stats.add(visitStatement(el));
 			}
 			String roleA = "";
-			String roleB = "";
+			ArrayList<String> roleB = new ArrayList<String>();
 			if(ctx.role(0).roleIndex()!=null) {
 				roleA = ctx.role(0).roleIndex().ID().getText()+"["+ctx.role(0).roleIndex().index().CHAR().getText()+"]";
 			}
 			else {
 				roleA = ctx.role(0).roleGroup().ID().getText();
 			}
+
+			for(int i=1; i<ctx.role().size(); i++) {
+				String tmpRole = "";
+				if(ctx.role(i).roleIndex()!=null) {
+					if(ctx.role(i).roleIndex().BRANCH()!=null) {
+						tmpRole = ctx.role(i).roleIndex().ID().getText()+"["+ctx.role(i).roleIndex().index().CHAR().getText()+"+"+ctx.role(i).roleIndex().INTEGER().toString()+"]";
+					}
+					else {
+						tmpRole = ctx.role(i).roleIndex().ID().getText()+"["+ctx.role(i).roleIndex().index().CHAR().getText()+"]";
+					}
+				}
+				else {
+					tmpRole = ctx.role(i).roleGroup().ID().getText();
+
+				}
+
+				roleB.add(tmpRole);
+			}
+			/*
 			if(ctx.role(1).roleIndex()!=null) {
 
 				if(ctx.role(1).roleIndex().BRANCH()!=null) {
@@ -137,7 +156,7 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 			}
 			else {
 				roleB = ctx.role(1).roleGroup().ID().getText();
-			}
+			}*/
 			return new BranchNode(roleA,roleB,rates,messages,stats,loops,actions);
 		}
 		else if(ctx.internalAction()!=null) {
@@ -174,7 +193,7 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 			rate = ctx.rate().get(0).getText().substring(1,ctx.rate().get(0).getText().length()-1);
 		}
 		String roleA = "";
-		String roleB = "";
+		ArrayList<String> roleB = new ArrayList<String>();
 		if(ctx.role(0).roleIndex()!=null) {
 			if(ctx.role(0).roleIndex().BRANCH()!=null) {
 				roleA = ctx.role(0).roleIndex().ID().getText()+"["+ctx.role(0).roleIndex().index().CHAR().getText()+"+"+ctx.role(0).roleIndex().INTEGER().toString()+"]";
@@ -186,7 +205,24 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 		else {
 			roleA = ctx.role(0).roleGroup().ID().getText();
 		}
-		if(ctx.role(1).roleIndex()!=null) {
+		for(int i=1; i<ctx.role().size(); i++) {
+			String tmpRole = "";
+			if(ctx.role(i).roleIndex()!=null) {
+				if(ctx.role(i).roleIndex().BRANCH()!=null) {
+					tmpRole = ctx.role(i).roleIndex().ID().getText()+"["+ctx.role(i).roleIndex().index().CHAR().getText()+"+"+ctx.role(i).roleIndex().INTEGER().toString()+"]";
+				}
+				else {
+					tmpRole = ctx.role(i).roleIndex().ID().getText()+"["+ctx.role(i).roleIndex().index().CHAR().getText()+"]";
+				}
+			}
+			else {
+				tmpRole = ctx.role(i).roleGroup().ID().getText();
+
+			}
+
+			roleB.add(tmpRole);
+		}
+		/*if(ctx.role(1).roleIndex()!=null) {
 			if(ctx.role(1).roleIndex().BRANCH()!=null) {
 				roleB = ctx.role(1).roleIndex().ID().getText()+"["+ctx.role(1).roleIndex().index().CHAR().getText()+"+"+ctx.role(1).roleIndex().INTEGER().toString()+"]";
 			}
@@ -195,7 +231,7 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 			}		}
 		else {
 			roleB = ctx.role(1).roleGroup().ID().getText();
-		}
+		}*/
 		ArrayList<String> actions = null;
 		if(ctx.actions()!=null ) {
 			actions = new ArrayList<String>();

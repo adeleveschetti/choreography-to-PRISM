@@ -90,6 +90,7 @@ public class ProtocolNode implements Node{
 
 			variablesRoles.add(tmpRoles);
 		}
+	
 
 
 		for(ArrayList<Pair<String,ArrayList<String>>> list : variablesRoles) {
@@ -110,13 +111,13 @@ public class ProtocolNode implements Node{
 			ArrayList<String> subRoles = new ArrayList<String>();
 			mapStates = new HashMap<String,ArrayList<Integer>>();
 			mapStatesBranches = new HashMap<String,ArrayList<Integer>>();
-
 			for(ArrayList<Pair<String,ArrayList<String>>> list : variablesRoles) {
 				mapStates.put(list.get(i).getFirst(),new ArrayList<Integer>());
 				mapStatesBranches.put(list.get(i).getFirst(),new ArrayList<Integer>());
 				subRoles.add(list.get(i).getFirst());
 			}
 			
+
 			code = statement.codeGenerator(code,mapStates,mapStatesBranches,subRoles,allRoles,i,varValue);
 
 		}
