@@ -20,11 +20,11 @@ Station[i] : 	"s[i] : [0..1];";
 
 PoW := IF(i!=4){
 	Server -> Station[i] 
-		(+["gamma"] "(s=[i])" -> "(s'=s+1)"&&" " : PoW 
-		+["gamma*lambda"] " "&&" " :  Server -> Station[i] : ["mu"] "(s=[i])" -> "(s'=s+1)"&&" ".PoW)  
+		(+["gamma"] "(s=[i])&(a=0)"&&"(s[i]=0)" -> "(s'=s+1)"&&"(s[i]'=0)" : PoW 
+		+["gamma*lambda"] "(s=[i])&(a=0)"&&"(s[i]=0)" -> "(a'=1)"&&"(s[i]'=1)" :  Server -> Station[i] : ["mu"] "(s=[i])&(a=1)"&&"(s[i]=1)" -> "(s'=s+1)&(a'=0)"&&"(s[i]'=0)".PoW)  
 		}
 		ELSE{
 		Server -> Station[i] 
-		(+["gamma"] "(s=[i])" -> "(s'=1)"&&" " : PoW 
-		+["gamma*lambda"] " "&&" " :  Server -> Station[i] : ["mu"] "(s=[i])" -> "(s'=1)"&&" ".PoW)  
+		(+["gamma"] "(s=[i])&(a=0)"&&"(s[i]=0)" -> "(s'=s+1)"&&"(s[i]'=0)" : PoW 
+		+["gamma*lambda"] "(s=[i])&(a=0)"&&"(s[i]=0)" -> "(a'=1)"&&"(s[i]'=1)" :  Server -> Station[i] : ["mu"] "(s=[i])&(a=1)"&&"(s[i]=1)" -> "(s'=1)&(a'=0)"&&"(s[i]'=0)".PoW)  
 		}

@@ -1,0 +1,17 @@
+preamble 
+
+"mdp"
+
+"const N=4;"
+
+endpreamble
+
+n = 4;
+
+preocess[i] -> i in [1...n]
+preocess[i] : 	"c[i] : [0..N-1];", "s[i] : [0..4];", "p[i] : [0..1];", "receive[i] : [0..2];", "sent[i] : [0..2];";
+
+Election := process[i] -> process[i]
+			(+["1/2"] "(s[i]=0)" -> "(s[i]'=1)&(p[i]'=0)"&&" " : process[i] -> process[i+1] : 
+															 "(s[i]=1)&(sent[i]=0)"&& -> (sent1'=1);
+			 +["1/2"] "(s[i]=0)" -> "(s[i]'=1)&(p[i]'=1)"&&" ")
