@@ -10,21 +10,21 @@ a : [0..1];
 
 Server_STATE: [0..10] init 0;
 
-[HZVAR] (s=1)&(a=0)-> gamma: (s'=s+1);
-[VLKPT] (s=1)&(a=0)-> gamma: (a'=1);
-[ZDTRZ] (s=1)&(a=1)-> mu: (s'=s+1)&(a'=0);
-[HHRUR] (s=2)&(a=0)-> gamma: (s'=s+1);
-[GWGOU] (s=2)&(a=0)-> gamma: (a'=1);
-[UPQDF] (s=2)&(a=1)-> mu: (s'=s+1)&(a'=0);
-[DEHHY] (s=3)&(a=0)-> gamma: (s'=s+1);
-[GNLBM] (s=3)&(a=0)-> gamma: (a'=1);
-[RCDEJ] (s=3)&(a=1)-> mu: (s'=s+1)&(a'=0);
-[PKSIF] (s=4)&(a=0)-> gamma: (s'=s+1);
-[IWCGE] (s=4)&(a=0)-> gamma: (a'=1);
-[RBMMX] (s=4)&(a=1)-> mu: (s'=s+1)&(a'=0);
-[KWDMX] (s=5)&(a=0)-> gamma: (s'=s+1);
-[UBEGV] (s=5)&(a=0)-> gamma: (a'=1);
-[SLOGT] (s=5)&(a=1)-> mu: (s'=1)&(a'=0);
+[ZELNM] (s=1)&(a=0)-> gamma: (s'=s+1);
+[IEDUH] (s=1)&(a=0)-> gamma: (a'=1);
+[KJAEZ] (s=1)&(a=1)-> mu: (s'=s+1)&(a'=0);
+[EKEYR] (s=2)&(a=0)-> gamma: (s'=s+1);
+[HOWKB] (s=2)&(a=0)-> gamma: (a'=1);
+[JHJLJ] (s=2)&(a=1)-> mu: (s'=s+1)&(a'=0);
+[FXUAD] (s=3)&(a=0)-> gamma: (s'=s+1);
+[TKDTY] (s=3)&(a=0)-> gamma: (a'=1);
+[KXPIZ] (s=3)&(a=1)-> mu: (s'=s+1)&(a'=0);
+[DOCPK] (s=4)&(a=0)-> gamma: (s'=s+1);
+[JJPXE] (s=4)&(a=0)-> gamma: (a'=1);
+[XWCEP] (s=4)&(a=1)-> mu: (s'=s+1)&(a'=0);
+[GRQET] (s=5)&(a=0)-> gamma: (s'=s+1);
+[BFLQG] (s=5)&(a=0)-> gamma: (a'=1);
+[KZSOO] (s=5)&(a=1)-> mu: (s'=1)&(a'=0);
 
 endmodule 
 
@@ -33,9 +33,9 @@ s1 : [0..1];
 
 Station1_STATE: [0..10] init 0;
 
-[HZVAR] (s1=0) -> 1: (s1'=0);
-[VLKPT] (s1=0) -> lambda: (s1'=1);
-[ZDTRZ] (s1=1) -> 1: (s1'=0);
+[ZELNM] (s1=0) -> 1: (s1'=0);
+[IEDUH] (s1=0) -> lambda: (s1'=1);
+[KJAEZ] (s1=1) -> 1: (s1'=0);
 
 endmodule 
 
@@ -44,9 +44,9 @@ s2 : [0..1];
 
 Station2_STATE: [0..10] init 0;
 
-[HHRUR] (s2=0) -> 1: (s2'=0);
-[GWGOU] (s2=0) -> lambda: (s2'=1);
-[UPQDF] (s2=1) -> 1: (s2'=0);
+[EKEYR] (s2=0) -> 1: (s2'=0);
+[HOWKB] (s2=0) -> lambda: (s2'=1);
+[JHJLJ] (s2=1) -> 1: (s2'=0);
 
 endmodule 
 
@@ -55,9 +55,9 @@ s3 : [0..1];
 
 Station3_STATE: [0..10] init 0;
 
-[DEHHY] (s3=0) -> 1: (s3'=0);
-[GNLBM] (s3=0) -> lambda: (s3'=1);
-[RCDEJ] (s3=1) -> 1: (s3'=0);
+[FXUAD] (s3=0) -> 1: (s3'=0);
+[TKDTY] (s3=0) -> lambda: (s3'=1);
+[KXPIZ] (s3=1) -> 1: (s3'=0);
 
 endmodule 
 
@@ -66,9 +66,9 @@ s4 : [0..1];
 
 Station4_STATE: [0..10] init 0;
 
-[PKSIF] (s4=0) -> 1: (s4'=0);
-[IWCGE] (s4=0) -> lambda: (s4'=1);
-[RBMMX] (s4=1) -> 1: (s4'=0);
+[DOCPK] (s4=0) -> 1: (s4'=0);
+[JJPXE] (s4=0) -> lambda: (s4'=1);
+[XWCEP] (s4=1) -> 1: (s4'=0);
 
 endmodule 
 
@@ -77,9 +77,9 @@ s5 : [0..1];
 
 Station5_STATE: [0..10] init 0;
 
-[KWDMX] (s5=0) -> 1: (s5'=0);
-[UBEGV] (s5=0) -> lambda: (s5'=1);
-[SLOGT] (s5=1) -> 1: (s5'=0);
+[GRQET] (s5=0) -> 1: (s5'=0);
+[BFLQG] (s5=0) -> lambda: (s5'=1);
+[KZSOO] (s5=1) -> 1: (s5'=0);
 
 endmodule 
 
