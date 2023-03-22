@@ -156,7 +156,7 @@ public class CommunicationNode implements Node {
 				rolesB.set(i,rolesB.get(i).replace("[i]",Integer.toString(currIndex+1)));
 			}
 		}
-		
+
 		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		StringBuilder salt = new StringBuilder();
 		Random rnd = new Random();
@@ -201,13 +201,21 @@ public class CommunicationNode implements Node {
 		String toInsert_A = "";
 		String nextState = "";
 		int stateTmp_A = state_A;
-		if(statement instanceof ProtocolIDNode ) {
-			nextState = "("+roleA+"_STATE'=0)";
+		boolean statePresent = false;
+		String _state = "_STATE'=";
+		if(!message.get(0).contains(_state)) {
+			if(statement instanceof ProtocolIDNode ) {
+				nextState = "("+roleA+"_STATE'=0)";
+			}
+			else {
+				stateTmp_A++;
+				nextState = "("+roleA+"_STATE'="+stateTmp_A+")";
+			}
 		}
 		else {
-			stateTmp_A++;
-			nextState = "("+roleA+"_STATE'="+stateTmp_A+")";
+			statePresent = true;
 		}
+
 		String messageForLoop_1 = "";
 		String messageForLoop_2 = "";
 
@@ -296,24 +304,28 @@ public class CommunicationNode implements Node {
 
 		if(indexBranchA==-1 || !(index_A<=indexBranchA && indexBranchA<=indexEnd_A)) {
 			if(precond!=null) {
-				toInsert_A = "["+label+"] " /*("+ roleA+"_STATE=" + state_A + ")&"*/+precond+"-> " + rateToPrintA + ": " + messageToAdd;
+				toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ")&"+precond+"-> " + rateToPrintA + ": " + messageToAdd;
 			}
 			else {
-				toInsert_A = "["+label+"] " /*("+ roleA+"_STATE=" + state_A + ")*/+" -> " + rateToPrintA + ": " + messageToAdd;
+				toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateToPrintA + ": " + messageToAdd;
 			}
 		}
 		else {
 			state_A  = Character.getNumericValue(toRet.charAt(indexBranchA-1));
 			toRet = toRet.replace("[] ("+ roleA+"_STATE="+state_A+") -> 1: ;\n","");
 			if(precond!=null) {
-				toInsert_A = "["+label+"] "/* ("+ roleA+"_STATE=" + state_A + ")&"+*/+precond+"-> " + rateToPrintA + ": " + messageToAdd;
+				toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ")&"+precond+"-> " + rateToPrintA + ": " + messageToAdd;
 			}
 			else {
-				toInsert_A = "["+label+"] "/*("+ roleA+"_STATE=" + state_A + ")*/+" -> " + rateToPrintA + ": " + messageToAdd;
+				toInsert_A = "["+label+"] ("+ roleA+"_STATE=" + state_A + ") -> " + rateToPrintA + ": " + messageToAdd;
 			}
 		}
-		toInsert_A = toInsert_A + ";\n";
-
+		if(message.get(0).length()==1 || statePresent) {
+			toInsert_A = toInsert_A + nextState + ";\n";
+		}
+		else {
+			toInsert_A = toInsert_A +"&"+ nextState + ";\n";
+		}
 		indexEnd_A = toRet.indexOf("endmodule",index_A);
 		toRet = new StringBuilder(toRet).insert(indexEnd_A-1,toInsert_A).toString();
 
@@ -422,29 +434,33 @@ public class CommunicationNode implements Node {
 		String toInsert_B = "";
 		if(indexBranchB==-1 || !(index_B<=indexBranchB && indexBranchB<=indexEnd_B)) {
 			if(precond_B!=null) {
-				toInsert_B = "["+label+"] "+/*("+ roleB+"_STATE=" + state_B + ")&"+*/precond_B+" -> " + rateToPrintB + ": " + messageToAdd; 
+				toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ")&"+precond_B+" -> " + rateToPrintB + ": " + messageToAdd; 
 			}
 			else {
-				toInsert_B = "["+label+"] "/*("+ roleB+"_STATE=" + state_B + ")*/+" -> " + rateToPrintB + ": " + messageToAdd; 
+				toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateToPrintB + ": " + messageToAdd; 
 			}
 		}
 		else {
 			state_B = Character.getNumericValue(toRet.charAt(indexBranchB-1));
 			toRet = toRet.replace("[] ("+ roleB+"_STATE="+state_B+") -> 1: ;\n","");
 			if(precond_B!=null) {
-				toInsert_B = "["+label+"] "/*("+ roleB+"_STATE=" + state_B + ")&"*/+precond_B+" -> " + rateToPrintB + ": " + messageToAdd; 
+				toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ")&"+precond_B+" -> " + rateToPrintB + ": " + messageToAdd; 
 			}
 			else {
-				toInsert_B = "["+label+"] "/*("+ roleB+"_STATE=" + state_B + ")*/+" -> " + rateToPrintB + ": " + messageToAdd; 
+				toInsert_B = "["+label+"] ("+ roleB+"_STATE=" + state_B + ") -> " + rateToPrintB + ": " + messageToAdd; 
 			}
 		}
-		toInsert_B = toInsert_B + ";\n";
-
+		if(messageToAdd.length()<=1) {
+			toInsert_B = toInsert_B + nextState + ";\n";
+		}
+		else {
+			toInsert_B = toInsert_B +"&"+ nextState + ";\n";
+		}
 		indexEnd_B = toRet.indexOf("endmodule",index_B);
 
 		toRet = new StringBuilder(toRet).insert(indexEnd_B-1,toInsert_B).toString();
 		//}
-		
+
 		for(int k=1; k<rolesB.size(); k++) {
 			String toFind_B2 = "module " + rolesB.get(k) + "\n\n";
 			int index_B2 = toRet.indexOf(toFind_B2);
@@ -452,7 +468,7 @@ public class CommunicationNode implements Node {
 			int indexBranchB2 = toRet.indexOf(") -> \n");
 			toRet = new StringBuilder(toRet).insert(indexEnd_B2-1,toInsert_B).toString();
 		}
-		
+
 		if(statement!=null) {
 			toRet = statement.codeGenerator(toRet,mapStates,mapStatesBranches,roles,allRoles,  currIndex,  totIndex);
 		}

@@ -85,14 +85,19 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 			ArrayList<ArrayList<String>> messages = new ArrayList<ArrayList<String>>();
 			ArrayList<ArrayList<Node>> loops = new ArrayList<ArrayList<Node>>();
 			ArrayList<String> actions = null;
+			ArrayList<ArrayList<String>> totActions = null;
+
 			if(ctx.actions()!=null ) {
-				actions = new ArrayList<String>();
-				for(ActionsContext el : ctx.actions()) {
-					for(Token el2 : el.action) {
+				totActions = new ArrayList<ArrayList<String>>();
+				for(int i = 0; i<ctx.actions().size(); i++) {
+					actions = new ArrayList<String>();
+					for(Token el2 : ctx.actions().get(i).action) {
 						actions.add(el2.getText().substring(1,el2.getText().length()-1));
 					}
+					totActions.add(actions);
 				}
 			}
+			
 			for(MessageContext el : ctx.message()) {
 				ArrayList<String> tmp = new ArrayList<String>();
 				for(Token el2 : el.actions().action) {
@@ -157,7 +162,7 @@ public class LangVisitorImpl extends LangBaseVisitor<Node>{
 			else {
 				roleB = ctx.role(1).roleGroup().ID().getText();
 			}*/
-			return new BranchNode(roleA,roleB,rates,messages,stats,loops,actions);
+			return new BranchNode(roleA,roleB,rates,messages,stats,loops,totActions);
 		}
 		else if(ctx.internalAction()!=null) {
 			Node stat = null;

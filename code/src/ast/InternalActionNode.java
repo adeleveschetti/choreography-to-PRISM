@@ -119,6 +119,7 @@ public class InternalActionNode implements Node{
 		}
 
 		role = roleTmp;
+		System.out.println("==== " + ret);
 		return ret ;
 	}
 

@@ -1,85 +1,81 @@
-ctmc
-const int N=5;
-const double mu= 1;
-const double gamma= 200;
-const double lambda= mu/N;
+mdp
+const N=4;
 
-module Server
-s : [1..5];
-a : [0..1];
+module phil1
 
-Server_STATE: [0..10] init 0;
+phil1_STATE: [0..10] init 0;
 
-[ZELNM] (s=1)&(a=0)-> gamma: (s'=s+1);
-[IEDUH] (s=1)&(a=0)-> gamma: (a'=1);
-[KJAEZ] (s=1)&(a=1)-> mu: (s'=s+1)&(a'=0);
-[EKEYR] (s=2)&(a=0)-> gamma: (s'=s+1);
-[HOWKB] (s=2)&(a=0)-> gamma: (a'=1);
-[JHJLJ] (s=2)&(a=1)-> mu: (s'=s+1)&(a'=0);
-[FXUAD] (s=3)&(a=0)-> gamma: (s'=s+1);
-[TKDTY] (s=3)&(a=0)-> gamma: (a'=1);
-[KXPIZ] (s=3)&(a=1)-> mu: (s'=s+1)&(a'=0);
-[DOCPK] (s=4)&(a=0)-> gamma: (s'=s+1);
-[JJPXE] (s=4)&(a=0)-> gamma: (a'=1);
-[XWCEP] (s=4)&(a=1)-> mu: (s'=s+1)&(a'=0);
-[GRQET] (s=5)&(a=0)-> gamma: (s'=s+1);
-[BFLQG] (s=5)&(a=0)-> gamma: (a'=1);
-[KZSOO] (s=5)&(a=1)-> mu: (s'=1)&(a'=0);
-
-endmodule 
-
-module Station1
-s1 : [0..1];
-
-Station1_STATE: [0..10] init 0;
-
-[ZELNM] (s1=0) -> 1: (s1'=0);
-[IEDUH] (s1=0) -> lambda: (s1'=1);
-[KJAEZ] (s1=1) -> 1: (s1'=0);
+[]  (phil1_STATE=0) -> 1:  (phil1_STATE'=0);
+[]  (phil1_STATE=0) -> 1:  (phil1_STATE'=2);
+[]  (phil1_STATE=2) -> 1/2:  (phil1_STATE'=4);
+[] (phil1_STATE=4)&lfree-> 1:  (phil1_STATE'=6);
+[] (phil1_STATE=6)&rfree-> 1:  (phil1_STATE'=8);
+[]  (phil1_STATE=8) -> 1:  (phil1_STATE'=10);
+[]  (phil1_STATE=10) -> 1:  (phil1_STATE'=12);
+[]  (phil1_STATE=12) -> 1:  (phil1_STATE'=0);
+[]  (phil1_STATE=10) -> 1:  (phil1_STATE'=14);
+[]  (phil1_STATE=14) -> 1:  (phil1_STATE'=0);
+[] (phil1_STATE=4)&(!rfree)-> 1:  (phil1_STATE'=16);
+[]  (phil1_STATE=16) -> 1: (phil1_STATE'=2);
+[] (phil1_STATE=2)&(!lfree)-> 1: (phil1_STATE'=4);
+[]  (phil1_STATE=0) -> 1/2:  (phil1_STATE'=18);
+[] (phil1_STATE=18)&rfree-> 1:  (phil1_STATE'=20);
+[] (phil1_STATE=20)&lfree-> 1: (phil1_STATE'=8);
+[] (phil1_STATE=20)&(!lfree)-> 1:  (phil1_STATE'=22);
+[]  (phil1_STATE=22) -> 1: (phil1_STATE'=2);
+[] (phil1_STATE=18)&(!rfree)-> 1: (phil1_STATE'=6);
 
 endmodule 
 
-module Station2
-s2 : [0..1];
+module phil2
 
-Station2_STATE: [0..10] init 0;
+phil2_STATE: [0..10] init 0;
 
-[EKEYR] (s2=0) -> 1: (s2'=0);
-[HOWKB] (s2=0) -> lambda: (s2'=1);
-[JHJLJ] (s2=1) -> 1: (s2'=0);
-
-endmodule 
-
-module Station3
-s3 : [0..1];
-
-Station3_STATE: [0..10] init 0;
-
-[FXUAD] (s3=0) -> 1: (s3'=0);
-[TKDTY] (s3=0) -> lambda: (s3'=1);
-[KXPIZ] (s3=1) -> 1: (s3'=0);
-
-endmodule 
-
-module Station4
-s4 : [0..1];
-
-Station4_STATE: [0..10] init 0;
-
-[DOCPK] (s4=0) -> 1: (s4'=0);
-[JJPXE] (s4=0) -> lambda: (s4'=1);
-[XWCEP] (s4=1) -> 1: (s4'=0);
+[]  (phil2_STATE=0) -> 1:  (phil2_STATE'=0);
+[]  (phil2_STATE=0) -> 1:  (phil2_STATE'=2);
+[]  (phil2_STATE=2) -> 1/2:  (phil2_STATE'=4);
+[] (phil2_STATE=4)&lfree-> 1:  (phil2_STATE'=6);
+[] (phil2_STATE=6)&rfree-> 1:  (phil2_STATE'=8);
+[]  (phil2_STATE=8) -> 1:  (phil2_STATE'=10);
+[]  (phil2_STATE=10) -> 1:  (phil2_STATE'=12);
+[]  (phil2_STATE=12) -> 1:  (phil2_STATE'=0);
+[]  (phil2_STATE=10) -> 1:  (phil2_STATE'=14);
+[]  (phil2_STATE=14) -> 1:  (phil2_STATE'=0);
+[] (phil2_STATE=4)&(!rfree)-> 1:  (phil2_STATE'=16);
+[]  (phil2_STATE=16) -> 1: (phil2_STATE'=2);
+[] (phil2_STATE=2)&(!lfree)-> 1: (phil2_STATE'=4);
+[]  (phil2_STATE=0) -> 1/2:  (phil2_STATE'=18);
+[] (phil2_STATE=18)&rfree-> 1:  (phil2_STATE'=20);
+[] (phil2_STATE=20)&lfree-> 1: (phil1_STATE'=8);
+[] (phil2_STATE=20)&(!lfree)-> 1:  (phil2_STATE'=22);
+[]  (phil2_STATE=22) -> 1: (phil2_STATE'=2);
+[] (phil2_STATE=18)&(!rfree)-> 1: (phil2_STATE'=6);
 
 endmodule 
 
-module Station5
-s5 : [0..1];
+module phil3
 
-Station5_STATE: [0..10] init 0;
+phil3_STATE: [0..10] init 0;
 
-[GRQET] (s5=0) -> 1: (s5'=0);
-[BFLQG] (s5=0) -> lambda: (s5'=1);
-[KZSOO] (s5=1) -> 1: (s5'=0);
+[]  (phil3_STATE=0) -> 1:  (phil3_STATE'=0);
+[]  (phil3_STATE=0) -> 1:  (phil3_STATE'=2);
+[]  (phil3_STATE=2) -> 1/2:  (phil3_STATE'=4);
+[] (phil3_STATE=4)&lfree-> 1:  (phil3_STATE'=6);
+[] (phil3_STATE=6)&rfree-> 1:  (phil3_STATE'=8);
+[]  (phil3_STATE=8) -> 1:  (phil3_STATE'=10);
+[]  (phil3_STATE=10) -> 1:  (phil3_STATE'=12);
+[]  (phil3_STATE=12) -> 1:  (phil3_STATE'=0);
+[]  (phil3_STATE=10) -> 1:  (phil3_STATE'=14);
+[]  (phil3_STATE=14) -> 1:  (phil3_STATE'=0);
+[] (phil3_STATE=4)&(!rfree)-> 1:  (phil3_STATE'=16);
+[]  (phil3_STATE=16) -> 1: (phil3_STATE'=2);
+[] (phil3_STATE=2)&(!lfree)-> 1: (phil3_STATE'=4);
+[]  (phil3_STATE=0) -> 1/2:  (phil3_STATE'=18);
+[] (phil3_STATE=18)&rfree-> 1:  (phil3_STATE'=20);
+[] (phil3_STATE=20)&lfree-> 1: (phil1_STATE'=8);
+[] (phil3_STATE=20)&(!lfree)-> 1:  (phil3_STATE'=22);
+[]  (phil3_STATE=22) -> 1: (phil3_STATE'=2);
+[] (phil3_STATE=18)&(!rfree)-> 1: (phil3_STATE'=6);
 
 endmodule 
 
