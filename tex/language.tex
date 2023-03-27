@@ -1,13 +1,31 @@
 This is the language
 
+\newcommand{\role}[1]{\textsf{#1}}
+\newcommand{\CEnd}{\mathbf{0}}
+\newcommand{\pp}{|\!|}
+\newcommand{\ppp}[1]{|[A]|}
 
 
+Global: 
 \begin{displaymath}
   \begin{array}{lll}
-    \text{(Chor)}  \quad & C \ ::=\ & \{p_i\}_{i\in I}\oplus\{\rho_i: [E_i]C_i\}_{i\in I}\\\\
-    \text{(Effect)}\quad & E \ ::=\ & \ldots                                 
+    \text{(Chor)}  \quad & C \ ::=\ & \{\role p_i\}_{i\in I}\oplus\{[\lambda_j] x_j=E_j: C_j\}_{j\in J}\ \mid\
+    \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2 \ \mid\ X\ \mid\ \CEnd\\\\
+    \text{(Expressions)}\quad & E \ ::=\ & f(\tilde E)\quad\mid\quad x\\\\
+    \text{(Rates)}\quad       & \lambda\ ::=\ & ???                                            
   \end{array}
 \end{displaymath}
+
+
+Prism/Local: 
+\begin{displaymath}
+  \begin{array}{lll}
+    \text{(???)}  \quad & N \ ::=\ & \CEnd \ \mid\ M \pp M\ \mid\ M \ppp A M\ \mid\ M/A\ \mid\ \sigma M\\\\
+    \text{(???)}  \quad & M \ ::=\ & \{F_i\}_i\\\\
+    \text{(???)}  \quad & F \ ::=\ & [a] E \rightarrow \lambda_1: x_1 = E_1\ldots\lambda_n: x_n = E_n\\\\
+  \end{array}
+\end{displaymath}
+
 
 
 %%% Local Variables: 
