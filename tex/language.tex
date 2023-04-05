@@ -1,32 +1,61 @@
-This is the language
-
-\newcommand{\role}[1]{\textsf{#1}}
-\newcommand{\CEnd}{\mathbf{0}}
-\newcommand{\pp}{|\!|}
-\newcommand{\ppp}[1]{|[A]|}
+\mypar{Syntax.} This is the language and we comment on it later.
 
 
-Global: 
+\noindent {\em Global:}
+
 \begin{displaymath}
   \begin{array}{lll}
     \text{(Chor)}  \quad & C \ ::=\ & \{\role p_i\}_{i\in I}\oplus\{[\lambda_j] x_j=E_j: C_j\}_{j\in J}\ \mid\
     \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2 \ \mid\ X\ \mid\ \CEnd\\\\
     \text{(Expressions)}\quad & E \ ::=\ & f(\tilde E)\quad\mid\quad x\\\\
-    \text{(Rates)}\quad       & \lambda\ ::=\ & ???                                            
+    \text{(Rates)}\quad       & \lambda\in\mathbb R
   \end{array}
 \end{displaymath}
 
 
-Prism/Local: 
+\noindent {\em Prism/Local:} 
 \begin{displaymath}
   \begin{array}{lll}
-    \text{(???)}  \quad & N \ ::=\ & \CEnd \ \mid\ M \pp M\ \mid\ M \ppp A M\ \mid\ M/A\ \mid\ \sigma M\\\\
-    \text{(???)}  \quad & M \ ::=\ & \{F_i\}_i\\\\
-    \text{(???)}  \quad & F \ ::=\ & [a] E \rightarrow \lambda_1: x_1 = E_1\ldots\lambda_n: x_n = E_n\\\\
+    \text{(Networks)}  \quad & N \ ::=\ & \CEnd \ \mid\ \role{p}:\{F_i\}_i\ \mid\ M \pp M\ \mid\ M \ppp A M\ \mid\ M/A\ \mid\ \sigma M\\\\
+    \text{(Commands)}  \quad & F \ ::=\ & \cmd aE{\lambda_i}{x_i}{E_i}{i\in I}\\\\
   \end{array}
 \end{displaymath}
 
+\mypar{Semantics.} We construct by the following set of rules:
 
+\begin{displaymath}
+  \begin{array}{lll}
+    \infer[]
+    {\cmd{}E{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_1\ppp A M_2}}
+    {\cmd{}E{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_j}
+    & j\in\{1,2\}}
+    \\\\
+    \infer[]
+    {\cmd aE{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_1\ppp A M_2}}
+    {\cmd aE{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_j}
+    & a\not\in A    & j\in\{1,2\}}
+    \\\\
+    \infer[]
+    {
+      % \cmd a{E\land E'}{\lambda_i*\lambda_j}{x_i}{E_j}{i\in I}\in \sem{M_1\ppp A M_2}{}
+    [a] E\land E' \rightarrow \{\lambda_i * \lambda_j': x_i = E_i \land x_j' = E_j' \}_{i\in I, j\in J}
+    \in \sem{M_1\ppp A M_2}
+    }
+    {\cmd aE{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M_1}{}
+    & \cmd a{E'}{\lambda_j}{x_j'}{E_j'}{j\in J}\in \sem{M_2}{}
+    & a\in A}
+  \end{array}
+\end{displaymath}
+
+\begin{displaymath}
+  \begin{array}{lll}
+    W(M) = \{F \mid F\in\sem{M}\}
+    \\\\
+    X = \{x_1,\ldots,x_n\}
+    \\\\
+    \sigma : X \rightarrow V
+  \end{array}
+\end{displaymath}
 
 %%% Local Variables: 
 %%% mode: latex
