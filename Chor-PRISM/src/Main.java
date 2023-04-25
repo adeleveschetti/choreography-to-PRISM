@@ -17,8 +17,8 @@ import parser.LanguageParser;
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		String fileName = "./generated-sources/example.language";
-		FileInputStream is = new FileInputStream(fileName);
+		String fileName = "./generated-sources/example";
+		FileInputStream is = new FileInputStream(fileName+".language");
 		@SuppressWarnings("deprecation")
 		ANTLRInputStream input = new ANTLRInputStream(is);
 		LanguageLexer lexer = new LanguageLexer(input);
@@ -28,7 +28,7 @@ public class Main {
 		LanguageVisitorImpl visitor = new LanguageVisitorImpl();
 		Node ast = visitor.visit(t);
 		String code = ast.generateCode("",-1,-1,null,0);
-		File file = new File("./generated-sources/GeneratedCode.prism");
+		File file = new File(fileName+".prism");
 		if (!file.exists()) {
             file.createNewFile();
         }

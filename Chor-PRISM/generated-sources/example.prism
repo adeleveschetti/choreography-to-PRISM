@@ -1,0 +1,133 @@
+ctmc
+const k;
+const T=k*1000;
+const double rb ;
+const double mR = 1/600;
+const double lR = 1-mR;
+const double hR1 = 0.25;
+const double hR2 = 0.25;
+const double hR3 = 0.25;
+const double hR4 = 0.25;
+const double rB = 1/12.6;
+const int N = 100;
+
+module Miner1
+b1 : block {m1,0;genesis,0} ;
+B1 : blockchain [{genesis,0;genesis,0}];
+c1 : [0..N] init 0;
+setMiner1 : list [];
+
+
+[OAZFJ] (Miner1=0)  -> hR1 : (b1'=createB(b1,B1,c1))&(c1'=c1+1)&(Miner1'=1); 
+[BHSBG] (Miner1=0)  -> hR1 :  &(Miner1'=2); 
+
+
+
+[TFDYW] (Miner1=1)&!isEmpty(set1)  -> r1 : (setMiner1'=addBlockSet(setMiner1,b1)&(Miner1'=0); 
+
+[] (Miner1=1)&!(!isEmpty(set1)) -> (Miner1'=0);
+endmodule
+
+
+module Miner2
+b2 : block {m2,0;genesis,0} ;
+B2 : blockchain [{genesis,0;genesis,0}];
+c2 : [0..N] init 0;
+setMiner2 : list [];
+
+
+[JHSPN] (Miner2=0)  -> hR1 : (b1'=createB(b1,B1,c1))&(c1'=c1+1)&(Miner2'=1); 
+[MZPSI] (Miner2=0)  -> hR1 :  &(Miner2'=2); 
+
+
+
+[BSSWV] (Miner2=1)&!isEmpty(set2)  -> r2 : (setMiner2'=addBlockSet(setMiner2,b2)&(Miner2'=0); 
+
+[] (Miner2=1)&!(!isEmpty(set2)) -> (Miner2'=0);
+endmodule
+
+
+module Miner3
+b3 : block {m3,0;genesis,0} ;
+B3 : blockchain [{genesis,0;genesis,0}];
+c3 : [0..N] init 0;
+setMiner3 : list [];
+
+
+[DPXTE] (Miner3=0)  -> hR1 : (b1'=createB(b1,B1,c1))&(c1'=c1+1)&(Miner3'=1); 
+[JKDFT] (Miner3=0)  -> hR1 :  &(Miner3'=2); 
+
+
+
+[THXGG] (Miner3=1)&!isEmpty(set3)  -> r3 : (setMiner3'=addBlockSet(setMiner3,b3)&(Miner3'=0); 
+
+[] (Miner3=1)&!(!isEmpty(set3)) -> (Miner3'=0);
+endmodule
+
+
+module Miner4
+b4 : block {m4,0;genesis,0} ;
+B4 : blockchain [{genesis,0;genesis,0}];
+c4 : [0..N] init 0;
+setMiner4 : list [];
+
+
+[VAMHE] (Miner4=0)  -> hR1 : (b1'=createB(b1,B1,c1))&(c1'=c1+1)&(Miner4'=1); 
+[HVQAK] (Miner4=0)  -> hR1 :  &(Miner4'=2); 
+
+
+
+[OJAAR] (Miner4=1)&!isEmpty(set4)  -> r4 : (setMiner4'=addBlockSet(setMiner4,b4)&(Miner4'=0); 
+
+[] (Miner4=1)&!(!isEmpty(set4)) -> (Miner4'=0);
+endmodule
+
+
+module Network
+set1 : list [];
+set2 : list [];
+set3 : list [];
+set4 : list [];
+
+
+[TFDYW] (Network=0)  -> 1 : (set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
+
+[BSSWV] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
+
+[THXGG] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
+
+[OJAAR] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&&(Network'=0); 
+endmodule
+
+
+module Hasher1
+
+
+[OAZFJ] (Hasher1=0)  -> mR :  &(Hasher1'=1); 
+[BHSBG] (Hasher1=0)  -> lR :  &(Hasher1'=2); 
+endmodule
+
+
+module Hasher2
+
+
+[JHSPN] (Hasher2=0)  -> mR :  &(Hasher2'=1); 
+[MZPSI] (Hasher2=0)  -> lR :  &(Hasher2'=2); 
+endmodule
+
+
+module Hasher3
+
+
+[DPXTE] (Hasher3=0)  -> mR :  &(Hasher3'=1); 
+[JKDFT] (Hasher3=0)  -> lR :  &(Hasher3'=2); 
+endmodule
+
+
+module Hasher4
+
+
+[VAMHE] (Hasher4=0)  -> mR :  &(Hasher4'=1); 
+[HVQAK] (Hasher4=0)  -> lR :  &(Hasher4'=2); 
+endmodule
+
