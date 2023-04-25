@@ -9,25 +9,27 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 
-import ast.LangVisitorImpl;
+import ast.LanguageVisitorImpl;
 import ast.Node;
-import parser.LangLexer;
-import parser.LangParser;
+import parser.LanguageLexer;
+import parser.LanguageParser;
 
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		String fileName = "example.lang";
+		String fileName = "example.language";
 		FileInputStream is = new FileInputStream(fileName);
 		@SuppressWarnings("deprecation")
 		ANTLRInputStream input = new ANTLRInputStream(is);
-		LangLexer lexer = new LangLexer(input);
+		LanguageLexer lexer = new LanguageLexer(input);
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
-		LangParser parser = new LangParser(tokens);
+		LanguageParser parser = new LanguageParser(tokens);
 		ParseTree t = parser.protocol();
-		LangVisitorImpl visitor = new LangVisitorImpl();
+		LanguageVisitorImpl visitor = new LanguageVisitorImpl();
 		Node ast = visitor.visit(t);
-		String toRet = "";
+		String code = ast.generateCode("",-1,-1,null,0);
+		System.out.println(code);
+		/*
 		HashMap<String,ArrayList<Integer>> mapStatesBranches = null ;
 		HashMap<String,ArrayList<Integer>> mapStates = null ;
 		ArrayList<String> roles = null;
@@ -41,6 +43,7 @@ public class Main {
 		BufferedWriter output = new BufferedWriter(new FileWriter(file));
 	    output.write(toRet);
 	    output.close();
+	    */
 	}
-
+	
 }
