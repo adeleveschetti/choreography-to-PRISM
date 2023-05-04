@@ -35,30 +35,25 @@ public class ProgramNode implements Node{
 	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex,  ArrayList<Node> modules, int state) {
+	public String generateCode(String code, int index, int totIndex,  ArrayList<Node> modules) {
 		totIndex = max;
 		if(preamble!=null) {
-			code = preamble.generateCode(code,1,totIndex,this.modules, state);
+			code = preamble.generateCode(code,1,totIndex,this.modules);
 		}
 		for(Node el : this.modules) {
-			code = el.generateCode(code,1,totIndex,this.modules, state);
+			code = el.generateCode(code,1,totIndex,this.modules);
 		}
 		Functions fun = new Functions();
 		for(Pair<Node,Node> pair : protocols) {
-			if(pair.getSecond() instanceof BranchNode) {
-				for(int i=1;i<=totIndex; i++) {
-					int stateRec = -1;
-					for(Node mod : this.modules) {
-						if(mod.toPrint().equals(Functions.changeIndex(((BranchNode) pair.getSecond()).getRoleA(),i,totIndex))) {
-							stateRec = ((ModuleNode) mod).getState();
-							((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
-						}
+			for(int i=1;i<=totIndex; i++) {
+				for(Node mod : this.modules) {
+					if(mod.toPrint().equals(Functions.changeIndex(((BranchNode) pair.getSecond()).getRoleA(),i,totIndex))) {
+						((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
 					}
-					code = pair.getSecond().generateCode(code,i,totIndex,this.modules,stateRec);
 				}
+				code = pair.getSecond().generateCode(code,i,totIndex,this.modules);
 			}
 		}
-		
 		return code;
 	}
 

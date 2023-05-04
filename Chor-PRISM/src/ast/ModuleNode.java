@@ -28,13 +28,14 @@ public class ModuleNode implements Node{
 	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, int state) {
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules) {
 		String toRet = "module " + name + "\n";
 		if(vars!=null) {
 			for(String el : vars) {
 				toRet = toRet + el + "\n";
 			}
 		}
+		toRet = toRet +  name + " : [0..10] init 0;\n";
 		toRet = toRet + "\nendmodule\n\n";
 		return code + "\n" + toRet;
 	}

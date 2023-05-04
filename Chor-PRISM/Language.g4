@@ -8,13 +8,19 @@ protocol : (preamble)? (varDef)? SEMICOLON (roleDef)+ (protocolID ASSIGN stateme
 
 protocolID : ID ;
 
-statement : branch | ifThenElse | rec  ;
+statement : branch | ifThenElse | rec | internalAction ;
 
-branch : inputRole=role FROM outputRole+=role (COMMA outputRole+=role)* COLON (BRANCH? SLPAR rateValues+=rate SRPAR updates DOT statement)* ;
+branch : inputRole=role FROM outputRole+=role (COMMA outputRole+=role)* COLON (branchStat* | commStat );
+
+branchStat : (BRANCH SLPAR rateValues+=rate SRPAR updates DOT statement) ;
+
+commStat : (SLPAR rateValues+=rate SRPAR updates DOT statement) ;
 
 ifThenElse : IF cond AT role THEN CLPAR thenStat=statement CRPAR (ELSE CLPAR elseStat=statement CRPAR)*;
 
 rec : protocolID ;
+
+internalAction : SLPAR rate SRPAR message AT role DOT statement;
 
 updates : (SQLPAR (prec=actions) SQRPAR)? upds=message ;
 

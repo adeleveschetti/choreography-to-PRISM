@@ -84,7 +84,7 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 		}
 		return new ProgramNode(valueVar,modules,preamble,prot);
 	}
-	
+
 	@Override 
 	public Node visitPreamble(PreambleContext ctx){
 		ArrayList<String> vars = new ArrayList<String>();
@@ -93,7 +93,7 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 		}
 		return new PreambleNode(vars);
 	}
-	
+
 	@Override
 	public Node visitStatement(StatementContext ctx) {
 		if(ctx.branch()!=null) {
@@ -102,15 +102,28 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 		else if(ctx.ifThenElse()!=null) {
 			return visitIfThenElse(ctx.ifThenElse());
 		}
-		return visitRec(ctx.rec());
+		else if(ctx.rec()!=null) {
+			return visitRec(ctx.rec());
+		}
+		return visitInternalAction(ctx.internalAction());
 	}
-	
+
 	@Override 
 	public Node visitRec(RecContext ctx) {
 		return new RecNode(ctx.protocolID().ID().getText());
 	}
 
-	
+
+	@Override 
+	public Node visitInternalAction(InternalActionContext ctx) {
+		String role = visitRole(ctx.role()).toPrint();
+		String rate = ctx.rate().DOUBLE_STRING().getText().substring(1,ctx.rate().DOUBLE_STRING().getText().length()-1);
+		Node upds = visitMessage(ctx.message());
+		Node stats = visitStatement(ctx.statement());
+		return new InternalActionNode(rate,role,upds,stats);
+	}
+
+
 	@Override 
 	public Node visitBranch(BranchContext ctx) {
 		String role = visitRole(ctx.inputRole).toPrint();
@@ -119,99 +132,114 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 			rolesOut.add(visitRole(el).toPrint());
 		}
 		ArrayList<Node> stats = new ArrayList<Node>();
-		for(StatementContext el : ctx.statement()) {
-			stats.add(visitStatement(el));
-		}
 		ArrayList<String> rates = new ArrayList<String>();
-		for(RateContext el : ctx.rateValues) {
-			rates.add(el.DOUBLE_STRING().getText().substring(1,el.DOUBLE_STRING().getText().length()-1));
-		}
 		ArrayList<Node> messages = new ArrayList<Node>();
 		ArrayList<Node> precs = new ArrayList<Node>();
-		for(UpdatesContext el : ctx.updates()) {
-			if(el.prec!=null) {
-				precs.add(visitActions(el.prec));
+		boolean isBranch = false;
+
+		if(ctx.branchStat().size()>0) {
+			for(BranchStatContext el : ctx.branchStat()) {
+				stats.add(visitStatement(el.statement()));
+				rates.add(el.rate().DOUBLE_STRING().getText().substring(1,el.rate().DOUBLE_STRING().getText().length()-1));
+				if(el.updates().prec!=null) {
+					precs.add(visitActions(el.updates().prec));
+				}
+				if(el.updates().upds != null) {
+					messages.add(visitMessage(el.updates().upds));
+				}	
+				isBranch = el.BRANCH()!=null;
 			}
-			if(el.upds != null) {
-				messages.add(visitMessage(el.upds));
-			}
-		}
-		return new BranchNode(role,rolesOut,ctx.BRANCH().size()>0,rates,precs,messages,stats);
-	}
-	
-	@Override
-	public Node visitMessage(MessageContext ctx) {
-		Node actions = null;
-		if(ctx.actions()!=null) {
-			actions = visitActions(ctx.actions());
-		}
-		ArrayList<Node> loops = null;
-		if(ctx.loop()!=null && ctx.loop().size()>0) {
-			loops = new ArrayList<Node>();
-			for(LoopContext el : ctx.loop()) {
-				loops.add(visitLoop(el));
-			}
-		}
-		String message = null;
-		boolean beforeAction = false;
-		if(ctx.first!=null) {
-			beforeAction = true;
-			message = ctx.first.getText().substring(1,ctx.first.getText().length()-1);
-		}
-		if(ctx.second!=null) {
-			message = ctx.second.getText().substring(1,ctx.second.getText().length()-1);
-		}
-		return new MessageNode(actions,loops,message,beforeAction);
-	}
-	
-	@Override
-	public Node visitLoop(LoopContext ctx) {
-		String role = "";
-		if(ctx.role().roleIndex()!=null) {
-			role = ctx.role().roleIndex().ID().getText()+"["+ctx.role().roleIndex().index().CHAR().getText()+"]";
+			return new BranchNode(role,rolesOut,isBranch,rates,precs,messages,stats);
 		}
 		else {
-			role = ctx.role().roleGroup().ID().getText();
+
+			stats.add(visitStatement(ctx.commStat().statement()));
+			rates.add(ctx.commStat().rate().DOUBLE_STRING().getText().substring(1,ctx.commStat().rate().DOUBLE_STRING().getText().length()-1));
+			if(ctx.commStat().updates().prec!=null) {
+				precs.add(visitActions(ctx.commStat().updates().prec));
+			}
+			if(ctx.commStat().updates().upds != null) {
+				messages.add(visitMessage(ctx.commStat().updates().upds));
+			}	
 		}
-		String message =  ctx.DOUBLE_STRING().getText().substring(1,ctx.DOUBLE_STRING().getText().length()-1);
-		
-		return new LoopNode(message,ctx.indexIteration.CHAR().getText(),ctx.upperBound.CHAR().getText(),ctx.op.getText(),role);
+		return new BranchNode(role,rolesOut,false,rates,precs,messages,stats);
 	}
-	
-	
-	@Override
-	public Node visitActions(ActionsContext ctx) {
-		
-		String actionA = ctx.action.get(0).getText().substring(1,ctx.action.get(0).getText().length());
-		String actionB = null;
-		if(ctx.action.size()>1) {
-			actionB = ctx.action.get(1).getText().substring(1,ctx.action.get(1).getText().length()-1);
+
+
+
+@Override
+public Node visitMessage(MessageContext ctx) {
+	Node actions = null;
+	if(ctx.actions()!=null) {
+		actions = visitActions(ctx.actions());
+	}
+	ArrayList<Node> loops = null;
+	if(ctx.loop()!=null && ctx.loop().size()>0) {
+		loops = new ArrayList<Node>();
+		for(LoopContext el : ctx.loop()) {
+			loops.add(visitLoop(el));
 		}
-		return new ActionNode(actionA,actionB);
 	}
-	
-	@Override
-	public Node visitRole(RoleContext ctx) {
-		String role = "" ;
-		if(ctx.roleGroup()!=null) {
-			role = ctx.roleGroup().ID().getText();
+	String message = null;
+	boolean beforeAction = false;
+	if(ctx.first!=null) {
+		beforeAction = true;
+		message = ctx.first.getText().substring(1,ctx.first.getText().length()-1);
+	}
+	if(ctx.second!=null) {
+		message = ctx.second.getText().substring(1,ctx.second.getText().length()-1);
+	}
+	return new MessageNode(actions,loops,message,beforeAction);
+}
+
+@Override
+public Node visitLoop(LoopContext ctx) {
+	String role = "";
+	if(ctx.role().roleIndex()!=null) {
+		role = ctx.role().roleIndex().ID().getText()+"["+ctx.role().roleIndex().index().CHAR().getText()+"]";
+	}
+	else {
+		role = ctx.role().roleGroup().ID().getText();
+	}
+	String message =  ctx.DOUBLE_STRING().getText().substring(1,ctx.DOUBLE_STRING().getText().length()-1);
+
+	return new LoopNode(message,ctx.indexIteration.CHAR().getText(),ctx.upperBound.CHAR().getText(),ctx.op.getText(),role);
+}
+
+
+@Override
+public Node visitActions(ActionsContext ctx) {
+
+	String actionA = ctx.action.get(0).getText().substring(1,ctx.action.get(0).getText().length()-1);
+	String actionB = null;
+	if(ctx.action.size()>1) {
+		actionB = ctx.action.get(1).getText().substring(1,ctx.action.get(1).getText().length()-1);
+	}
+	return new ActionNode(actionA,actionB);
+}
+
+@Override
+public Node visitRole(RoleContext ctx) {
+	String role = "" ;
+	if(ctx.roleGroup()!=null) {
+		role = ctx.roleGroup().ID().getText();
+	}
+	else {
+		if(ctx.roleIndex().BRANCH()==null) {
+			role = ctx.roleIndex().ID().getText()+"["+ctx.roleIndex().index().CHAR().getText()+"]";
 		}
 		else {
-			if(ctx.roleIndex().BRANCH()==null) {
-				role = ctx.roleIndex().ID().getText()+"["+ctx.roleIndex().index().CHAR().getText()+"]";
-			}
-			else {
-				role = ctx.roleIndex().ID().getText()+"["+ctx.roleIndex().index().CHAR().getText()+"+"+ctx.roleIndex().INTEGER().getText()+"]";
-			}
+			role = ctx.roleIndex().ID().getText()+"["+ctx.roleIndex().index().CHAR().getText()+"+"+ctx.roleIndex().INTEGER().getText()+"]";
 		}
-		return new RoleNode(role);
 	}
-	
-	public Node visitIfThenElse(IfThenElseContext ctx) {
-		Node elseStatement = null;
-		if(ctx.elseStat!=null) {
-			elseStatement = visitStatement(ctx.elseStat);
-		}
-		return new IfThenElseNode(ctx.role().getText(),ctx.cond().getText().substring(1,ctx.cond().getText().length()-1),visitStatement(ctx.thenStat),elseStatement);
+	return new RoleNode(role);
+}
+
+public Node visitIfThenElse(IfThenElseContext ctx) {
+	Node elseStatement = null;
+	if(ctx.elseStat!=null) {
+		elseStatement = visitStatement(ctx.elseStat);
 	}
+	return new IfThenElseNode(ctx.role().getText(),ctx.cond().getText().substring(1,ctx.cond().getText().length()-1),visitStatement(ctx.thenStat),elseStatement);
+}
 }

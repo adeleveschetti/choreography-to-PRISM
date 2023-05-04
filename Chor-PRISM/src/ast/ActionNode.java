@@ -17,7 +17,10 @@ public class ActionNode implements Node{
 	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, int state) {
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules) {
+		if(actionB==null) {
+			return actionA;
+		}
 		return actionA+"&&"+actionB;
 	}
 }

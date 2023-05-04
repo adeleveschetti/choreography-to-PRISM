@@ -5,7 +5,7 @@ preamble
 "const k;"
 "const T=k*1000;"
 
-"const double rb ;"
+"const double r = 1;"
 "const double mR = 1/600;"
 "const double lR = 1-mR;"
 
@@ -31,11 +31,20 @@ Network : "set1 : list [];", "set2 : list [];", "set3 : list [];" , "set4 : list
 	
 
 PoW := Hasher[i] -> Miner[i] :
-+["mR*hR[i]"]  " "&&"(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" . if "!isEmpty(set[i])"@Miner[i] then { 
-  		Miner[i] -> Network  : ["r[i]*1"] "(setMiner[i]'=addBlockSet(setMiner[i],b[i]))"&&foreach(k != i) "(set[k]'=addBlockSet(set[k],b[i]))" @Network . PoW 
- }
- else { Pow}
- +["lR*hR[i]"] " " && " " .PoW 
++["mR*hR[i]"]  " "&&"(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" . 
+		Miner[i] -> Network : ["rB*1"] "(B[i]'=addBlock(B[i],b[i]))" && foreach(k != i) "(set[k]'=addBlockSet(set[k],b[i]))" @Network .PoW
+ +["lR*hR[i]"] " " && " " .
+ 				if "!isEmpty(set[i])"@Miner[i] then { 
+  						["r"] "(b[i]'=extractBlock(set[i]))"@Miner[i] . Miner[i] -> Network : ["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . PoW 
+ 				}
+ 				else{
+ 					if "canBeInserted(B[i],b[i])"@Miner[i] then { 
+ 						["1"] "(B[i]'=addBlock(B[i],b[i]))&(setMiner[i]'=removeBlock(setMiner[i],b[i]))"@Miner[i] . Pow 
+ 					}
+ 					else{
+ 						PoW
+}
+}
   
-
-	
+  
+ 

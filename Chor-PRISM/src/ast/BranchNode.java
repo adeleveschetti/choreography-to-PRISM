@@ -55,7 +55,7 @@ public class BranchNode implements Node{
 
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, int state) {
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules) {
 		Functions funs = new Functions();
 		String roleTmp = funs.changeIndex(role,index,totIndex);
 		ArrayList<String> outRolesTmp = new ArrayList<String>();
@@ -92,7 +92,7 @@ public class BranchNode implements Node{
 			for(Node el : modules) {
 				if(el.toPrint().equals(roleTmp)) {
 					stateA = ((ModuleNode) el).getState();
-					if(!branch && (statements!=null && !(statements.get(0) instanceof RecNode))) {
+					if(!branch && (statements!=null && !(statements.get(i) instanceof RecNode))) {
 						((ModuleNode) el).setState(stateA+1);
 					}
 				}
@@ -102,10 +102,10 @@ public class BranchNode implements Node{
 			for(int ii=0; ii<outRole.size(); ii++) {
 				toRetRoleB.add("");
 			}
+			String toFind = "-> ;";
 
-			if(code.contains("-> ;")) {
-
-				int indexState = code.indexOf("-> ;");
+			if(code.contains(toFind)) {
+				int indexState = code.indexOf(toFind);
 				int indexStart = code.indexOf("module " + roleTmp);
 				int whereToAdd = -1;
 				whereToAdd = code.indexOf("endmodule",indexStart);
@@ -146,120 +146,125 @@ public class BranchNode implements Node{
 
 
 			int indexRate = rates.get(i).indexOf("*");
-			int indexUp = updates.get(i).generateCode("",index,totIndex,modules, state).indexOf("&&");
+			int indexUp = updates.get(i).generateCode("",index,totIndex,modules).indexOf("&&");
+
 			if(preconditions.size()==rates.size()) {
-				int indexPrec = preconditions.get(i).generateCode("",index,totIndex,modules, state).indexOf("&&");
-				String precA = preconditions.get(i).generateCode("",index,totIndex,modules, state).substring(0,indexPrec);
+				int indexPrec = preconditions.get(i).generateCode("",index,totIndex,modules).indexOf("&&");
+				String precA = preconditions.get(i).generateCode("",index,totIndex,modules).substring(0,indexPrec);
 				toRetRoleA = toRetRoleA +  Functions.returnStringNewIndex(precA,index,totIndex);
 				for(int j=0; j<outRole.size(); j++) {
-					String precCode = preconditions.get(i).generateCode("",index,totIndex,modules, state).substring(indexPrec+2,preconditions.get(i).generateCode("",index,totIndex,modules, state).length());
+					String precCode = preconditions.get(i).generateCode("",index,totIndex,modules).substring(indexPrec+2,preconditions.get(i).generateCode("",index,totIndex,modules).length());
 					toRetRoleB.set(j,Functions.returnStringNewIndex(precCode,j+1,totIndex));
 				}
 			}
-			String upA = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules, state).substring(0,indexUp-1),index,totIndex);
+			String upA = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules).substring(0,indexUp),index,totIndex);
 			toRetRoleA = toRetRoleA + " -> " + Functions.returnStringNewIndex(rates.get(i).substring(0,indexRate),index,totIndex) + " : " + upA;
-
 			if(statements!=null) {
-				if(statements.get(0) instanceof RecNode) {
-					toRetRoleA = toRetRoleA + "&(" + roleTmp +"'=" + Integer.toString(state) + "); " ;
+				if(!upA.equals("") && !upA.equals(" ")) {
+					toRetRoleA = toRetRoleA + "&";
+				}
+				if(statements.get(i) instanceof RecNode) {
+					toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + Integer.toString(((RecNode) statements.get(i)).getState()) + "); " ;
 				}
 				else {
-					toRetRoleA = toRetRoleA + "&(" + roleTmp +"'=" + Integer.toString(stateA+i+1) + "); " ;
+					toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + Integer.toString(stateA+1) + "); " ;
 				}
 			}
-
-			for(int j=0; j<outRole.size(); j++) {
-				int stateB = -1;
-				for(Node el : modules) {
-					if(el.toPrint().equals(outRolesTmp.get(j))) {
-						stateB = ((ModuleNode) el).getState();
-						if(!branch && (statements!=null && !(statements.get(0) instanceof RecNode))) {
-							((ModuleNode) el).setState(stateB+1);
+			if(!contained) {
+				for(int j=0; j<outRole.size(); j++) {
+					int stateB = -1;
+					for(Node el : modules) {
+						if(el.toPrint().equals(outRolesTmp.get(j))) {
+							stateB = ((ModuleNode) el).getState();
+							if(!branch && (statements!=null && !(statements.get(i) instanceof RecNode))) {
+								((ModuleNode) el).setState(stateB+1);
+							}
 						}
 					}
-				}
-				String upCode = "";
-				
-				if(!outRole.get(j).contains("[i]") && !outRole.get(j).contains("[i+1]") && (updates.get(i).generateCode("",index,totIndex,modules, state).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules, state).length()).contains("[i]") || updates.get(i).generateCode("",index,totIndex,modules, state).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules, state).length()).contains("[i]"))) {
-					upCode = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules, state).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules, state).length()),index,totIndex);
-				}
-				else {
-					upCode = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules, state).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules, state).length()),j+1,totIndex);
-				}
-				String rateB = Functions.returnStringNewIndex(rates.get(i).substring(indexRate+1,rates.get(i).length()),j+1,totIndex);
-				String toCheck="";
-				if(!ifThen) {
-					toCheck = "["+label+"] (" + outRolesTmp.get(j) +"=" + Integer.toString(stateB) + ") " ;
-				}
-				toCheck = toCheck + toRetRoleB.get(j) + " -> " + rateB + " : " + upCode + "&(" + outRolesTmp.get(j) +"'=" ;
-				if(statements!=null) {
-					if(statements.get(0) instanceof RecNode) {
-						toCheck = toCheck +  Integer.toString(state) + "); ";
+					String upCode = "";
+
+					if(!outRole.get(j).contains("[i]") && !outRole.get(j).contains("[i+1]") && (updates.get(i).generateCode("",index,totIndex,modules).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules).length()).contains("[i]") || updates.get(i).generateCode("",index,totIndex,modules).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules).length()).contains("[i+1]"))) {
+						upCode = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules).length()),index,totIndex);
 					}
 					else {
-						toCheck = toCheck +  Integer.toString(stateB+i+1) + "); ";
+						upCode = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules).length()),index+j,totIndex);
 					}
+
+					String rateB = Functions.returnStringNewIndex(rates.get(i).substring(indexRate+1,rates.get(i).length()),index+j,totIndex);
+					String toCheck="";
+					if(!ifThen) {
+						toCheck = "["+label+"] (" + outRolesTmp.get(j) +"=" + Integer.toString(stateB) + ") " ;
+					}
+
+					toCheck = toCheck + toRetRoleB.get(j) + " -> " + rateB + " : " + upCode ;
+
+
+					if(!upCode.equals("") && !upCode.equals(" ")) {
+						toCheck = toCheck + "&";
+					}
+					toCheck = toCheck + "(" + outRolesTmp.get(j) +"'=";
+					if(statements!=null) {
+						if(statements.get(i) instanceof RecNode) {
+							toCheck = toCheck +  Integer.toString(((RecNode) statements.get(i)).getState()) + "); ";
+						}
+						else {
+							toCheck = toCheck +  Integer.toString(stateB+i+1) + "); ";
+						}
+					}
+					toRetRoleB.set(j,toCheck);
 				}
-				toRetRoleB.set(j,toCheck);
+				totB.add(toRetRoleB);
 			}
-			totB.add(toRetRoleB);
 			totA.add(toRetRoleA);
+
 		}
 
 		int indexRoleA = code.indexOf("module "+roleTmp);
 		int whereToAdd = code.indexOf("endmodule",indexRoleA);
 		String codeToRet = code.substring(0,whereToAdd) ;
 		for(String el : totA) {
-			codeToRet = codeToRet + "\n" + el;
+			codeToRet = codeToRet + "\n" + el; 
 		}
+
 		codeToRet = codeToRet + "\n" + code.substring(whereToAdd,code.length());
-		for(String el : outRolesTmp) {
-			String codeTmp = codeToRet;
-			int indexRoleB = codeTmp.indexOf("module "+el);
-			whereToAdd = codeTmp.indexOf("endmodule",indexRoleB);
-			codeToRet = codeTmp.substring(0,whereToAdd) ;
-			for(ArrayList<String> list : totB) {
-				for(String el2 : list) {
-					codeToRet = codeToRet + "\n" + el2;
-				}
-			}
-			codeToRet = codeToRet + "\n" + codeTmp.substring(whereToAdd,codeTmp.length());
-
-		}
-
-		if(branch) {
-			for(Node el : modules) {
-				if(el.toPrint().equals(roleTmp)) {
-					((ModuleNode) el).setState(((ModuleNode) el).getState()+1);
-				}
-				for(String el2 : outRolesTmp) {
-					if(el.toPrint().equals(el2)) {
-						((ModuleNode) el).setState(((ModuleNode) el).getState()+1);
+		if(!contained) {
+			for(String el : outRolesTmp) {
+				String codeTmp = codeToRet;
+				int indexRoleB = codeTmp.indexOf("module "+el);
+				whereToAdd = codeTmp.indexOf("endmodule",indexRoleB);
+				codeToRet = codeTmp.substring(0,whereToAdd) ;
+				for(ArrayList<String> list : totB) {
+					for(String el2 : list) {				
+						codeToRet = codeToRet + "\n" + el2;
 					}
 				}
+				codeToRet = codeToRet + "\n" + codeTmp.substring(whereToAdd,codeTmp.length());
+
 			}
 		}
 
-		/*
-		for(String el : totA) {
-			System.out.println(el);
-			System.out.println("========");
+		for(Node el : modules) {
+			if(el.toPrint().equals(roleTmp)) {
+				((ModuleNode) el).setState(((ModuleNode) el).getState()+1);
+
+			}
+
+			for(String el2 : outRolesTmp) {
+				if(el.toPrint().equals(el2) && !contained) {
+					((ModuleNode) el).setState(((ModuleNode) el).getState()+1);
+
+				}
+			}
 		}
 
-		for(ArrayList<String> list : totB) {
-			for(String el : list) {
-				System.out.println(el);
-				System.out.println("========");
-			}
-		}*/
+
 		if(statements!=null) {
 			for(Node stat : statements) {
 				if(!(stat instanceof RecNode)) {
-					codeToRet = stat.generateCode(codeToRet,index,totIndex,modules, state);
+					codeToRet = stat.generateCode(codeToRet,index,totIndex,modules);
 				}
 			}
 		}
-		//System.out.println("sono qua! " + codeToRet);
 		return codeToRet;
 	}
 

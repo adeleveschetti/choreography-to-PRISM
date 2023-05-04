@@ -1,0 +1,98 @@
+ctmc
+const int N=5;
+const double mu= 1;
+const double gamma= 200;
+const double lambda= mu/N;
+
+module Server
+s : [1..5];
+a : [0..1];
+Server : [0..10] init 0;
+
+
+[QQOOJ] (Server=0)  -> gamma : (s1'=s1+1)&(Server'=0); 
+[ZPDIS] (Server=0)  -> gamma : (a'=1)&(Server'=2); 
+
+[KIBEX] (Server=1)  -> mu : (s'=s+1)&(a'=0)&(Server'=0); 
+
+[XGVUS] (Server=1)  -> gamma : (s2'=s2+1)&(Server'=1); 
+[LOIAC] (Server=1)  -> gamma : (a'=1)&(Server'=3); 
+
+[QSNIC] (Server=2)  -> mu : (s'=s+1)&(a'=0)&(Server'=1); 
+
+[ULOFK] (Server=2)  -> gamma : (s3'=s3+1)&(Server'=2); 
+[ZFGDL] (Server=2)  -> gamma : (a'=1)&(Server'=4); 
+
+[NBOTP] (Server=3)  -> mu : (s'=s+1)&(a'=0)&(Server'=2); 
+
+[XMBQF] (Server=3)  -> gamma : (s4'=s4+1)&(Server'=3); 
+[GZOYX] (Server=3)  -> gamma : (a'=1)&(Server'=5); 
+
+[BEHEW] (Server=4)  -> mu : (s'=s+1)&(a'=0)&(Server'=3); 
+
+[JMLHQ] (Server=4)  -> gamma : (s5'=s5+1)&(Server'=4); 
+[HAPBZ] (Server=4)  -> gamma : (a'=1)&(Server'=6); 
+
+[DJXRY] (Server=5)  -> mu : (s'=s+1)&(a'=0)&(Server'=4); 
+endmodule
+
+
+module Station1
+s1 : [0..1];
+Station1 : [0..10] init 0;
+
+
+[QQOOJ] (Station1=0)  -> 1 : (s1'=0)&(Station1'=0); 
+[ZPDIS] (Station1=0)  -> lambda : (s1'=1)&(Station1'=2); 
+
+[KIBEX] (Station1=1)  -> 1 : (s1'=0)&(Station1'=0); 
+endmodule
+
+
+module Station2
+s2 : [0..1];
+Station2 : [0..10] init 0;
+
+
+[XGVUS] (Station2=0)  -> 1 : (s2'=0)&(Station2'=1); 
+[LOIAC] (Station2=0)  -> lambda : (s2'=1)&(Station2'=2); 
+
+[QSNIC] (Station2=1)  -> 1 : (s2'=0)&(Station2'=1); 
+endmodule
+
+
+module Station3
+s3 : [0..1];
+Station3 : [0..10] init 0;
+
+
+[ULOFK] (Station3=0)  -> 1 : (s3'=0)&(Station3'=2); 
+[ZFGDL] (Station3=0)  -> lambda : (s3'=1)&(Station3'=2); 
+
+[NBOTP] (Station3=1)  -> 1 : (s3'=0)&(Station3'=2); 
+endmodule
+
+
+module Station4
+s4 : [0..1];
+Station4 : [0..10] init 0;
+
+
+[XMBQF] (Station4=0)  -> 1 : (s4'=0)&(Station4'=3); 
+[GZOYX] (Station4=0)  -> lambda : (s4'=1)&(Station4'=2); 
+
+[BEHEW] (Station4=1)  -> 1 : (s4'=0)&(Station4'=3); 
+endmodule
+
+
+module Station5
+s5 : [0..1];
+Station5 : [0..10] init 0;
+
+
+[JMLHQ] (Station5=0)  -> 1 : (s5'=0)&(Station5'=4); 
+[HAPBZ] (Station5=0)  -> lambda : (s5'=1)&(Station5'=2); 
+
+[DJXRY] (Station5=1)  -> 1 : (s5'=0)&(Station5'=4); 
+endmodule
+
