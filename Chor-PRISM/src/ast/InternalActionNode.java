@@ -24,6 +24,10 @@ public class InternalActionNode implements Node{
 		return null;
 	}
 
+	public String getRole() {
+		return role;
+	}
+	
 	@Override
 	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules) {
 		Functions funs = new Functions();

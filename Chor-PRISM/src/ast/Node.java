@@ -7,4 +7,5 @@ public interface Node {
 
 	String toPrint();
 	String generateCode(String code, int index, int totIndex, ArrayList<Node> modules);
+
 }

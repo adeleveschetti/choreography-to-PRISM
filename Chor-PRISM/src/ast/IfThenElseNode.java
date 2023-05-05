@@ -25,6 +25,10 @@ public class IfThenElseNode implements Node {
 		return null;
 	}
 
+	public String getRole() {
+		return role;
+	}
+	
 	@Override
 	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules) {
 		Functions funs = new Functions();
@@ -36,6 +40,7 @@ public class IfThenElseNode implements Node {
 				stateModule = ((ModuleNode) el).getState();
 			}
 		}
+
 		String toRet = "[] (" + roleTmp +"=" + Integer.toString(stateModule) + ")&" + Functions.returnStringNewIndex(cond,index,totIndex) + " -> ;" ;
 		if(thenStat instanceof RecNode) {
 			toRet = toRet.substring(0,toRet.length()-1) + "(" + roleTmp +"'=" + Integer.toString(((RecNode) thenStat).getState()) + ");";

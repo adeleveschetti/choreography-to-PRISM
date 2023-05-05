@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import lib.Functions;
+import lib.Pair;
 
 public class BranchNode implements Node{
 
@@ -59,6 +60,7 @@ public class BranchNode implements Node{
 		Functions funs = new Functions();
 		String roleTmp = funs.changeIndex(role,index,totIndex);
 		ArrayList<String> outRolesTmp = new ArrayList<String>();
+
 		for(String el : outRole) {
 			outRolesTmp.add(Functions.changeIndex(el,index,totIndex));
 		}
@@ -75,7 +77,6 @@ public class BranchNode implements Node{
 		}
 
 		for(int i=0; i<rates.size(); i++) {
-
 			if(!contained) {
 
 				String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -157,26 +158,52 @@ public class BranchNode implements Node{
 					toRetRoleB.set(j,Functions.returnStringNewIndex(precCode,j+1,totIndex));
 				}
 			}
+
 			String upA = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules).substring(0,indexUp),index,totIndex);
 			toRetRoleA = toRetRoleA + " -> " + Functions.returnStringNewIndex(rates.get(i).substring(0,indexRate),index,totIndex) + " : " + upA;
 			if(statements!=null) {
+				boolean continues = false;
+				if(statements.get(i) instanceof BranchNode) {
+					continues = Functions.returnStringNewIndex(((BranchNode) statements.get(i)).getRoleA(),index,totIndex).equals(roleTmp);
+				}
+				else if(statements.get(i) instanceof IfThenElseNode) {
+					continues = Functions.returnStringNewIndex(((IfThenElseNode) statements.get(i)).getRole(),index,totIndex).equals(roleTmp);
+				}
+				else if(statements.get(i) instanceof InternalActionNode) {
+					continues = Functions.returnStringNewIndex(((InternalActionNode) statements.get(i)).getRole(),index,totIndex).equals(roleTmp);
+				}
+
 				if(!upA.equals("") && !upA.equals(" ")) {
 					toRetRoleA = toRetRoleA + "&";
 				}
+
 				if(statements.get(i) instanceof RecNode) {
 					toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + Integer.toString(((RecNode) statements.get(i)).getState()) + "); " ;
 				}
+				else if(!continues) {
+					toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + Integer.toString(0) + "); ";
+				}
 				else {
-					toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + Integer.toString(stateA+1) + "); " ;
+					toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + Integer.toString(stateA+i+1) + "); " ;
 				}
 			}
 			if(!contained) {
 				for(int j=0; j<outRole.size(); j++) {
 					int stateB = -1;
 					for(Node el : modules) {
+						boolean continuesB = false;
+						if((statements!=null && (statements.get(i) instanceof BranchNode))) {
+							continuesB = Functions.returnStringNewIndex(((BranchNode) statements.get(i)).getRoleA(),index+j,totIndex).equals(outRolesTmp.get(j));
+						}
+						else if((statements!=null && (statements.get(i) instanceof IfThenElseNode))) {
+							continuesB = Functions.returnStringNewIndex(((IfThenElseNode) statements.get(i)).getRole(),index+j,totIndex).equals(outRolesTmp.get(j));
+						}
+						else if((statements!=null && (statements.get(i) instanceof InternalActionNode))) {
+							continuesB = Functions.returnStringNewIndex(((InternalActionNode) statements.get(i)).getRole(),index+j,totIndex).equals(outRolesTmp.get(j));
+						}
 						if(el.toPrint().equals(outRolesTmp.get(j))) {
 							stateB = ((ModuleNode) el).getState();
-							if(!branch && (statements!=null && !(statements.get(i) instanceof RecNode))) {
+							if(!branch && (statements!=null && !(statements.get(i) instanceof RecNode)) && continuesB) {
 								((ModuleNode) el).setState(stateB+1);
 							}
 						}
@@ -204,8 +231,22 @@ public class BranchNode implements Node{
 					}
 					toCheck = toCheck + "(" + outRolesTmp.get(j) +"'=";
 					if(statements!=null) {
+						boolean continues = false;
+						if(statements.get(i) instanceof BranchNode) {
+							continues = Functions.returnStringNewIndex(((BranchNode) statements.get(i)).getRoleA(),index+j,totIndex).equals(outRolesTmp.get(j) );
+						}
+						else if(statements.get(i) instanceof IfThenElseNode) {
+							continues = Functions.returnStringNewIndex(((IfThenElseNode) statements.get(i)).getRole(),index+j,totIndex).equals(outRolesTmp.get(j) );
+						}
+						else if(statements.get(i) instanceof InternalActionNode) {
+							continues = Functions.returnStringNewIndex(((InternalActionNode) statements.get(i)).getRole(),index+j,totIndex).equals(outRolesTmp.get(j) );
+						}
+						
 						if(statements.get(i) instanceof RecNode) {
 							toCheck = toCheck +  Integer.toString(((RecNode) statements.get(i)).getState()) + "); ";
+						}
+						else if(!continues) {
+							toCheck = toCheck +  Integer.toString(0) + "); ";
 						}
 						else {
 							toCheck = toCheck +  Integer.toString(stateB+i+1) + "); ";
@@ -215,6 +256,7 @@ public class BranchNode implements Node{
 				}
 				totB.add(toRetRoleB);
 			}
+
 			totA.add(toRetRoleA);
 
 		}
@@ -242,28 +284,67 @@ public class BranchNode implements Node{
 
 			}
 		}
-
+		int stateNext = -1;
+		ArrayList<Pair<Node,Integer>> statesNext = new ArrayList<Pair<Node,Integer>>();
 		for(Node el : modules) {
 			if(el.toPrint().equals(roleTmp)) {
-				((ModuleNode) el).setState(((ModuleNode) el).getState()+1);
-
+				stateNext = ((ModuleNode) el).getState()+1;
 			}
 
 			for(String el2 : outRolesTmp) {
-				if(el.toPrint().equals(el2) && !contained) {
-					((ModuleNode) el).setState(((ModuleNode) el).getState()+1);
-
+				if(el.toPrint().equals(el2) ) {
+					statesNext.add(new Pair(el,((ModuleNode) el).getState()+1));
 				}
 			}
 		}
-
-
 		if(statements!=null) {
+
 			for(Node stat : statements) {
+				boolean continuesA = false;
+				if(stat instanceof BranchNode) {
+					continuesA = Functions.returnStringNewIndex(((BranchNode) stat).getRoleA(),index,totIndex).equals(roleTmp);
+				}
+				else if(stat instanceof IfThenElseNode) {
+					continuesA = Functions.returnStringNewIndex(((IfThenElseNode) stat).getRole(),index,totIndex).equals(roleTmp);
+				}
+				else if(stat instanceof InternalActionNode) {
+					continuesA = Functions.returnStringNewIndex(((InternalActionNode) stat).getRole(),index,totIndex).equals(roleTmp);
+				}
+				for(Node el : modules) {
+					if(el.toPrint().equals(roleTmp) && continuesA) {						
+						((ModuleNode) el).setState(stateNext);
+						stateNext++;
+					}
+
+					for(int j=0; j<outRolesTmp.size(); j++) {
+						boolean continuesB = false;
+						if(stat instanceof BranchNode) {
+							continuesB = Functions.returnStringNewIndex(((BranchNode) stat).getRoleA(),index+j,totIndex).equals(outRolesTmp.get(j));
+						}
+						else if(stat instanceof IfThenElseNode) {
+							continuesB = Functions.returnStringNewIndex(((IfThenElseNode) stat).getRole(),index+j,totIndex).equals(outRolesTmp.get(j));
+						}
+						else if(stat instanceof InternalActionNode) {
+							continuesB = Functions.returnStringNewIndex(((InternalActionNode) stat).getRole(),index+j,totIndex).equals(outRolesTmp.get(j));
+						}
+						if(el.toPrint().equals(outRolesTmp.get(j)) && !contained && continuesB) {
+							for(Pair<Node,Integer> pair : statesNext) {
+								if(pair.getFirst().toPrint().equals(outRolesTmp.get(j))) {
+									((ModuleNode) el).setState(pair.getSecond());
+									pair.setSecond(pair.getSecond() + 1);
+								}
+							}
+
+
+						}
+					}
+				}
+
 				if(!(stat instanceof RecNode)) {
 					codeToRet = stat.generateCode(codeToRet,index,totIndex,modules);
 				}
 			}
+
 		}
 		return codeToRet;
 	}

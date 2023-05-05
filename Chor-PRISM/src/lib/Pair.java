@@ -5,8 +5,8 @@ package lib;
  *  Utitlity class to represent a pair
  */
 public class Pair<K,V> {
-    private final K first;
-    private final V second;
+    private K first;
+    private V second;
 
     /** creates a pair <code>(first, second)</code>
      *
@@ -24,6 +24,14 @@ public class Pair<K,V> {
 
     public V getSecond() {
         return second;
+    }
+    
+    public void setFirst(K _first) {
+    	this.first = _first;
+    }
+    
+    public void setSecond(V _second) {
+    	this.second = _second;
     }
 
     @Override
