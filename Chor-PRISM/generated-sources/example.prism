@@ -19,14 +19,14 @@ setMiner1 : list [];
 Miner1 : [0..10] init 0;
 
 
-[DXZGE] (Miner1=0)  -> hR1 : (b1'=createB(b1,B1,c1))&(c1'=c1+1)&(Miner1'=1); 
-[NSHBZ] (Miner1=0)  -> hR1 :  (Miner1'=2); 
+[HAUBT] (Miner1=0)  -> hR1 : (b1'=createB(b1,B1,c1))&(c1'=c1+1)&(Miner1'=1); 
+[LQMYP] (Miner1=0)  -> hR1 :  (Miner1'=2); 
 
-[PDQJF] (Miner1=1)  -> rB : (B1'=addBlock(B1,b1))&(Miner1'=0); 
+[MFDJJ] (Miner1=1)  -> rB : (B1'=addBlock(B1,b1))&(Miner1'=0); 
 
 [] (Miner1=2)&!isEmpty(set1) -> r : (b1'=extractBlock(set1))&(Miner1'=4); 
 
-[DOPBX] (Miner1=4)  -> 1 : (setMiner1' = addBlockSet(setMiner1 , b1))&(Miner1'=0); 
+[WVHER] (Miner1=4)  -> 1 : (setMiner1' = addBlockSet(setMiner1 , b1))&(Miner1'=0); 
 
 [] (Miner1=2)&!(!isEmpty(set1)) -> 1 : (Miner1'=5); 
 
@@ -44,14 +44,14 @@ setMiner2 : list [];
 Miner2 : [0..10] init 0;
 
 
-[SOVVW] (Miner2=0)  -> hR2 : (b2'=createB(b2,B2,c2))&(c2'=c2+1)&(Miner2'=1); 
-[VOZJK] (Miner2=0)  -> hR2 :  (Miner2'=2); 
+[EMPMO] (Miner2=0)  -> hR2 : (b2'=createB(b2,B2,c2))&(c2'=c2+1)&(Miner2'=1); 
+[VFLET] (Miner2=0)  -> hR2 :  (Miner2'=2); 
 
-[XVDKQ] (Miner2=1)  -> rB : (B2'=addBlock(B2,b2))&(Miner2'=0); 
+[AODVN] (Miner2=1)  -> rB : (B2'=addBlock(B2,b2))&(Miner2'=0); 
 
 [] (Miner2=2)&!isEmpty(set2) -> r : (b2'=extractBlock(set2))&(Miner2'=4); 
 
-[UIJWS] (Miner2=4)  -> 1 : (setMiner2' = addBlockSet(setMiner2 , b2))&(Miner2'=0); 
+[OCKTI] (Miner2=4)  -> 1 : (setMiner2' = addBlockSet(setMiner2 , b2))&(Miner2'=0); 
 
 [] (Miner2=2)&!(!isEmpty(set2)) -> 1 : (Miner2'=5); 
 
@@ -69,14 +69,14 @@ setMiner3 : list [];
 Miner3 : [0..10] init 0;
 
 
-[AWRMV] (Miner3=0)  -> hR3 : (b3'=createB(b3,B3,c3))&(c3'=c3+1)&(Miner3'=1); 
-[GYCDN] (Miner3=0)  -> hR3 :  (Miner3'=2); 
+[XMSKW] (Miner3=0)  -> hR3 : (b3'=createB(b3,B3,c3))&(c3'=c3+1)&(Miner3'=1); 
+[SOKAR] (Miner3=0)  -> hR3 :  (Miner3'=2); 
 
-[IWIXQ] (Miner3=1)  -> rB : (B3'=addBlock(B3,b3))&(Miner3'=0); 
+[ZUKJE] (Miner3=1)  -> rB : (B3'=addBlock(B3,b3))&(Miner3'=0); 
 
 [] (Miner3=2)&!isEmpty(set3) -> r : (b3'=extractBlock(set3))&(Miner3'=4); 
 
-[RGRHR] (Miner3=4)  -> 1 : (setMiner3' = addBlockSet(setMiner3 , b3))&(Miner3'=0); 
+[WIUFI] (Miner3=4)  -> 1 : (setMiner3' = addBlockSet(setMiner3 , b3))&(Miner3'=0); 
 
 [] (Miner3=2)&!(!isEmpty(set3)) -> 1 : (Miner3'=5); 
 
@@ -94,14 +94,14 @@ setMiner4 : list [];
 Miner4 : [0..10] init 0;
 
 
-[VLDQH] (Miner4=0)  -> hR4 : (b4'=createB(b4,B4,c4))&(c4'=c4+1)&(Miner4'=1); 
-[EUCUJ] (Miner4=0)  -> hR4 :  (Miner4'=2); 
+[QIDSN] (Miner4=0)  -> hR4 : (b4'=createB(b4,B4,c4))&(c4'=c4+1)&(Miner4'=1); 
+[XPXEA] (Miner4=0)  -> hR4 :  (Miner4'=2); 
 
-[CXRJK] (Miner4=1)  -> rB : (B4'=addBlock(B4,b4))&(Miner4'=0); 
+[RAROS] (Miner4=1)  -> rB : (B4'=addBlock(B4,b4))&(Miner4'=0); 
 
 [] (Miner4=2)&!isEmpty(set4) -> r : (b4'=extractBlock(set4))&(Miner4'=4); 
 
-[GMMUG] (Miner4=4)  -> 1 : (setMiner4' = addBlockSet(setMiner4 , b4))&(Miner4'=0); 
+[WEBJU] (Miner4=4)  -> 1 : (setMiner4' = addBlockSet(setMiner4 , b4))&(Miner4'=0); 
 
 [] (Miner4=2)&!(!isEmpty(set4)) -> 1 : (Miner4'=5); 
 
@@ -119,21 +119,21 @@ set4 : list [];
 Network : [0..10] init 0;
 
 
-[PDQJF] (Network=0)  -> 1 : (set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
+[MFDJJ] (Network=0)  -> 1 : (set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
 
-[DOPBX] (Network=0)  -> 1 : (set1' = removeBlock(set1,b1))&(Network'=0); 
+[WVHER] (Network=0)  -> 1 : (set1' = removeBlock(set1,b1))&(Network'=0); 
 
-[XVDKQ] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
+[AODVN] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
 
-[UIJWS] (Network=0)  -> 1 : (set2' = removeBlock(set2,b2))&(Network'=0); 
+[OCKTI] (Network=0)  -> 1 : (set2' = removeBlock(set2,b2))&(Network'=0); 
 
-[IWIXQ] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
+[ZUKJE] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
 
-[RGRHR] (Network=0)  -> 1 : (set3' = removeBlock(set3,b3))&(Network'=0); 
+[WIUFI] (Network=0)  -> 1 : (set3' = removeBlock(set3,b3))&(Network'=0); 
 
-[CXRJK] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(Network'=0); 
+[RAROS] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(Network'=0); 
 
-[GMMUG] (Network=0)  -> 1 : (set4' = removeBlock(set4,b4))&(Network'=0); 
+[WEBJU] (Network=0)  -> 1 : (set4' = removeBlock(set4,b4))&(Network'=0); 
 endmodule
 
 
@@ -141,8 +141,8 @@ module Hasher1
 Hasher1 : [0..10] init 0;
 
 
-[DXZGE] (Hasher1=0)  -> mR :  (Hasher1'=0); 
-[NSHBZ] (Hasher1=0)  -> lR :  (Hasher1'=0); 
+[HAUBT] (Hasher1=0)  -> mR :  (Hasher1'=0); 
+[LQMYP] (Hasher1=0)  -> lR :  (Hasher1'=0); 
 endmodule
 
 
@@ -150,8 +150,8 @@ module Hasher2
 Hasher2 : [0..10] init 0;
 
 
-[SOVVW] (Hasher2=0)  -> mR :  (Hasher2'=0); 
-[VOZJK] (Hasher2=0)  -> lR :  (Hasher2'=0); 
+[EMPMO] (Hasher2=0)  -> mR :  (Hasher2'=0); 
+[VFLET] (Hasher2=0)  -> lR :  (Hasher2'=0); 
 endmodule
 
 
@@ -159,8 +159,8 @@ module Hasher3
 Hasher3 : [0..10] init 0;
 
 
-[AWRMV] (Hasher3=0)  -> mR :  (Hasher3'=0); 
-[GYCDN] (Hasher3=0)  -> lR :  (Hasher3'=0); 
+[XMSKW] (Hasher3=0)  -> mR :  (Hasher3'=0); 
+[SOKAR] (Hasher3=0)  -> lR :  (Hasher3'=0); 
 endmodule
 
 
@@ -168,7 +168,7 @@ module Hasher4
 Hasher4 : [0..10] init 0;
 
 
-[VLDQH] (Hasher4=0)  -> mR :  (Hasher4'=0); 
-[EUCUJ] (Hasher4=0)  -> lR :  (Hasher4'=0); 
+[QIDSN] (Hasher4=0)  -> mR :  (Hasher4'=0); 
+[XPXEA] (Hasher4=0)  -> lR :  (Hasher4'=0); 
 endmodule
 

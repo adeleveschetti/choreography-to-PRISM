@@ -180,6 +180,9 @@ public class BranchNode implements Node{
 				if(statements.get(i) instanceof RecNode) {
 					toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + Integer.toString(((RecNode) statements.get(i)).getState()) + "); " ;
 				}
+				else if(statements.get(i) instanceof EndNode) {
+					toRetRoleA = toRetRoleA +";" ;
+				}
 				else if(!continues) {
 					toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + Integer.toString(0) + "); ";
 				}
@@ -244,6 +247,9 @@ public class BranchNode implements Node{
 						
 						if(statements.get(i) instanceof RecNode) {
 							toCheck = toCheck +  Integer.toString(((RecNode) statements.get(i)).getState()) + "); ";
+						}
+						else if(statements.get(i) instanceof EndNode) {
+							toCheck = toCheck +";" ;
 						}
 						else if(!continues) {
 							toCheck = toCheck +  Integer.toString(0) + "); ";
@@ -340,7 +346,7 @@ public class BranchNode implements Node{
 					}
 				}
 
-				if(!(stat instanceof RecNode)) {
+				if(!(stat instanceof RecNode) && !(stat instanceof EndNode)) {
 					codeToRet = stat.generateCode(codeToRet,index,totIndex,modules);
 				}
 			}

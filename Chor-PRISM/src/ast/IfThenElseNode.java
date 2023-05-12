@@ -45,6 +45,9 @@ public class IfThenElseNode implements Node {
 		if(thenStat instanceof RecNode) {
 			toRet = toRet.substring(0,toRet.length()-1) + "(" + roleTmp +"'=" + Integer.toString(((RecNode) thenStat).getState()) + ");";
 		}
+		else if(elseStat instanceof EndNode) {
+			toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(stateModule) + ");";
+		}
 		else if(thenStat instanceof IfThenElseNode) {
 			toRet = toRet.substring(0,toRet.length()-1) + "(" + roleTmp +"'=" + Integer.toString(stateModule+1) + ");";
 		}
@@ -75,6 +78,9 @@ public class IfThenElseNode implements Node {
 		if(elseStat instanceof RecNode) {
 			toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(((RecNode) elseStat).getState()) + ");";
 		}
+		else if(elseStat instanceof EndNode) {
+			toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(newStateModule) + ");";
+		}
 		else if(!(elseStat instanceof InternalActionNode)) {
 			toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(newStateModule+1) + "); ";
 			for(Node el : modules) {
@@ -89,7 +95,7 @@ public class IfThenElseNode implements Node {
 		String codeToRetElse = codeToRet.substring(0,whereToAdd) ;
 		codeToRetElse = codeToRetElse + "\n" + toRet;
 		codeToRetElse = codeToRetElse + "\n" + codeToRet.substring(whereToAdd,codeToRet.length());
-		if(!(elseStat instanceof RecNode)) {
+		if(!(elseStat instanceof RecNode) && !(elseStat instanceof EndNode)) {
 			codeToRetElse = elseStat.generateCode(codeToRetElse,index,totIndex,modules);
 		}
 		return codeToRetElse;

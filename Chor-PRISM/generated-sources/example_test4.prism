@@ -1,0 +1,39 @@
+ 
+
+module Network2
+Network2 : [0..10] init 0;
+
+
+[ZDSEN] (Network2=0)  -> 1 :  (Network2'=1); 
+[PWXVJ] (Network2=0)  -> 1 :  (Network2'=2); 
+
+[UJDAM] (Network2=1)  -> 1 :  (Network2'=0); 
+
+[EDYAG] (Network2=2)  -> 1 :  (Network2'=0); 
+endmodule
+
+
+module Network3
+Network3 : [0..10] init 0;
+
+
+[UJDAM] (Network3=0)  -> 1 :  (Network3'=0); 
+endmodule
+
+
+module Network4
+Network4 : [0..10] init 0;
+
+
+[EDYAG] (Network4=0)  -> 1 :  (Network4'=0); 
+endmodule
+
+
+module Network1
+Network1 : [0..10] init 0;
+
+
+[ZDSEN] (Network1=0)  -> 1 :  (Network1'=0); 
+[PWXVJ] (Network1=0)  -> 1 :  (Network1'=0); 
+endmodule
+
