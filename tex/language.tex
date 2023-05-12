@@ -5,7 +5,7 @@
 
 \begin{displaymath}
   \begin{array}{lll}
-    \text{(Chor)}  \quad & C \ ::=\ & \{\role p_i\}_{i\in I}\oplus\{[\lambda_j] x_j=E_j: C_j\}_{j\in J}\ \mid\
+    \text{(Chor)}  \quad & C \ ::=\ & \role p\longrightarrow\{\role p_i\}_{i\in I}\oplus\{[\lambda_j] x_j=E_j: C_j\}_{j\in J}\ \mid\
     \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2 \ \mid\ X\ \mid\ \CEnd\\\\
     \text{(Expressions)}\quad & E \ ::=\ & f(\tilde E)\quad\mid\quad x\\\\
     \text{(Rates)}\quad       & \lambda\in\mathbb R
@@ -55,6 +55,19 @@
     \sigma : X \rightarrow V
   \end{array}
 \end{displaymath}
+
+
+
+\mypar{Mapping Choreographies to PRISM.} We need to run some standard
+static checks because, since there is branching, some terms may not be
+projectable.
+
+
+$f: C\rightarrow \mathcal R\mapsto F$
+
+$f(\role p\longrightarrow\{\role p_i\}_{i\in I}\oplus\{[\lambda_j]
+x_j=E_j: C_j\}_{j\in J}) =???$
+
 
 %%% Local Variables: 
 %%% mode: latex
