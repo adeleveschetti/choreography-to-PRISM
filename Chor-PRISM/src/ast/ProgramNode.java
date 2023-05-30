@@ -35,13 +35,13 @@ public class ProgramNode implements Node{
 	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex,  ArrayList<Node> modules) {
+	public String generateCode(String code, int index, int totIndex,  ArrayList<Node> modules, ArrayList<String> labels) {
 		totIndex = max;
 		if(preamble!=null) {
-			code = preamble.generateCode(code,1,totIndex,this.modules);
+			code = preamble.generateCode(code,1,totIndex,this.modules,labels);
 		}
 		for(Node el : this.modules) {
-			code = el.generateCode(code,1,totIndex,this.modules);
+			code = el.generateCode(code,1,totIndex,this.modules,labels);
 		}
 		Functions fun = new Functions();
 		for(Pair<Node,Node> pair : protocols) {
@@ -51,8 +51,11 @@ public class ProgramNode implements Node{
 						((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
 					}
 				}
-				code = pair.getSecond().generateCode(code,i,totIndex,this.modules);
+				code = pair.getSecond().generateCode(code,i,totIndex,this.modules,labels);
 			}
+		}
+		for(Node el : this.modules) {
+			code = ((ModuleNode) el).addStateVariable(code);
 		}
 		return code;
 	}

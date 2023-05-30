@@ -17,7 +17,7 @@ public class ActionNode implements Node{
 	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules) {
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels) {
 		if(actionB==null) {
 			return actionA;
 		}

@@ -2,22 +2,20 @@ package ast;
 
 import java.util.ArrayList;
 
-public class RoleNode implements Node{
+public class EndNode implements Node {
 
-	private String name;
+	public EndNode() {}
 	
-	public RoleNode(String _name) {
-		name = _name;
-	}
-
 	@Override
 	public String toPrint() {
-		return name;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels) {
-		return code + name;
+		// TODO Auto-generated method stub
+		return null;
 	}
-	
+
 }

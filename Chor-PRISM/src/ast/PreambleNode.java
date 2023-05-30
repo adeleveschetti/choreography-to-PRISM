@@ -23,7 +23,7 @@ public class PreambleNode implements Node {
 	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules) {
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels) {
 		for(String el : vars) {
 			code = code + el.substring(1,el.length()-1) + "\n";
 		}

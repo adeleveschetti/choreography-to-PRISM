@@ -105,6 +105,9 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 		else if(ctx.rec()!=null) {
 			return visitRec(ctx.rec());
 		}
+		else if(ctx.end()!=null) {
+			return new EndNode();
+		}
 		return visitInternalAction(ctx.internalAction());
 	}
 

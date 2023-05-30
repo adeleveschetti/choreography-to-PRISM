@@ -1,0 +1,16 @@
+preamble
+
+" "
+
+endpreamble
+
+n = 1;
+Network1 -> ;
+Network2 -> ;
+Network3 -> ;
+Network4 -> ;
+
+Test :=
+	Network1 -> Network2 :
+	["1*1"]  "x1'=1"&&"x2'=1" . Network3 -> Network4 :+["1*1"]  "x3'=2"&&"x4'=2".Test
+													+["1*1"]  "x3'=1"&&"x4'=1".Test

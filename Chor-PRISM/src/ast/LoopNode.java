@@ -26,7 +26,7 @@ public class LoopNode implements Node{
 	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules) {
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels) {
 		String toRet = "";
 		Functions funs = new Functions();
 		if(op.equals("!=")) {
