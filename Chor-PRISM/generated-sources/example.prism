@@ -12,21 +12,21 @@ const double rB = 1/12.6;
 const int N = 100;
 
 module Miner1
-b1 : block {m1,0;genesis,0} ;
+Miner1 : [0..7] init 0;
+1 : block {m1,0;genesis,0} ;
 B1 : blockchain [{genesis,0;genesis,0}];
 c1 : [0..N] init 0;
 setMiner1 : list [];
-Miner1 : [0..10] init 0;
 
 
-[HAUBT] (Miner1=0)  -> hR1 : (b1'=createB(b1,B1,c1))&(c1'=c1+1)&(Miner1'=1); 
-[LQMYP] (Miner1=0)  -> hR1 :  (Miner1'=2); 
+[OVYWN] (Miner1=0)  -> hR1 : (b1'=createB(b1,B1,c1))&(c1'=c1+1)&(Miner1'=1); 
+[QZSGT] (Miner1=0)  -> hR1 :  (Miner1'=2); 
 
-[MFDJJ] (Miner1=1)  -> rB : (B1'=addBlock(B1,b1))&(Miner1'=0); 
+[LLVDK] (Miner1=1)  -> rB : (B1'=addBlock(B1,b1))&(Miner1'=0); 
 
 [] (Miner1=2)&!isEmpty(set1) -> r : (b1'=extractBlock(set1))&(Miner1'=4); 
 
-[WVHER] (Miner1=4)  -> 1 : (setMiner1' = addBlockSet(setMiner1 , b1))&(Miner1'=0); 
+[XFGTD] (Miner1=4)  -> 1 : (setMiner1' = addBlockSet(setMiner1 , b1))&(Miner1'=0); 
 
 [] (Miner1=2)&!(!isEmpty(set1)) -> 1 : (Miner1'=5); 
 
@@ -37,21 +37,21 @@ endmodule
 
 
 module Miner2
-b2 : block {m2,0;genesis,0} ;
+Miner2 : [0..7] init 0;
+2 : block {m2,0;genesis,0} ;
 B2 : blockchain [{genesis,0;genesis,0}];
 c2 : [0..N] init 0;
 setMiner2 : list [];
-Miner2 : [0..10] init 0;
 
 
-[EMPMO] (Miner2=0)  -> hR2 : (b2'=createB(b2,B2,c2))&(c2'=c2+1)&(Miner2'=1); 
-[VFLET] (Miner2=0)  -> hR2 :  (Miner2'=2); 
+[AYANL] (Miner2=0)  -> hR2 : (b2'=createB(b2,B2,c2))&(c2'=c2+1)&(Miner2'=1); 
+[UZEJD] (Miner2=0)  -> hR2 :  (Miner2'=2); 
 
-[AODVN] (Miner2=1)  -> rB : (B2'=addBlock(B2,b2))&(Miner2'=0); 
+[XBHGF] (Miner2=1)  -> rB : (B2'=addBlock(B2,b2))&(Miner2'=0); 
 
 [] (Miner2=2)&!isEmpty(set2) -> r : (b2'=extractBlock(set2))&(Miner2'=4); 
 
-[OCKTI] (Miner2=4)  -> 1 : (setMiner2' = addBlockSet(setMiner2 , b2))&(Miner2'=0); 
+[MBMAS] (Miner2=4)  -> 1 : (setMiner2' = addBlockSet(setMiner2 , b2))&(Miner2'=0); 
 
 [] (Miner2=2)&!(!isEmpty(set2)) -> 1 : (Miner2'=5); 
 
@@ -62,21 +62,21 @@ endmodule
 
 
 module Miner3
-b3 : block {m3,0;genesis,0} ;
+Miner3 : [0..7] init 0;
+3 : block {m3,0;genesis,0} ;
 B3 : blockchain [{genesis,0;genesis,0}];
 c3 : [0..N] init 0;
 setMiner3 : list [];
-Miner3 : [0..10] init 0;
 
 
-[XMSKW] (Miner3=0)  -> hR3 : (b3'=createB(b3,B3,c3))&(c3'=c3+1)&(Miner3'=1); 
-[SOKAR] (Miner3=0)  -> hR3 :  (Miner3'=2); 
+[BBDAG] (Miner3=0)  -> hR3 : (b3'=createB(b3,B3,c3))&(c3'=c3+1)&(Miner3'=1); 
+[ZLRIJ] (Miner3=0)  -> hR3 :  (Miner3'=2); 
 
-[ZUKJE] (Miner3=1)  -> rB : (B3'=addBlock(B3,b3))&(Miner3'=0); 
+[PSUXB] (Miner3=1)  -> rB : (B3'=addBlock(B3,b3))&(Miner3'=0); 
 
 [] (Miner3=2)&!isEmpty(set3) -> r : (b3'=extractBlock(set3))&(Miner3'=4); 
 
-[WIUFI] (Miner3=4)  -> 1 : (setMiner3' = addBlockSet(setMiner3 , b3))&(Miner3'=0); 
+[TMHIW] (Miner3=4)  -> 1 : (setMiner3' = addBlockSet(setMiner3 , b3))&(Miner3'=0); 
 
 [] (Miner3=2)&!(!isEmpty(set3)) -> 1 : (Miner3'=5); 
 
@@ -87,21 +87,21 @@ endmodule
 
 
 module Miner4
-b4 : block {m4,0;genesis,0} ;
+Miner4 : [0..7] init 0;
+4 : block {m4,0;genesis,0} ;
 B4 : blockchain [{genesis,0;genesis,0}];
 c4 : [0..N] init 0;
 setMiner4 : list [];
-Miner4 : [0..10] init 0;
 
 
-[QIDSN] (Miner4=0)  -> hR4 : (b4'=createB(b4,B4,c4))&(c4'=c4+1)&(Miner4'=1); 
-[XPXEA] (Miner4=0)  -> hR4 :  (Miner4'=2); 
+[WVWCU] (Miner4=0)  -> hR4 : (b4'=createB(b4,B4,c4))&(c4'=c4+1)&(Miner4'=1); 
+[OSQZG] (Miner4=0)  -> hR4 :  (Miner4'=2); 
 
-[RAROS] (Miner4=1)  -> rB : (B4'=addBlock(B4,b4))&(Miner4'=0); 
+[KCVWO] (Miner4=1)  -> rB : (B4'=addBlock(B4,b4))&(Miner4'=0); 
 
 [] (Miner4=2)&!isEmpty(set4) -> r : (b4'=extractBlock(set4))&(Miner4'=4); 
 
-[WEBJU] (Miner4=4)  -> 1 : (setMiner4' = addBlockSet(setMiner4 , b4))&(Miner4'=0); 
+[TXFEC] (Miner4=4)  -> 1 : (setMiner4' = addBlockSet(setMiner4 , b4))&(Miner4'=0); 
 
 [] (Miner4=2)&!(!isEmpty(set4)) -> 1 : (Miner4'=5); 
 
@@ -112,63 +112,59 @@ endmodule
 
 
 module Network
-set1 : list [];
+Network : [0..1] init 0;
+et1 : list [];
 set2 : list [];
 set3 : list [];
 set4 : list [];
-Network : [0..10] init 0;
 
 
-[MFDJJ] (Network=0)  -> 1 : (set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
+[LLVDK] (Network=0)  -> 1 : (set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
 
-[WVHER] (Network=0)  -> 1 : (set1' = removeBlock(set1,b1))&(Network'=0); 
+[XFGTD] (Network=0)  -> 1 : (set1' = removeBlock(set1,b1))&(Network'=0); 
 
-[AODVN] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
+[XBHGF] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
 
-[OCKTI] (Network=0)  -> 1 : (set2' = removeBlock(set2,b2))&(Network'=0); 
+[MBMAS] (Network=0)  -> 1 : (set2' = removeBlock(set2,b2))&(Network'=0); 
 
-[ZUKJE] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
+[PSUXB] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set4'=addBlockSet(set4,b4))&(Network'=0); 
 
-[WIUFI] (Network=0)  -> 1 : (set3' = removeBlock(set3,b3))&(Network'=0); 
+[TMHIW] (Network=0)  -> 1 : (set3' = removeBlock(set3,b3))&(Network'=0); 
 
-[RAROS] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(Network'=0); 
+[KCVWO] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(Network'=0); 
 
-[WEBJU] (Network=0)  -> 1 : (set4' = removeBlock(set4,b4))&(Network'=0); 
+[TXFEC] (Network=0)  -> 1 : (set4' = removeBlock(set4,b4))&(Network'=0); 
 endmodule
 
 
 module Hasher1
-Hasher1 : [0..10] init 0;
+Hasher1 : [0..1] init 0;
 
-
-[HAUBT] (Hasher1=0)  -> mR :  (Hasher1'=0); 
-[LQMYP] (Hasher1=0)  -> lR :  (Hasher1'=0); 
+[OVYWN] (Hasher1=0)  -> mR :  (Hasher1'=0); 
+[QZSGT] (Hasher1=0)  -> lR :  (Hasher1'=0); 
 endmodule
 
 
 module Hasher2
-Hasher2 : [0..10] init 0;
+Hasher2 : [0..1] init 0;
 
-
-[EMPMO] (Hasher2=0)  -> mR :  (Hasher2'=0); 
-[VFLET] (Hasher2=0)  -> lR :  (Hasher2'=0); 
+[AYANL] (Hasher2=0)  -> mR :  (Hasher2'=0); 
+[UZEJD] (Hasher2=0)  -> lR :  (Hasher2'=0); 
 endmodule
 
 
 module Hasher3
-Hasher3 : [0..10] init 0;
+Hasher3 : [0..1] init 0;
 
-
-[XMSKW] (Hasher3=0)  -> mR :  (Hasher3'=0); 
-[SOKAR] (Hasher3=0)  -> lR :  (Hasher3'=0); 
+[BBDAG] (Hasher3=0)  -> mR :  (Hasher3'=0); 
+[ZLRIJ] (Hasher3=0)  -> lR :  (Hasher3'=0); 
 endmodule
 
 
 module Hasher4
-Hasher4 : [0..10] init 0;
+Hasher4 : [0..1] init 0;
 
-
-[QIDSN] (Hasher4=0)  -> mR :  (Hasher4'=0); 
-[XPXEA] (Hasher4=0)  -> lR :  (Hasher4'=0); 
+[WVWCU] (Hasher4=0)  -> mR :  (Hasher4'=0); 
+[OSQZG] (Hasher4=0)  -> lR :  (Hasher4'=0); 
 endmodule
 

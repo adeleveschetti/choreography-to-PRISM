@@ -56,7 +56,7 @@ public class BranchNode implements Node{
 
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules) {
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels) {
 		Functions funs = new Functions();
 		String roleTmp = funs.changeIndex(role,index,totIndex);
 		ArrayList<String> outRolesTmp = new ArrayList<String>();
@@ -78,17 +78,28 @@ public class BranchNode implements Node{
 
 		for(int i=0; i<rates.size(); i++) {
 			if(!contained) {
-
-				String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-				StringBuilder salt = new StringBuilder();
-				Random rnd = new Random();
-				int size = 5;
-				while (salt.length() < size) { // length of the random string.
-					int indexLabel = (int) (rnd.nextFloat() * SALTCHARS.length());
-					salt.append(SALTCHARS.charAt(indexLabel));
+				boolean firstLabel = false;
+				while(!firstLabel) {
+					String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+					StringBuilder salt = new StringBuilder();
+					Random rnd = new Random();
+					int size = 5;
+					while (salt.length() < size) { // length of the random string.
+						int indexLabel = (int) (rnd.nextFloat() * SALTCHARS.length());
+						salt.append(SALTCHARS.charAt(indexLabel));
+					}
+					label = salt.toString();					
+					if(labels==null) {
+						labels = new ArrayList<String>();
+						labels.add(label);
+						firstLabel = true;
+					}
+					else {
+						if(!labels.contains(label)) {
+							firstLabel = true;
+						}
+					}
 				}
-				label = salt.toString();
-
 			}
 			for(Node el : modules) {
 				if(el.toPrint().equals(roleTmp)) {
@@ -147,19 +158,19 @@ public class BranchNode implements Node{
 
 
 			int indexRate = rates.get(i).indexOf("*");
-			int indexUp = updates.get(i).generateCode("",index,totIndex,modules).indexOf("&&");
+			int indexUp = updates.get(i).generateCode("",index,totIndex,modules,labels).indexOf("&&");
 
 			if(preconditions.size()==rates.size()) {
-				int indexPrec = preconditions.get(i).generateCode("",index,totIndex,modules).indexOf("&&");
-				String precA = preconditions.get(i).generateCode("",index,totIndex,modules).substring(0,indexPrec);
+				int indexPrec = preconditions.get(i).generateCode("",index,totIndex,modules,labels).indexOf("&&");
+				String precA = preconditions.get(i).generateCode("",index,totIndex,modules,labels).substring(0,indexPrec);
 				toRetRoleA = toRetRoleA +  Functions.returnStringNewIndex(precA,index,totIndex);
 				for(int j=0; j<outRole.size(); j++) {
-					String precCode = preconditions.get(i).generateCode("",index,totIndex,modules).substring(indexPrec+2,preconditions.get(i).generateCode("",index,totIndex,modules).length());
+					String precCode = preconditions.get(i).generateCode("",index,totIndex,modules,labels).substring(indexPrec+2,preconditions.get(i).generateCode("",index,totIndex,modules,labels).length());
 					toRetRoleB.set(j,Functions.returnStringNewIndex(precCode,j+1,totIndex));
 				}
 			}
 
-			String upA = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules).substring(0,indexUp),index,totIndex);
+			String upA = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules,labels).substring(0,indexUp),index,totIndex);
 			toRetRoleA = toRetRoleA + " -> " + Functions.returnStringNewIndex(rates.get(i).substring(0,indexRate),index,totIndex) + " : " + upA;
 			if(statements!=null) {
 				boolean continues = false;
@@ -173,7 +184,7 @@ public class BranchNode implements Node{
 					continues = Functions.returnStringNewIndex(((InternalActionNode) statements.get(i)).getRole(),index,totIndex).equals(roleTmp);
 				}
 
-				if(!upA.equals("") && !upA.equals(" ")) {
+				if(!upA.equals("") && !upA.equals(" ") && !(statements.get(i) instanceof EndNode)) {
 					toRetRoleA = toRetRoleA + "&";
 				}
 
@@ -213,11 +224,11 @@ public class BranchNode implements Node{
 					}
 					String upCode = "";
 
-					if(!outRole.get(j).contains("[i]") && !outRole.get(j).contains("[i+1]") && (updates.get(i).generateCode("",index,totIndex,modules).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules).length()).contains("[i]") || updates.get(i).generateCode("",index,totIndex,modules).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules).length()).contains("[i+1]"))) {
-						upCode = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules).length()),index,totIndex);
+					if(!outRole.get(j).contains("[i]") && !outRole.get(j).contains("[i+1]") && (updates.get(i).generateCode("",index,totIndex,modules,labels).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules,labels).length()).contains("[i]") || updates.get(i).generateCode("",index,totIndex,modules,labels).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules,labels).length()).contains("[i+1]"))) {
+						upCode = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules,labels).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules,labels).length()),index,totIndex);
 					}
 					else {
-						upCode = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules).length()),index+j,totIndex);
+						upCode = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules,labels).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules,labels).length()),index+j,totIndex);
 					}
 
 					String rateB = Functions.returnStringNewIndex(rates.get(i).substring(indexRate+1,rates.get(i).length()),index+j,totIndex);
@@ -229,10 +240,12 @@ public class BranchNode implements Node{
 					toCheck = toCheck + toRetRoleB.get(j) + " -> " + rateB + " : " + upCode ;
 
 
-					if(!upCode.equals("") && !upCode.equals(" ")) {
+					if(!upCode.equals("") && !upCode.equals(" ") && !(statements.get(i) instanceof EndNode)) {
 						toCheck = toCheck + "&";
 					}
-					toCheck = toCheck + "(" + outRolesTmp.get(j) +"'=";
+					if(!(statements.get(i) instanceof EndNode)) {
+						toCheck = toCheck + "(" + outRolesTmp.get(j) +"'=";
+					}
 					if(statements!=null) {
 						boolean continues = false;
 						if(statements.get(i) instanceof BranchNode) {
@@ -244,7 +257,7 @@ public class BranchNode implements Node{
 						else if(statements.get(i) instanceof InternalActionNode) {
 							continues = Functions.returnStringNewIndex(((InternalActionNode) statements.get(i)).getRole(),index+j,totIndex).equals(outRolesTmp.get(j) );
 						}
-						
+
 						if(statements.get(i) instanceof RecNode) {
 							toCheck = toCheck +  Integer.toString(((RecNode) statements.get(i)).getState()) + "); ";
 						}
@@ -347,7 +360,7 @@ public class BranchNode implements Node{
 				}
 
 				if(!(stat instanceof RecNode) && !(stat instanceof EndNode)) {
-					codeToRet = stat.generateCode(codeToRet,index,totIndex,modules);
+					codeToRet = stat.generateCode(codeToRet,index,totIndex,modules,labels);
 				}
 			}
 

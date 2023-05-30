@@ -13,7 +13,7 @@ public class EndNode implements Node {
 	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules) {
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels) {
 		// TODO Auto-generated method stub
 		return null;
 	}

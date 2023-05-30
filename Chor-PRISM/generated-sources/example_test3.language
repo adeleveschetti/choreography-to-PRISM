@@ -12,5 +12,5 @@ Network4 -> ;
 
 Test :=
 	Network1 -> Network2 :
-	+["1*1"]  " "&&" " . Network3 -> Network4 :["1*1"]  " "&&" ".Test
-	+["1*1"]  " "&&" " . Network3 -> Network2 :["1*1"]  " "&&" ".Test
+	+["1*1"]  " "&&" " . Network3 -> Network4 :["1*1"]  "x'=1"&&"y'=1".Test
+	+["1*1"]  " "&&" " . Network3 -> Network4 :["1*1"]  "x'=1"&&"y'=1".Test

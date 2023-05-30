@@ -1,0 +1,29 @@
+ 
+
+module Network2
+Network2 : [0..1] init 0;
+
+[PJAYM] (Network2=0)  -> 1 : x2'=1;
+
+[LWHMN] (Network2=0)  -> 1 : x2'=1&(Network2'=0); 
+endmodule
+
+
+module Network3
+Network3 : [0..1] init 0;
+endmodule
+
+
+module Network4
+Network4 : [0..1] init 0;
+endmodule
+
+
+module Network1
+Network1 : [0..2] init 0;
+
+[PJAYM] (Network1=0)  -> 1 : x1'=1;
+
+[LWHMN] (Network1=1)  -> 1 : x1'=1&(Network1'=0); 
+endmodule
+
