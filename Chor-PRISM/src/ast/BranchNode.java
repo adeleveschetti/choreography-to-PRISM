@@ -316,6 +316,9 @@ public class BranchNode implements Node{
 				}
 			}
 		}
+		System.out.println(codeToRet);
+		System.out.println("##################");
+
 		if(statements!=null) {
 
 			for(Node stat : statements) {
