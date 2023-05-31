@@ -4,16 +4,9 @@
 \noindent {\em Global:}
 
 \begin{displaymath}
-  \begin{array}{lrl}
-    \text{(Chor)}  \quad & C \ ::=\ &
-    %
-                                      \role p\longrightarrow\{\role p_i\}_{i\in
-                                      I}\oplus\{[\lambda_j] x_j=E_j. C_j\}_{j\in J}\\
-                         & \ \mid\ & \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else }
-                                     C_2\\
-                         & \ \mid\ & [\lambda]x=E. C\\
-                         & \ \mid\ & X\\
-                         & \ \mid\ & \CEnd\\\\
+  \begin{array}{lll}
+    \text{(Chor)}  \quad & C \ ::=\ & \role p\longrightarrow\{\role p_i\}_{i\in I}\oplus\{[\lambda_j] x_j=E_j: C_j\}_{j\in J}\ \mid\
+    \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2 \ \mid\ X\ \mid\ \CEnd\\\\
     \text{(Expressions)}\quad & E \ ::=\ & f(\tilde E)\quad\mid\quad x\\\\
     \text{(Rates)}\quad       & \lambda\in\mathbb R
   \end{array}
@@ -71,9 +64,27 @@ projectable.
 
 
 $f: C\rightarrow \mathcal R\mapsto F$
-
-$f(\role p\longrightarrow\{\role p_i\}_{i\in I}\oplus\{[\lambda_j]
-x_j=E_j: C_j\}_{j\in J}) =???$
+\[
+\begin{array}{l}
+f(\role p_1\longrightarrow\{\role p_i\}_{i\in I}\oplus\{[\lambda_j]
+x_j=E_j: C_j\}_{j\in J}) = \\
+= \begin{cases}
+\bigg( [\lambda_{j_1}] x_{j_1} = f(E_{j_1}) \bigg)_{\role p}. f(\oplus\{[\lambda_j]
+x_j=E_j: C_j\}_{j\in J\setminus\{{j_1}\}}). f(C_{j_1}) &if \ \role p = \role p_1 \lor \role p \in \role \{\role p_i\}_{i \in I} \\
+%\big|[\lambda_j] x_j = f(E_j)\big|_{\role p} . f(C_j) &if\ \role p \in \role \{\role p_i\}_{i \in I}\\
+f(C_j) & if \ \role p \neq \role p_1 \land \role p \notin \{\role p_i\}_{i\in I}
+\end{cases} 
+\\
+f(\textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2) = \begin{cases}
+f(E) . f(C_1) . f(C_2) & if\ \role p\in \mathbf{roles}\\
+\bot & otherwise
+\end{cases} 
+\\
+f(X) = \; ??
+\\
+f(\CEnd) = \bot
+\end{array}
+\]
 
 
 %%% Local Variables: 
