@@ -87,6 +87,44 @@ f(\CEnd) = \bot
 \]
 
 
+\[
+f: [C_1,\ldots,C_n] \rightarrow String \mapsto String
+\]
+
+
+\begin{lstlisting}[mathescape=true,backgroundcolor={}]
+CASE 1: C_$i$ $\equiv$ $\role p_1\longrightarrow\{\role p_i\}_{i\in I}\oplus\{[\lambda_j]
+x_j=E_j: C_j\}_{j\in J} $
+
+   f([C$_i$,$\ldots$,C$_n$], code) :
+      label = generateNewLabel()
+      for c$_j$ in C$_i$ :
+         for p $\in$ $\mathbf{roles}$(C$_i$):
+            newCode = "[label] (x$_j$ = E$_j$)$_p$"
+            code = code + newCode
+      f([C$_{i+1}$,$\ldots$,C$_n$],code)
+      
+\end{lstlisting}    
+
+
+
+where $\mathbf{roles}$(C$_i$) $\coloneqq$ $\role p_1  \cup \{\role p_i\}_{i\in I}.$
+
+	
+\begin{lstlisting}[mathescape=true,backgroundcolor={}]
+CASE 2: C_$i$ $\equiv$ $\textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2 $
+
+   f([C$_i$,$\ldots$,C$_n$], code) :
+      code = code + (E)$_p$
+      f(C$_{1}$,code)
+      f(C$_{2}$,code)
+      f([C$_{i+1}$,$\ldots$,C$_n$],code)
+      
+
+      
+	
+\end{lstlisting}
+
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "main"
