@@ -169,7 +169,7 @@ CASE 2: C_$i$ $\equiv$ $\textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ els
     \\\\
     \text{label} = \text{newlabel}();\\
     \text{for } \role p_i \{\\
-    \ add(p_i, [\text{label}] {s_p_i = state(p_i)} \rightarrow\
+    \ add(p_i, [\text{label}] {s_{p_i} = state(p_i)} \rightarrow\
     \left\{
     \begin{array}{ll}
       \lambda_1: x'=5; \textsf{state}(\role p_i)' = \textsf{generatenewstate} (\role p_i)
@@ -185,6 +185,48 @@ CASE 2: C_$i$ $\equiv$ $\textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ els
   \end{array}
 \end{displaymath}
 
+\hrule
+
+
+\begin{displaymath}
+	f : C \longrightarrow \texttt{network} \longrightarrow \texttt{network} \quad\quad \texttt{network} : \mathcal R \longrightarrow \text{Set}(F)
+\end{displaymath}
+
+\begin{displaymath}
+  \begin{array}{ll}
+    f\Big(\; \role p_1\longrightarrow\{\role
+ p_i\}_{i\in I} \oplus \{[\lambda_j] x_j=E_j: D_j\}_{j\in J}, \texttt{network}
+    \Big)
+    \\\\
+    =
+    \\\\
+    \textsf{label} = \texttt{newlabel}();\\
+    \textsf{for } \role p_k \in \mathbf{roles} \{\\
+    \quad\textsf{for } j \in J \{\\
+    \quad\quad \texttt{network} = \texttt{add}(\role p_k,[\textsf{label}] {s_{\role p_k} = \texttt{state}(\role p_k)} \rightarrow\ \lambda_j : x_j=E_j\;\& \;s_{\role p_k}'=\texttt{genNewState}(\role p_k));\\
+  	\quad\}\\
+  	\}\\
+	\textsf{for } j \in J \{\\
+	\quad \texttt{network} = f(D_j, \texttt{network});  \\ 
+	\}\\
+  	\textsf{return } \texttt{network}
+  \end{array}
+\end{displaymath}
+
+\begin{displaymath}
+  \begin{array}{ll}
+    f\Big(\; \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2, \texttt{network} 
+    \Big)
+    \\\\
+    =
+    \\\\
+\texttt{network} = \texttt{add}(\role p,[\;] {s_{\role p} = \texttt{state}(\role p)} \;\& \;f(E));\\
+	\texttt{network} = f(C_1, \texttt{network}); \\
+	\texttt{network} = f(C_2, \texttt{network}); \\
+
+ 	\text{return } \texttt{network}
+  \end{array}
+\end{displaymath}
 
 
 %%% Local Variables: 
