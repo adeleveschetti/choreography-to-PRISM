@@ -1,28 +1,65 @@
-\mypar{Syntax.} This is the language and we comment on it later.
+In this section, we provide the formal definition of our choreographic
+language as well as process algebra representing
+PRISM~\cite{prismsemantics}.
 
+\subsection{Choreographies}
 
-\noindent {\em Global:}
-
+\mypar{Syntax.} Our choreographic language is defined by the following
+syntax:
+%
 \begin{displaymath}
   \begin{array}{lll}
-    \text{(Chor)}  \quad & C \ ::=\ & \role p\longrightarrow\{\role p_i\}_{i\in I}\oplus\{[\lambda_j] x_j=E_j: C_j\}_{j\in J}\ \mid\
-    \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2 \ \mid\ X\ \mid\ \CEnd\\\\
-    \text{(Expressions)}\quad & E \ ::=\ & f(\tilde E)\quad\mid\quad x\\\\
+    \text{(Chor)}  \quad & C \ ::=\
+    & \{\role p_i\}_{i\in I}\,+\!\{\lambda_j: x_j=E_j;\ C_j\}_{j\in J}
+      \ \mid\
+      \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2
+      \ \mid\
+      X
+      \ \mid\
+      \CEnd
+    \\[1mm]
+    \text{(Expr)}\quad & E \ ::=\ & f(\tilde E)\quad\mid\quad x\quad\mid\quad v
+    \\[1mm]
     \text{(Rates)}\quad       & \lambda\in\mathbb R
+    & \qquad\quad
+      \text{(Variables)}\quad    x\in\mathsf{Var} 
+      \qquad\quad
+      \text{(Values)}\quad       v\in\mathsf{Val} 
   \end{array}
 \end{displaymath}
+We briefly comment the various constructs. The syntactic category $C$
+denotes choreographic programmes. The term
+$\role p\longrightarrow\{\role p_i\}_{i\in I}\oplus\{[\lambda_j]
+x_j=E_j: C_j\}_{j\in J}$ denotes an interaction between roles
+$\role p_i$...
 
 
-\noindent {\em Prism/Local:} 
+\subsection{PRISM}
+
+\mypar{Syntax.}
 \begin{displaymath}
-  \begin{array}{lll}
-    \text{(Networks)}  \quad & N \ ::=\ & \CEnd \ \mid\ \role{p}:\{F_i\}_i\ \mid\ M \pp M\ \mid\ M \ppp A M\ \mid\ M/A\ \mid\ \sigma M\\\\
-    \text{(Commands)}  \quad & F \ ::=\ & \cmd aE{\lambda_i}{x_i}{E_i}{i\in I}\\\\
+  \begin{array}{lrllll}
+    \text{(Networks)}  \quad
+    & N, M  & ::=  &      & \CEnd & \text{empty network}\\
+    &       &      & \mid & \role{p}:\{F_i\}_i & \text{module}\\
+%    &       &      & \mid & M \pp M    & \text{parallel composition}\\
+    &       &      & \mid & M \ppp A M & \text{parallel composition}\\
+    &       &      & \mid & M/A        & \text{action hiding}\\
+    &       &      & \mid & \sigma M   & \text{substitution}\\
+    \\
+    \text{(Commands)}  \quad
+    & F     & ::=  &      & [a] g \rightarrow \Sigma_{i\in I}\{\lambda_i: u_i\}
+                                  & \text{$g$ is a boolean expression in $E$} \\
+    \\[1mm]
+    \text{(Assignment)} \quad
+    & u     & ::=  &      & (x' = E) & \text{update $x$, element of $\mathcal V$, with $E$}\\
+    &       &      & \mid & A \& A   & \text{multiple assignments}
   \end{array}
 \end{displaymath}
 
-\mypar{Semantics.} We construct by the following set of rules:
-
+\mypar{Semantics.} We construct all the enables commands by applying a
+closure to the following rules.
+% 
 \begin{displaymath}
   \begin{array}{lll}
     \infer[]
@@ -45,6 +82,9 @@
     & a\in A}
   \end{array}
 \end{displaymath}
+That means that ones we have a set of executable rules, we can start
+building a transition system. In order to do so, we
+
 
 \begin{displaymath}
   \begin{array}{lll}
@@ -58,6 +98,7 @@
 
 
 
+\subsection{Projection from Choreographies to PRISM}
 \mypar{Mapping Choreographies to PRISM.} We need to run some standard
 static checks because, since there is branching, some terms may not be
 projectable.
