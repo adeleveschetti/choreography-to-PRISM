@@ -1,3 +1,9 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
+
+\bibitem{DBLP:journals/concurrency/BistarelliNGLMV23}
+Stefano Bistarelli, Rocco~De Nicola, Letterio Galletta, Cosimo Laneve, Ivan Mercanti, and Adele Veschetti.
+\newblock Stochastic modeling and analysis of the bitcoin protocol in the presence of block communication delays.
+\newblock {\em Concurr. Comput. Pract. Exp.}, 35(16), 2023.
+\newblock \href {https://doi.org/10.1002/cpe.6749} {\path{doi:10.1002/cpe.6749}}.
 
 \end{thebibliography}

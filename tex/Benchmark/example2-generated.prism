@@ -1,0 +1,22 @@
+dtmc
+const int k;
+
+module Dice
+Dice : [0..11] init 0;
+d : [0..6] init 0; 
+
+[] (Dice=0)  -> 0.5 :  (Dice'=2) + 0.5 :  (Dice'=6); 
+[] (Dice=2)  -> 0.5 :  (Dice'=3) + 0.5 :  (Dice'=4); 
+[] (Dice=3)  -> 0.5 :  (Dice'=2) + 0.5 : (d'=1)&(Dice'=10); 
+[] (Dice=4)  -> 0.5 : (d'=2)&(Dice'=10) + 0.5 : (d'=3)&(Dice'=10);
+[] (Dice=6)  -> 0.5 :  (Dice'=7) + 0.5 : (Dice'=8); 
+[] (Dice=7)  -> 0.5 :  (Dice'=6) + 0.5 : (d'=4)&(Dice'=10);
+[] (Dice=8)  -> 0.5 : (d'=5)&(Dice'=10) + 0.5 : (d'=6)&(Dice'=10); 
+[] (Dice=10)  -> 1 :  (Dice'=10); 
+
+endmodule
+	
+
+rewards "coin_flips"
+	[] Dice<10: 1;
+endrewards
