@@ -6,4 +6,9 @@ Stefano Bistarelli, Rocco~De Nicola, Letterio Galletta, Cosimo Laneve, Ivan Merc
 \newblock {\em Concurr. Comput. Pract. Exp.}, 35(16), 2023.
 \newblock \href {https://doi.org/10.1002/cpe.6749} {\path{doi:10.1002/cpe.6749}}.
 
+\bibitem{KY76}
+D.~Knuth and A.~Yao.
+\newblock {\em Algorithms and Complexity: New Directions and Recent Results}, chapter The complexity of nonuniform random number generation.
+\newblock Academic Press, 1976.
+
 \end{thebibliography}

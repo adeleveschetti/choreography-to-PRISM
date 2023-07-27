@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.30)  27 JUL 2023 12:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.30)  27 JUL 2023 12:35
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -796,33 +796,33 @@ Overfull \hbox (6.31485pt too wide) detected at line 255
  []
 
 [4.4]) [5.5] (/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/tests.tex
-LaTeX Font Info:    Calculating math sizes for size <8.5> on input line 5.
+LaTeX Font Info:    Calculating math sizes for size <8.5> on input line 4.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8.5> on input line 5.
+(Font)              <8.5> on input line 4.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5.94997> on input line 5.
+(Font)              <5.94997> on input line 4.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <4.25> on input line 5.
-<Figures//diagram-20230725.pdf, id=140, 713.66624pt x 234.1247pt>
+(Font)              <4.25> on input line 4.
+<Figures//diagram-20230725.pdf, id=141, 713.66624pt x 234.1247pt>
 File: Figures//diagram-20230725.pdf Graphic file (type pdf)
 <use Figures//diagram-20230725.pdf>
-Package pdftex.def Info: Figures//diagram-20230725.pdf  used on input line 10.
+Package pdftex.def Info: Figures//diagram-20230725.pdf  used on input line 9.
 (pdftex.def)             Requested size: 428.20305pt x 140.47589pt.
 
-Overfull \hbox (29.86447pt too wide) in paragraph at lines 10--11
+Overfull \hbox (29.86447pt too wide) in paragraph at lines 9--10
  [][] 
  []
 
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <9> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 16.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 15.
 [6.6 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//diagram-20230725.pdf>]
-<Figures//example2-results.jpeg, id=184, 488.82625pt x 230.8625pt>
+<Figures//example2-results.jpeg, id=186, 488.82625pt x 230.8625pt>
 File: Figures//example2-results.jpeg Graphic file (type jpg)
 <use Figures//example2-results.jpeg>
-Package pdftex.def Info: Figures//example2-results.jpeg  used on input line 73.
+Package pdftex.def Info: Figures//example2-results.jpeg  used on input line 72.
 (pdftex.def)             Requested size: 293.298pt x 138.51855pt.
  [7.7 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example2-results.jpeg>]
-LaTeX Font Info:    Trying to load font information for TS1+lmss on input line 113.
+LaTeX Font Info:    Trying to load font information for TS1+lmss on input line 112.
  (/usr/local/texlive/2023/texmf-dist/tex/latex/lm/ts1lmss.fd
 File: ts1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -831,21 +831,22 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
  [8.8]
-<Figures//example3-results.jpeg, id=258, 488.82625pt x 230.8625pt>
+<Figures//example3-results.jpeg, id=260, 488.82625pt x 230.8625pt>
 File: Figures//example3-results.jpeg Graphic file (type jpg)
 <use Figures//example3-results.jpeg>
-Package pdftex.def Info: Figures//example3-results.jpeg  used on input line 141.
+Package pdftex.def Info: Figures//example3-results.jpeg  used on input line 140.
 (pdftex.def)             Requested size: 293.298pt x 138.51855pt.
  [9.9 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example3-results.jpeg>] [10.10]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [11.11]
-<Figures//example4-results.jpeg, id=391, 595.22375pt x 278.03876pt>
+<Figures//example4-results.jpeg, id=348, 595.22375pt x 278.03876pt>
 File: Figures//example4-results.jpeg Graphic file (type jpg)
 <use Figures//example4-results.jpeg>
-Package pdftex.def Info: Figures//example4-results.jpeg  used on input line 265.
+Package pdftex.def Info: Figures//example4-results.jpeg  used on input line 256.
 (pdftex.def)             Requested size: 357.13701pt x 166.82454pt.
-) (/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.bbl) [12.12 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example4-results.jpeg>] (/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.aux)
+)
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+(/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.bbl [11.11]) [12.12 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example4-results.jpeg>] (/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -853,18 +854,18 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: F7FD8FCECE7966C7A069745AFF592A17;1391.
  ) 
 Here is how much of TeX's memory you used:
- 25610 strings out of 476025
- 452048 string characters out of 5790017
- 2259388 words of memory out of 5000000
- 45115 multiletter control sequences out of 15000+600000
- 684871 words of font info for 247 fonts, out of 8000000 for 9000
+ 25609 strings out of 476025
+ 452010 string characters out of 5790017
+ 2252388 words of memory out of 5000000
+ 45117 multiletter control sequences out of 15000+600000
+ 684954 words of font info for 248 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 90i,20n,90p,1072b,2161s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,20n,90p,1072b,2163s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmbx9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmmi9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmr5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmr6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmr9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmri9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmss10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmss8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmss9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmsy9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmtt9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on /Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.pdf (12 pages, 709154 bytes).
+Output written on /Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.pdf (12 pages, 713565 bytes).
 PDF statistics:
- 600 PDF objects out of 1000 (max. 8388607)
- 509 compressed objects within 6 object streams
- 263 named destinations out of 1000 (max. 500000)
+ 595 PDF objects out of 1000 (max. 8388607)
+ 504 compressed objects within 6 object streams
+ 258 named destinations out of 1000 (max. 500000)
  112223 words of extra memory for PDF output out of 128383 (max. 10000000)
 

@@ -1,13 +1,13 @@
 # Fdb version 4
-["bibtex /Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main"] 1690452620 "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.aux" "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.bbl" "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main" 1690452621 0
-  "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/biblio.bib" 1690368112 841 f92dbbdf957db2f1cf953d412eec1b6a ""
-  "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.aux" 1690452621 3549 09c506cb31e38ff2b598999aceb44a76 "pdflatex"
+["bibtex /Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main"] 1690454112 "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.aux" "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.bbl" "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main" 1690454159 0
+  "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/biblio.bib" 1690453628 1137 3e623b7bcf02339b5f1b647a3e08f020 ""
+  "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.aux" 1690454159 3583 2f097773069f8ac0c4a79baf101c9a92 "pdflatex"
   "/usr/local/texlive/2023/texmf-dist/bibtex/bst/urlbst/plainurl.bst" 1675116457 33495 46cfb45e24a877059f9f7e142c7fc61c ""
   (generated)
   "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.bbl"
   "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.blg"
   (rewritten before read)
-["pdflatex"] 1690452620 "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.tex" "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.pdf" "main" 1690452621 0
+["pdflatex"] 1690454158 "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.tex" "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.pdf" "main" 1690454159 0
   "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//diagram-20230725.pdf" 1690282223 3521 16273854e0a62ec35edb6ee147af49c4 ""
   "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example2-results.jpeg" 1690297537 42845 3e9f542f3a4b76a36f54cda568b99999 ""
   "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example3-results.jpeg" 1690362782 39804 2f57e59609bbb57b8516437bdff82889 ""
@@ -16,12 +16,12 @@
   "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/lipics-logo-bw.pdf" 1682268296 83561 228e2a095239965e3f4546d0433e704b ""
   "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/lipics-v2021.cls" 1682268334 48045 757e221109d7507f645f8e824b74bc05 ""
   "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/macros.tex" 1685444223 352 8a1bda441e67a59ab106cf236b9c4841 ""
-  "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.aux" 1690452621 3549 09c506cb31e38ff2b598999aceb44a76 "pdflatex"
-  "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.bbl" 1690452620 468 224f8cac743e13697e881a449aee589d "bibtex /Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main"
-  "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.out" 1690452621 1391 f7fd8fcece7966c7a069745aff592a17 "pdflatex"
+  "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.aux" 1690454159 3583 2f097773069f8ac0c4a79baf101c9a92 "pdflatex"
+  "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.bbl" 1690454112 678 d5575c03ad93827a3dce2cfb18d3b5aa "bibtex /Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main"
+  "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.out" 1690454159 1391 f7fd8fcece7966c7a069745aff592a17 "pdflatex"
   "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.tex" 1690451053 5489 8c9f5bacda9b8db41aeaef25c988f178 ""
-  "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/sml-highlight.sty" 1690369062 1758 565dc1f3b250d4e25cd82f3e98b4c543 ""
-  "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/tests.tex" 1690451120 11155 6a7c0560f98f0db63b84df19014521ca ""
+  "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/sml-highlight.sty" 1690454158 1852 acd141caea7c1a3cdefc35946160a140 ""
+  "/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/tests.tex" 1690454110 11117 a6238d80a156f4b5ad6ea13c7ecf2921 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc" 1254269338 2375 baa924870cfb487815765f9094cf3728 ""
   "/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc" 1202520719 3486 c7eadf5dcc57b3b2d11736679f6636ba ""
   "/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc" 1202520719 2405 5dcf2c1b967ee25cc46c58cd52244aed ""

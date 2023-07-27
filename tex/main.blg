@@ -9,45 +9,45 @@ Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Database file #1: biblio.bib
 Warning--I didn't find a database entry for "prismsemantics"
-You've used 1 entry,
+You've used 2 entries,
             2943 wiz_defined-function locations,
-            644 strings with 5472 characters,
-and the built_in function-call counts, 572 in all, are:
-= -- 53
-> -- 35
-< -- 0
-+ -- 13
-- -- 12
-* -- 42
-:= -- 115
-add.period$ -- 4
-call.type$ -- 1
-change.case$ -- 9
+            651 strings with 5630 characters,
+and the built_in function-call counts, 955 in all, are:
+= -- 89
+> -- 49
+< -- 1
++ -- 18
+- -- 16
+* -- 57
+:= -- 169
+add.period$ -- 7
+call.type$ -- 2
+change.case$ -- 13
 chr.to.int$ -- 0
-cite$ -- 1
-duplicate$ -- 10
-empty$ -- 36
-format.name$ -- 12
-if$ -- 127
+cite$ -- 2
+duplicate$ -- 24
+empty$ -- 78
+format.name$ -- 16
+if$ -- 231
 int.to.chr$ -- 0
-int.to.str$ -- 1
-missing$ -- 1
-newline$ -- 9
-num.names$ -- 2
-pop$ -- 11
+int.to.str$ -- 2
+missing$ -- 3
+newline$ -- 14
+num.names$ -- 4
+pop$ -- 26
 preamble$ -- 1
-purify$ -- 8
+purify$ -- 12
 quote$ -- 0
-skip$ -- 34
+skip$ -- 62
 stack$ -- 0
-substring$ -- 7
-swap$ -- 3
-text.length$ -- 2
+substring$ -- 12
+swap$ -- 5
+text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 4
+type$ -- 6
 warning$ -- 0
-while$ -- 2
-width$ -- 2
-write$ -- 15
+while$ -- 4
+width$ -- 3
+write$ -- 26
 (There was 1 warning)

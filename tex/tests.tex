@@ -1,8 +1,7 @@
-
 We tested our language by various examples.
 
 \subsection{The Dice Program}
- The first example we present is the Dice Program\footnote{\url{https://www.prismmodelchecker.org/casestudies/dice.php}}. The following program models a die using only fair coins. Starting at the root vertex (state 0), one repeatedly tosses a coin. Every time heads appears, one takes the upper branch and when tails appears, the lower branch. This continues until the value of the die is decided.
+ The first example we present is the Dice Program\footnote{\url{https://www.prismmodelchecker.org/casestudies/dice.php}} \cite{KY76}. The following program models a die using only fair coins. Starting at the root vertex (state 0), one repeatedly tosses a coin. Every time heads appears, one takes the upper branch and when tails appears, the lower branch. This continues until the value of the die is decided.
 
 
 \begin{figure}[h]
@@ -150,24 +149,17 @@ In\cite{DBLP:journals/concurrency/BistarelliNGLMV23}, a Bitcoin system is the re
 We tested our system by considering a protocol with $n=5$ miners and it is reported in Listing \ref{ex3-code}.
 \begin{lstlisting}[style=chor-color,caption={Choreographic language for the Proof of Work Bitcoin Protocol.},captionpos=b,label={ex3-code}]
 preamble
-
 "ctmc"
-
-"const k;"
-"const T=k*1000;"
-
+"const T"
 "const double r = 1;"
 "const double mR = 1/600;"
 "const double lR = 1-mR;"
-
 "const double hR1 = 0.25;"
 "const double hR2 = 0.25;"
 "const double hR3 = 0.25;"
 "const double hR4 = 0.25;"
 "const double rB = 1/12.6;"
-
 "const int N = 100;"
-
 endpreamble
 
 n = 4;
@@ -183,26 +175,31 @@ Network : "set1 : list [];", "set2 : list [];", "set3 : list [];" , "set4 : list
 {
 PoW := Hasher[i]  $\rightarrow$  Miner[i] :
 (+["mR*hR[i]"]  " "$\&\&$"(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" . 
-		Miner[i]  $\rightarrow$  Network : (["rB*1"] "(B[i]'=addBlock(B[i],b[i]))" $\&\&$ foreach(k != i) "(set[k]'=addBlockSet(set[k],b[i]))" @Network .PoW)
+	Miner[i]  $\rightarrow$  Network : 
+		(["rB*1"] "(B[i]'=addBlock(B[i],b[i]))" $\&\&$ 
+		foreach(k != i) "(set[k]'=addBlockSet(set[k],b[i]))" @Network .PoW)
  +["lR*hR[i]"] " " $\&\&$ " " .
- 				if "!isEmpty(set[i])"@Miner[i] then { 
-  						["r"] "(b[i]'=extractBlock(set[i]))"@Miner[i] . Miner[i]  $\rightarrow$  Network : (["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"$\&\&$"(set[i]' = removeBlock(set[i],b[i]))" . PoW) 
- 				}
- 				else{
- 					if "canBeInserted(B[i],b[i])"@Miner[i] then { 
- 						["1"] "(B[i]'=addBlock(B[i],b[i]))&(setMiner[i]'=removeBlock(setMiner[i],b[i]))"@Miner[i] . Pow 
- 					}
- 					else{
- 						PoW
-}
-})
+ 	if "!isEmpty(set[i])"@Miner[i] then { 
+  		["r"] "(b[i]'=extractBlock(set[i]))"@Miner[i] . 
+			Miner[i]  $\rightarrow$  Network : 
+			(["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"$\&\&$"(set[i]' = removeBlock(set[i],b[i]))" . PoW) 
+ 	}
+ 	else{
+ 		if "canBeInserted(B[i],b[i])"@Miner[i] then { 
+ 			["1"] "(B[i]'=addBlock(B[i],b[i]))
+			&(setMiner[i]'=removeBlock(setMiner[i],b[i]))"@Miner[i] . Pow 
+ 		}
+ 		else{
+ 			PoW
+		}
+	}
+)
 } 	
 \end{lstlisting}
 
 Part of the generated PRISM code is shown in Listing \ref{ex3-gen}. 
 \begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Peer-To-Peer Protocol.},captionpos=b,label={ex3-gen}]
 ctmc
-const k=1;
 const T;
 const double r = 1;
 const double mR = 1/600;
@@ -231,10 +228,7 @@ setMiner1 : list [];
 		$\&$(setMiner1'=removeBlock(setMiner1,b1))$\&$(Miner1'=0); 
 [] (Miner1=5)$\&$!(canBeInserted(B1,b1))  $\rightarrow$  1 : (Miner1'=0);
 endmodule
-
-
 $\ldots$
-
 module Network
 Network : [0..1] init 0;
 set1 : list []; 
@@ -246,7 +240,6 @@ $\ldots$
 
 endmodule
 
-
 module Hasher1
 Hasher1 : [0..1] init 0;
 
@@ -254,8 +247,6 @@ Hasher1 : [0..1] init 0;
 [EUBVP] (Hasher1=0)  $\rightarrow$  lR :  (Hasher1'=0); 
 
 endmodule
-
-
 \end{lstlisting}
 
 
