@@ -21,9 +21,18 @@ public class PreambleNode implements Node {
 		}
 		return toRet;
 	}
+	
+	@Override
+	public String projection(int index, int totIndex, ArrayList<Node> modules) {
+		String toRet = "";
+		for(String el : vars) {
+			toRet = toRet + el.substring(1,el.length()-1) + "\n";
+		}
+		return toRet;
+	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels) {
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName) {
 		for(String el : vars) {
 			code = code + el.substring(1,el.length()-1) + "\n";
 		}

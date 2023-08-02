@@ -4,13 +4,13 @@ grammar Language;
  * PARSER RULES
  *------------------------------------------------------------------*/
 
-protocol : (preamble)? (varDef)? SEMICOLON (roleDef)+ (protocolID ASSIGN statement)*;
+protocol : (preamble)? (varDef)? SEMICOLON (roleDef)+  CLPAR (protocolID ASSIGN statement)* CRPAR ;
 
 protocolID : ID ;
 
 statement : branch | ifThenElse | end | internalAction | rec;
 
-branch : inputRole=role FROM outputRole+=role (COMMA outputRole+=role)* COLON (branchStat* | commStat );
+branch : inputRole=role FROM outputRole+=role (COMMA outputRole+=role)* COLON LPAR (branchStat* | commStat )RPAR ;
 
 branchStat : (BRANCH SLPAR rateValues+=rate SRPAR updates DOT statement) ;
 

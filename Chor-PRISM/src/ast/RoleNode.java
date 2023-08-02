@@ -16,8 +16,13 @@ public class RoleNode implements Node{
 	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels) {
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName) {
 		return code + name;
+	}
+	
+	@Override
+	public String projection(int index, int totIndex, ArrayList<Node> modules) {
+		return null;
 	}
 	
 }

@@ -29,7 +29,12 @@ public class InternalActionNode implements Node{
 	}
 	
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels) {
+	public String projection(int index, int totIndex, ArrayList<Node> modules) {
+		return null;
+	}
+	
+	@Override
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName) {
 		Functions funs = new Functions();
 		String roleTmp = Functions.changeIndex(role,index,totIndex);
 		
@@ -43,13 +48,18 @@ public class InternalActionNode implements Node{
 			}
 		}
 		
-		String updatesNew = updates.generateCode(code,index,totIndex,modules,labels);
+		String updatesNew = updates.generateCode(code,index,totIndex,modules,labels,protocolName);
 		updatesNew = Functions.returnStringNewIndex(updatesNew,index,totIndex);
 		if(!updatesNew.equals("")) {
 			updatesNew = updatesNew + "&";
 		}
 		if(statement instanceof RecNode) {
-			updatesNew = updatesNew + "(" + roleTmp +"'=" + Integer.toString(((RecNode) statement).getState()) + "); " ;
+			if(((RecNode) statement).getState()!=-1) {
+				updatesNew = updatesNew + "(" + roleTmp +"'=" + Integer.toString(((RecNode) statement).getState()) + "); " ;
+			}
+			else {
+				updatesNew = updatesNew + "(" + roleTmp +"'=" + ((RecNode) statement).getName() + "); " ;
+			}
 		}
 		else {
 			updatesNew = updatesNew + "(" + roleTmp +"'=" + Integer.toString(stateRole+1) + "); " ;
@@ -73,7 +83,7 @@ public class InternalActionNode implements Node{
 		}
 		
 		if(!(statement instanceof RecNode)) {
-			toRet = statement.generateCode(toRet,index,totIndex,modules,labels);
+			toRet = statement.generateCode(toRet,index,totIndex,modules,labels,protocolName);
 		}
 		return toRet;
 	}

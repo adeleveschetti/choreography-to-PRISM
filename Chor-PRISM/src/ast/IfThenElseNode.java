@@ -28,12 +28,17 @@ public class IfThenElseNode implements Node {
 	public String getRole() {
 		return role;
 	}
-	
+
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels) {
+	public String projection(int index, int totIndex, ArrayList<Node> modules) {
+		return null;
+	}
+
+	@Override
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName) {
 		Functions funs = new Functions();
 		String roleTmp = funs.changeIndex(role,index,totIndex);
-		
+
 		int stateModule = -1;
 		for(Node el : modules) {
 			if(el.toPrint().equals(roleTmp)) {
@@ -43,13 +48,20 @@ public class IfThenElseNode implements Node {
 
 		String toRet = "[] (" + roleTmp +"=" + Integer.toString(stateModule) + ")&" + Functions.returnStringNewIndex(cond,index,totIndex) + " -> ;" ;
 		if(thenStat instanceof RecNode) {
-			toRet = toRet.substring(0,toRet.length()-1) + "(" + roleTmp +"'=" + Integer.toString(((RecNode) thenStat).getState()) + ");";
+			if(((RecNode)thenStat).getState()!=-1) {
+				toRet = toRet.substring(0,toRet.length()-1) + "(" + roleTmp +"'=" + Integer.toString(((RecNode) thenStat).getState()) + ");";
+			}
+			else {
+				toRet = toRet.substring(0,toRet.length()-1) + "(" + roleTmp +"'=" + ((RecNode) thenStat).getName() + ");";			}
 		}
 		else if(elseStat instanceof EndNode) {
 			toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(stateModule) + ");";
 		}
 		else if(thenStat instanceof IfThenElseNode) {
 			toRet = toRet.substring(0,toRet.length()-1) + "(" + roleTmp +"'=" + Integer.toString(stateModule+1) + ");";
+		}
+		else if(thenStat instanceof BranchNode) {
+			toRet = toRet + "\n[] (" + roleTmp +"=" + Integer.toString(stateModule) + ")&" + Functions.returnStringNewIndex(cond,index,totIndex) + " -> ;";
 		}
 		for(Node el : modules) {
 			if(el.toPrint().equals(roleTmp) && !(elseStat instanceof EndNode)) {
@@ -63,9 +75,9 @@ public class IfThenElseNode implements Node {
 		String codeToRet = code.substring(0,whereToAdd) ;
 		codeToRet = codeToRet + "\n" + toRet;
 		codeToRet = codeToRet + "\n" + code.substring(whereToAdd,code.length());
-		
+
 		if(!(thenStat instanceof RecNode)) {
-			codeToRet = thenStat.generateCode(codeToRet,index,totIndex,modules,labels);
+			codeToRet = thenStat.generateCode(codeToRet,index,totIndex,modules,labels,protocolName);
 		}
 		int newStateModule = -1;
 		for(Node el : modules) {
@@ -89,14 +101,14 @@ public class IfThenElseNode implements Node {
 				}
 			}
 		}
-		
+
 		indexRoleA = codeToRet.indexOf("module "+roleTmp);
 		whereToAdd = codeToRet.indexOf("endmodule",indexRoleA);
 		String codeToRetElse = codeToRet.substring(0,whereToAdd) ;
 		codeToRetElse = codeToRetElse + "\n" + toRet;
 		codeToRetElse = codeToRetElse + "\n" + codeToRet.substring(whereToAdd,codeToRet.length());
 		if(!(elseStat instanceof RecNode) && !(elseStat instanceof EndNode)) {
-			codeToRetElse = elseStat.generateCode(codeToRetElse,index,totIndex,modules,labels);
+			codeToRetElse = elseStat.generateCode(codeToRetElse,index,totIndex,modules,labels,protocolName);
 		}
 		return codeToRetElse;
 	}

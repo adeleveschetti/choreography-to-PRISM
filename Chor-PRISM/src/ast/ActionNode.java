@@ -17,7 +17,12 @@ public class ActionNode implements Node{
 	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels) {
+	public String projection(int index, int totIndex, ArrayList<Node> modules) {
+		return null;
+	}
+	
+	@Override
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName) {
 		if(actionB==null) {
 			return actionA;
 		}

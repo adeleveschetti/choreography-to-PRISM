@@ -80,7 +80,12 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 		for(int i=0; i<ctx.protocolID().size(); i++) {
 			String protID = ctx.protocolID().get(i).ID().getText();
 			Node stat = visitStatement(ctx.statement().get(i));
-			prot.add(new Pair(new RecNode(protID),stat));
+			if(ctx.protocolID().size()>1 && i>0) {
+				prot.add(new Pair(new RecNode(protID,false),stat));
+			}
+			else {
+				prot.add(new Pair(new RecNode(protID,true),stat));
+			}
 		}
 		return new ProgramNode(valueVar,modules,preamble,prot);
 	}
