@@ -5,14 +5,14 @@ Dice2 : [0..3] init 0;
 d1 : [0..6] init 0; 
 
 
-[FLDHY] (Dice2=0)  -> 1 :  (Dice2'=1); 
-[MSWLE] (Dice2=0)  -> 1 :  (Dice2'=0); 
+[GXMCC] (Dice2=0)  -> 1 :  (Dice2'=1); 
+[HIKQO] (Dice2=0)  -> 1 :  (Dice2'=0); 
 
 
 
 
-[GUNOD] (Dice2=1)&(d1=0)  -> 1 :  (Dice2'=0); 
-[AWLNX] (Dice2=1)&(d1=0)  -> 5 :  (Dice2'=0); 
+[OOCAC] (Dice2=1)&(d1=0)  -> 1 :  (Dice2'=0); 
+[AJHAY] (Dice2=1)&(d1=0)  -> 5 :  (Dice2'=0); 
 
 [] (Dice2=1)&!((d1=0)) -> 1 : (Dice2'=-1);
 endmodule
@@ -23,10 +23,10 @@ Dice1 : [0..1] init 0;
 d1 : [0..6] init 0; 
 
 
-[FLDHY] (Dice1=0)  -> 1 : (d1'=2)&(Dice1'=0); 
-[MSWLE] (Dice1=0)  -> 1 : (d1'=0)&(Dice1'=0); 
+[GXMCC] (Dice1=0)  -> 1 : (d1'=2)&(Dice1'=0); 
+[HIKQO] (Dice1=0)  -> 1 : (d1'=0)&(Dice1'=0); 
 
-[GUNOD] (Dice1=0)  -> a : (d1'=2)&(Dice1'=0); 
-[AWLNX] (Dice1=0)  -> c : (d1'=3)&(Dice1'=0); 
+[OOCAC] (Dice1=0)  -> a : (d1'=2)&(Dice1'=0); 
+[AJHAY] (Dice1=0)  -> c : (d1'=3)&(Dice1'=0); 
 endmodule
 

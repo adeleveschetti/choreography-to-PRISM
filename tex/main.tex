@@ -16,13 +16,18 @@
 
 %\graphicspath{{./graphics/}}%helpful if your graphic files are in another directory 
   
- 
- 
+ \usepackage{mathtools}
+\usepackage{sml-highlight}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{epstopdf}
+\usepackage{inputenc}
+ \usepackage{graphicx} %Loading the package
+\graphicspath{{Figures/}}
   
 \bibliographystyle{plainurl}% the mandatory bibstyle
 
-\title{A Sound and Complete Projection for Global
-  Types} %TODO Please add
+\title{A Choreographic Language for PRISM} %TODO Please add
 
 %\titlerunning{Dummy short title} %TODO optional, please use if title is longer than one line
 
@@ -98,12 +103,11 @@
 
 
 % My macros
-\input macros
+\input{macros}
 
 \begin{document}
 
 \maketitle
-
 %TODO mandatory: add short abstract of the document
 \begin{abstract}
   This is the abstract
@@ -112,14 +116,18 @@
 \section{Formal Language} 
 \input language
 
- 
+
+\newpage
+\section{Tests}
+\input tests
+
 %%
 %% Bibliography
 %% 
 
 %% Please use bibtex, 
  
-\bibliography{ref}
+\bibliography{biblio}
  
 
 \end{document}

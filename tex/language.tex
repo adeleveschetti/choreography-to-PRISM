@@ -1,28 +1,65 @@
-\mypar{Syntax.} This is the language and we comment on it later.
+In this section, we provide the formal definition of our choreographic
+language as well as process algebra representing
+PRISM~\cite{prismsemantics}.
 
+\subsection{Choreographies}
 
-\noindent {\em Global:}
-
+\mypar{Syntax.} Our choreographic language is defined by the following
+syntax:
+%
 \begin{displaymath}
   \begin{array}{lll}
-    \text{(Chor)}  \quad & C \ ::=\ & \role p\longrightarrow\{\role p_i\}_{i\in I}\oplus\{[\lambda_j] x_j=E_j: C_j\}_{j\in J}\ \mid\
-    \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2 \ \mid\ X\ \mid\ \CEnd\\\\
-    \text{(Expressions)}\quad & E \ ::=\ & f(\tilde E)\quad\mid\quad x\\\\
+    \text{(Chor)}  \quad & C \ ::=\
+    & \{\role p_i\}_{i\in I}\,+\!\{\lambda_j: x_j=E_j;\ C_j\}_{j\in J}
+      \ \mid\
+      \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2
+      \ \mid\
+      X
+      \ \mid\
+      \CEnd
+    \\[1mm]
+    \text{(Expr)}\quad & E \ ::=\ & f(\tilde E)\quad\mid\quad x\quad\mid\quad v
+    \\[1mm]
     \text{(Rates)}\quad       & \lambda\in\mathbb R
+    & \qquad\quad
+      \text{(Variables)}\quad    x\in\mathsf{Var} 
+      \qquad\quad
+      \text{(Values)}\quad       v\in\mathsf{Val} 
   \end{array}
 \end{displaymath}
+We briefly comment the various constructs. The syntactic category $C$
+denotes choreographic programmes. The term
+$\role p\longrightarrow\{\role p_i\}_{i\in I}\oplus\{[\lambda_j]
+x_j=E_j: C_j\}_{j\in J}$ denotes an interaction between roles
+$\role p_i$...
 
 
-\noindent {\em Prism/Local:} 
+\subsection{PRISM}
+
+\mypar{Syntax.}
 \begin{displaymath}
-  \begin{array}{lll}
-    \text{(Networks)}  \quad & N \ ::=\ & \CEnd \ \mid\ \role{p}:\{F_i\}_i\ \mid\ M \pp M\ \mid\ M \ppp A M\ \mid\ M/A\ \mid\ \sigma M\\\\
-    \text{(Commands)}  \quad & F \ ::=\ & \cmd aE{\lambda_i}{x_i}{E_i}{i\in I}\\\\
+  \begin{array}{lrllll}
+    \text{(Networks)}  \quad
+    & N, M  & ::=  &      & \CEnd & \text{empty network}\\
+    &       &      & \mid & \role{p}:\{F_i\}_i & \text{module}\\
+%    &       &      & \mid & M \pp M    & \text{parallel composition}\\
+    &       &      & \mid & M \ppp A M & \text{parallel composition}\\
+    &       &      & \mid & M/A        & \text{action hiding}\\
+    &       &      & \mid & \sigma M   & \text{substitution}\\
+    \\
+    \text{(Commands)}  \quad
+    & F     & ::=  &      & [a] g \rightarrow \Sigma_{i\in I}\{\lambda_i: u_i\}
+                                  & \text{$g$ is a boolean expression in $E$} \\
+    \\[1mm]
+    \text{(Assignment)} \quad
+    & u     & ::=  &      & (x' = E) & \text{update $x$, element of $\mathcal V$, with $E$}\\
+    &       &      & \mid & A \& A   & \text{multiple assignments}
   \end{array}
 \end{displaymath}
 
-\mypar{Semantics.} We construct by the following set of rules:
-
+\mypar{Semantics.} We construct all the enables commands by applying a
+closure to the following rules.
+% 
 \begin{displaymath}
   \begin{array}{lll}
     \infer[]
@@ -45,6 +82,9 @@
     & a\in A}
   \end{array}
 \end{displaymath}
+That means that ones we have a set of executable rules, we can start
+building a transition system. In order to do so, we
+
 
 \begin{displaymath}
   \begin{array}{lll}
@@ -58,33 +98,86 @@
 
 
 
+\subsection{Projection from Choreographies to PRISM}
 \mypar{Mapping Choreographies to PRISM.} We need to run some standard
 static checks because, since there is branching, some terms may not be
 projectable.
+%
+\begin{displaymath}
+  \begin{array}{ll}
+    f\Big(\quad \role p_1\longrightarrow\{\role p_2\} \oplus
+    \left\{
+    \begin{array}{l}{}
+      [\lambda_1] x=5:  \role p_1\longrightarrow\{\role p_2\} \oplus\{[\lambda_3] y=5\}
+      \\{}
+      [\lambda_2] y=10: \role p_1\longrightarrow\{\role p_2\} \oplus\{[\lambda_4] x=10\}
+    \end{array}
+    \right\}
+    , \ \role p_1:\emptyset\ \pp\ \role p_2:\emptyset
+    \Big)
+    \\\\
+    =
+    \\\\
+    \text{label} = \text{newlabel}();\\
+    \text{for } \role p_i \{\\
+    \ add(p_i, [\text{label}] {s_{p_i} = state(p_i)} \rightarrow\
+    \left\{
+    \begin{array}{ll}
+      \lambda_1: x'=5; \textsf{state}(\role p_i)' = \textsf{generatenewstate} (\role p_i)
+      \\
+      \lambda_2: y'=10; \textsf{state}(\role p_i)' = \textsf{generatenewstate} (\role p_i)
+    \end{array}
+    \right\}
+    \\
+
+    \ f(\role p_1\longrightarrow\{\role p_2\} \oplus\{[\lambda_3] y=5\}, network') = network''\\
+    \ return f(\role p_1\longrightarrow\{\role p_2\} \oplus\{[\lambda_4] x=10\}, network'')
+    
+  \end{array}
+\end{displaymath}
+
+\hrule
 
 
-$f: C\rightarrow \mathcal R\mapsto F$
-\[
-\begin{array}{l}
-f(\role p_1\longrightarrow\{\role p_i\}_{i\in I}\oplus\{[\lambda_j]
-x_j=E_j: C_j\}_{j\in J}) = \\
-= \begin{cases}
-\bigg( [\lambda_{j_1}] x_{j_1} = f(E_{j_1}) \bigg)_{\role p}. f(\oplus\{[\lambda_j]
-x_j=E_j: C_j\}_{j\in J\setminus\{{j_1}\}}). f(C_{j_1}) &if \ \role p = \role p_1 \lor \role p \in \role \{\role p_i\}_{i \in I} \\
-%\big|[\lambda_j] x_j = f(E_j)\big|_{\role p} . f(C_j) &if\ \role p \in \role \{\role p_i\}_{i \in I}\\
-f(C_j) & if \ \role p \neq \role p_1 \land \role p \notin \{\role p_i\}_{i\in I}
-\end{cases} 
-\\
-f(\textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2) = \begin{cases}
-f(E) . f(C_1) . f(C_2) & if\ \role p\in \mathbf{roles}\\
-\bot & otherwise
-\end{cases} 
-\\
-f(X) = \; ??
-\\
-f(\CEnd) = \bot
-\end{array}
-\]
+\begin{displaymath}
+	f : C \longrightarrow \texttt{network} \longrightarrow \texttt{network} \quad\quad \texttt{network} : \mathcal R \longrightarrow \text{Set}(F)
+\end{displaymath}
+
+\begin{displaymath}
+  \begin{array}{ll}
+    f\Big(\; \role p_1\longrightarrow\{\role
+ p_i\}_{i\in I} \oplus \{[\lambda_j] x_j=E_j: D_j\}_{j\in J}, \texttt{network}
+    \Big)
+    \\\\
+    =
+    \\\\
+    \textsf{label} = \texttt{newlabel}();\\
+    \textsf{for } \role p_k \in \mathbf{roles} \{\\
+    \quad\textsf{for } j \in J \{\\
+    \quad\quad \texttt{network} = \texttt{add}(\role p_k,[\textsf{label}] {s_{\role p_k} = \texttt{state}(\role p_k)} \rightarrow\ \lambda_j : x_j=E_j\;\& \;s_{\role p_k}'=\texttt{genNewState}(\role p_k));\\
+  	\quad\}\\
+  	\}\\
+	\textsf{for } j \in J \{\\
+	\quad \texttt{network} = f(D_j, \texttt{network});  \\ 
+	\}\\
+  	\textsf{return } \texttt{network}
+  \end{array}
+\end{displaymath}
+
+\begin{displaymath}
+  \begin{array}{ll}
+    f\Big(\; \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2, \texttt{network} 
+    \Big)
+    \\\\
+    =
+    \\\\
+\texttt{network} = \texttt{add}(\role p,[\;] {s_{\role p} = \texttt{state}(\role p)} \;\& \;f(E));\\
+	\texttt{network} = f(C_1, \texttt{network}); \\
+	\texttt{network} = f(C_2, \texttt{network}); \\
+
+ 	\text{return } \texttt{network}
+  \end{array}
+\end{displaymath}
 
 
 %%% Local Variables: 
