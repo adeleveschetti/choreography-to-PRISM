@@ -13,13 +13,14 @@ endpreamble
 n = 5;
 
 Server -> 
-Server : "s : [1..5];", "a : [0..1];" ;
+Server : "a : [0..1];" ;
 
 Station[i] -> i in [1...n]
 Station[i] : 	"s[i] : [0..1];"; 
 
-PoW := 
+{
+ServerPolling := 
 	Server -> Station[i] :
-		+["gamma*1"]  "(s[i]'=s[i]+1)"&&"(s[i]'=0)" . PoW 
-		+["gamma*lambda"]  "(a'=1)"&&"(s[i]'=1)" .  Server -> Station[i] : ["mu*1"] "(s'=s+1)&(a'=0)"&&"(s[i]'=0)".PoW  
-	
+		(+["gamma*1"]  " "&&"(s[i]'=0)" . ServerPolling 
+		+["gamma*lambda"]  "(a'=1)"&&"(s[i]'=1)" .  Server -> Station[i] : (["mu*1"] "(a'=0)"&&"(s[i]'=0)".ServerPolling ))
+}

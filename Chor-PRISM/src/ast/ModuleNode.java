@@ -25,13 +25,26 @@ public class ModuleNode implements Node{
 	public String toPrint() {
 		return name;
 	}
-
+	
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels) {
+	public String projection(int index, int totIndex, ArrayList<Node> modules) {
 		String toRet = "module " + name + "\n";
 		if(vars!=null) {
 			for(String el : vars) {
 				toRet = toRet + el + "\n";
+			}
+		}
+		toRet = toRet + "\nendmodule\n\n";
+		return toRet;
+	}
+
+	@Override
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName) {
+		String toRet = "module " + name + "\n";
+		if(vars!=null) {
+			for(String el : vars) {
+				toRet = toRet + el + " \n";
+				
 			}
 		}
 		toRet = toRet + "\nendmodule\n\n";
@@ -41,7 +54,7 @@ public class ModuleNode implements Node{
 	public String addStateVariable(String code) {
 		String toFind = "module " + name + "\n";
 		int index = code.indexOf(toFind)+toFind.length();
-		String toRet = code.substring(0,index) + name + " : [0.."+(state+1)+"] init 0;\n" + code.substring(index+1,code.length());
+		String toRet = code.substring(0,index) + name + " : [0.."+(state+1)+"] init 0;\n" + code.substring(index,code.length());
 		return toRet;
 	}
 }

@@ -23,15 +23,20 @@ public class MessageNode implements Node {
 	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels) {
+	public String projection(int index, int totIndex, ArrayList<Node> modules) {
+		return null;
+	}
+	
+	@Override
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName) {
 		if(loop==null) {
-			return actions.generateCode("",index,totIndex,modules,labels);
+			return actions.generateCode("",index,totIndex,modules,labels,protocolName);
 		}
 		else if(actions==null && loop.size()>1) {
 
 			String ret = "";
 			for(int i=0; i<loop.size(); i++) {
-				ret = ret + loop.get(i).generateCode("",index,totIndex,modules,labels);
+				ret = ret + loop.get(i).generateCode("",index,totIndex,modules,labels,protocolName);
 				if(i!=loop.size()-1) {
 					ret = ret + "&&";
 				}
@@ -39,7 +44,7 @@ public class MessageNode implements Node {
 			return ret;
 		}
 		String ret = "";
-		String loopMessage = loop.get(0).generateCode("",index,totIndex,modules,labels);
+		String loopMessage = loop.get(0).generateCode("",index,totIndex,modules,labels,protocolName);
 		if(beforeAction) {
 			ret = message + "&&" + loopMessage;
 		}

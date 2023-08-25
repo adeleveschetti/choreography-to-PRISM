@@ -29,13 +29,13 @@ Miner[i] : "b[i] : block {m[i],0;genesis,0} ;", "B[i] : blockchain [{genesis,0;g
 Network ->
 Network : "set1 : list [];", "set2 : list [];", "set3 : list [];" , "set4 : list [];"; 
 	
-
+{
 PoW := Hasher[i] -> Miner[i] :
-+["mR*hR[i]"]  " "&&"(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" . 
-		Miner[i] -> Network : ["rB*1"] "(B[i]'=addBlock(B[i],b[i]))" && foreach(k != i) "(set[k]'=addBlockSet(set[k],b[i]))" @Network .PoW
+(+["mR*hR[i]"]  " "&&"(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" . 
+		Miner[i] -> Network : (["rB*1"] "(B[i]'=addBlock(B[i],b[i]))" && foreach(k != i) "(set[k]'=addBlockSet(set[k],b[i]))" @Network .PoW)
  +["lR*hR[i]"] " " && " " .
  				if "!isEmpty(set[i])"@Miner[i] then { 
-  						["r"] "(b[i]'=extractBlock(set[i]))"@Miner[i] . Miner[i] -> Network : ["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . PoW 
+  						["r"] "(b[i]'=extractBlock(set[i]))"@Miner[i] . Miner[i] -> Network : (["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . PoW) 
  				}
  				else{
  					if "canBeInserted(B[i],b[i])"@Miner[i] then { 
@@ -44,7 +44,7 @@ PoW := Hasher[i] -> Miner[i] :
  					else{
  						PoW
 }
-}
-  
+})
+} 
   
  

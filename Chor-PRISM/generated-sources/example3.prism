@@ -5,94 +5,93 @@ const double gamma= 200;
 const double lambda= mu/N;
 
 module Server
-s : [1..5];
-a : [0..1];
-Server : [0..10] init 0;
+Server : [0..6] init 0;
+a : [0..1]; 
 
 
-[QQOOJ] (Server=0)  -> gamma : (s1'=s1+1)&(Server'=0); 
-[ZPDIS] (Server=0)  -> gamma : (a'=1)&(Server'=2); 
+[CVMOF] (Server=0)  -> gamma :  (Server'=0); 
+[CVHKL] (Server=0)  -> gamma : (a'=1)&(Server'=2); 
 
-[KIBEX] (Server=1)  -> mu : (s'=s+1)&(a'=0)&(Server'=0); 
+[VOKSK] (Server=1)  -> mu : (a'=0)&(Server'=0); 
 
-[XGVUS] (Server=1)  -> gamma : (s2'=s2+1)&(Server'=1); 
-[LOIAC] (Server=1)  -> gamma : (a'=1)&(Server'=3); 
+[MPJTL] (Server=1)  -> gamma :  (Server'=0); 
+[WRSGU] (Server=1)  -> gamma : (a'=1)&(Server'=3); 
 
-[QSNIC] (Server=2)  -> mu : (s'=s+1)&(a'=0)&(Server'=1); 
+[JESEG] (Server=2)  -> mu : (a'=0)&(Server'=0); 
 
-[ULOFK] (Server=2)  -> gamma : (s3'=s3+1)&(Server'=2); 
-[ZFGDL] (Server=2)  -> gamma : (a'=1)&(Server'=4); 
+[DUKRK] (Server=2)  -> gamma :  (Server'=0); 
+[ZCICI] (Server=2)  -> gamma : (a'=1)&(Server'=4); 
 
-[NBOTP] (Server=3)  -> mu : (s'=s+1)&(a'=0)&(Server'=2); 
+[HOBHV] (Server=3)  -> mu : (a'=0)&(Server'=0); 
 
-[XMBQF] (Server=3)  -> gamma : (s4'=s4+1)&(Server'=3); 
-[GZOYX] (Server=3)  -> gamma : (a'=1)&(Server'=5); 
+[OFKTL] (Server=3)  -> gamma :  (Server'=0); 
+[DPUAX] (Server=3)  -> gamma : (a'=1)&(Server'=5); 
 
-[BEHEW] (Server=4)  -> mu : (s'=s+1)&(a'=0)&(Server'=3); 
+[KHZRH] (Server=4)  -> mu : (a'=0)&(Server'=0); 
 
-[JMLHQ] (Server=4)  -> gamma : (s5'=s5+1)&(Server'=4); 
-[HAPBZ] (Server=4)  -> gamma : (a'=1)&(Server'=6); 
+[OZPYT] (Server=4)  -> gamma :  (Server'=0); 
+[KKCIU] (Server=4)  -> gamma : (a'=1)&(Server'=6); 
 
-[DJXRY] (Server=5)  -> mu : (s'=s+1)&(a'=0)&(Server'=4); 
+[IMKQH] (Server=5)  -> mu : (a'=0)&(Server'=0); 
 endmodule
 
 
 module Station1
-s1 : [0..1];
-Station1 : [0..10] init 0;
+Station1 : [0..1] init 0;
+s1 : [0..1]; 
 
 
-[QQOOJ] (Station1=0)  -> 1 : (s1'=0)&(Station1'=0); 
-[ZPDIS] (Station1=0)  -> lambda : (s1'=1)&(Station1'=2); 
+[CVMOF] (Station1=0)  -> 1 : (s1'=0)&(Station1'=0); 
+[CVHKL] (Station1=0)  -> lambda : (s1'=1)&(Station1'=0); 
 
-[KIBEX] (Station1=1)  -> 1 : (s1'=0)&(Station1'=0); 
+[VOKSK] (Station1=0)  -> 1 : (s1'=0)&(Station1'=0); 
 endmodule
 
 
 module Station2
-s2 : [0..1];
-Station2 : [0..10] init 0;
+Station2 : [0..1] init 0;
+s2 : [0..1]; 
 
 
-[XGVUS] (Station2=0)  -> 1 : (s2'=0)&(Station2'=1); 
-[LOIAC] (Station2=0)  -> lambda : (s2'=1)&(Station2'=2); 
+[MPJTL] (Station2=0)  -> 1 : (s2'=0)&(Station2'=0); 
+[WRSGU] (Station2=0)  -> lambda : (s2'=1)&(Station2'=0); 
 
-[QSNIC] (Station2=1)  -> 1 : (s2'=0)&(Station2'=1); 
+[JESEG] (Station2=0)  -> 1 : (s2'=0)&(Station2'=0); 
 endmodule
 
 
 module Station3
-s3 : [0..1];
-Station3 : [0..10] init 0;
+Station3 : [0..1] init 0;
+s3 : [0..1]; 
 
 
-[ULOFK] (Station3=0)  -> 1 : (s3'=0)&(Station3'=2); 
-[ZFGDL] (Station3=0)  -> lambda : (s3'=1)&(Station3'=2); 
+[DUKRK] (Station3=0)  -> 1 : (s3'=0)&(Station3'=0); 
+[ZCICI] (Station3=0)  -> lambda : (s3'=1)&(Station3'=0); 
 
-[NBOTP] (Station3=1)  -> 1 : (s3'=0)&(Station3'=2); 
+[HOBHV] (Station3=0)  -> 1 : (s3'=0)&(Station3'=0); 
 endmodule
 
 
 module Station4
-s4 : [0..1];
-Station4 : [0..10] init 0;
+Station4 : [0..1] init 0;
+s4 : [0..1]; 
 
 
-[XMBQF] (Station4=0)  -> 1 : (s4'=0)&(Station4'=3); 
-[GZOYX] (Station4=0)  -> lambda : (s4'=1)&(Station4'=2); 
+[OFKTL] (Station4=0)  -> 1 : (s4'=0)&(Station4'=0); 
+[DPUAX] (Station4=0)  -> lambda : (s4'=1)&(Station4'=0); 
 
-[BEHEW] (Station4=1)  -> 1 : (s4'=0)&(Station4'=3); 
+[KHZRH] (Station4=0)  -> 1 : (s4'=0)&(Station4'=0); 
 endmodule
 
 
 module Station5
-s5 : [0..1];
-Station5 : [0..10] init 0;
+Station5 : [0..1] init 0;
+s5 : [0..1]; 
 
 
-[JMLHQ] (Station5=0)  -> 1 : (s5'=0)&(Station5'=4); 
-[HAPBZ] (Station5=0)  -> lambda : (s5'=1)&(Station5'=2); 
+[OZPYT] (Station5=0)  -> 1 : (s5'=0)&(Station5'=0); 
+[KKCIU] (Station5=0)  -> lambda : (s5'=1)&(Station5'=0); 
 
-[DJXRY] (Station5=1)  -> 1 : (s5'=0)&(Station5'=4); 
+[IMKQH] (Station5=0)  -> 1 : (s5'=0)&(Station5'=0); 
 endmodule
 

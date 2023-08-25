@@ -33,15 +33,16 @@ public class ProgramNode implements Node{
 		}
 		return toRet;
 	}
-
+	
 	@Override
-	public String generateCode(String code, int index, int totIndex,  ArrayList<Node> modules, ArrayList<String> labels) {
+	public String projection(int index, int totIndex, ArrayList<Node> modules) {
 		totIndex = max;
+		String code = "";
 		if(preamble!=null) {
-			code = preamble.generateCode(code,1,totIndex,this.modules,labels);
+			code = preamble.projection(1,totIndex,this.modules);
 		}
 		for(Node el : this.modules) {
-			code = el.generateCode(code,1,totIndex,this.modules,labels);
+			code = code + el.projection(1,totIndex,this.modules);
 		}
 		Functions fun = new Functions();
 		for(Pair<Node,Node> pair : protocols) {
@@ -51,11 +52,43 @@ public class ProgramNode implements Node{
 						((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
 					}
 				}
-				code = pair.getSecond().generateCode(code,i,totIndex,this.modules,labels);
+			}
+			
+		}
+		return code;
+	}
+
+	@Override
+	public String generateCode(String code, int index, int totIndex,  ArrayList<Node> modules, ArrayList<String> labels, String protocolName) {
+		totIndex = max;
+		if(preamble!=null) {
+			code = preamble.generateCode(code,1,totIndex,this.modules,labels,"");
+		}
+		for(Node el : this.modules) {
+			code = el.generateCode(code,1,totIndex,this.modules,labels,"");
+		}
+		Functions fun = new Functions();
+		for(Pair<Node,Node> pair : protocols) {
+			for(int i=1;i<=totIndex; i++) {
+				for(Node mod : this.modules) {
+					if(mod.toPrint().equals(Functions.changeIndex(((BranchNode) pair.getSecond()).getRoleA(),i,totIndex))) {
+						((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
+					}
+				}
+				code = pair.getSecond().generateCode(code,i,totIndex,this.modules,labels,((RecNode) pair.getFirst()).getName());
+				for(Node mod : this.modules) {
+					((RecNode) pair.getFirst()).setGenerated(true);
+					if(mod.toPrint().equals(Functions.changeIndex(((BranchNode) pair.getSecond()).getRoleA(),i,totIndex)) && ((RecNode) pair.getFirst()).getState()==-1) {
+						((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
+					}
+				}
 			}
 		}
 		for(Node el : this.modules) {
 			code = ((ModuleNode) el).addStateVariable(code);
+		}
+		for(Pair<Node,Node> pair : protocols) {
+			code = ((RecNode) pair.getFirst()).changeState(code);
 		}
 		return code;
 	}
