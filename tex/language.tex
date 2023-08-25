@@ -2,41 +2,19 @@ In this section, we provide the formal definition of our choreographic
 language as well as process algebra representing
 PRISM~\cite{prismsemantics}.
 
-\subsection{Choreographies}
 
-\mypar{Syntax.} Our choreographic language is defined by the following
-syntax:
-%
-\begin{displaymath}
-  \begin{array}{lll}
-    \text{(Chor)}  \quad & C \ ::=\
-    & \{\role p_i\}_{i\in I}\,+\!\{\lambda_j: x_j=E_j;\ C_j\}_{j\in J}
-      \ \mid\
-      \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2
-      \ \mid\
-      X
-      \ \mid\
-      \CEnd
-    \\[1mm]
-    \text{(Expr)}\quad & E \ ::=\ & f(\tilde E)\quad\mid\quad x\quad\mid\quad v
-    \\[1mm]
-    \text{(Rates)}\quad       & \lambda\in\mathbb R
-    & \qquad\quad
-      \text{(Variables)}\quad    x\in\mathsf{Var} 
-      \qquad\quad
-      \text{(Values)}\quad       v\in\mathsf{Val} 
-  \end{array}
-\end{displaymath}
-We briefly comment the various constructs. The syntactic category $C$
-denotes choreographic programmes. The term
-$\role p\longrightarrow\{\role p_i\}_{i\in I}\oplus\{[\lambda_j]
-x_j=E_j: C_j\}_{j\in J}$ denotes an interaction between roles
-$\role p_i$...
+\subsection{PRISM} We start by describing PRISM semantics. Except from
+transforming some informal text in precise rules, Our formalisation
+closely follows that found on the PRISM website~\cite{prismemantics}.
 
+\smallskip
 
-\subsection{PRISM}
-
-\mypar{Syntax.}
+\mypar{Syntax.} Let $\role p$ range over a (possibly infinite) set of
+module names $\mathcal R$, $a$ over a (possibly infinite) set of
+labels $\mathcal L$, $x$ over a (possibly infinite) set of variables
+$\mathsf{Var}$, and $v$ over a (possibly infinite) set of values
+$\mathsf{Val}$. Then, the syntax of PRISM is given by the following
+grammar:
 \begin{displaymath}
   \begin{array}{lrllll}
     \text{(Networks)}  \quad
@@ -54,8 +32,31 @@ $\role p_i$...
     \text{(Assignment)} \quad
     & u     & ::=  &      & (x' = E) & \text{update $x$, element of $\mathcal V$, with $E$}\\
     &       &      & \mid & A \& A   & \text{multiple assignments}
+    \\[1mm]
+    \text{(Expr)}\quad
+    & E     & ::= &       & f(\tilde E)\quad\mid\quad x\quad\mid\quad v
+    % \\[1mm]
+    % \text{(Rates)}\quad   &     \lambda\in\mathbb R
+    %  \\[1mm]
+    %   \text{(Variables)}\quad &   x\in\mathsf{Var} 
+    %  \\[1mm]
+    %   \text{(Values)}\quad     &  v\in\mathsf{Val} 
   \end{array}
 \end{displaymath}
+Networks are the top syntactic category for system of modules composed
+together. The term $CEnd$ represent an empty network. A module
+$\role{p}:\{F_i\}_i$ is identified by its name $\role p$ and a set of
+commands $F_i$. Networks can be composed in parallel, in a CSP style:
+a term like $M_1 \ppp A M_2$ says that networks $M_1$ and $M_2$ can
+interact with each other using labels in the finite set $A$. The term
+$M/A$ is the standard CSP/CCS hiding operator. Finally $\sigma M$ is
+equivalent to applying the substitution $\sigma$ to all variables in
+$x$. A substitution is a function that given a variable returns a
+value. When we write $\sigma N$ we refer to the term obtained by
+replacing every free variable $x$ in $N$ with $\sigma(x)$. \marco{Is
+  this really the way substitution is used? Where does it become
+  important?}
+
 
 \mypar{Semantics.} We construct all the enables commands by applying a
 closure to the following rules.
@@ -95,6 +96,35 @@ building a transition system. In order to do so, we
     \sigma : X \rightarrow V
   \end{array}
 \end{displaymath}
+
+
+
+
+\newpage
+
+
+\subsection{Choreographies}
+
+\mypar{Syntax.} Our choreographic language is defined by the following
+syntax:
+%
+\begin{displaymath}
+  \begin{array}{lll}
+    \text{(Chor)}  \quad & C \ ::=\
+    & \{\role p_i\}_{i\in I}\,+\!\{\lambda_j: x_j=E_j;\ C_j\}_{j\in J}
+      \ \mid\
+      \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2
+      \ \mid\
+      X
+      \ \mid\
+      \CEnd
+  \end{array}
+\end{displaymath}
+We briefly comment the various constructs. The syntactic category $C$
+denotes choreographic programmes. The term
+$\{\role p_i\}_{i\in I}\,+\!\{\lambda_j: x_j=E_j;\ C_j\}_{j\in J}$
+denotes an interaction between the roles $\role p_i$. The value
+$\lambda_j$ is a real number representing the rate. ...
 
 
 
