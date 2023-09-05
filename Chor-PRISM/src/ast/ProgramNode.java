@@ -9,10 +9,10 @@ public class ProgramNode implements Node{
 
 	private ArrayList<Node> modules ;
 	private Node preamble ;
-	private ArrayList<Pair<Node,Node>> protocols;
+	private ArrayList<Pair<Node,ArrayList<Node>>> protocols;
 	private int max;
 
-	public ProgramNode(int _max, ArrayList<Node> _modules, Node _preamble, ArrayList<Pair<Node,Node>> _protocols) {
+	public ProgramNode(int _max, ArrayList<Node> _modules, Node _preamble, ArrayList<Pair<Node,ArrayList<Node>>> _protocols) {
 		max = _max;
 		modules = _modules;
 		preamble = _preamble;
@@ -28,34 +28,17 @@ public class ProgramNode implements Node{
 		for(Node el : modules) {
 			toRet = toRet + el.toPrint();
 		}
-		for(Pair<Node,Node> el : protocols) {
-			toRet = toRet + el.getSecond().toPrint();
+		for(Pair<Node,ArrayList<Node>> el : protocols) {
+			for(Node el2 : el.getSecond()) {
+				toRet = toRet + el2.toPrint();
+			}
 		}
 		return toRet;
 	}
-	
+
 	@Override
 	public String projection(int index, int totIndex, ArrayList<Node> modules) {
-		totIndex = max;
-		String code = "";
-		if(preamble!=null) {
-			code = preamble.projection(1,totIndex,this.modules);
-		}
-		for(Node el : this.modules) {
-			code = code + el.projection(1,totIndex,this.modules);
-		}
-		Functions fun = new Functions();
-		for(Pair<Node,Node> pair : protocols) {
-			for(int i=1;i<=totIndex; i++) {
-				for(Node mod : this.modules) {
-					if(mod.toPrint().equals(Functions.changeIndex(((BranchNode) pair.getSecond()).getRoleA(),i,totIndex))) {
-						((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
-					}
-				}
-			}
-			
-		}
-		return code;
+		return null;
 	}
 
 	@Override
@@ -68,18 +51,20 @@ public class ProgramNode implements Node{
 			code = el.generateCode(code,1,totIndex,this.modules,labels,"");
 		}
 		Functions fun = new Functions();
-		for(Pair<Node,Node> pair : protocols) {
-			for(int i=1;i<=totIndex; i++) {
-				for(Node mod : this.modules) {
-					if(mod.toPrint().equals(Functions.changeIndex(((BranchNode) pair.getSecond()).getRoleA(),i,totIndex))) {
-						((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
+		for(Pair<Node,ArrayList<Node>> pair : protocols) {
+			for(Node el : pair.getSecond()) {
+				for(int i=1;i<=totIndex; i++) {
+					for(Node mod : this.modules) {
+						if(el instanceof BranchNode && mod.toPrint().equals(Functions.changeIndex(((BranchNode) el).getRoleA(),i,totIndex))) {
+							((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
+						}
 					}
-				}
-				code = pair.getSecond().generateCode(code,i,totIndex,this.modules,labels,((RecNode) pair.getFirst()).getName());
-				for(Node mod : this.modules) {
-					((RecNode) pair.getFirst()).setGenerated(true);
-					if(mod.toPrint().equals(Functions.changeIndex(((BranchNode) pair.getSecond()).getRoleA(),i,totIndex)) && ((RecNode) pair.getFirst()).getState()==-1) {
-						((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
+					code = el.generateCode(code,i,totIndex,this.modules,labels,((RecNode) pair.getFirst()).getName());
+					for(Node mod : this.modules) {
+						((RecNode) pair.getFirst()).setGenerated(true);
+						if(el instanceof BranchNode && mod.toPrint().equals(Functions.changeIndex(((BranchNode) el).getRoleA(),i,totIndex)) && ((RecNode) pair.getFirst()).getState()==-1) {
+							((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
+						}
 					}
 				}
 			}
@@ -87,7 +72,7 @@ public class ProgramNode implements Node{
 		for(Node el : this.modules) {
 			code = ((ModuleNode) el).addStateVariable(code);
 		}
-		for(Pair<Node,Node> pair : protocols) {
+		for(Pair<Node,ArrayList<Node>> pair : protocols) {
 			code = ((RecNode) pair.getFirst()).changeState(code);
 		}
 		return code;

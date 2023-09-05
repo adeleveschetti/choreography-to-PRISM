@@ -79,7 +79,7 @@ public class BranchNode implements Node{
 				contained = true;
 			}
 		}
-		
+
 		for(int i=0; i<rates.size(); i++) {
 			if(!contained) {
 				boolean firstLabel = false;
@@ -111,7 +111,7 @@ public class BranchNode implements Node{
 					if(!branch && (statements!=null && !(statements.get(i) instanceof RecNode) )) {
 						((ModuleNode) el).setState(stateA+1);
 					}
-									
+
 				}
 			}
 			String toRetRoleA = "";
@@ -126,7 +126,6 @@ public class BranchNode implements Node{
 				int indexStart = code.indexOf("module " + roleTmp);
 				int whereToAdd = -1;
 				whereToAdd = code.indexOf("endmodule",indexStart);
-
 				if(indexState<=whereToAdd && indexState>=indexStart) {
 					String tmpCode = code.substring(indexStart,indexState);
 					int indexBracks = tmpCode.lastIndexOf("[");
@@ -189,7 +188,7 @@ public class BranchNode implements Node{
 					continues = Functions.returnStringNewIndex(((InternalActionNode) statements.get(i)).getRole(),index,totIndex).equals(roleTmp);
 				}
 
-				if(!upA.equals("") && !upA.equals(" ") && !(statements.get(i) instanceof EndNode)) {
+				if(!upA.equals("") && !upA.equals(" ") /*!(statements.get(i) instanceof EndNode)*/) {
 					toRetRoleA = toRetRoleA + "&";
 				}
 
@@ -204,9 +203,10 @@ public class BranchNode implements Node{
 						toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + ((RecNode) statements.get(i)).getName() + "); " ;
 					}
 				}
-				else if(statements.get(i) instanceof EndNode) {
-					toRetRoleA = toRetRoleA +";" ;
+				else if(statements.get(i) instanceof EndNode || (statements.get(i) instanceof IfThenElseNode && ((IfThenElseNode) statements.get(i)).getThenStatement() instanceof EndNode)) {
+					toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + Integer.toString(stateA) + "); " ;
 				}
+				
 				else if(!continues) {
 					toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + Integer.toString(0) + "); ";
 				}
@@ -256,9 +256,8 @@ public class BranchNode implements Node{
 					if(!upCode.equals("") && !upCode.equals(" ") && !(statements.get(i) instanceof EndNode)) {
 						toCheck = toCheck + "&";
 					}
-					if(!(statements.get(i) instanceof EndNode)) {
-						toCheck = toCheck + "(" + outRolesTmp.get(j) +"'=";
-					}
+					toCheck = toCheck + "(" + outRolesTmp.get(j) +"'=";
+
 					if(statements!=null) {
 						boolean continues = false;
 						if(statements.get(i) instanceof BranchNode) {
@@ -274,8 +273,8 @@ public class BranchNode implements Node{
 						if(statements.get(i) instanceof RecNode) {
 							toCheck = toCheck +  Integer.toString(((RecNode) statements.get(i)).getState()) + "); ";
 						}
-						else if(statements.get(i) instanceof EndNode) {
-							toCheck = toCheck +";" ;
+						else if(statements.get(i) instanceof EndNode || (statements.get(i) instanceof IfThenElseNode && ((IfThenElseNode) statements.get(i)).getThenStatement() instanceof EndNode)) {
+							toCheck = toCheck +  Integer.toString(stateB) + "); " ;
 						}
 						else if(!continues) {
 							toCheck = toCheck +  Integer.toString(0) + "); ";
@@ -329,7 +328,6 @@ public class BranchNode implements Node{
 				}
 			}
 		}
-		
 
 		if(statements!=null) {
 
@@ -355,6 +353,10 @@ public class BranchNode implements Node{
 					}	
 					for(int j=0; j<outRolesTmp.size(); j++) {
 						boolean continuesB = false;
+						boolean ends = false;
+						if(stat instanceof IfThenElseNode && ((IfThenElseNode) stat).getThenStatement() instanceof EndNode) {
+							ends = true;
+						}
 						if(stat instanceof BranchNode) {
 							continuesB = Functions.returnStringNewIndex(((BranchNode) stat).getRoleA(),index+j,totIndex).equals(outRolesTmp.get(j));
 						}
@@ -364,8 +366,8 @@ public class BranchNode implements Node{
 						else if(stat instanceof InternalActionNode) {
 							continuesB = Functions.returnStringNewIndex(((InternalActionNode) stat).getRole(),index+j,totIndex).equals(outRolesTmp.get(j));
 						}
-						
-						if(el.toPrint().equals(outRolesTmp.get(j)) && !contained && continuesB) {
+
+						if(el.toPrint().equals(outRolesTmp.get(j)) && !contained && continuesB && !ends) {
 							for(Pair<Node,Integer> pair : statesNext) {
 								if(pair.getFirst().toPrint().equals(outRolesTmp.get(j))) {
 									((ModuleNode) el).setState(pair.getSecond());

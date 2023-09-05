@@ -4,9 +4,11 @@ grammar Language;
  * PARSER RULES
  *------------------------------------------------------------------*/
 
-protocol : (preamble)? (varDef)? SEMICOLON (roleDef)+  CLPAR (protocolID ASSIGN statement)* CRPAR ;
+protocol : (preamble)? (varDef)? SEMICOLON (roleDef)+  CLPAR (protocolID ASSIGN blockStatement)* CRPAR ;
 
 protocolID : ID ;
+
+blockStatement : (statement)+;
 
 statement : branch | ifThenElse | end | internalAction | rec;
 
@@ -16,11 +18,11 @@ branchStat : (BRANCH SLPAR rateValues+=rate SRPAR updates DOT statement) ;
 
 commStat : (SLPAR rateValues+=rate SRPAR updates DOT statement) ;
 
-ifThenElse : IF cond AT role THEN CLPAR thenStat=statement CRPAR (ELSE CLPAR elseStat=statement CRPAR)*;
+ifThenElse : IF cond AT role THEN CLPAR thenStat=statement CRPAR ELSE CLPAR elseStat=statement CRPAR;
 
 rec : protocolID ;
 
-end : END;
+end : END (AT CLPAR roles+=role (COMMA roles+=role)* CRPAR)?;
 
 internalAction : SLPAR rate SRPAR message AT role DOT statement;
 

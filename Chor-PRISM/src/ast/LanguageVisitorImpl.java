@@ -76,15 +76,18 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 				modules.add(new ModuleNode(el,modVars));
 			}
 		}
-		ArrayList<Pair<Node,Node>> prot = new ArrayList<Pair<Node,Node>>();
+		ArrayList<Pair<Node,ArrayList<Node>>> prot = new ArrayList<Pair<Node,ArrayList<Node>>>();
 		for(int i=0; i<ctx.protocolID().size(); i++) {
 			String protID = ctx.protocolID().get(i).ID().getText();
-			Node stat = visitStatement(ctx.statement().get(i));
+			ArrayList<Node> statements = new ArrayList<Node>();
+			for(StatementContext stm : ctx.blockStatement().get(i).statement()) {
+				statements.add(visitStatement(stm));
+			}
 			if(ctx.protocolID().size()>1 && i>0) {
-				prot.add(new Pair(new RecNode(protID,false),stat));
+				prot.add(new Pair(new RecNode(protID,false),statements));
 			}
 			else {
-				prot.add(new Pair(new RecNode(protID,true),stat));
+				prot.add(new Pair(new RecNode(protID,true),statements));
 			}
 		}
 		return new ProgramNode(valueVar,modules,preamble,prot);
@@ -111,11 +114,22 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 			return visitRec(ctx.rec());
 		}
 		else if(ctx.end()!=null) {
-			return new EndNode();
+			return visitEnd(ctx.end());
 		}
 		return visitInternalAction(ctx.internalAction());
 	}
-
+	
+	@Override 
+	public Node visitEnd(EndContext ctx) {
+		ArrayList<Node> roles = null;
+		if(ctx.roles!=null) {
+			roles = new ArrayList<Node>();
+			for(RoleContext el : ctx.roles) {
+				roles.add(visitRole(el));
+			}
+		}
+		return new EndNode(roles);
+	}
 	@Override 
 	public Node visitRec(RecContext ctx) {
 		return new RecNode(ctx.protocolID().ID().getText());
