@@ -64,7 +64,7 @@ public class BranchNode implements Node{
 		Functions funs = new Functions();
 		String roleTmp = funs.changeIndex(role,index,totIndex);
 		ArrayList<String> outRolesTmp = new ArrayList<String>();
-
+		int varAdd = 0;
 		for(String el : outRole) {
 			outRolesTmp.add(Functions.changeIndex(el,index,totIndex));
 		}
@@ -108,9 +108,9 @@ public class BranchNode implements Node{
 			for(Node el : modules) {
 				if(el.toPrint().equals(roleTmp)) {
 					stateA = ((ModuleNode) el).getState();
-					if(!branch && (statements!=null && !(statements.get(i) instanceof RecNode) )) {
+					/*if(!branch && (statements!=null && !(statements.get(i) instanceof RecNode) )) {
 						((ModuleNode) el).setState(stateA+1);
-					}
+					}*/
 
 				}
 			}
@@ -173,7 +173,6 @@ public class BranchNode implements Node{
 					toRetRoleB.set(j,Functions.returnStringNewIndex(precCode,j+1,totIndex));
 				}
 			}
-
 			String upA = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules,labels,protocolName).substring(0,indexUp),index,totIndex);
 			toRetRoleA = toRetRoleA + " -> " + Functions.returnStringNewIndex(rates.get(i).substring(0,indexRate),index,totIndex) + " : " + upA;
 			if(statements!=null) {
@@ -211,7 +210,8 @@ public class BranchNode implements Node{
 					toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + Integer.toString(0) + "); ";
 				}
 				else {
-					toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + Integer.toString(stateA+i+1) + "); " ;
+					toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + Integer.toString(stateA+varAdd+1) + "); " ;
+					varAdd++;
 				}
 			}
 			if(!contained) {
@@ -236,7 +236,6 @@ public class BranchNode implements Node{
 						}
 					}
 					String upCode = "";
-
 					if(!outRole.get(j).contains("[i]") && !outRole.get(j).contains("[i+1]") && (updates.get(i).generateCode("",index,totIndex,modules,labels,protocolName).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules,labels,protocolName).length()).contains("[i]") || updates.get(i).generateCode("",index,totIndex,modules,labels,protocolName).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules,labels,protocolName).length()).contains("[i+1]"))) {
 						upCode = Functions.returnStringNewIndex(updates.get(i).generateCode("",index,totIndex,modules,labels,protocolName).substring(indexUp+2,updates.get(i).generateCode("",index,totIndex,modules,labels,protocolName).length()),index,totIndex);
 					}
@@ -251,7 +250,6 @@ public class BranchNode implements Node{
 					}
 
 					toCheck = toCheck + toRetRoleB.get(j) + " -> " + rateB + " : " + upCode ;
-
 
 					if(!upCode.equals("") && !upCode.equals(" ") && !(statements.get(i) instanceof EndNode)) {
 						toCheck = toCheck + "&";
@@ -280,7 +278,7 @@ public class BranchNode implements Node{
 							toCheck = toCheck +  Integer.toString(0) + "); ";
 						}
 						else {
-							toCheck = toCheck +  Integer.toString(stateB+i+1) + "); ";
+							toCheck = toCheck +  Integer.toString(stateB+j+1) + "); ";
 						}
 					}
 					toRetRoleB.set(j,toCheck);

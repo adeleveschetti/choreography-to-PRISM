@@ -7,7 +7,7 @@ varModule1 : bool;
 
 
 [] (phil1=0)  -> 1 :  (phil1'=0); 
-[] (phil1=0)  -> 1 :  (phil1'=2); 
+[] (phil1=0)  -> 1 :  (phil1'=1); 
 
 [] (phil1=1)  -> 0.5 :  (phil1'=2); 
 [] (phil1=1)  -> 0.5 :  (phil1'=3); 
@@ -42,7 +42,7 @@ varModule2 : bool;
 
 
 [] (phil2=0)  -> 1 :  (phil2'=0); 
-[] (phil2=0)  -> 1 :  (phil2'=2); 
+[] (phil2=0)  -> 1 :  (phil2'=1); 
 
 [] (phil2=1)  -> 0.5 :  (phil2'=2); 
 [] (phil2=1)  -> 0.5 :  (phil2'=3); 
@@ -77,7 +77,7 @@ varModule3 : bool;
 
 
 [] (phil3=0)  -> 1 :  (phil3'=0); 
-[] (phil3=0)  -> 1 :  (phil3'=2); 
+[] (phil3=0)  -> 1 :  (phil3'=1); 
 
 [] (phil3=1)  -> 0.5 :  (phil3'=2); 
 [] (phil3=1)  -> 0.5 :  (phil3'=3); 
