@@ -33,19 +33,21 @@ public class IfThenElseNode implements Node {
 	public String projection(int index, int totIndex, ArrayList<Node> modules) {
 		return null;
 	}
+	
+	public Node getThenStatement() {
+		return thenStat;
+	}
 
 	@Override
 	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName) {
 		Functions funs = new Functions();
 		String roleTmp = funs.changeIndex(role,index,totIndex);
-
 		int stateModule = -1;
 		for(Node el : modules) {
 			if(el.toPrint().equals(roleTmp)) {
 				stateModule = ((ModuleNode) el).getState();
 			}
 		}
-
 		String toRet = "[] (" + roleTmp +"=" + Integer.toString(stateModule) + ")&" + Functions.returnStringNewIndex(cond,index,totIndex) + " -> ;" ;
 		if(thenStat instanceof RecNode) {
 			if(((RecNode)thenStat).getState()!=-1) {
@@ -54,63 +56,91 @@ public class IfThenElseNode implements Node {
 			else {
 				toRet = toRet.substring(0,toRet.length()-1) + "(" + roleTmp +"'=" + ((RecNode) thenStat).getName() + ");";			}
 		}
-		else if(elseStat instanceof EndNode) {
+		else if(thenStat instanceof EndNode) {
 			toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(stateModule) + ");";
 		}
 		else if(thenStat instanceof IfThenElseNode) {
 			toRet = toRet.substring(0,toRet.length()-1) + "(" + roleTmp +"'=" + Integer.toString(stateModule+1) + ");";
 		}
-		else if(thenStat instanceof BranchNode) {
+		else if(thenStat instanceof BranchNode ) {
 			toRet = toRet + "\n[] (" + roleTmp +"=" + Integer.toString(stateModule) + ")&" + Functions.returnStringNewIndex(cond,index,totIndex) + " -> ;";
 		}
+		
 		for(Node el : modules) {
 			if(el.toPrint().equals(roleTmp) && !(elseStat instanceof EndNode)) {
 				((ModuleNode) el).setState(stateModule+1);
-
 			}
 		}
 
 		int indexRoleA = code.indexOf("module "+roleTmp);
 		int whereToAdd = code.indexOf("endmodule",indexRoleA);
+		
 		String codeToRet = code.substring(0,whereToAdd) ;
 		codeToRet = codeToRet + "\n" + toRet;
 		codeToRet = codeToRet + "\n" + code.substring(whereToAdd,code.length());
-
-		if(!(thenStat instanceof RecNode)) {
+		
+		if(!(thenStat instanceof RecNode) && !(thenStat instanceof EndNode)  ) {
 			codeToRet = thenStat.generateCode(codeToRet,index,totIndex,modules,labels,protocolName);
 		}
-		int newStateModule = -1;
-		for(Node el : modules) {
-			if(el.toPrint().equals(roleTmp)) {
-				newStateModule = ((ModuleNode) el).getState();
-			}
-		}
-		toRet = "[] (" + roleTmp +"=" + Integer.toString(stateModule) + ")&!(" + Functions.returnStringNewIndex(cond,index,totIndex) + ") -> ;" ;
+		/*if(thenStat instanceof EndNode && ((EndNode) thenStat).getRoles()!=null) {
+			for(Node el : ((EndNode) thenStat).getRoles()) {
+				String name = el.toPrint();
+				name = funs.changeIndex(name,index,totIndex);
+				if(!name.equals(roleTmp)) {
+					for(Node el2 : modules) {
+						if(el2.toPrint().equals(name)) {
+							stateModule = ((ModuleNode) el2).getState();
+						}
+					}
+					System.out.println(roleTmp + " " + name);
+					String toRetB = "[] (" + name +"=" + Integer.toString(stateModule) + ") -> 1 : (" + name +"'=" + Integer.toString(stateModule) + ");" ;
+					System.out.println(toRetB);
+					int indexRoleB = codeToRet.indexOf("module "+name);
+					int whereToAddB = codeToRet.indexOf("endmodule",indexRoleB);
+					String codeToRetB = codeToRet.substring(0,whereToAddB) ;
+					codeToRetB = codeToRetB + "\n" + toRetB;
+					codeToRetB = codeToRetB + "\n" + codeToRet.substring(whereToAdd,codeToRet.length());
+					codeToRet = codeToRetB;
+				}
 
-		if(elseStat instanceof RecNode) {
-			toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(((RecNode) elseStat).getState()) + ");";
-		}
-		else if(elseStat instanceof EndNode) {
-			toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(newStateModule) + ");";
-		}
-		else if(!(elseStat instanceof InternalActionNode)) {
-			toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(newStateModule+1) + "); ";
+			}
+		}*/
+		if(elseStat!=null) {
+			int newStateModule = -1;
 			for(Node el : modules) {
 				if(el.toPrint().equals(roleTmp)) {
-					((ModuleNode) el).setState(((ModuleNode) el).getState()+1);
+					newStateModule = ((ModuleNode) el).getState();
 				}
 			}
-		}
+			toRet = "[] (" + roleTmp +"=" + Integer.toString(stateModule) + ")&!(" + Functions.returnStringNewIndex(cond,index,totIndex) + ") -> ;" ;
 
-		indexRoleA = codeToRet.indexOf("module "+roleTmp);
-		whereToAdd = codeToRet.indexOf("endmodule",indexRoleA);
-		String codeToRetElse = codeToRet.substring(0,whereToAdd) ;
-		codeToRetElse = codeToRetElse + "\n" + toRet;
-		codeToRetElse = codeToRetElse + "\n" + codeToRet.substring(whereToAdd,codeToRet.length());
-		if(!(elseStat instanceof RecNode) && !(elseStat instanceof EndNode)) {
-			codeToRetElse = elseStat.generateCode(codeToRetElse,index,totIndex,modules,labels,protocolName);
+			if(elseStat instanceof RecNode) {
+				toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(((RecNode) elseStat).getState()) + ");";
+			}
+			else if(elseStat instanceof EndNode) {
+				toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(newStateModule) + ");";
+			}
+			else if(!(elseStat instanceof InternalActionNode)) {
+				toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(newStateModule+1) + "); ";
+				for(Node el : modules) {
+					if(el.toPrint().equals(roleTmp)) {
+						((ModuleNode) el).setState(((ModuleNode) el).getState()+1);
+					}
+				}
+			}
+
+			indexRoleA = codeToRet.indexOf("module "+roleTmp);
+			whereToAdd = codeToRet.indexOf("endmodule",indexRoleA);
+			String codeToRetElse = codeToRet.substring(0,whereToAdd) ;
+			codeToRetElse = codeToRetElse + "\n" + toRet;
+			codeToRetElse = codeToRetElse + "\n" + codeToRet.substring(whereToAdd,codeToRet.length());
+			if(!(elseStat instanceof RecNode) && !(elseStat instanceof EndNode)) {
+				codeToRetElse = elseStat.generateCode(codeToRetElse,index,totIndex,modules,labels,protocolName);
+			}
+			return codeToRetElse;
 		}
-		return codeToRetElse;
+		return codeToRet;
+
 	}
 
 }

@@ -6,13 +6,14 @@ public class Functions {
 		int needChange = string.indexOf("[");
 		if(needChange!=-1) {
 			String answer = string.substring(string.indexOf("[")+1, string.indexOf("]"));
-			if(answer.length()==1) {
+			if(answer.length()==1) {				
 				answer = Integer.toString(index);
 			}
 			else {
 				char op = answer.charAt(1);
 				char el = answer.charAt(2);
 				int val = 0;
+
 				if(op=='+') {
 					val = index + Character.getNumericValue(el); 
 				}
@@ -54,6 +55,7 @@ public class Functions {
 				else {
 					answer = Integer.toString(val%max);
 				}
+				//answer = Integer.toString(val);
 			}
 			return answer;
 		}
@@ -62,8 +64,10 @@ public class Functions {
 	}
 
 	public static String returnStringNewIndex(String string, int index, int max) {
-		String newVal = retNewIndex(string,index,max);
-		string = string.replaceAll("\\[.*?\\]",newVal);
+		while(string.indexOf("[")!=-1) {
+			String newVal = retNewIndex(string,index,max);
+			string = string.replaceFirst("\\[.*?\\]",newVal);
+		}
 		return string;
 	}
 

@@ -502,3 +502,29 @@ instead of 22.051 seconds needed for the original model.
 %%% mode: latex
 %%% TeX-master: "main"
 %%% End:
+
+
+\subsection{Problems}
+While testing our choreographic language, we noticed that some of the case studies presented in the 
+PRISM documentation \cite{PRISMdoc} cannot be modeled by using our language.
+The reasons are various, in this section we try to outline the problems.
+
+\begin{itemize}
+\item \textbf{Asynchronous Leader Election}\footnote{\url{https://www.prismmodelchecker.org/casestudies/asynchronous_leader.php}}:
+ processes synchronize with the same label but the conditions are different.
+ We include in our language the \texttt{it-then-else} statement but we do not allow 
+ the \texttt{if-then} (without the \texttt{else}). This is done because in this way, we do not 
+ incur in deadlock states.
+\item  \textbf{Probabilistic Broadcast Protocols}\footnote{\url{https://www.prismmodelchecker.org/casestudies/prob_broadcast.php}}:
+ also in this case, the problem are the labels of the synchronizations.
+ In fact, all the processes synchornize with the same label on every actions.
+ This is not possible in our language, since a label is unique for every synchronization between two (or more) processes.
+\item \textbf{Cyclic Server Polling System}\footnote{\url{https://www.prismmodelchecker.org/casestudies/polling.php}}:
+ in this model, the processes \texttt{station$_i$} do two different things in the same state.
+ More precicely, at the state 0 (\texttt{s$_i$=0}), the processes may synchornize with the process
+ \texttt{server} or may change their state without any synchronization.
+ In out language, this cannot be formalized since the synchronization is a branch action,
+ so there should be another option with a synchronization.
+
+
+\end{itemize}
