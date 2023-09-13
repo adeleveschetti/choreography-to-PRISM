@@ -262,6 +262,14 @@ public Node visitIfThenElse(IfThenElseContext ctx) {
 	if(ctx.elseStat!=null) {
 		elseStatement = visitStatement(ctx.elseStat);
 	}
-	return new IfThenElseNode(ctx.role().getText(),ctx.cond().getText().substring(1,ctx.cond().getText().length()-1),visitStatement(ctx.thenStat),elseStatement);
+	ArrayList<String> roles = new ArrayList<String>();
+	for(RoleContext el : ctx.role()) {
+		roles.add(el.getText());
+	}
+	ArrayList<String> conds = new ArrayList<String>();
+	for(CondContext el : ctx.cond()) {
+		conds.add(el.getText().substring(1,el.getText().length()-1));
+	}
+	return new IfThenElseNode(roles,conds,visitStatement(ctx.thenStat),elseStatement);
 }
 }

@@ -1,5 +1,9 @@
 grammar Language;
 
+@header {
+    package parser;
+}
+
 /*------------------------------------------------------------------
  * PARSER RULES
  *------------------------------------------------------------------*/
@@ -18,7 +22,7 @@ branchStat : (BRANCH SLPAR rateValues+=rate SRPAR updates DOT statement) ;
 
 commStat : (SLPAR rateValues+=rate SRPAR updates DOT statement) ;
 
-ifThenElse : IF cond AT role THEN CLPAR thenStat=statement CRPAR ELSE CLPAR elseStat=statement CRPAR;
+ifThenElse : IF cond AT role (COMMA cond AT role)* THEN CLPAR thenStat=statement CRPAR ELSE CLPAR elseStat=statement CRPAR;
 
 rec : protocolID ;
 

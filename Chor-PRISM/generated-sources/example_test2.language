@@ -5,12 +5,12 @@ preamble
 endpreamble
 
 n = 1;
-Network1 -> ;
-Network2 -> ;
-Network3 -> ;
-Network4 -> ;
+P1 -> ;
+P2 -> ;
 
-Test :=
-	Network1 -> Network2 :
-	+["1*1"]  " "&&" " . Network2 -> Network3 :["1*1"]  " "&&" ".Test
-	+["1*1"]  " "&&" " . Network4 -> Network2 :["1*1"]  " "&&" ".Test
+{
+Test := 
+	P1 -> P2 :
+	(+["1*1"]  " "&&" " . if "(x=0)"@P1, "(x2=0)"@P2 then { END } else {END}
+	+["1*1"]  " "&&" " . if "(x=1)"@P1 then { END } else {END})
+}

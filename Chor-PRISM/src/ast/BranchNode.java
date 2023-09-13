@@ -202,7 +202,7 @@ public class BranchNode implements Node{
 						toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + ((RecNode) statements.get(i)).getName() + "); " ;
 					}
 				}
-				else if(statements.get(i) instanceof EndNode || (statements.get(i) instanceof IfThenElseNode && ((IfThenElseNode) statements.get(i)).getThenStatement() instanceof EndNode)) {
+				else if(statements.get(i) instanceof EndNode /*|| (statements.get(i) instanceof IfThenElseNode && ((IfThenElseNode) statements.get(i)).getThenStatement() instanceof EndNode)*/) {
 					toRetRoleA = toRetRoleA + "(" + roleTmp +"'=" + Integer.toString(stateA) + "); " ;
 				}
 				
