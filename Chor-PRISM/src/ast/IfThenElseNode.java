@@ -39,7 +39,7 @@ public class IfThenElseNode implements Node {
 	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName) {
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName, int counter) {
 		Functions funs = new Functions();
 		String codeToRet = "" ;
 		for(int i=0; i<roles.size(); i++) {
@@ -83,7 +83,7 @@ public class IfThenElseNode implements Node {
 			codeToRet = codeToRet + "\n" + code.substring(whereToAdd,code.length());
 
 			if(!(thenStat instanceof RecNode) && !(thenStat instanceof EndNode)  ) {
-				codeToRet = thenStat.generateCode(codeToRet,index,totIndex,modules,labels,protocolName);
+				codeToRet = thenStat.generateCode(codeToRet,index,totIndex,modules,labels,protocolName,counter);
 			}
 			/*if(thenStat instanceof EndNode && ((EndNode) thenStat).getRoles()!=null) {
 			for(Node el : ((EndNode) thenStat).getRoles()) {
@@ -118,7 +118,7 @@ public class IfThenElseNode implements Node {
 				toRet = "[] (" + roleTmp +"=" + Integer.toString(stateModule) + ")&!(" + Functions.returnStringNewIndex(conds.get(i),index,totIndex) + ") -> ;" ;
 
 				if(elseStat instanceof RecNode) {
-					toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(((RecNode) elseStat).getState()) + ");";
+					toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + ((RecNode) elseStat).getName() + ");";
 				}
 				else if(elseStat instanceof EndNode) {
 					toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(newStateModule) + ");";
@@ -138,7 +138,7 @@ public class IfThenElseNode implements Node {
 				codeToRetElse = codeToRetElse + "\n" + toRet;
 				codeToRetElse = codeToRetElse + "\n" + codeToRet.substring(whereToAdd,codeToRet.length());
 				if(!(elseStat instanceof RecNode) && !(elseStat instanceof EndNode)) {
-					codeToRetElse = elseStat.generateCode(codeToRetElse,index,totIndex,modules,labels,protocolName);
+					codeToRetElse = elseStat.generateCode(codeToRetElse,index,totIndex,modules,labels,protocolName,1);
 				}
 				codeToRet = codeToRetElse;
 			}

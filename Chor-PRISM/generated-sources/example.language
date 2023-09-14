@@ -39,7 +39,7 @@ PoW := Hasher[i] -> Miner[i] :
  				}
  				else{
  					if "canBeInserted(B[i],b[i])"@Miner[i] then { 
- 						["1"] "(B[i]'=addBlock(B[i],b[i]))&(setMiner[i]'=removeBlock(setMiner[i],b[i]))"@Miner[i] . Pow 
+ 						["1"] "(B[i]'=addBlock(B[i],b[i]))&(setMiner[i]'=removeBlock(setMiner[i],b[i]))"@Miner[i] . PoW 
  					}
  					else{
  						PoW

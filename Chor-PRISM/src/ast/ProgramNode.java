@@ -42,13 +42,13 @@ public class ProgramNode implements Node{
 	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex,  ArrayList<Node> modules, ArrayList<String> labels, String protocolName) {
+	public String generateCode(String code, int index, int totIndex,  ArrayList<Node> modules, ArrayList<String> labels, String protocolName, int counter) {
 		totIndex = max;
 		if(preamble!=null) {
-			code = preamble.generateCode(code,1,totIndex,this.modules,labels,"");
+			code = preamble.generateCode(code,1,totIndex,this.modules,labels,"",counter);
 		}
 		for(Node el : this.modules) {
-			code = el.generateCode(code,1,totIndex,this.modules,labels,"");
+			code = el.generateCode(code,1,totIndex,this.modules,labels,"",counter);
 		}
 		Functions fun = new Functions();
 		for(Pair<Node,ArrayList<Node>> pair : protocols) {
@@ -59,13 +59,16 @@ public class ProgramNode implements Node{
 							((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
 						}
 					}
-					code = el.generateCode(code,i,totIndex,this.modules,labels,((RecNode) pair.getFirst()).getName());
+					
+					code = el.generateCode(code,i,totIndex,this.modules,labels,((RecNode) pair.getFirst()).getName(),counter);
 					for(Node mod : this.modules) {
 						((RecNode) pair.getFirst()).setGenerated(true);
 						if(el instanceof BranchNode && mod.toPrint().equals(Functions.changeIndex(((BranchNode) el).getRoleA(),i,totIndex)) && ((RecNode) pair.getFirst()).getState()==-1) {
 							((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
+
 						}
 					}
+
 				}
 			}
 		}

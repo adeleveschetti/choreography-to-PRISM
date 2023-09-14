@@ -34,7 +34,7 @@ public class InternalActionNode implements Node{
 	}
 	
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName) {
+	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName, int counter) {
 		Functions funs = new Functions();
 		String roleTmp = Functions.changeIndex(role,index,totIndex);
 		
@@ -48,7 +48,7 @@ public class InternalActionNode implements Node{
 			}
 		}
 		
-		String updatesNew = updates.generateCode(code,index,totIndex,modules,labels,protocolName);
+		String updatesNew = updates.generateCode(code,index,totIndex,modules,labels,protocolName,counter);
 		updatesNew = Functions.returnStringNewIndex(updatesNew,index,totIndex);
 		if(!updatesNew.equals("")) {
 			updatesNew = updatesNew + "&";
@@ -83,7 +83,7 @@ public class InternalActionNode implements Node{
 		}
 		
 		if(!(statement instanceof RecNode)) {
-			toRet = statement.generateCode(toRet,index,totIndex,modules,labels,protocolName);
+			toRet = statement.generateCode(toRet,index,totIndex,modules,labels,protocolName,counter);
 		}
 		return toRet;
 	}

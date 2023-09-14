@@ -35,20 +35,20 @@ PoS := Validator[i] -> Validator[i] :
 			Validator[i] -> Network : (["1*1"] "(L[i]'=addBlock(L[i],b[i]))" && foreach(k!=i) "(set[k]'=addBlockSet(set[k],b[i]))"@Network .PoS)
 		}
 		else{
-			Validator[i] -> Network : (["1*1"] "(L[i]'=addBlock(L[i],b[i]))" && foreach(k!=i) "(set[k]'=addBlockSet(set[k],b[i]))"@Network.
-			Validator[i] -> Vote_Manager :(["1*1"] " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS))
+			Validator[i] -> Vote_Manager :(["1*1"] " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS)
 		}
  +["hR*1"] " "&&" " . if "!isEmpty(set[i])"@Validator[i] then {
  				  ["1"] "(b[i]'=extractBlock(set[i]))"@Validator[i] . if "!canBeInserted(L[i],b[i])"@Validator[i] then {
  				  															PoS
  				  											}
  				  											else{
+ 				  												Validator[i] -> Network : (["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . 
  				  												if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then {
- 				  																Validator[i] -> Network : (["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . PoS)
+ 				  																 PoS
  				  														}
  				  														else{
- 				  	 															Validator[i] -> Network : (["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . Validator[i] -> Vote_Manager : (["1*1"] " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS ))
- 				  														}
+ 				  	 															Validator[i] -> Vote_Manager : (["1*1"] " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS )
+ 				  														})
  				  											}
  			}
  			else{
