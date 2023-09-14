@@ -185,7 +185,7 @@ syntax:
     \text{(Chor)}  \quad & C \ ::=\
     & \{\role p_i\}_{i\in I}\,+\!\{\lambda_j: x_j=E_j;\ C_j\}_{j\in J}
       \ \mid\
-      \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2
+      \textsf{if } E@\{\role p_i\}_{i\in I} \textsf{ then } C_1 \textsf{ else } C_2
       \ \mid\
       X
       \ \mid\
@@ -270,16 +270,18 @@ projectable.
 
 \begin{displaymath}
   \begin{array}{ll}
-    f\Big(\; \textsf{if } E@\role{p} \textsf{ then } C_1 \textsf{ else } C_2, \texttt{network} 
+    f\Big(\; \textsf{if } E@\{\role p_i\}_{i\in I} \textsf{ then } C_1 \textsf{ else } C_2, \texttt{network} 
     \Big)
     \\\\
     =
     \\\\
-\texttt{network} = \texttt{add}(\role p,[\;] {s_{\role p} = \texttt{state}(\role p)} \;\& \;f(E));\\
-	\texttt{network} = f(C_1, \texttt{network}); \\
-	\texttt{network} = f(C_2, \texttt{network}); \\
+    \textsf{for } \role p_k \in \mathbf{roles} \{\\
+    \quad\texttt{network} = \texttt{add}(\role p_k,[\;] {s_{\role p_k} = \texttt{state}(\role p_k)} \;\& \;f(E));\\
+	\quad\texttt{network} = f(C_1, \texttt{network}); \\
+	\quad\texttt{network} = f(C_2, \texttt{network}); \\
+  \}\\
+  \text{return } \texttt {network}\\
 
- 	\text{return } \texttt{network}
   \end{array}
 \end{displaymath}
 
