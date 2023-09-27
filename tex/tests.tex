@@ -1,15 +1,22 @@
-We tested our language by various examples.
+In this section we present our experimental evaluation of our language. 
+We focus on four benchmarks: the dice program and the random graphs protocol that we compare with the  
+test cases reported in the PRISM repository\footnote{\url{https://www.prismmodelchecker.org/casestudies/}}; 
+the Bitcoin proof of work protocol and the Hybrid Casper protocol, 
+presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/distribledger/GallettaLMV23}.
 
 \subsection{The Dice Program}
- The first example we present is the Dice Program\footnote{\url{https://www.prismmodelchecker.org/casestudies/dice.php}} \cite{KY76}. The following program models a die using only fair coins. Starting at the root vertex (state 0), one repeatedly tosses a coin. Every time heads appears, one takes the upper branch and when tails appears, the lower branch. This continues until the value of the die is decided.
 
+\begin{wrapfigure}[9]{r}{5.5cm}
+	\includegraphics[scale=0.6]{diagram-20230927.pdf}	
+\end{wrapfigure} 
+ The first test case we focus on the Dice Program\footnote{\url{https://www.prismmodelchecker.org/casestudies/dice.php}}\cite{KY76}.
+ The following program models a die using only fair coins. 
+ Starting at the root vertex (state $s_0$), one repeatedly tosses a coin. Every time heads appears, one takes the upper branch and when tails appears, the lower branch. 
+ This continues until the value of the die is decided.
 
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.6]{diagram-20230725.pdf}	
-\end{figure}
+In Listing \ref{ex1-code}, we report the modelled program using the choreographic language
+while in Listing \ref{ex1-gen} the generated PRISM program is shown.
 
-We modelled the program using the choreographic language (Listing \ref{ex1-code}) and we were able to generate the corresponding PRISM program, reported in Listing \ref{ex1-gen}.
 
 \begin{lstlisting}[style=chor-color,caption={Choreographic language for the Dice Program.},captionpos=b,label={ex1-code}]
 preamble
@@ -63,17 +70,22 @@ endmodule
 	
 \end{lstlisting}
 
-By comparing our model with the one presented in the PRISM documentation, we noticed that the difference is the number assumed by the variable {\tt Dice}. In particular, the variable does not assume the values 1, 5 and 9. This is due to how the generation in presence of a branch is done. However, this does not cause any problems since the updates are done correctly.
+By comparing our model with the one presented in the PRISM documentation, we notice that the difference is the number assumed by the variable {\tt Dice}. 
+In particular, the variable assumes different values and 
+this is due to how the generation in presence of a branch is done. 
+However, this does not cause any problems since the updates are done correctly and the states are unique.
 Moreover,  to prove the generated program is correct, we show that the probability of reaching a state where 
 $$\texttt{d=k} \text{ for } \texttt{k}=1,\ldots,6 \text{ is } 1/6.$$
-The results are displayed in Figure \ref{ex1-res}, where also the results obtained with the original PRISM model are shown.
+The results are displayed in Figure \ref{ex1-res}, where we compare the probability we obtain with our generated model
+and the one obtained with the original PRISM model. 
+As expected, the results are equiivalent.
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.6]{example2-results.jpeg}	
 \caption{Probability of reaching a state where $d=k$, for $k=1,\ldots,6.$}
 \label{ex1-res}
 \end{figure}
-
+\begin{comment}
 \subsection{Simple Peer-To-Peer Protocol}
 This case study describes a simple peer-to-peer protocol based on BitTorrent\footnote{\url{https://www.prismmodelchecker.org/casestudies/peer2peer.php}}. The model comprises a set of clients trying to download a file that has been partitioned into $K$ blocks. Initially, there is one client that has already obtained all of the blocks and $N$ additional clients with no blocks. Each client can download a block from any of the others but they can only attempt four concurrent downloads for each block.\\
 The code we analyze with $k=5$ and $N=4$ is reported in Listing \ref{ex2-code}.
@@ -141,12 +153,114 @@ In Figure \ref{ex2-res}, we compare the values obtained for the probability that
 \caption{Probability that clients received all the block before $T$, with $0\leq T \leq 1.5$.}
 \label{ex2-res}
 \end{figure}
+\end{comment}
+\newpage
+\subsection{Random Graphs Protocol}
+\begin{wrapfigure}[8]{l}{4cm}
+	\includegraphics[scale=0.7]{network.pdf}	
+\end{wrapfigure} 
+The second case study we report is the random graphs protocol presented in the PRISM documentation\footnote{\url{https://www.prismmodelchecker.org/casestudies/graph_connected.php}}.
+It investigates the likelihood that a pair of nodes are connected in a
+ random graph. More precisely, we take into account the the set of random graphs $G(n,p)$,
+  i.e. the set of random graphs with $n$ nodes where the probability of there being an edge 
+  between any two nodes equals $p$. 
 
+  The model is divided in two parts: at the beginning the random graph is built.
+Then the algorithm finds nodes that have a path to node 2 by searching for nodes for which one can reach (in one step) a node for which the existence of a path to node 2 has already been found.
+
+The choreographic model is shown in Listing \ref{ex4-code}, while
+in Listing \ref{ex4-gen}, we report only part of the generated PRISM module (the modules $M_2$, $M_3$ and $P_2$, $P_3$ are equivalent to, respectively, $M_1$ and $P_2$ and can be found in the repository\footnote{\url{https://github.com/adeleveschetti/choreography-to-PRISM}}).
+
+\begin{lstlisting}[style=chor-color,caption={Choreographic language for the Random Graphs
+	Protocol.},captionpos=b,label={ex4-code}]
+	preamble
+"mdp"
+"const double p;"
+endpreamble
+
+n = 3;
+
+PC -> 
+PC : " ";
+
+M[i] -> i in [1...n]
+Module[i] : "varM[i] : bool;";
+
+P[i] -> i in [1...n]
+P[i] : "varP[i] : bool;";
+
+{
+GraphConnected0 := 
+	PC -> M[i] : (+["1*p"] " "&&"(varM[i]'=true)". END
+		        +["1*(1-p)"] " "&&"(varM[i]'=false)". END)
+	PC -> P[i] : (+["1*p"] " "&&"(varP[i]'=true)" . END
+		        +["1*(1-p)"] " "&&"(varP[i]'=false)".
+			if "(PC=6)&!varP[i]&((varP[i] & varM[i]) | (varM[i+1] & varP[i+2])) "@P[i] then {
+					["1"]"(varP[i]'=true)"@P[i] . GraphConnected0
+			}) 								  
+}
+\end{lstlisting}
+\begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Random Graphs
+	Protocol.},captionpos=b,label={ex4-gen}]
+mdp
+const double p;
+	
+module PC
+   PC : [0..7] init 0;
+	
+   [DPPGR] (PC=0)  $\rightarrow$ 1 :  (PC'=1); 
+   [YCJJG] (PC=1)  $\rightarrow$ 1 :  (PC'=2); 
+   [TWGVA] (PC=2)  $\rightarrow$ 1 :  (PC'=3); 
+   [NODPZ] (PC=3)  $\rightarrow$ 1 :  (PC'=4); 
+   [FDALJ] (PC=4)  $\rightarrow$ 1 :  (PC'=5); 
+   [DCKXC] (PC=5)  $\rightarrow$ 1 :  (PC'=6); 
+endmodule
+
+module M1
+   M1 : [0..1] init 0;
+   varM1 : bool; 
+
+   [DPPGR] (M1=0)  $\rightarrow$ p :(varM1'=true)$\&$(M1'=0) + (1-p) :(varM1'=false)$\&$(M1'=0); 
+endmodule	
+
+$\ldots$
+
+module P1
+   P1 : [0..3] init 0;
+   varP1 : bool; 
+
+   [NODPZ] (P1=0)  $\rightarrow$ p:(varP1'=true)$\&$(P1'=0) + (1-p):(varP1'=false)$\&$(P1'=0); 
+   [] (P1=0)$\&$(PC=6)$\&$!varP1&((varP1 $\&$ varM1) | (varM2$\&$ varP3))  
+   				$\rightarrow$ 1 : (varP1'=true)$\&$(P1'=0); 
+endmodule
+\end{lstlisting}
+
+The model is very similar to the one presented in the PRISM repository, the main difference is that we use state variables also for the modules \texttt{P$_i$} and \texttt{M$_i$}, 
+where in the original model they were not requires.
+However, this does not affect the behaviour of the model, as the reader can notice from the results of the probability that nodes 1 and 2 are connected showed in Figure \ref{ex4-res}.
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.6]{example5-results.jpeg}	
+\caption{Probability that the nodes 1 and 2 are connected.}
+\label{ex4-res}
+\end{figure}
+\newpage
 \subsection{Proof of Work Bitcoin Protocol}
-This protocol represents the Proof of Work implemented in the Bitcoin blockchain.
-In\cite{DBLP:journals/concurrency/BistarelliNGLMV23}, a Bitcoin system is the result of the parallel composition of $n$ Miner processes, $n$  \emph{Hasher} processes and a process called \emph{Network}.
-\emph{Hasher} processes model the attempts of the miners to solve the cryptopuzzle, while the \emph{Network} process model the broadcast communication among miners. 
-We tested our system by considering a protocol with $n=5$ miners and it is reported in Listing \ref{ex3-code}.
+\begin{wrapfigure}[7]{r}{4cm}
+	\includegraphics[scale=0.45]{bitcoin.pdf}	
+\end{wrapfigure} 
+In \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, the authors decided to extend the PRISM model checker with
+dynamic data types in order to model the Proof of Work protocol implemented in the Bitcoin blockchain \cite{bitcoin}.
+
+The Bitcoin system is the result of the parallel composition of $n$ Miner processes, $n$  \emph{Hasher} processes and a process called \emph{Network}.
+In particular: 
+\begin{itemize}
+	\item The \emph{Miner} processes model the blockchain mainers that create new blocks and add them to their local ledger;
+	\item the \emph{Hasher} processes model the attempts of the miners to solve the cryptopuzzle;
+	\item the \emph{Network} process model the broadcast communication among miners. 
+\end{itemize}
+Since we are not interested in the properties obtained by analyzing the protocol, we decided to consider $n=4$ miner and hasher processes; the model can be found in Listing \ref{ex3-code}.
+
 \begin{lstlisting}[style=chor-color,caption={Choreographic language for the Proof of Work Bitcoin Protocol.},captionpos=b,label={ex3-code}]
 preamble
 "ctmc"
@@ -197,7 +311,11 @@ PoW := Hasher[i]  $\rightarrow$  Miner[i] :
 } 	
 \end{lstlisting}
 
-Part of the generated PRISM code is shown in Listing \ref{ex3-gen}. 
+Part of the generated PRISM code is shown in Listing \ref{ex3-gen}, 
+the modules $Miner_2$, $Miner_3$, $Miner_4$ and $Hasher_2$, $Hasher_3$, $Hasher_4$ are equivalent to $Miner_1$ and $Hasher_1$, respectively.
+Our generated PRISM model is more verbose than the one presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23},
+this is due to the fact that for the \texttt{if-then-else} expression, we always generate the \texttt{else} branch.
+and this leads to having more instructions
 \begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Peer-To-Peer Protocol.},captionpos=b,label={ex3-gen}]
 ctmc
 const T;
@@ -249,105 +367,33 @@ Hasher1 : [0..1] init 0;
 endmodule
 \end{lstlisting}
 
-
-In Figure \ref{ex3-res}, we compare the values obtained for the probability that at least one miner has mined a block both for the generated model and the model presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}.
+However, for this particular test case, the results of the experiments are not affected, 
+as shown Figure \ref{ex3-res} where the results are compared.
+In this example, since we are comparing the results of two simulations, the two probabilities are
+slightly different, but it has nothing to do with the model itself.
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.6]{example4-results.jpeg}	
+\includegraphics[scale=0.5]{example4-results.jpeg}	
 \caption{Probability at least one miner has created a block.}
 \label{ex3-res}
 \end{figure}
 
 
-\subsection{Random Graphs Protocol}
-In this case study\footnote{\url{https://www.prismmodelchecker.org/casestudies/graph_connected.php}} we investigate the likelihood that a pair of nodes are connected in a
- random graph. More precisely, we take into account the the set of random graphs $G(n,p)$,
-  i.e. the set of random graphs with n nodes where the probability of there being an edge 
-  between any two nodes equals $p$. 
-
-\begin{lstlisting}[style=chor-color,caption={Choreographic language for the Random Graphs
-	Protocol.},captionpos=b,label={ex4-code}]
-	preamble
-"mdp"
-"const double p;"
-endpreamble
-
-n = 3;
-
-PC -> 
-PC : " ";
-
-M[i] -> i in [1...n]
-Module[i] : "varM[i] : bool;";
-
-P[i] -> i in [1...n]
-P[i] : "varP[i] : bool;";
-
-{
-GraphConnected0 := 
-	PC -> M[i] : (+["1*p"] " "&&"(varM[i]'=true)". END
-		        +["1*(1-p)"] " "&&"(varM[i]'=false)". END)
-	PC -> P[i] : (+["1*p"] " "&&"(varP[i]'=true)" . END
-		        +["1*(1-p)"] " "&&"(varP[i]'=false)".
-			if "(PC=6)&!varP[i]&((varP[i] & varM[i]) | (varM[i+1] & varP[i+2])) "@P[i] then {
-					["1"]"(varP[i]'=true)"@P[i] . GraphConnected0
-			}) 								  
-}
-\end{lstlisting}
-The model is divided in two parts: at the beginning the random graph is built.
-Then they find nodes that have a path to node 2 by searching for nodes for which one can reach (in one step) a node for which they have already found the existence of a path to node 2.
-Part of the generated PRISM code is shown in Listing \ref{ex4-gen} (we do not report modules \texttt{M2, M3, P2, P3}).
-\begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Random Graphs
-	Protocol.},captionpos=b,label={ex4-gen}]
-mdp
-const double p;
-	
-module PC
-   PC : [0..7] init 0;
-	
-   [DPPGR] (PC=0)  $\rightarrow$ 1 :  (PC'=1); 
-   [YCJJG] (PC=1)  $\rightarrow$ 1 :  (PC'=2); 
-   [TWGVA] (PC=2)  $\rightarrow$ 1 :  (PC'=3); 
-   [NODPZ] (PC=3)  $\rightarrow$ 1 :  (PC'=4); 
-   [FDALJ] (PC=4)  $\rightarrow$ 1 :  (PC'=5); 
-   [DCKXC] (PC=5)  $\rightarrow$ 1 :  (PC'=6); 
-endmodule
-
-module M1
-   M1 : [0..1] init 0;
-   varM1 : bool; 
-
-   [DPPGR] (M1=0)  $\rightarrow$ p :(varM1'=true)$\&$(M1'=0) + (1-p) :(varM1'=false)$\&$(M1'=0); 
-endmodule	
-
-$\ldots$
-
-module P1
-   P1 : [0..3] init 0;
-   varP1 : bool; 
-
-   [NODPZ] (P1=0)  $\rightarrow$ p:(varP1'=true)$\&$(P1'=0) + (1-p):(varP1'=false)$\&$(P1'=0); 
-   [] (P1=0)$\&$(PC=6)$\&$!varP1&((varP1 $\&$ varM1) | (varM2$\&$ varP3))  
-   				$\rightarrow$ 1 : (varP1'=true)$\&$(P1'=0); 
-endmodule
-\end{lstlisting}
-
-The model is very similar to the one presented in the PRISM repository, the main difference is that we use state variables also for the modules \texttt{P$_i$} and \texttt{M$_i$}.
- 
-In Figure \ref{ex4-res}, we compare the results obtained with the two models.
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.6]{example5-results.jpeg}	
-\caption{Probability that the nodes 1 and 2 are connected.}
-\label{ex4-res}
-\end{figure}
-
-
 \subsection{Hybrid Casper Protocol}
-The last case we study is the Hybrid Casper Protocol presented in \cite{DBLP:journals/distribledger/GallettaLMV23}. 
-The protocol models what happened in the Ethereum blockchain while it was implemented the hybrid Casper protocol:
-an hybrid protocol that includes features of the Proof of Work and the Proof of Stake protocols.
-The modeling language is reported in Listing \ref{ex5-code} while (part of) the generated PRISM code can be found in Listing \ref{ex4-gen}.
+\begin{wrapfigure}[9]{l}{4.5cm}
+	\includegraphics[scale=0.45]{ethereum.pdf}	
+\end{wrapfigure} 
+The last case we study we present is the Hybrid Casper Protocol modelled in PRISM in \cite{DBLP:journals/distribledger/GallettaLMV23}. 
+The Hybrid Capser protocol is
+an hybrid blockchain consenus protocol that includes features of the Proof of Work and the Proof of Stake protocols.
+It was implemented in the Ethereum blockchain \cite{ethereum} as a testing phase before switching to Proof of Stake protocol.
+
+The approach is very similat to the one used for the Proof of Work Bitcoin protocol,
+so they model Hybrid Casper in PRISM as the parallel composition of $n$ \texttt{Validator} modules and the modules \texttt{Vote\_Manager} and \texttt{Network}.
+The module \texttt{Validator} is very similar to the module \texttt{Miner} of the previous protocol and
+the only module that requires an explaination is the \texttt{Vote\_Manager} that stores the tables containing the votes for each checkpoint and calculates the rewards/penalties.
+
+The modeling language is reported in Listing \ref{ex5-code} while (part of) the generated PRISM code can be found in Listing \ref{ex5-gen}.
 \begin{lstlisting}[style=chor-color,caption={Choreographic language for the Hybrid Casper Protocol.},captionpos=b,label={ex5-code}]
 preamble
 "ctmc"
@@ -498,10 +544,7 @@ instead of 22.051 seconds needed for the original model.
 \caption{Probability that a block has been created.}
 \label{ex5-res}
 \end{figure}
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "main"
-%%% End:
+
 
 
 \subsection{Problems}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.30)  14 SEP 2023 16:08
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.3.30)  27 SEP 2023 16:22
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -556,34 +556,41 @@ Package cleveref Info: no abbreviation of names on input line 7852.
 Package: aliascnt 2018/09/07 v1.5 Alias counters (HO)
 )
 \c@theorem=\count320
+) (/usr/local/texlive/2023/texmf-dist/tex/latex/wrapfig/wrapfig.sty
+\wrapoverhang=\dimen192
+\WF@size=\dimen193
+\c@WF@wrappedlines=\count321
+\WF@box=\box62
+\WF@everypar=\toks48
+Package: wrapfig 2003/01/31  v 3.6
 ) (/usr/local/texlive/2023/texmf-dist/tex/latex/mathtools/mathtools.sty
 Package: mathtools 2022/06/29 v1.29 mathematical typesetting tools
  (/usr/local/texlive/2023/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count321
-\calc@Bcount=\count322
-\calc@Adimen=\dimen192
-\calc@Bdimen=\dimen193
+\calc@Acount=\count322
+\calc@Bcount=\count323
+\calc@Adimen=\dimen194
+\calc@Bdimen=\dimen195
 \calc@Askip=\skip66
 \calc@Bskip=\skip67
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count323
+\calc@Ccount=\count324
 \calc@Cskip=\skip68
 ) (/usr/local/texlive/2023/texmf-dist/tex/latex/mathtools/mhsetup.sty
 Package: mhsetup 2021/03/18 v1.4 programming setup (MH)
 )
-\g_MT_multlinerow_int=\count324
-\l_MT_multwidth_dim=\dimen194
+\g_MT_multlinerow_int=\count325
+\l_MT_multwidth_dim=\dimen196
 \origjot=\skip69
-\l_MT_shortvdotswithinadjustabove_dim=\dimen195
-\l_MT_shortvdotswithinadjustbelow_dim=\dimen196
-\l_MT_above_intertext_sep=\dimen197
-\l_MT_below_intertext_sep=\dimen198
-\l_MT_above_shortintertext_sep=\dimen199
-\l_MT_below_shortintertext_sep=\dimen256
-\xmathstrut@box=\box62
-\xmathstrut@dim=\dimen257
+\l_MT_shortvdotswithinadjustabove_dim=\dimen197
+\l_MT_shortvdotswithinadjustbelow_dim=\dimen198
+\l_MT_above_intertext_sep=\dimen199
+\l_MT_below_intertext_sep=\dimen256
+\l_MT_above_shortintertext_sep=\dimen257
+\l_MT_below_shortintertext_sep=\dimen258
+\xmathstrut@box=\box63
+\xmathstrut@dim=\dimen259
 ) (/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/sml-highlight.sty
 Package: sml-highlight 2023/03/14 v0.01 LaTeX package for highlighting our Smart Contract Language
  (/usr/local/texlive/2023/texmf-dist/tex/latex/xcolor/xcolor.sty
@@ -616,29 +623,29 @@ Package grfext Info: Graphics extension search list:
  (/usr/local/texlive/2023/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))) Excluding 'CCSXML' comment. (/usr/local/texlive/2023/texmf-dist/tex/latex/lkproof/proof.sty
-\inferLineSkip=\dimen258
-\inferLabelSkip=\dimen259
-\@LeftOffset=\dimen260
-\@RightOffset=\dimen261
-\@SavedLeftOffset=\dimen262
-\UpperWidth=\dimen263
-\LowerWidth=\dimen264
-\LowerHeight=\dimen265
-\UpperLeftOffset=\dimen266
-\UpperRightOffset=\dimen267
-\UpperCenter=\dimen268
-\LowerCenter=\dimen269
-\UpperAdjust=\dimen270
-\RuleAdjust=\dimen271
-\LowerAdjust=\dimen272
-\RuleWidth=\dimen273
-\HLabelAdjust=\dimen274
-\VLabelAdjust=\dimen275
-\WidthAdjust=\dimen276
-\@UpperPart=\box63
-\@LowerPart=\box64
-\@LabelPart=\box65
-\ResultBox=\box66
+\inferLineSkip=\dimen260
+\inferLabelSkip=\dimen261
+\@LeftOffset=\dimen262
+\@RightOffset=\dimen263
+\@SavedLeftOffset=\dimen264
+\UpperWidth=\dimen265
+\LowerWidth=\dimen266
+\LowerHeight=\dimen267
+\UpperLeftOffset=\dimen268
+\UpperRightOffset=\dimen269
+\UpperCenter=\dimen270
+\LowerCenter=\dimen271
+\UpperAdjust=\dimen272
+\RuleAdjust=\dimen273
+\LowerAdjust=\dimen274
+\RuleWidth=\dimen275
+\HLabelAdjust=\dimen276
+\VLabelAdjust=\dimen277
+\WidthAdjust=\dimen278
+\@UpperPart=\box64
+\@LowerPart=\box65
+\@LabelPart=\box66
+\ResultBox=\box67
 ) (/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/macros.tex) (/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.aux)
 \openout1 = `main.aux'.
 
@@ -680,19 +687,19 @@ Package microtype Info: No adjustment of character kerning.
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (RS)
 ) (/usr/local/texlive/2023/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count325
-\scratchdimen=\dimen277
-\scratchbox=\box67
-\nofMPsegments=\count326
-\nofMParguments=\count327
-\everyMPshowfont=\toks48
-\MPscratchCnt=\count328
-\MPscratchDim=\dimen278
-\MPnumerator=\count329
-\makeMPintoPDFobject=\count330
-\everyMPtoPDFconversion=\toks49
+\scratchcounter=\count326
+\scratchdimen=\dimen279
+\scratchbox=\box68
+\nofMPsegments=\count327
+\nofMParguments=\count328
+\everyMPshowfont=\toks49
+\MPscratchCnt=\count329
+\MPscratchDim=\dimen280
+\MPnumerator=\count330
+\makeMPintoPDFobject=\count331
+\everyMPtoPDFconversion=\toks50
 )
-\c@lstlisting=\count331
+\c@lstlisting=\count332
 Package hyperref Info: Link coloring OFF on input line 108.
  (/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.out) (/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.out)
 \@outlinefile=\write5
@@ -700,6 +707,7 @@ Package hyperref Info: Link coloring OFF on input line 108.
 
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: rotating package is loaded.
+Package caption Info: wrapfig package is loaded.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Trying to load font information for T1+lmss on input line 112.
  (/usr/local/texlive/2023/texmf-dist/tex/latex/lm/t1lmss.fd
@@ -773,7 +781,7 @@ Overfull \hbox (1.76468pt too wide) detected at line 142
  $[]$ 
  []
 
-<example-image-plain.pdf, id=49, 321.2pt x 240.9pt>
+<example-image-plain.pdf, id=45, 321.2pt x 240.9pt>
 File: example-image-plain.pdf Graphic file (type pdf)
 <use example-image-plain.pdf>
 Package pdftex.def Info: example-image-plain.pdf  used on input line 142.
@@ -782,7 +790,7 @@ LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 14
 (/usr/local/texlive/2023/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-<lipics-logo-bw.pdf, id=51, 591.44762pt x 144.42657pt>
+<lipics-logo-bw.pdf, id=47, 591.44762pt x 144.42657pt>
 File: lipics-logo-bw.pdf Graphic file (type pdf)
 <use lipics-logo-bw.pdf>
 Package pdftex.def Info: lipics-logo-bw.pdf  used on input line 142.
@@ -809,85 +817,94 @@ Overfull \hbox (6.31485pt too wide) detected at line 269
  []
 
 ) [3.3{/usr/local/texlive/2023/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}] (/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/tests.tex
-LaTeX Font Info:    Calculating math sizes for size <8.5> on input line 4.
+LaTeX Font Info:    Calculating math sizes for size <8.5> on input line 3.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8.5> on input line 4.
+(Font)              <8.5> on input line 3.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5.94997> on input line 4.
+(Font)              <5.94997> on input line 3.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <4.25> on input line 4.
-<Figures//diagram-20230725.pdf, id=105, 713.66624pt x 234.1247pt>
-File: Figures//diagram-20230725.pdf Graphic file (type pdf)
-<use Figures//diagram-20230725.pdf>
-Package pdftex.def Info: Figures//diagram-20230725.pdf  used on input line 9.
-(pdftex.def)             Requested size: 428.20305pt x 140.47589pt.
-
-Overfull \hbox (29.86447pt too wide) in paragraph at lines 9--10
- [][] 
- []
-
+(Font)              <4.25> on input line 3.
+<Figures//diagram-20230927.pdf, id=102, 218.80275pt x 208.53381pt>
+File: Figures//diagram-20230927.pdf Graphic file (type pdf)
+<use Figures//diagram-20230927.pdf>
+Package pdftex.def Info: Figures//diagram-20230927.pdf  used on input line 10.
+(pdftex.def)             Requested size: 131.28265pt x 125.12125pt.
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <9> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 15.
-[4.4 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//diagram-20230725.pdf>]
-<Figures//example2-results.jpeg, id=150, 488.82625pt x 230.8625pt>
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 22.
+ [4.4 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//diagram-20230927.pdf>]
+<Figures//example2-results.jpeg, id=158, 488.82625pt x 230.8625pt>
 File: Figures//example2-results.jpeg Graphic file (type jpg)
 <use Figures//example2-results.jpeg>
-Package pdftex.def Info: Figures//example2-results.jpeg  used on input line 72.
+Package pdftex.def Info: Figures//example2-results.jpeg  used on input line 84.
 (pdftex.def)             Requested size: 293.298pt x 138.51855pt.
- [5.5 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example2-results.jpeg>] [6.6]
-<Figures//example3-results.jpeg, id=225, 488.82625pt x 230.8625pt>
-File: Figures//example3-results.jpeg Graphic file (type jpg)
-<use Figures//example3-results.jpeg>
-Package pdftex.def Info: Figures//example3-results.jpeg  used on input line 140.
-(pdftex.def)             Requested size: 293.298pt x 138.51855pt.
- [7.7 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example3-results.jpeg>] [8.8]
-<Figures//example4-results.jpeg, id=317, 595.22375pt x 278.03876pt>
-File: Figures//example4-results.jpeg Graphic file (type jpg)
-<use Figures//example4-results.jpeg>
-Package pdftex.def Info: Figures//example4-results.jpeg  used on input line 256.
-(pdftex.def)             Requested size: 357.13701pt x 166.82454pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[9.9] [10.10 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example4-results.jpeg>]
-<Figures//example5-results.jpeg, id=401, 538.01pt x 193.72375pt>
+ Excluding 'comment' comment. [5.5 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example2-results.jpeg>]
+<Figures//network.pdf, id=181, 154.27295pt x 127.1327pt>
+File: Figures//network.pdf Graphic file (type pdf)
+<use Figures//network.pdf>
+Package pdftex.def Info: Figures//network.pdf  used on input line 160.
+(pdftex.def)             Requested size: 107.99033pt x 88.99228pt.
+ [6.6 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//network.pdf>]
+<Figures//example5-results.jpeg, id=230, 538.01pt x 193.72375pt>
 File: Figures//example5-results.jpeg Graphic file (type jpg)
 <use Figures//example5-results.jpeg>
-Package pdftex.def Info: Figures//example5-results.jpeg  used on input line 340.
+Package pdftex.def Info: Figures//example5-results.jpeg  used on input line 243.
 (pdftex.def)             Requested size: 322.80849pt x 116.23514pt.
- [11.11 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example5-results.jpeg>]
+ [7.7 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example5-results.jpeg>]
+<Figures//bitcoin.pdf, id=265, 294.0309pt x 227.33647pt>
+File: Figures//bitcoin.pdf Graphic file (type pdf)
+<use Figures//bitcoin.pdf>
+Package pdftex.def Info: Figures//bitcoin.pdf  used on input line 250.
+(pdftex.def)             Requested size: 132.31267pt x 102.30046pt.
+
+Overfull \hbox (18.50165pt too wide) in paragraph at lines 250--251
+[][] 
+ []
+
+[8.8 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//bitcoin.pdf>] [9.9]
+<Figures//example4-results.jpeg, id=370, 595.22375pt x 278.03876pt>
+File: Figures//example4-results.jpeg Graphic file (type jpg)
+<use Figures//example4-results.jpeg>
+Package pdftex.def Info: Figures//example4-results.jpeg  used on input line 376.
+(pdftex.def)             Requested size: 297.61115pt x 139.01903pt.
+<Figures//ethereum.pdf, id=371, 292.69753pt x 230.82416pt>
+File: Figures//ethereum.pdf Graphic file (type pdf)
+<use Figures//ethereum.pdf>
+Package pdftex.def Info: Figures//ethereum.pdf  used on input line 384.
+(pdftex.def)             Requested size: 131.71266pt x 103.8699pt.
+
+Overfull \hbox (3.67526pt too wide) in paragraph at lines 384--385
+[][] 
+ []
+
+[10.10 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example4-results.jpeg> </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//ethereum.pdf>] [11.11] [12.12]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [12.12] [13.13]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [14.14]
-<Figures//example6-results.jpeg, id=577, 488.82625pt x 230.8625pt>
+ [13.13]
+<Figures//example6-results.jpeg, id=537, 488.82625pt x 230.8625pt>
 File: Figures//example6-results.jpeg Graphic file (type jpg)
 <use Figures//example6-results.jpeg>
-Package pdftex.def Info: Figures//example6-results.jpeg  used on input line 497.
+Package pdftex.def Info: Figures//example6-results.jpeg  used on input line 543.
 (pdftex.def)             Requested size: 293.298pt x 138.51855pt.
- [15.15 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example6-results.jpeg>]) (/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.bbl) [16.16] (/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.aux)
+ [14.14 </Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/Figures//example6-results.jpeg>]) (/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.bbl) [15.15] (/Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.aux)
 
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 23BAB5B87354A6195BEAEDF7B84CA806;1905.
+(rerunfilecheck)             Checksum: A2BBA037831AB49A94AC27B912D45FDC;1678.
  ) 
 Here is how much of TeX's memory you used:
- 25910 strings out of 476025
- 455891 string characters out of 5790017
- 2471388 words of memory out of 5000000
- 45220 multiletter control sequences out of 15000+600000
- 688651 words of font info for 263 fonts, out of 8000000 for 9000
+ 25956 strings out of 476025
+ 456848 string characters out of 5790017
+ 2494388 words of memory out of 5000000
+ 45298 multiletter control sequences out of 15000+600000
+ 688936 words of font info for 267 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 90i,13n,90p,1072b,2221s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 90i,13n,90p,1072b,2292s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmmi9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmr6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmr9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmri9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmss10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmss8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmss9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmsy9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/lm/lmtt9.pfb>
-Output written on /Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.pdf (16 pages, 785420 bytes).
+Output written on /Users/adele/Università/Copenhagen/Git-Repo/choreography-to-PRISM/tex/main.pdf (15 pages, 798852 bytes).
 PDF statistics:
- 827 PDF objects out of 1000 (max. 8388607)
- 733 compressed objects within 8 object streams
- 426 named destinations out of 1000 (max. 500000)
- 111745 words of extra memory for PDF output out of 128383 (max. 10000000)
+ 791 PDF objects out of 1000 (max. 8388607)
+ 692 compressed objects within 7 object streams
+ 380 named destinations out of 1000 (max. 500000)
+ 111747 words of extra memory for PDF output out of 128383 (max. 10000000)
 
