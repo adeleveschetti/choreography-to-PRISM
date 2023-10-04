@@ -250,7 +250,7 @@ projectable.
 \begin{displaymath}
   \begin{array}{ll}
     f\Big(\; \role p_1\longrightarrow\{\role
- p_i\}_{i\in I} \oplus \{[\lambda_j] x_j=E_j: D_j\}_{j\in J}, \texttt{network}
+ p_i\}_{i\in I} +\{\lambda_j : x_j=E_j: C_j\}_{j\in J}, \texttt{network}
     \Big)
     \\\\
     =
@@ -262,7 +262,7 @@ projectable.
   	\quad\}\\
   	\}\\
 	\textsf{for } j \in J \{\\
-	\quad \texttt{network} = f(D_j, \texttt{network});  \\ 
+	\quad \texttt{network} = f(C_j, \texttt{network});  \\ 
 	\}\\
   	\textsf{return } \texttt{network}
   \end{array}

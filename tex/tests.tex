@@ -1,15 +1,22 @@
-We tested our language by various examples.
+In this section we present our experimental evaluation of our language. 
+We focus on four benchmarks: the dice program and the random graphs protocol that we compare with the  
+test cases reported in the PRISM repository\footnote{\url{https://www.prismmodelchecker.org/casestudies/}}; 
+the Bitcoin proof of work protocol and the Hybrid Casper protocol, 
+presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/distribledger/GallettaLMV23}.
 
 \subsection{The Dice Program}
- The first example we present is the Dice Program\footnote{\url{https://www.prismmodelchecker.org/casestudies/dice.php}} \cite{KY76}. The following program models a die using only fair coins. Starting at the root vertex (state 0), one repeatedly tosses a coin. Every time heads appears, one takes the upper branch and when tails appears, the lower branch. This continues until the value of the die is decided.
 
+\begin{wrapfigure}[9]{r}{5.5cm}
+	\includegraphics[scale=0.6]{diagram-20230927.pdf}	
+\end{wrapfigure} 
+ The first test case we focus on the Dice Program\footnote{\url{https://www.prismmodelchecker.org/casestudies/dice.php}}\cite{KY76}.
+ The following program models a die using only fair coins. 
+ Starting at the root vertex (state $s_0$), one repeatedly tosses a coin. Every time heads appears, one takes the upper branch and when tails appears, the lower branch. 
+ This continues until the value of the die is decided.
 
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.6]{diagram-20230725.pdf}	
-\end{figure}
+In Listing \ref{ex1-code}, we report the modelled program using the choreographic language
+while in Listing \ref{ex1-gen} the generated PRISM program is shown.
 
-We modelled the program using the choreographic language (Listing \ref{ex1-code}) and we were able to generate the corresponding PRISM program, reported in Listing \ref{ex1-gen}.
 
 \begin{lstlisting}[style=chor-color,caption={Choreographic language for the Dice Program.},captionpos=b,label={ex1-code}]
 preamble
@@ -17,27 +24,28 @@ preamble
 endpreamble
 
 n = 1;
+
 Dice $\rightarrow$ Dice : "d : [0..6] init 0;" ;
 
 {
-DiceProtocol$_0$ $\coloneqq$ Dice $\rightarrow$ Dice : (+["0.5*1"]  " "$\&\&$" " . DiceProtocol$_1$
-                                    +["0.5*1"]  " "$\&\&$" " .  DiceProtocol$_2$)
+DiceProtocol$_0$ $\coloneqq$ Dice $\rightarrow$ Dice : (+["0.5*1"]  " "&&" " . DiceProtocol$_1$
+                                    +["0.5*1"]  " "&&" " .  DiceProtocol$_2$)
 
-DiceProtocol$_1$ $\coloneqq$ Dice $\rightarrow$ Dice : (+["0.5*1"]  " "$\&\&$" " . 
- 			Dice $\rightarrow$ Dice : (+["0.5*1"]  " "$\&\&$" " . DiceProtocol$_1$
-           	 		 	+["0.5*1"]  "(d'=1)"$\&\&$" " . DiceProtocol$_3$)
-     				   +["0.5*1"]  " "$\&\&$" " .  
-   			Dice $\rightarrow$ Dice : (+["0.5*1"]  "(d'=2)"$\&\&$" " . DiceProtocol$_3$
-           	 		         +["0.5*1"]  "(d'=3)"$\&\&$" " . DiceProtocol$_3$))
+DiceProtocol$_1$ $\coloneqq$ Dice $\rightarrow$ Dice : (+["0.5*1"]  " "&&" " . 
+ 			Dice $\rightarrow$ Dice : (+["0.5*1"]  " "&&" " . DiceProtocol$_1$
+           	 		 	+["0.5*1"]  "(d'=1)"&&" " . DiceProtocol$_3$)
+     				   +["0.5*1"]  " "&&" " .  
+   			Dice $\rightarrow$ Dice : (+["0.5*1"]  "(d'=2)"&&" " . DiceProtocol$_3$
+           	 		         +["0.5*1"]  "(d'=3)"&&" " . DiceProtocol$_3$))
 
 DiceProtocol$_2$ $\coloneqq$ Dice $\rightarrow$ Dice : (+["0.5*1"]  " "&&" " . 
 	 		Dice $\rightarrow$ Dice : (+["0.5*1"]  " "&&" " . DiceProtocol$_2$
-	 	                	 +["0.5*1"]  "(d'=4)"$\&\&$" " . DiceProtocol$_3$)
+	 	                	 +["0.5*1"]  "(d'=4)"&&" " . DiceProtocol$_3$)
 	 			 +["0.5*1"]  " "&&" " . 
-	    		Dice $\rightarrow$ Dice : (+["0.5*1"]  "(d'=5)"$\&\&$" " . DiceProtocol$_3$
-	                     		+["0.5*1"]  "(d'=6)"$\&\&$" " . DiceProtocol$_3$))
+	    		Dice $\rightarrow$ Dice : (+["0.5*1"]  "(d'=5)"&&" " . DiceProtocol$_3$
+	                     		+["0.5*1"]  "(d'=6)"&&" " . DiceProtocol$_3$))
 
-DiceProtocol$_3$ $\coloneqq$ Dice $\rightarrow$ Dice : (["1*1"] " "$\&\&$" ".DiceProtocol$_3$)
+DiceProtocol$_3$ $\coloneqq$ Dice $\rightarrow$ Dice : (["1*1"] " "&&" ".DiceProtocol$_3$)
 }
 	
 \end{lstlisting}
@@ -63,17 +71,22 @@ endmodule
 	
 \end{lstlisting}
 
-By comparing our model with the one presented in the PRISM documentation, we noticed that the difference is the number assumed by the variable {\tt Dice}. In particular, the variable does not assume the values 1, 5 and 9. This is due to how the generation in presence of a branch is done. However, this does not cause any problems since the updates are done correctly.
+By comparing our model with the one presented in the PRISM documentation, we notice that the difference is the number assumed by the variable {\tt Dice}. 
+In particular, the variable assumes different values and 
+this is due to how the generation in presence of a branch is done. 
+However, this does not cause any problems since the updates are done correctly and the states are unique.
 Moreover,  to prove the generated program is correct, we show that the probability of reaching a state where 
 $$\texttt{d=k} \text{ for } \texttt{k}=1,\ldots,6 \text{ is } 1/6.$$
-The results are displayed in Figure \ref{ex1-res}, where also the results obtained with the original PRISM model are shown.
+The results are displayed in Figure \ref{ex1-res}, where we compare the probability we obtain with our generated model
+and the one obtained with the original PRISM model. 
+As expected, the results are equiivalent.
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.6]{example2-results.jpeg}	
 \caption{Probability of reaching a state where $d=k$, for $k=1,\ldots,6.$}
 \label{ex1-res}
 \end{figure}
-
+\begin{comment}
 \subsection{Simple Peer-To-Peer Protocol}
 This case study describes a simple peer-to-peer protocol based on BitTorrent\footnote{\url{https://www.prismmodelchecker.org/casestudies/peer2peer.php}}. The model comprises a set of clients trying to download a file that has been partitioned into $K$ blocks. Initially, there is one client that has already obtained all of the blocks and $N$ additional clients with no blocks. Each client can download a block from any of the others but they can only attempt four concurrent downloads for each block.\\
 The code we analyze with $k=5$ and $N=4$ is reported in Listing \ref{ex2-code}.
@@ -141,147 +154,36 @@ In Figure \ref{ex2-res}, we compare the values obtained for the probability that
 \caption{Probability that clients received all the block before $T$, with $0\leq T \leq 1.5$.}
 \label{ex2-res}
 \end{figure}
-
-\subsection{Proof of Work Bitcoin Protocol}
-This protocol represents the Proof of Work implemented in the Bitcoin blockchain.
-In\cite{DBLP:journals/concurrency/BistarelliNGLMV23}, a Bitcoin system is the result of the parallel composition of $n$ Miner processes, $n$  \emph{Hasher} processes and a process called \emph{Network}.
-\emph{Hasher} processes model the attempts of the miners to solve the cryptopuzzle, while the \emph{Network} process model the broadcast communication among miners. 
-We tested our system by considering a protocol with $n=5$ miners and it is reported in Listing \ref{ex3-code}.
-\begin{lstlisting}[style=chor-color,caption={Choreographic language for the Proof of Work Bitcoin Protocol.},captionpos=b,label={ex3-code}]
-preamble
-"ctmc"
-"const T"
-"const double r = 1;"
-"const double mR = 1/600;"
-"const double lR = 1-mR;"
-"const double hR1 = 0.25;"
-"const double hR2 = 0.25;"
-"const double hR3 = 0.25;"
-"const double hR4 = 0.25;"
-"const double rB = 1/12.6;"
-"const int N = 100;"
-endpreamble
-
-n = 4;
-
-Hasher[i] -> i in [1...n] ;
-
-Miner[i] -> i in [1...n]
-Miner[i] : "b[i] : block {m[i],0;genesis,0} ;", "B[i] : blockchain [{genesis,0;genesis,0}];" ,"c[i] : [0..N] init 0;", "setMiner[i] : list [];" ;
-
-Network ->
-Network : "set1 : list [];", "set2 : list [];", "set3 : list [];" , "set4 : list [];"; 
-	
-{
-PoW := Hasher[i]  $\rightarrow$  Miner[i] :
-(+["mR*hR[i]"]  " "$\&\&$"(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" . 
-	Miner[i]  $\rightarrow$  Network : 
-		(["rB*1"] "(B[i]'=addBlock(B[i],b[i]))" $\&\&$ 
-		foreach(k != i) "(set[k]'=addBlockSet(set[k],b[i]))" @Network .PoW)
- +["lR*hR[i]"] " " $\&\&$ " " .
- 	if "!isEmpty(set[i])"@Miner[i] then { 
-  		["r"] "(b[i]'=extractBlock(set[i]))"@Miner[i] . 
-			Miner[i]  $\rightarrow$  Network : 
-			(["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"$\&\&$"(set[i]' = removeBlock(set[i],b[i]))" . PoW) 
- 	}
- 	else{
- 		if "canBeInserted(B[i],b[i])"@Miner[i] then { 
- 			["1"] "(B[i]'=addBlock(B[i],b[i]))
-			&(setMiner[i]'=removeBlock(setMiner[i],b[i]))"@Miner[i] . Pow 
- 		}
- 		else{
- 			PoW
-		}
-	}
-)
-} 	
-\end{lstlisting}
-
-Part of the generated PRISM code is shown in Listing \ref{ex3-gen}. 
-\begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Peer-To-Peer Protocol.},captionpos=b,label={ex3-gen}]
-ctmc
-const T;
-const double r = 1;
-const double mR = 1/600;
-const double lR = 1-mR;
-const double hR1 = 0.25;
-const double hR2 = 0.25;
-const double hR3 = 0.25;
-const double hR4 = 0.25;
-const double rB = 1/12.6;
-const int N = 100;
-
-module Miner1
-Miner1 : [0..7] init 0;
-b1 : block {m1,0;genesis,0} ; 
-B1 : blockchain [{genesis,0;genesis,0}]; 
-c1 : [0..N] init 0; 
-setMiner1 : list []; 
-
-[PZKYT] (Miner1=0)   $\rightarrow$  hR1 : (b1'=createB(b1,B1,c1))$\&$(c1'=c1+1)$\&$(Miner1'=1); 
-[EUBVP] (Miner1=0)   $\rightarrow$  hR1 :  (Miner1'=2); 
-[HXYKO] (Miner1=1)   $\rightarrow$  1 : (B1'=addBlock(B1,b1))$\&$(Miner1'=0); 
-[] (Miner1=2)$\&$!isEmpty(set1)  $\rightarrow$  r : (b1'=extractBlock(set1))$\&$(Miner1'=4); 
-[SRKSV] (Miner1=4)   $\rightarrow$  1 : (setMiner1' = addBlockSet(setMiner1 , b1))$\&$(Miner1'=0); 
-[] (Miner1=2)$\&$!(!isEmpty(set1))  $\rightarrow$  1 : (Miner1'=5); 
-[] (Miner1=5)$\&$canBeInserted(B1,b1)  $\rightarrow$  1 : (B1'=addBlock(B1,b1))
-		$\&$(setMiner1'=removeBlock(setMiner1,b1))$\&$(Miner1'=0); 
-[] (Miner1=5)$\&$!(canBeInserted(B1,b1))  $\rightarrow$  1 : (Miner1'=0);
-endmodule
-$\ldots$
-module Network
-Network : [0..1] init 0;
-set1 : list []; 
-$\ldots$
-
-[HXYKO] (Network=0)  $\rightarrow$  1 : (set2'=addBlockSet(set2,b2))$\&$(set3'=addBlockSet(set3,b3))$\&$(set4'=addBlockSet(set4,b4))$\&$(Network'=0); 
-[SRKSV] (Network=0)  $\rightarrow$  1 : (set1' = removeBlock(set1,b1))$\&$(Network'=0); 
-$\ldots$
-
-endmodule
-
-module Hasher1
-Hasher1 : [0..1] init 0;
-
-[PZKYT] (Hasher1=0)  $\rightarrow$  mR :  (Hasher1'=0); 
-[EUBVP] (Hasher1=0)  $\rightarrow$  lR :  (Hasher1'=0); 
-
-endmodule
-\end{lstlisting}
-
-
-In Figure \ref{ex3-res}, we compare the values obtained for the probability that at least one miner has mined a block both for the generated model and the model presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}.
-\begin{figure}[h]
-\centering
-\includegraphics[scale=0.6]{example4-results.jpeg}	
-\caption{Probability at least one miner has created a block.}
-\label{ex3-res}
-\end{figure}
-
-
+\end{comment}
+\newpage
 \subsection{Random Graphs Protocol}
-In this case study\footnote{\url{https://www.prismmodelchecker.org/casestudies/graph_connected.php}} we investigate the likelihood that a pair of nodes are connected in a
+\begin{wrapfigure}[8]{l}{4cm}
+	\includegraphics[scale=0.7]{network.pdf}	
+\end{wrapfigure} 
+The second case study we report is the random graphs protocol presented in the PRISM documentation\footnote{\url{https://www.prismmodelchecker.org/casestudies/graph_connected.php}}.
+It investigates the likelihood that a pair of nodes are connected in a
  random graph. More precisely, we take into account the the set of random graphs $G(n,p)$,
-  i.e. the set of random graphs with n nodes where the probability of there being an edge 
+  i.e. the set of random graphs with $n$ nodes where the probability of there being an edge 
   between any two nodes equals $p$. 
 
-\begin{lstlisting}[style=chor-color,caption={Choreographic language for the Random Graphs
+  The model is divided in two parts: at the beginning the random graph is built.
+Then the algorithm finds nodes that have a path to node 2 by searching for nodes for which one can reach (in one step) a node for which the existence of a path to node 2 has already been found.
+
+The choreographic model is shown in Listing \ref{ex4-code}, while
+in Listing \ref{ex4-gen}, we report only part of the generated PRISM module (the modules $M_2$, $M_3$ and $P_2$, $P_3$ are equivalent to, respectively, $M_1$ and $P_2$ and can be found in the repository\footnote{\url{https://github.com/adeleveschetti/choreography-to-PRISM}}).
+
+\begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreographic language for the Random Graphs
 	Protocol.},captionpos=b,label={ex4-code}]
-	preamble
+preamble
 "mdp"
 "const double p;"
 endpreamble
 
 n = 3;
 
-PC -> 
-PC : " ";
-
-M[i] -> i in [1...n]
-Module[i] : "varM[i] : bool;";
-
-P[i] -> i in [1...n]
-P[i] : "varP[i] : bool;";
+PC -> PC : " ";
+M[i] -> i in [1...n]  M[i] : "varM[i] : bool;";
+P[i] -> i in [1...n] P[i] : "varP[i] : bool;";
 
 {
 GraphConnected0 := 
@@ -290,13 +192,10 @@ GraphConnected0 :=
 	PC -> P[i] : (+["1*p"] " "&&"(varP[i]'=true)" . END
 		        +["1*(1-p)"] " "&&"(varP[i]'=false)".
 			if "(PC=6)&!varP[i]&((varP[i] & varM[i]) | (varM[i+1] & varP[i+2])) "@P[i] then {
-					["1"]"(varP[i]'=true)"@P[i] . GraphConnected0
+				["1"]"(varP[i]'=true)"@P[i] . GraphConnected0
 			}) 								  
 }
 \end{lstlisting}
-The model is divided in two parts: at the beginning the random graph is built.
-Then they find nodes that have a path to node 2 by searching for nodes for which one can reach (in one step) a node for which they have already found the existence of a path to node 2.
-Part of the generated PRISM code is shown in Listing \ref{ex4-gen} (we do not report modules \texttt{M2, M3, P2, P3}).
 \begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Random Graphs
 	Protocol.},captionpos=b,label={ex4-gen}]
 mdp
@@ -330,90 +229,180 @@ module P1
    [] (P1=0)$\&$(PC=6)$\&$!varP1&((varP1 $\&$ varM1) | (varM2$\&$ varP3))  
    				$\rightarrow$ 1 : (varP1'=true)$\&$(P1'=0); 
 endmodule
+$\ldots$
 \end{lstlisting}
 
-The model is very similar to the one presented in the PRISM repository, the main difference is that we use state variables also for the modules \texttt{P$_i$} and \texttt{M$_i$}.
- 
-In Figure \ref{ex4-res}, we compare the results obtained with the two models.
+The model is very similar to the one presented in the PRISM repository, the main difference is that we use state variables also for the modules \texttt{P$_i$} and \texttt{M$_i$}, 
+where in the original model they were not requires.
+However, this does not affect the behaviour of the model, as the reader can notice from the results of the probability that nodes 1 and 2 are connected showed in Figure \ref{ex4-res}.
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.6]{example5-results.jpeg}	
 \caption{Probability that the nodes 1 and 2 are connected.}
 \label{ex4-res}
 \end{figure}
+\newpage
+\subsection{Proof of Work Bitcoin Protocol}
+\begin{wrapfigure}[7]{r}{4cm}
+	\includegraphics[scale=0.45]{bitcoin.pdf}	
+\end{wrapfigure} 
+In \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, the authors decided to extend the PRISM model checker with
+dynamic data types in order to model the Proof of Work protocol implemented in the Bitcoin blockchain \cite{bitcoin}.
+
+The Bitcoin system is the result of the parallel composition of $n$ Miner processes, $n$  \emph{Hasher} processes and a process called \emph{Network}.
+In particular: 
+\begin{itemize}
+	\item The \emph{Miner} processes model the blockchain mainers that create new blocks and add them to their local ledger;
+	\item the \emph{Hasher} processes model the attempts of the miners to solve the cryptopuzzle;
+	\item the \emph{Network} process model the broadcast communication among miners. 
+\end{itemize}
+Since we are not interested in the properties obtained by analyzing the protocol, we decided to consider $n=4$ miner and hasher processes; the model can be found in Listing \ref{ex3-code}.
+
+\begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreographic language for the Proof of Work Bitcoin Protocol.},captionpos=b,label={ex3-code}]
+preamble
+$\ldots$
+endpreamble
+
+n = 4;
+
+$\ldots$
+	
+{
+PoW := Hasher[i]  ->  Miner[i] :
+(+["mR*hR[i]"]  " "&&"(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" . 
+	Miner[i]  ->  Network : 
+		(["rB*1"] "(B[i]'=addBlock(B[i],b[i]))" && 
+		foreach(k != i) "(set[k]'=addBlockSet(set[k],b[i]))" @Network .PoW)
+ +["lR*hR[i]"] " " && " " .
+ 	if "!isEmpty(set[i])"@Miner[i] then { 
+  		["r"] "(b[i]'=extractBlock(set[i]))"@Miner[i] . 
+			Miner[i]  ->  Network : 
+			(["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . PoW) 
+ 	}
+ 	else{
+ 		if "canBeInserted(B[i],b[i])"@Miner[i] then { 
+ 			["1"] "(B[i]'=addBlock(B[i],b[i]))&&(setMiner[i]'=removeBlock(setMiner[i],b[i]))"@Miner[i] . Pow 
+ 		}
+ 		else{
+ 			PoW
+		}
+	}
+)
+} 	
+\end{lstlisting}
+
+Part of the generated PRISM code is shown in Listing \ref{ex3-gen}, 
+the modules $Miner_2$, $Miner_3$, $Miner_4$ and $Hasher_2$, $Hasher_3$, $Hasher_4$ are equivalent to $Miner_1$ and $Hasher_1$, respectively.
+Our generated PRISM model is more verbose than the one presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23},
+this is due to the fact that for the \texttt{if-then-else} expression, we always generate the \texttt{else} branch.
+and this leads to having more instructions
+\begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Peer-To-Peer Protocol.},captionpos=b,label={ex3-gen}]
+$\ldots$
+
+module Miner1
+   Miner1 : [0..7] init 0;
+   b1 : block {m1,0;genesis,0} ; 
+   B1 : blockchain [{genesis,0;genesis,0}]; 
+   c1 : [0..N] init 0; 
+   setMiner1 : list []; 
+
+   [PZKYT] (Miner1=0)   $\rightarrow$  hR1 : (b1'=createB(b1,B1,c1))$\&$(c1'=c1+1)$\&$(Miner1'=1); 
+   [EUBVP] (Miner1=0)   $\rightarrow$  hR1 :  (Miner1'=2); 
+   [HXYKO] (Miner1=1)   $\rightarrow$  1 : (B1'=addBlock(B1,b1))$\&$(Miner1'=0); 
+   [] (Miner1=2)$\&$!isEmpty(set1)  $\rightarrow$  r : (b1'=extractBlock(set1))$\&$(Miner1'=4); 
+   [SRKSV] (Miner1=4)   $\rightarrow$  1 : (setMiner1' = addBlockSet(setMiner1 , b1))$\&$(Miner1'=0); 
+   [] (Miner1=2)$\&$!(!isEmpty(set1))  $\rightarrow$  1 : (Miner1'=5); 
+   [] (Miner1=5)$\&$canBeInserted(B1,b1)  $\rightarrow$  1 : (B1'=addBlock(B1,b1))$\&$(setMiner1'=removeBlock(setMiner1,b1))$\&$(Miner1'=0); 
+   [] (Miner1=5)$\&$!(canBeInserted(B1,b1))  $\rightarrow$  1 : (Miner1'=0);
+
+endmodule
+$\ldots$
+module Network
+Network : [0..1] init 0;
+   set1 : list []; 
+   $\ldots$
+
+   [HXYKO] (Network=0)  $\rightarrow$  1 : (set2'=addBlockSet(set2,b2))$\&$(set3'=addBlockSet(set3,b3))$\&$(set4'=addBlockSet(set4,b4))$\&$(Network'=0); 
+   [SRKSV] (Network=0)  $\rightarrow$  1 : (set1' = removeBlock(set1,b1))$\&$(Network'=0); 
+   $\ldots$
+
+endmodule
+
+module Hasher1
+Hasher1 : [0..1] init 0;
+
+[PZKYT] (Hasher1=0)  $\rightarrow$  mR :  (Hasher1'=0); 
+[EUBVP] (Hasher1=0)  $\rightarrow$  lR :  (Hasher1'=0); 
+
+endmodule
+\end{lstlisting}
+
+However, for this particular test case, the results of the experiments are not affected, 
+as shown Figure \ref{ex3-res} where the results are compared.
+In this example, since we are comparing the results of two simulations, the two probabilities are
+slightly different, but it has nothing to do with the model itself.
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.5]{example4-results.jpeg}	
+\caption{Probability at least one miner has created a block.}
+\label{ex3-res}
+\end{figure}
 
 
 \subsection{Hybrid Casper Protocol}
-The last case we study is the Hybrid Casper Protocol presented in \cite{DBLP:journals/distribledger/GallettaLMV23}. 
-The protocol models what happened in the Ethereum blockchain while it was implemented the hybrid Casper protocol:
-an hybrid protocol that includes features of the Proof of Work and the Proof of Stake protocols.
-The modeling language is reported in Listing \ref{ex5-code} while (part of) the generated PRISM code can be found in Listing \ref{ex4-gen}.
-\begin{lstlisting}[style=chor-color,caption={Choreographic language for the Hybrid Casper Protocol.},captionpos=b,label={ex5-code}]
+\begin{wrapfigure}[9]{l}{4.5cm}
+	\includegraphics[scale=0.45]{ethereum.pdf}	
+\end{wrapfigure} 
+The last case we study we present is the Hybrid Casper Protocol modelled in PRISM in \cite{DBLP:journals/distribledger/GallettaLMV23}. 
+The Hybrid Capser protocol is
+an hybrid blockchain consenus protocol that includes features of the Proof of Work and the Proof of Stake protocols.
+It was implemented in the Ethereum blockchain \cite{ethereum} as a testing phase before switching to Proof of Stake protocol.
+
+The approach is very similat to the one used for the Proof of Work Bitcoin protocol,
+so they model Hybrid Casper in PRISM as the parallel composition of $n$ \texttt{Validator} modules and the modules \texttt{Vote\_Manager} and \texttt{Network}.
+The module \texttt{Validator} is very similar to the module \texttt{Miner} of the previous protocol and
+the only module that requires an explaination is the \texttt{Vote\_Manager} that stores the tables containing the votes for each checkpoint and calculates the rewards/penalties.
+
+The modeling language is reported in Listing \ref{ex5-code} while (part of) the generated PRISM code can be found in Listing \ref{ex5-gen}.
+\begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Choreographic language for the Hybrid Casper Protocol.},captionpos=b,label={ex5-code}]
 preamble
-"ctmc"
-"const int EpochSize = 2;"
-"const k = 1;"
-"const double rMw = 1/12.6;"
-"const epochs = 0;"
-"const double T;"
-"const int N = 100;"
-"const double rC = 1/(14*EpochSize);"
-"const double mR =1/14;"
-"const double lR = 10;"
+$\ldots$
 endpreamble
-	
 n = 5;
-	
-Validator[i] -> i in [1...n]
-Validator[i] : "b[i] : block {m[i],0;genesis,0};", "lastJ[i] : block {m[i],0;genesis,0};", "L[i] : blockchain [{genesis,0;genesis,0}];", "c[i] : [0..N] init 0;", "setMiner[i] : list [];", "heightCheckpoint[i] : [0..N] init 0;", "heightLast[i] : [0..N] init 0;", "lastFinalized[i] : block {genesis,0;genesis,0};", "lastJustified[i] : block {genesis,0;genesis,0};", "lastCheck[i] : block {genesis,0;genesis,0};", "votes[i] : [0..1000] init 0;", "listCheckpoints[i] : list [];";
-	
-Network ->
-Network : "set1 : list [];", "set2 : list [];", "set3 : list [];" , "set4 : list [];" , "set5 : list [];";
-		
-Vote_Manager -> 
-Vote_Manager : "Votes : hash []; ", "tot_stake : [0..120000] init 50;", "stake1 : [0..N] init 10;", "stake2 : [0..N] init 10;", "stake3 : [0..N] init 10;", "stake4 : [0..N] init 10;", "stake5 : [0..N] init 10;";
-	
+$\ldots$
 {
 PoS := Validator[i] -> Validator[i] :
-	(+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"&&" " .
-	     if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{
-			Validator[i] -> Network : (["1*1"] "(L[i]'=addBlock(L[i],b[i]))" && foreach(k!=i) "(set[k]'=addBlockSet(set[k],b[i]))"@Network .PoS)
-		 }
-		 else{
-			Validator[i] -> Network : (["1*1"] "(L[i]'=addBlock(L[i],b[i]))" && foreach(k!=i) "(set[k]'=addBlockSet(set[k],b[i]))"@Network.
-			Validator[i] -> Vote_Manager :(["1*1"] " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS))
-		 }
-	 +["lR*1"] " "&&" " . 
-	 	 if "!isEmpty(set[i])"@Validator[i] then {
-			["1"] "(b[i]'=extractBlock(set[i]))"@Validator[i] . 
-				if "!canBeInserted(L[i],b[i])"@Validator[i] then {
-					PoS
-				}
-				else{
-					if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then {
-						Validator[i] -> Network : (["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . PoS)
-					}
-					else{
-						Validator[i] -> Network : (["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . Validator[i] -> Vote_Manager : (["1*1"] " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS ))
-					}
-				}
-		 }
-		 else{
-			PoS
-		 }
-	 +["rC*1"] "(lastCheck[i]'=extractCheckpoint(listCheckpoints[i],lastCheck[i]))&(heightLast[i]'=getHeight(extractCheckpoint(listCheckpoints[i],lastCheck[i])))&(votes[i]'=calcVotes(Votes,extractCheckpoint(listCheckpoints[i],lastCheck[i])))"&&" " . 
-	 	 if "(heightLast[i]=heightCheckpoint[i]+EpochSize)&(votes[i]>=2/3*tot_stake)"@Validator[i] then{
-			if "(heightLast[i]=heightCheckpoint[i]+EpochSize)"@Validator[i] then{
-				["1"] "(lastJ[i]'=b[i])&(L[i]'= updateHF(L[i],lastJ[i]))" @Validator[i].Validator[i]->Vote_Manager :(["1*1"]" "&&"(epoch'=height(lastF(L[i]))&(Stakes'=addVote(Votes,b[i],stake[i]))".PoS)
-		 	}
-		 	else{
-				["1"] "(lastJ[i]'=b[i])"@Validator[i] . PoS
+   (+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"&&" " .
+	if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{
+	   Validator[i] -> Network : (["1*1"] "(L[i]'=addBlock(L[i],b[i]))" && foreach(k!=i) "(set[k]'=addBlockSet(set[k],b[i]))"@Network .PoS)
+	}
+	else{
+	   Validator[i] -> Network : (["1*1"] "(L[i]'=addBlock(L[i],b[i]))" && foreach(k!=i) "(set[k]'=addBlockSet(set[k],b[i]))"@Network . Validator[i] -> Vote_Manager :(["1*1"] " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS))
+	}
+   +["lR*1"] " "&&" " . if "!isEmpty(set[i])"@Validator[i] then {
+	   ["1"] "(b[i]'=extractBlock(set[i]))"@Validator[i] . 
+		   if "!canBeInserted(L[i],b[i])"@Validator[i] then {
+		       PoS
+		   }
+		   else{
+			if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then {
+			  Validator[i] -> Network : (["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . PoS)
 			}
-		 }
-		 else{
-			PoS
-		 }
-	)								 
+			else{
+			  Validator[i] -> Network : (["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . Validator[i] -> Vote_Manager : (["1*1"] " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS ))
+			}
+		}
+	}
+	else{PoS}
+   +["rC*1"] "(lastCheck[i]'=extractCheckpoint(listCheckpoints[i],lastCheck[i]))&(heightLast[i]'=getHeight(extractCheckpoint(listCheckpoints[i],lastCheck[i])))&(votes[i]'=calcVotes(Votes,extractCheckpoint(listCheckpoints[i],lastCheck[i])))"&&" " . 
+	   if "(heightLast[i]=heightCheckpoint[i]+EpochSize)&(votes[i]>=2/3*tot_stake)"@Validator[i] then{
+		   if "(heightLast[i]=heightCheckpoint[i]+EpochSize)"@Validator[i] then{
+			   ["1"] "(lastJ[i]'=b[i])&(L[i]'= updateHF(L[i],lastJ[i]))" @Validator[i].Validator[i]->Vote_Manager :(["1*1"]" "&&"(epoch'=height(lastF(L[i]))&(Stakes'=addVote(Votes,b[i],stake[i]))".PoS)
+		   }
+		   else{["1"] "(lastJ[i]'=b[i])"@Validator[i] . PoS} 
+	   }
+	   else{PoS}
+)								 
 }	
 \end{lstlisting}
 
@@ -498,10 +487,7 @@ instead of 22.051 seconds needed for the original model.
 \caption{Probability that a block has been created.}
 \label{ex5-res}
 \end{figure}
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "main"
-%%% End:
+
 
 
 \subsection{Problems}
