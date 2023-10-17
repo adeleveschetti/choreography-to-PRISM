@@ -244,46 +244,47 @@ projectable.
 \end{comment}
 
 \begin{displaymath}
-	f : C \longrightarrow \texttt{network} \longrightarrow \texttt{network} \quad\quad \texttt{network} : \mathcal R \longrightarrow \text{Set}(F)
+	f : C\times\texttt{network}\times States \times Labels \longrightarrow \texttt{network} \quad\quad \texttt{network} : \mathcal R \longrightarrow \text{Set}(F)
 \end{displaymath}
 
 \begin{displaymath}
   \begin{array}{ll}
     f\Big(\; \role p_1\longrightarrow\{\role
- p_i\}_{i\in I} +\{\lambda_j : x_j=E_j: C_j\}_{j\in J}, \texttt{network}
+ p_i\}_{i\in I} +\{\lambda_j : x_j=E_j: C_j\}_{j\in J}, \texttt{network}, \overline{s}, \ell
     \Big)
     \\\\
     =
     \\\\
-    \textsf{label} = \texttt{newlabel}();\\
+    %\textsf{label} = \texttt{newlabel}();\\
     \textsf{for } \role p_k \in \mathbf{roles} \{\\
     \quad\textsf{for } j \in J \{\\
-    \quad\quad \texttt{network} = \texttt{add}(\role p_k,[\textsf{label}] {s_{\role p_k} = \texttt{state}(\role p_k)} \rightarrow\ \lambda_j : x_j=E_j\;\& \;s_{\role p_k}'=\texttt{genNewState}(\role p_k));\\
+    \quad\quad \texttt{network} = \texttt{add}(\role p_k,[\ell]\; {s_{\role p_k} = s_k} \rightarrow\ \lambda_j : x_j=E_j\;\& \;s_{\role p_k}'=s_k+1);\\
   	\quad\}\\
   	\}\\
 	\textsf{for } j \in J \{\\
-	\quad \texttt{network} = f(C_j, \texttt{network});  \\ 
+	\quad \texttt{network} = f(C_j, \texttt{network}, \overline{s}', \mathbf{genLabel(\ell)});  \\ 
 	\}\\
   	\textsf{return } \texttt{network}
   \end{array}
 \end{displaymath}
 
+where $\overline{s} = (s_1, \ldots, s_n)$ and $\overline{s}' = (s_1+1, \ldots, s_n+1)$ for $n = |\mathbf{roles}|$.
 \begin{displaymath}
   \begin{array}{ll}
-    f\Big(\; \textsf{if } E@\{\role p_i\}_{i\in I} \textsf{ then } C_1 \textsf{ else } C_2, \texttt{network} 
+    f\Big(\; \textsf{if } E@\{\role p_i\}_{i\in I} \textsf{ then } C_1 \textsf{ else } C_2, \texttt{network}, \overline{s}, \ell 
     \Big)
     \\\\
     =
     \\\\
     \textsf{for } \role p_k \in \mathbf{roles} \{\\
-    \quad\texttt{network} = \texttt{add}(\role p_k,[\;] {s_{\role p_k} = \texttt{state}(\role p_k)} \;\& \;f(E));\\
-	\quad\texttt{network} = f(C_1, \texttt{network}); \\
-	\quad\texttt{network} = f(C_2, \texttt{network}); \\
+    \quad\texttt{network} = \texttt{add}(\role p_k,[\;]\; s_{\role p_k} = s_k \;\& \;f(E))+f(C_1, \texttt{network},\overline{s},\ell);\\
+    \quad\texttt{network} = \texttt{add}(\role p_k,[\;]\; s_{\role p_k} = s_k \;\& \;!f(E))+f(C_1, \texttt{network},\overline{s},\ell);\\
   \}\\
   \text{return } \texttt {network}\\
 
   \end{array}
 \end{displaymath}
+
 
 
 %%% Local Variables: 
