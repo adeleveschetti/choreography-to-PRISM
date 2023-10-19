@@ -32,11 +32,11 @@ listCheckpoints1 : list [];
 
 
 
-[YNUIP] (Validator1=1)&!(mod(getHeight(b1),EpochSize)=0)  -> 1 : (L1'=addBlock(L1,b1))&(Validator1'=0); 
+[CAWGG] (Validator1=1)&!(mod(getHeight(b1),EpochSize)=0)  -> 1 : (L1'=addBlock(L1,b1))&(Validator1'=0); 
 
 [] (Validator1=1)&!(!(mod(getHeight(b1),EpochSize)=0)) -> 1 : (Validator1'=3); 
 
-[ARQDK] (Validator1=1)&!(mod(getHeight(b1),EpochSize)=0)  -> 1 :  (Validator1'=0); 
+[TJVLU] (Validator1=1)&!(mod(getHeight(b1),EpochSize)=0)  -> 1 :  (Validator1'=0); 
 
 [] (Validator1=2)&!isEmpty(set1) -> 1 : (b1'=extractBlock(set1))&(Validator1'=4); 
 
@@ -44,13 +44,13 @@ listCheckpoints1 : list [];
 
 [] (Validator1=4)&!(!canBeInserted(L1,b1)) -> 1 : (Validator1'=6); 
 
-[PPGEZ] (Validator1=6)  -> 1 : (setMiner1' = addBlockSet(setMiner1 , b1))&(Validator1'=8); 
+[SOCSO] (Validator1=6)  -> 1 : (setMiner1' = addBlockSet(setMiner1 , b1))&(Validator1'=8); 
 
 [] (Validator1=7)&!(mod(getHeight(b1),EpochSize)=0) -> (Validator1'=0);
 
 [] (Validator1=7)&!(!(mod(getHeight(b1),EpochSize)=0)) -> 1 : (Validator1'=9); 
 
-[KELKF] (Validator1=9)  -> 1 :  (Validator1'=0); 
+[UMVMR] (Validator1=9)  -> 1 :  (Validator1'=0); 
 
 [] (Validator1=2)&!(!isEmpty(set1)) -> 1 : (Validator1'=0);
 
@@ -58,7 +58,7 @@ listCheckpoints1 : list [];
 
 [] (Validator1=4)&(heightLast1=heightCheckpoint1+EpochSize) -> 1 : (lastJ1'=b1)&(L1'= updateHF(L1,lastJ1))&(Validator1'=6); 
 
-[WRSSJ] (Validator1=6)  -> 1 :  (Validator1'=0); 
+[LQFTH] (Validator1=6)  -> 1 :  (Validator1'=0); 
 
 [] (Validator1=4)&!((heightLast1=heightCheckpoint1+EpochSize)) -> 1 : (lastJ1'=b1)&(Validator1'=0); 
 
@@ -89,11 +89,11 @@ listCheckpoints2 : list [];
 
 
 
-[XSVLC] (Validator2=1)&!(mod(getHeight(b2),EpochSize)=0)  -> 1 : (L2'=addBlock(L2,b2))&(Validator2'=0); 
+[THDGL] (Validator2=1)&!(mod(getHeight(b2),EpochSize)=0)  -> 1 : (L2'=addBlock(L2,b2))&(Validator2'=0); 
 
 [] (Validator2=1)&!(!(mod(getHeight(b2),EpochSize)=0)) -> 1 : (Validator2'=3); 
 
-[IEXOM] (Validator2=1)&!(mod(getHeight(b2),EpochSize)=0)  -> 1 :  (Validator2'=0); 
+[XPQBW] (Validator2=1)&!(mod(getHeight(b2),EpochSize)=0)  -> 1 :  (Validator2'=0); 
 
 [] (Validator2=2)&!isEmpty(set2) -> 1 : (b2'=extractBlock(set2))&(Validator2'=4); 
 
@@ -101,13 +101,13 @@ listCheckpoints2 : list [];
 
 [] (Validator2=4)&!(!canBeInserted(L2,b2)) -> 1 : (Validator2'=6); 
 
-[NBKNO] (Validator2=6)  -> 1 : (setMiner2' = addBlockSet(setMiner2 , b2))&(Validator2'=8); 
+[NARTF] (Validator2=6)  -> 1 : (setMiner2' = addBlockSet(setMiner2 , b2))&(Validator2'=8); 
 
 [] (Validator2=7)&!(mod(getHeight(b2),EpochSize)=0) -> (Validator2'=0);
 
 [] (Validator2=7)&!(!(mod(getHeight(b2),EpochSize)=0)) -> 1 : (Validator2'=9); 
 
-[WKIXR] (Validator2=9)  -> 1 :  (Validator2'=0); 
+[EEZHK] (Validator2=9)  -> 1 :  (Validator2'=0); 
 
 [] (Validator2=2)&!(!isEmpty(set2)) -> 1 : (Validator2'=0);
 
@@ -115,7 +115,7 @@ listCheckpoints2 : list [];
 
 [] (Validator2=4)&(heightLast2=heightCheckpoint2+EpochSize) -> 1 : (lastJ2'=b2)&(L2'= updateHF(L2,lastJ2))&(Validator2'=6); 
 
-[XBTJD] (Validator2=6)  -> 1 :  (Validator2'=0); 
+[EQBWK] (Validator2=6)  -> 1 :  (Validator2'=0); 
 
 [] (Validator2=4)&!((heightLast2=heightCheckpoint2+EpochSize)) -> 1 : (lastJ2'=b2)&(Validator2'=0); 
 
@@ -146,11 +146,11 @@ listCheckpoints3 : list [];
 
 
 
-[PLAOH] (Validator3=1)&!(mod(getHeight(b3),EpochSize)=0)  -> 1 : (L3'=addBlock(L3,b3))&(Validator3'=0); 
+[VUSMH] (Validator3=1)&!(mod(getHeight(b3),EpochSize)=0)  -> 1 : (L3'=addBlock(L3,b3))&(Validator3'=0); 
 
 [] (Validator3=1)&!(!(mod(getHeight(b3),EpochSize)=0)) -> 1 : (Validator3'=3); 
 
-[JDSCG] (Validator3=1)&!(mod(getHeight(b3),EpochSize)=0)  -> 1 :  (Validator3'=0); 
+[NYNER] (Validator3=1)&!(mod(getHeight(b3),EpochSize)=0)  -> 1 :  (Validator3'=0); 
 
 [] (Validator3=2)&!isEmpty(set3) -> 1 : (b3'=extractBlock(set3))&(Validator3'=4); 
 
@@ -158,13 +158,13 @@ listCheckpoints3 : list [];
 
 [] (Validator3=4)&!(!canBeInserted(L3,b3)) -> 1 : (Validator3'=6); 
 
-[BVJRF] (Validator3=6)  -> 1 : (setMiner3' = addBlockSet(setMiner3 , b3))&(Validator3'=8); 
+[BPYMA] (Validator3=6)  -> 1 : (setMiner3' = addBlockSet(setMiner3 , b3))&(Validator3'=8); 
 
 [] (Validator3=7)&!(mod(getHeight(b3),EpochSize)=0) -> (Validator3'=0);
 
 [] (Validator3=7)&!(!(mod(getHeight(b3),EpochSize)=0)) -> 1 : (Validator3'=9); 
 
-[FOCGN] (Validator3=9)  -> 1 :  (Validator3'=0); 
+[RMRBM] (Validator3=9)  -> 1 :  (Validator3'=0); 
 
 [] (Validator3=2)&!(!isEmpty(set3)) -> 1 : (Validator3'=0);
 
@@ -172,7 +172,7 @@ listCheckpoints3 : list [];
 
 [] (Validator3=4)&(heightLast3=heightCheckpoint3+EpochSize) -> 1 : (lastJ3'=b3)&(L3'= updateHF(L3,lastJ3))&(Validator3'=6); 
 
-[IZTOM] (Validator3=6)  -> 1 :  (Validator3'=0); 
+[BLQTO] (Validator3=6)  -> 1 :  (Validator3'=0); 
 
 [] (Validator3=4)&!((heightLast3=heightCheckpoint3+EpochSize)) -> 1 : (lastJ3'=b3)&(Validator3'=0); 
 
@@ -203,11 +203,11 @@ listCheckpoints4 : list [];
 
 
 
-[IMEMJ] (Validator4=1)&!(mod(getHeight(b4),EpochSize)=0)  -> 1 : (L4'=addBlock(L4,b4))&(Validator4'=0); 
+[ACEEP] (Validator4=1)&!(mod(getHeight(b4),EpochSize)=0)  -> 1 : (L4'=addBlock(L4,b4))&(Validator4'=0); 
 
 [] (Validator4=1)&!(!(mod(getHeight(b4),EpochSize)=0)) -> 1 : (Validator4'=3); 
 
-[QQXKS] (Validator4=1)&!(mod(getHeight(b4),EpochSize)=0)  -> 1 :  (Validator4'=0); 
+[HQAJG] (Validator4=1)&!(mod(getHeight(b4),EpochSize)=0)  -> 1 :  (Validator4'=0); 
 
 [] (Validator4=2)&!isEmpty(set4) -> 1 : (b4'=extractBlock(set4))&(Validator4'=4); 
 
@@ -215,13 +215,13 @@ listCheckpoints4 : list [];
 
 [] (Validator4=4)&!(!canBeInserted(L4,b4)) -> 1 : (Validator4'=6); 
 
-[PFFUS] (Validator4=6)  -> 1 : (setMiner4' = addBlockSet(setMiner4 , b4))&(Validator4'=8); 
+[VNMDF] (Validator4=6)  -> 1 : (setMiner4' = addBlockSet(setMiner4 , b4))&(Validator4'=8); 
 
 [] (Validator4=7)&!(mod(getHeight(b4),EpochSize)=0) -> (Validator4'=0);
 
 [] (Validator4=7)&!(!(mod(getHeight(b4),EpochSize)=0)) -> 1 : (Validator4'=9); 
 
-[WANSN] (Validator4=9)  -> 1 :  (Validator4'=0); 
+[OBGHI] (Validator4=9)  -> 1 :  (Validator4'=0); 
 
 [] (Validator4=2)&!(!isEmpty(set4)) -> 1 : (Validator4'=0);
 
@@ -229,7 +229,7 @@ listCheckpoints4 : list [];
 
 [] (Validator4=4)&(heightLast4=heightCheckpoint4+EpochSize) -> 1 : (lastJ4'=b4)&(L4'= updateHF(L4,lastJ4))&(Validator4'=6); 
 
-[SFAJB] (Validator4=6)  -> 1 :  (Validator4'=0); 
+[NCXGG] (Validator4=6)  -> 1 :  (Validator4'=0); 
 
 [] (Validator4=4)&!((heightLast4=heightCheckpoint4+EpochSize)) -> 1 : (lastJ4'=b4)&(Validator4'=0); 
 
@@ -260,11 +260,11 @@ listCheckpoints5 : list [];
 
 
 
-[PWZVL] (Validator5=1)&!(mod(getHeight(b5),EpochSize)=0)  -> 1 : (L5'=addBlock(L5,b5))&(Validator5'=0); 
+[IIMUJ] (Validator5=1)&!(mod(getHeight(b5),EpochSize)=0)  -> 1 : (L5'=addBlock(L5,b5))&(Validator5'=0); 
 
 [] (Validator5=1)&!(!(mod(getHeight(b5),EpochSize)=0)) -> 1 : (Validator5'=3); 
 
-[PRXJU] (Validator5=1)&!(mod(getHeight(b5),EpochSize)=0)  -> 1 :  (Validator5'=0); 
+[EZUSY] (Validator5=1)&!(mod(getHeight(b5),EpochSize)=0)  -> 1 :  (Validator5'=0); 
 
 [] (Validator5=2)&!isEmpty(set5) -> 1 : (b5'=extractBlock(set5))&(Validator5'=4); 
 
@@ -272,13 +272,13 @@ listCheckpoints5 : list [];
 
 [] (Validator5=4)&!(!canBeInserted(L5,b5)) -> 1 : (Validator5'=6); 
 
-[HVCRQ] (Validator5=6)  -> 1 : (setMiner5' = addBlockSet(setMiner5 , b5))&(Validator5'=8); 
+[JIDEB] (Validator5=6)  -> 1 : (setMiner5' = addBlockSet(setMiner5 , b5))&(Validator5'=8); 
 
 [] (Validator5=7)&!(mod(getHeight(b5),EpochSize)=0) -> (Validator5'=0);
 
 [] (Validator5=7)&!(!(mod(getHeight(b5),EpochSize)=0)) -> 1 : (Validator5'=9); 
 
-[AISZA] (Validator5=9)  -> 1 :  (Validator5'=0); 
+[AYCJI] (Validator5=9)  -> 1 :  (Validator5'=0); 
 
 [] (Validator5=2)&!(!isEmpty(set5)) -> 1 : (Validator5'=0);
 
@@ -286,7 +286,7 @@ listCheckpoints5 : list [];
 
 [] (Validator5=4)&(heightLast5=heightCheckpoint5+EpochSize) -> 1 : (lastJ5'=b5)&(L5'= updateHF(L5,lastJ5))&(Validator5'=6); 
 
-[LOFAH] (Validator5=6)  -> 1 :  (Validator5'=0); 
+[KOPQA] (Validator5=6)  -> 1 :  (Validator5'=0); 
 
 [] (Validator5=4)&!((heightLast5=heightCheckpoint5+EpochSize)) -> 1 : (lastJ5'=b5)&(Validator5'=0); 
 
@@ -303,25 +303,25 @@ set4 : list [];
 set5 : list []; 
 
 
-[YNUIP] (Network=0)  -> 1 : (set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(set5'=addBlockSet(set5,b5))&(Network'=0);
+[CAWGG] (Network=0)  -> 1 : (set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(set5'=addBlockSet(set5,b5))&(Network'=0);
 
-[PPGEZ] (Network=0)  -> 1 : (set1' = removeBlock(set1,b1))&(Network'=0); 
+[SOCSO] (Network=0)  -> 1 : (set1' = removeBlock(set1,b1))&(Network'=0); 
 
-[XSVLC] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(set5'=addBlockSet(set5,b5))&(Network'=0);
+[THDGL] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(set5'=addBlockSet(set5,b5))&(Network'=0);
 
-[NBKNO] (Network=0)  -> 1 : (set2' = removeBlock(set2,b2))&(Network'=0); 
+[NARTF] (Network=0)  -> 1 : (set2' = removeBlock(set2,b2))&(Network'=0); 
 
-[PLAOH] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set4'=addBlockSet(set4,b4))&(set5'=addBlockSet(set5,b5))&(Network'=0);
+[VUSMH] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set4'=addBlockSet(set4,b4))&(set5'=addBlockSet(set5,b5))&(Network'=0);
 
-[BVJRF] (Network=0)  -> 1 : (set3' = removeBlock(set3,b3))&(Network'=0); 
+[BPYMA] (Network=0)  -> 1 : (set3' = removeBlock(set3,b3))&(Network'=0); 
 
-[IMEMJ] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(set5'=addBlockSet(set5,b5))&(Network'=0);
+[ACEEP] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(set5'=addBlockSet(set5,b5))&(Network'=0);
 
-[PFFUS] (Network=0)  -> 1 : (set4' = removeBlock(set4,b4))&(Network'=0); 
+[VNMDF] (Network=0)  -> 1 : (set4' = removeBlock(set4,b4))&(Network'=0); 
 
-[PWZVL] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(Network'=0);
+[IIMUJ] (Network=0)  -> 1 : (set1'=addBlockSet(set1,b1))&(set2'=addBlockSet(set2,b2))&(set3'=addBlockSet(set3,b3))&(set4'=addBlockSet(set4,b4))&(Network'=0);
 
-[HVCRQ] (Network=0)  -> 1 : (set5' = removeBlock(set5,b5))&(Network'=0); 
+[JIDEB] (Network=0)  -> 1 : (set5' = removeBlock(set5,b5))&(Network'=0); 
 endmodule
 
 
@@ -336,34 +336,34 @@ stake4 : [0..N] init 10;
 stake5 : [0..N] init 10; 
 
 
-[ARQDK] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b1,stake1))&(Vote_Manager'=0);
+[TJVLU] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b1,stake1))&(Vote_Manager'=0);
 
-[KELKF] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b1,stake1))&(Vote_Manager'=0);
+[UMVMR] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b1,stake1))&(Vote_Manager'=0);
 
-[WRSSJ] (Vote_Manager=0)  -> 1 : (epoch'=height(lastF(L1))&(Stakes'=addVote(Votes,b1,stake1))&(Vote_Manager'=0);
+[LQFTH] (Vote_Manager=0)  -> 1 : (epoch'=height(lastF(L1))&(Stakes'=addVote(Votes,b1,stake1))&(Vote_Manager'=0);
 
-[IEXOM] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b2,stake2))&(Vote_Manager'=0);
+[XPQBW] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b2,stake2))&(Vote_Manager'=0);
 
-[WKIXR] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b2,stake2))&(Vote_Manager'=0);
+[EEZHK] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b2,stake2))&(Vote_Manager'=0);
 
-[XBTJD] (Vote_Manager=0)  -> 1 : (epoch'=height(lastF(L2))&(Stakes'=addVote(Votes,b2,stake2))&(Vote_Manager'=0);
+[EQBWK] (Vote_Manager=0)  -> 1 : (epoch'=height(lastF(L2))&(Stakes'=addVote(Votes,b2,stake2))&(Vote_Manager'=0);
 
-[JDSCG] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b3,stake3))&(Vote_Manager'=0);
+[NYNER] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b3,stake3))&(Vote_Manager'=0);
 
-[FOCGN] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b3,stake3))&(Vote_Manager'=0);
+[RMRBM] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b3,stake3))&(Vote_Manager'=0);
 
-[IZTOM] (Vote_Manager=0)  -> 1 : (epoch'=height(lastF(L3))&(Stakes'=addVote(Votes,b3,stake3))&(Vote_Manager'=0);
+[BLQTO] (Vote_Manager=0)  -> 1 : (epoch'=height(lastF(L3))&(Stakes'=addVote(Votes,b3,stake3))&(Vote_Manager'=0);
 
-[QQXKS] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b4,stake4))&(Vote_Manager'=0);
+[HQAJG] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b4,stake4))&(Vote_Manager'=0);
 
-[WANSN] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b4,stake4))&(Vote_Manager'=0);
+[OBGHI] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b4,stake4))&(Vote_Manager'=0);
 
-[SFAJB] (Vote_Manager=0)  -> 1 : (epoch'=height(lastF(L4))&(Stakes'=addVote(Votes,b4,stake4))&(Vote_Manager'=0);
+[NCXGG] (Vote_Manager=0)  -> 1 : (epoch'=height(lastF(L4))&(Stakes'=addVote(Votes,b4,stake4))&(Vote_Manager'=0);
 
-[PRXJU] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b5,stake5))&(Vote_Manager'=0);
+[EZUSY] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b5,stake5))&(Vote_Manager'=0);
 
-[AISZA] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b5,stake5))&(Vote_Manager'=0);
+[AYCJI] (Vote_Manager=0)  -> 1 : (Votes'=addVote(Votes,b5,stake5))&(Vote_Manager'=0);
 
-[LOFAH] (Vote_Manager=0)  -> 1 : (epoch'=height(lastF(L5))&(Stakes'=addVote(Votes,b5,stake5))&(Vote_Manager'=0);
+[KOPQA] (Vote_Manager=0)  -> 1 : (epoch'=height(lastF(L5))&(Stakes'=addVote(Votes,b5,stake5))&(Vote_Manager'=0);
 endmodule
 
