@@ -44,7 +44,7 @@ grammar:
   \end{array}
 \end{displaymath}
 Networks are the top syntactic category for system of modules composed
-together. The term $CEnd$ represent an empty network. A module
+together. The term $\CEnd$ represent an empty network. A module
 $\role{p}:\{F_i\}_i$ is identified by its name $\role p$ and a set of
 commands $F_i$. Networks can be composed in parallel, in a CSP style:
 a term like $M_1 \ppp A M_2$ says that networks $M_1$ and $M_2$ can
@@ -183,7 +183,7 @@ syntax:
 \begin{displaymath}
   \begin{array}{lll}
     \text{(Chor)}  \quad & C \ ::=\
-    & \{\role p_i\}_{i\in I}\,+\!\{\lambda_j: x_j=E_j;\ C_j\}_{j\in J}
+    & \{\role p_i\}_{i\in I}\,\Sigma\{\lambda_j: x_j=E_j;\ C_j\}_{j\in J}
       \ \mid\
       \textsf{if } E@\{\role p_i\}_{i\in I} \textsf{ then } C_1 \textsf{ else } C_2
       \ \mid\
@@ -258,7 +258,8 @@ projectable.
     %\textsf{label} = \texttt{newlabel}();\\
     \textsf{for } \role p_k \in \mathbf{roles} \{\\
     \quad\textsf{for } j \in J \{\\
-    \quad\quad \texttt{network} = \texttt{add}(\role p_k,[\ell]\; {s_{\role p_k} = s_k} \rightarrow\ \lambda_j : x_j=E_j\;\& \;s_{\role p_k}'=s_k+1);\\
+    \quad\quad \texttt{network} = \texttt{add}(\role p_k,[\ell]\; {s_{\role p_k} = s_k}
+    \rightarrow\ \Sigma_j\lambda_j : x_j=E_j\;\& \;s_{\role p_k}'=s_k+1);\\
   	\quad\}\\
   	\}\\
 	\textsf{for } j \in J \{\\
