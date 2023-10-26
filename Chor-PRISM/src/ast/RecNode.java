@@ -16,7 +16,7 @@ public class RecNode implements Node{
 	}
 
 	@Override
-	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot) {
 		// TODO Auto-generated method stub
 		return null;
 	}

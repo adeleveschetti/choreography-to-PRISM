@@ -19,10 +19,10 @@ public class ProtocolNode implements Node{
 	}
 
 	@Override
-	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot) {
 		for(Node el : statements) {
 			for(int i=1;i<=maxIndex; i++) {
-				el.generateCode(mods,i,maxIndex,isCtmc,labels);
+				el.generateCode(mods,i,maxIndex,isCtmc,labels,prot);
 			}
 		}
 		return null;

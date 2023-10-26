@@ -37,7 +37,7 @@ public class InternalActionNode implements Node{
 	}
 	
 	@Override
-	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot) {
 		Functions funs = new Functions();
 		String roleTmp = Functions.changeIndex(role,index,maxIndex);
 		
@@ -52,7 +52,7 @@ public class InternalActionNode implements Node{
 		}
 		
 		
-		String updatesNew = updates.generateCode(mods,index,maxIndex,isCtmc,labels);
+		String updatesNew = updates.generateCode(mods,index,maxIndex,isCtmc,labels,prot);
 		updatesNew = Functions.returnStringNewIndex(updatesNew,index,maxIndex);
 		if(!updatesNew.equals(" ")) {
 			updatesNew = updatesNew.substring(0,updatesNew.length()-3) + "&";
@@ -88,7 +88,7 @@ public class InternalActionNode implements Node{
 		if(!(statement instanceof EndNode)) {
 			((ModuleNode) mods.get(iA)).setState();
 		}
-		statement.generateCode(mods,index,maxIndex,isCtmc,labels);
+		statement.generateCode(mods,index,maxIndex,isCtmc,labels,prot);
 		
 		return null;
 	}

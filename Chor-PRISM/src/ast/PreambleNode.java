@@ -27,7 +27,7 @@ public class PreambleNode implements Node {
 
 
 	@Override
-	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot) {
 		String code = "";
 		for(String el : vars) {
 			code = code + el.substring(1,el.length()-1) + "\n";

@@ -22,15 +22,15 @@ public class MessageNode implements Node {
 	}
 
 	@Override
-	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot) {
 		if(loop==null) {
-			return actions.generateCode(mods,index,maxIndex,isCtmc,labels);
+			return actions.generateCode(mods,index,maxIndex,isCtmc,labels,prot);
 		}
 		else if(actions==null && loop.size()>1) {
 
 			String ret = "";
 			for(int i=0; i<loop.size(); i++) {
-				ret = ret + loop.get(i).generateCode(mods,index,maxIndex,isCtmc,labels);
+				ret = ret + loop.get(i).generateCode(mods,index,maxIndex,isCtmc,labels,prot);
 				if(i!=loop.size()-1) {
 					ret = ret + "&&";
 				}
@@ -38,7 +38,7 @@ public class MessageNode implements Node {
 			return ret;
 		}
 		String ret = "";
-		String loopMessage = loop.get(0).generateCode(mods,index,maxIndex,isCtmc,labels);
+		String loopMessage = loop.get(0).generateCode(mods,index,maxIndex,isCtmc,labels,prot);
 		if(beforeAction) {
 			ret = message + "&&" + loopMessage;
 		}

@@ -25,7 +25,7 @@ public class ActionNode implements Node{
 	}
 
 	@Override
-	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot) {
 		if(actionB==null || actionB.equals(" ") ) {
 			actionB = " ";
 		}

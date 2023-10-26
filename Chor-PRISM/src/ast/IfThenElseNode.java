@@ -31,7 +31,7 @@ public class IfThenElseNode implements Node {
 	}
 
 	@Override
-	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot) {
 		ArrayList<String> rolesTmp = new ArrayList<String>();
 		ArrayList<String> condsTmp = new ArrayList<String>();
 
@@ -88,7 +88,7 @@ public class IfThenElseNode implements Node {
 					}
 
 					((ModuleNode) el2).addCommand(stat);
-					thenStat.generateCode(mods,index,maxIndex,isCtmc,labels);
+					thenStat.generateCode(mods,index,maxIndex,isCtmc,labels,prot);
 					
 					if(!ifte2) {
 						stat2 = "[] (" + rolesTmp.get(i) + "=" +  state + ")" ;
@@ -114,7 +114,7 @@ public class IfThenElseNode implements Node {
 						}
 					}
 					((ModuleNode) el2).addCommand(stat2);
-					elseStat.generateCode(mods,index,maxIndex,isCtmc,labels);
+					elseStat.generateCode(mods,index,maxIndex,isCtmc,labels,prot);
 
 				}
 			}

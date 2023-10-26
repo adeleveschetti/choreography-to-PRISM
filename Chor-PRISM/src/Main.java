@@ -15,7 +15,7 @@ import parser.LanguageParser;
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		String fileName = "./generated-sources/example-sintax";
+		String fileName = "./generated-sources/example4";
 		FileInputStream is = new FileInputStream(fileName+".language");
 		@SuppressWarnings("deprecation")
 		ANTLRInputStream input = new ANTLRInputStream(is);
@@ -25,7 +25,7 @@ public class Main {
 		ParseTree t = parser.protocol();
 		LanguageVisitorImpl visitor = new LanguageVisitorImpl();
 		Node ast = visitor.visit(t);
-		String code = ast.generateCode(null,0,0,false,null);
+		String code = ast.generateCode(null,0,0,false,null,null);
 		File file = new File(fileName+".prism");
 		if (!file.exists()) {
 			file.createNewFile();

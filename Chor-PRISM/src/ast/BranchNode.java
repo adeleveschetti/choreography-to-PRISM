@@ -32,7 +32,7 @@ public class BranchNode implements Node{
 	}
 
 	@Override
-	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot) {
 
 		Functions funs = new Functions();
 		String roleTmp = funs.changeIndex(role,index,maxIndex);
@@ -87,10 +87,18 @@ public class BranchNode implements Node{
 					}
 				}
 			}
-			int stateA = ((ModuleNode) mods.get(iA)).getState();
+			
+			int stateA = ((ModuleNode) mods.get(iA)).getValueRecursion(prot);
+			if(stateA == -1) {
+				stateA = ((ModuleNode) mods.get(iA)).getState();
+				((ModuleNode) mods.get(iA)).setValueRecursion(prot,stateA);
+			}
 			if(isCtmc) {
 				statementA = null;
 			}
+			System.out.println(prot + " " + stateA);
+			System.out.println("===");
+
 			int indexRate = rates.get(k).indexOf("*");
 			String rateA = funs.changeIndex(rates.get(k).substring(0,indexRate),index,maxIndex);
 			boolean ifte = false;
@@ -111,7 +119,7 @@ public class BranchNode implements Node{
 			statementA = statementA + rateA + " : ";
 
 			String upA = "";
-			String genUpdates = updates.get(k).generateCode(mods,index,maxIndex,isCtmc,labels);
+			String genUpdates = updates.get(k).generateCode(mods,index,maxIndex,isCtmc,labels,prot);
 			if(!genUpdates.equals(" ")) {
 				int indexUp = genUpdates.indexOf("&&");
 				if(!genUpdates.substring(0,indexUp).equals(" ")) {
@@ -126,14 +134,22 @@ public class BranchNode implements Node{
 				}
 			}
 			if(statements.get(k) instanceof RecNode){
-				stateA = 0; // TO BE CHANGED
+				if(statements.get(k) instanceof RecNode){
+					int stateRec = ((ModuleNode) mods.get(iA)).getValueRecursion(statements.get(k).toPrint());
+					if(stateRec == -1) {
+						((ModuleNode) mods.get(iA)).setValueRecursion(statements.get(k).toPrint(),stateA+k+1);
+						stateA = stateA + k + 1;
+					}
+					else {
+						stateA = stateRec;
+					}
+				}
 			}
 			else if( !(statements.get(k) instanceof EndNode) && roleAContained) {
 				stateA = stateA + k + 1;
 			}
 			statementA = statementA + upA + "(" + roleTmp + "'=" + stateA +")";
 
-		
 			
 			for(int kk=0; kk<outRolesTmp.size(); kk++) {
 				if(!sameRole) {
@@ -213,7 +229,7 @@ public class BranchNode implements Node{
 			}
 		}
 		for(int k=0; k<statements.size(); k++) {
-			if(!(statements.get(k) instanceof EndNode) && statements.get(k).getRoles().contains(role)){
+			if(!(statements.get(k) instanceof EndNode) && statements.get(k).getRoles().contains(role) || statements.get(k) instanceof RecNode){
 				((ModuleNode) mods.get(iA)).setState();
 			}
 			
@@ -228,7 +244,7 @@ public class BranchNode implements Node{
 					((ModuleNode) mods.get(iB)).setState();
 				}
 			}
-			statements.get(k).generateCode(mods,index,maxIndex,isCtmc,labels);
+			statements.get(k).generateCode(mods,index,maxIndex,isCtmc,labels,prot);
 		}
 
 		return null;

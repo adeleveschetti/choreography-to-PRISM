@@ -34,7 +34,7 @@ public class LoopNode implements Node{
 	}
 	
 	@Override
-	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot) {
 		String toRet = "";
 		Functions funs = new Functions();
 		int roleIndex = Functions.newIndex(role,index,maxIndex);

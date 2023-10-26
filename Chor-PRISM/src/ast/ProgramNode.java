@@ -23,13 +23,13 @@ public class ProgramNode implements Node{
 	}
 
 	@Override
-	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot) {
 		String program = "";
 		isCtmc = ((PreambleNode) preamble).isCtmc();
-		program = program + preamble.generateCode(modules,index,n,isCtmc,labels);
+		program = program + preamble.generateCode(modules,index,n,isCtmc,labels,prot);
 
 		for(Node el : protocols) {
-			el.generateCode(modules,index,n,isCtmc,labels);
+			el.generateCode(modules,index,n,isCtmc,labels,el.toPrint());
 		}
 		program = program + "\n";
 		for(Node el : modules) {

@@ -35,5 +35,5 @@ DiceProtocol2:=
 						 +["0.5*1"]  "(d'=6)"&&" " . DiceProtocol7))
 
 DiceProtocol7:= 
-	Dice -> Dice : (["1*1"] " "&&" ".DiceProtocol7)
+	Dice -> Dice : (["1*1"] " "&&" ". END)
 }
