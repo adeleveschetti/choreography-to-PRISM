@@ -1,6 +1,7 @@
 package ast;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import lib.Functions;
 
@@ -21,7 +22,7 @@ public class InternalActionNode implements Node{
 	@Override
 	public String toPrint() {
 		// TODO Auto-generated method stub
-		return null;
+		return "internal";
 	}
 
 	public String getRole() {
@@ -29,63 +30,67 @@ public class InternalActionNode implements Node{
 	}
 	
 	@Override
-	public String projection(int index, int totIndex, ArrayList<Node> modules) {
-		return null;
+	public ArrayList<String> getRoles(){
+		ArrayList<String> roles = new ArrayList<String>();
+		roles.add(role);
+		return roles;
 	}
 	
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName, int counter) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
 		Functions funs = new Functions();
-		String roleTmp = Functions.changeIndex(role,index,totIndex);
+		String roleTmp = Functions.changeIndex(role,index,maxIndex);
 		
 		
 		String toRet = "";
-		String toFind = "-> ;";
 		int stateRole = 0;
-		for(Node el : modules) {
-			if(el.toPrint().equals(roleTmp)) {
-				stateRole = ((ModuleNode) el).getState();
+		int iA = -1;
+		for(int i=0; i<mods.size(); i++) {
+			if(mods.get(i).toPrint().equals(roleTmp)) {
+				iA = i;
 			}
 		}
 		
-		String updatesNew = updates.generateCode(code,index,totIndex,modules,labels,protocolName,counter);
-		updatesNew = Functions.returnStringNewIndex(updatesNew,index,totIndex);
-		if(!updatesNew.equals("")) {
-			updatesNew = updatesNew + "&";
+		
+		String updatesNew = updates.generateCode(mods,index,maxIndex,isCtmc,labels);
+		updatesNew = Functions.returnStringNewIndex(updatesNew,index,maxIndex);
+		if(!updatesNew.equals(" ")) {
+			updatesNew = updatesNew.substring(0,updatesNew.length()-3) + "&";
 		}
+		int upState = -1;
 		if(statement instanceof RecNode) {
-			if(((RecNode) statement).getState()!=-1) {
-				updatesNew = updatesNew + "(" + roleTmp +"'=" + Integer.toString(((RecNode) statement).getState()) + "); " ;
-			}
-			else {
-				updatesNew = updatesNew + "(" + roleTmp +"'=" + ((RecNode) statement).getName() + "); " ;
-			}
+			upState = 0; //TOBECHANGED
+		}
+		else if(statement instanceof EndNode) {
+			upState = ((ModuleNode) mods.get(iA)).getState();
 		}
 		else {
-			updatesNew = updatesNew + "(" + roleTmp +"'=" + Integer.toString(stateRole+1) + "); " ;
-			for(Node el : modules) {
-				if(el.toPrint().equals(roleTmp)) {
-					((ModuleNode) el).setState(stateRole+1);
-				}
-			}
+			upState = ((ModuleNode) mods.get(iA)).getState()+1;
 		}
-		int indexStart = code.indexOf("module " + roleTmp);
-		int indexAdd = code.indexOf("endmodule",indexStart);
-		if(code.substring(indexStart,indexAdd).contains(toFind)) {
-			indexAdd = code.indexOf(toFind,indexStart);
-			
-			toRet = code.substring(0,indexAdd+toFind.length()-1) + Functions.returnStringNewIndex(rate,index,totIndex) + " : " + updatesNew + code.substring(indexAdd+toFind.length(),code.length()) ;		
-
-		}
-		else {
-			toRet = code.substring(0,indexAdd) + Functions.returnStringNewIndex(rate,index,totIndex) + " : " + updatesNew + code.substring(indexAdd,code.length()) ;		
-
-		}
+		updatesNew = updatesNew + "(" + roleTmp +"'=" + upState + "); ";
 		
-		if(!(statement instanceof RecNode)) {
-			toRet = statement.generateCode(toRet,index,totIndex,modules,labels,protocolName,counter);
+		String statFin = "";
+		for(String el : ((ModuleNode) mods.get(iA)).getCommands()) {
+			if(el.contains("IFTE")) {
+				statFin = el.substring(0,el.indexOf("IFTE"));
+			}
 		}
-		return toRet;
+		((ModuleNode) mods.get(iA)).addCommand(statFin + rate + " : " + updatesNew);
+		
+		Iterator<String> itr = ((ModuleNode) mods.get(iA)).getCommands().iterator();
+		while (itr.hasNext()) {
+			String el = itr.next();
+			if(el.contains("IFTE") && el.substring(0,el.indexOf("IFTE")).equals(statFin)) {
+				itr.remove();
+			}
+		}
+
+		if(!(statement instanceof EndNode)) {
+			((ModuleNode) mods.get(iA)).setState();
+		}
+		statement.generateCode(mods,index,maxIndex,isCtmc,labels);
+		
+		return null;
 	}
 
 }

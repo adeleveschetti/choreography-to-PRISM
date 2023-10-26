@@ -18,25 +18,19 @@ public class MessageNode implements Node {
 
 	@Override
 	public String toPrint() {
-		// TODO Auto-generated method stub
-		return null;
+		return actions.toPrint();
 	}
 
 	@Override
-	public String projection(int index, int totIndex, ArrayList<Node> modules) {
-		return null;
-	}
-	
-	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName, int counter) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
 		if(loop==null) {
-			return actions.generateCode("",index,totIndex,modules,labels,protocolName,counter);
+			return actions.generateCode(mods,index,maxIndex,isCtmc,labels);
 		}
 		else if(actions==null && loop.size()>1) {
 
 			String ret = "";
 			for(int i=0; i<loop.size(); i++) {
-				ret = ret + loop.get(i).generateCode("",index,totIndex,modules,labels,protocolName,counter);
+				ret = ret + loop.get(i).generateCode(mods,index,maxIndex,isCtmc,labels);
 				if(i!=loop.size()-1) {
 					ret = ret + "&&";
 				}
@@ -44,7 +38,7 @@ public class MessageNode implements Node {
 			return ret;
 		}
 		String ret = "";
-		String loopMessage = loop.get(0).generateCode("",index,totIndex,modules,labels,protocolName,counter);
+		String loopMessage = loop.get(0).generateCode(mods,index,maxIndex,isCtmc,labels);
 		if(beforeAction) {
 			ret = message + "&&" + loopMessage;
 		}
@@ -53,5 +47,12 @@ public class MessageNode implements Node {
 		}
 		return ret;
 	}
+
+	@Override
+	public ArrayList<String> getRoles() {
+		// TODO Auto-generated method stub
+		return new ArrayList<String>();
+	}
+
 
 }

@@ -32,6 +32,40 @@ public class Functions {
 		return string;
 	}
 
+	public static int newIndex(String string, int index, int max) {
+		int needChange = string.indexOf("[");
+		int indexToRet = -1;
+
+		if(needChange!=-1) {
+			String answer = string.substring(string.indexOf("[")+1, string.indexOf("]"));
+
+			if(answer.length()==1) {				
+				indexToRet = index;
+			}
+			else {
+				char op = answer.charAt(1);
+				char el = answer.charAt(2);
+				int val = 0;
+
+				if(op=='+') {
+					val = index + Character.getNumericValue(el); 
+				}
+				else {
+					val = index + Character.getNumericValue(el); 
+				}
+				if(val<=max) {
+					indexToRet = val;
+				}
+				else {
+					indexToRet = val%max;
+				}
+			}
+
+		}
+
+		return indexToRet;
+	}
+
 	public static String retNewIndex(String string, int index, int max) {
 		int needChange = string.indexOf("[");
 		if(needChange!=-1) {

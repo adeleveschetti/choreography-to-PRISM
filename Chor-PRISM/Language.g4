@@ -38,9 +38,11 @@ actions : (action+=DOUBLE_STRING)? (AND action+=DOUBLE_STRING)*  ;
 
 loop : FOREACH LPAR indexIteration=index op=(EQ | LE | GE | LEQ | GEQ | NEQ ) upperBound=index RPAR DOUBLE_STRING AT role;
 
-preamble : PREAMBLE (variableDecl)* ENDPREAMBLE ;
+preamble : PREAMBLE (modelType SEMICOLON)? (variableDecl)* ENDPREAMBLE ;
 
 varDef : CHAR EQ INTEGER;
+
+modelType : DOUBLE_STRING;
 
 roleDef : role FROM (indexSpec)? roleSpec* SEMICOLON;
 

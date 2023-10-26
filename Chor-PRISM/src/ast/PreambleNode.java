@@ -5,38 +5,40 @@ import java.util.ArrayList;
 public class PreambleNode implements Node {
 
 	private ArrayList<String> vars ;
+	private boolean isCtmc ;
 	
-	public PreambleNode(ArrayList<String> _vars) {
+	public PreambleNode(ArrayList<String> _vars, boolean _ctmc) {
 		vars = new ArrayList<String>();
 		for(String el : _vars) {
 			vars.add(el);
 		}
+		isCtmc = _ctmc;
+	}
+	
+	public boolean isCtmc() {
+		return isCtmc;
 	}
 	
 	@Override
 	public String toPrint() {
-		String toRet = "";
-		for(String el : vars) {
-			toRet = toRet + el.substring(1,el.length()-1) + "\n";
-		}
-		return toRet;
+		return null;
 	}
 	
-	@Override
-	public String projection(int index, int totIndex, ArrayList<Node> modules) {
-		String toRet = "";
-		for(String el : vars) {
-			toRet = toRet + el.substring(1,el.length()-1) + "\n";
-		}
-		return toRet;
-	}
+
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName, int counter) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+		String code = "";
 		for(String el : vars) {
 			code = code + el.substring(1,el.length()-1) + "\n";
 		}
 		return code;
+	}
+
+	@Override
+	public ArrayList<String> getRoles() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

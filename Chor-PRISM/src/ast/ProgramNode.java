@@ -2,85 +2,56 @@ package ast;
 
 import java.util.ArrayList;
 
-import lib.Functions;
-import lib.Pair;
-
 public class ProgramNode implements Node{
 
-	private ArrayList<Node> modules ;
-	private Node preamble ;
-	private ArrayList<Pair<Node,ArrayList<Node>>> protocols;
-	private int max;
+	public Node preamble ;
+	public ArrayList<Node> modules = new ArrayList<Node>();
+	public ArrayList<Node> protocols = new ArrayList<Node>();
+	public int n ;
 
-	public ProgramNode(int _max, ArrayList<Node> _modules, Node _preamble, ArrayList<Pair<Node,ArrayList<Node>>> _protocols) {
-		max = _max;
-		modules = _modules;
+	ProgramNode(Node _preamble, ArrayList<Node> _modules, ArrayList<Node> _protocols, int _n){
 		preamble = _preamble;
+		modules = _modules;
 		protocols = _protocols;
+		n = _n;
 	}
 
 	@Override
 	public String toPrint() {
-		String toRet = "";
-		if(preamble!=null) {
-			toRet = toRet + preamble.toPrint();
-		}
-		for(Node el : modules) {
-			toRet = toRet + el.toPrint();
-		}
-		for(Pair<Node,ArrayList<Node>> el : protocols) {
-			for(Node el2 : el.getSecond()) {
-				toRet = toRet + el2.toPrint();
-			}
-		}
-		return toRet;
-	}
-
-	@Override
-	public String projection(int index, int totIndex, ArrayList<Node> modules) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String generateCode(String code, int index, int totIndex,  ArrayList<Node> modules, ArrayList<String> labels, String protocolName, int counter) {
-		totIndex = max;
-		if(preamble!=null) {
-			code = preamble.generateCode(code,1,totIndex,this.modules,labels,"",counter);
-		}
-		for(Node el : this.modules) {
-			code = el.generateCode(code,1,totIndex,this.modules,labels,"",counter);
-		}
-		Functions fun = new Functions();
-		for(Pair<Node,ArrayList<Node>> pair : protocols) {
-			for(Node el : pair.getSecond()) {
-				for(int i=1;i<=totIndex; i++) {
-					for(Node mod : this.modules) {
-						if(el instanceof BranchNode && mod.toPrint().equals(Functions.changeIndex(((BranchNode) el).getRoleA(),i,totIndex))) {
-							((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
-						}
-					}
-					
-					code = el.generateCode(code,i,totIndex,this.modules,labels,((RecNode) pair.getFirst()).getName(),counter);
-					for(Node mod : this.modules) {
-						((RecNode) pair.getFirst()).setGenerated(true);
-						if(el instanceof BranchNode && mod.toPrint().equals(Functions.changeIndex(((BranchNode) el).getRoleA(),i,totIndex)) && ((RecNode) pair.getFirst()).getState()==-1) {
-							((RecNode) pair.getFirst()).setState(((ModuleNode) mod).getState());
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+		String program = "";
+		isCtmc = ((PreambleNode) preamble).isCtmc();
+		program = program + preamble.generateCode(modules,index,n,isCtmc,labels);
 
-						}
-					}
-
+		for(Node el : protocols) {
+			el.generateCode(modules,index,n,isCtmc,labels);
+		}
+		program = program + "\n";
+		for(Node el : modules) {
+			program = program + "module " + el.toPrint() + "\n\n";
+			if(((ModuleNode) el).getVars()!=null) {
+				for(String el2 : ((ModuleNode) el).getVars()) {
+					program = program + el2 + "\n";
 				}
 			}
+			program = program + "\n";
+			for(String el2 : ((ModuleNode) el).getCommands()) {
+				program = program + el2 + "\n";
+			}
+			program = program + "\nendmodule\n\n";
 		}
-		for(Node el : this.modules) {
-			code = ((ModuleNode) el).addStateVariable(code);
-		}
-		for(Pair<Node,ArrayList<Node>> pair : protocols) {
-			code = ((RecNode) pair.getFirst()).changeState(code);
-		}
-		return code;
+		return program;
 	}
 
-
+	@Override
+	public ArrayList<String> getRoles() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -10,21 +10,19 @@ public class EndNode implements Node {
 	
 	@Override
 	public String toPrint() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public ArrayList<Node> getRoles(){
-		return roles;
+		return "END";
 	}
 	
 	@Override
-	public String projection(int index, int totIndex, ArrayList<Node> modules) {
-		return null;
+	public ArrayList<String> getRoles(){
+		return new ArrayList<String>();
 	}
 
+	
+
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName, int counter) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+		
 		return "";
 	}
 

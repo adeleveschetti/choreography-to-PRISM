@@ -22,25 +22,34 @@ public class LoopNode implements Node{
 
 	@Override
 	public String toPrint() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String projection(int index, int totIndex, ArrayList<Node> modules) {
-		return null;
+	public ArrayList<String> getRoles(){
+		ArrayList<String> roles = new ArrayList<String>();
+		roles.add(role);
+		return roles;
 	}
 	
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName, int counter) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
 		String toRet = "";
 		Functions funs = new Functions();
+		int roleIndex = Functions.newIndex(role,index,maxIndex);
+		if(roleIndex == -1) {
+			roleIndex = index;
+		}
 		if(op.equals("!=")) {
-			for(int i=1; i<=totIndex; i++) {
-				if(i!=index) {
-					toRet = toRet + Functions.returnStringNewIndex(message,i,totIndex) + "&"; 
+			for(int i=1; i<=maxIndex; i++) {
+				if(i!=roleIndex) {
+					toRet = toRet + Functions.returnStringNewIndex(message,i,maxIndex) + "&"; 
 				}
 			}
 		}
-		return toRet.substring(0,toRet.length()-1);
+		return toRet;
 	}
+
+
 }

@@ -14,15 +14,19 @@ public class RoleNode implements Node{
 	public String toPrint() {
 		return name;
 	}
+	
+	
 
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName, int counter) {
-		return code + name;
-	}
-	
-	@Override
-	public String projection(int index, int totIndex, ArrayList<Node> modules) {
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
+	@Override
+	public ArrayList<String> getRoles() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -13,18 +13,21 @@ public class ActionNode implements Node{
 
 	@Override
 	public String toPrint() {
+		if(actionB.equals(" ")) {
+			actionB = " ";
+		}
 		return actionA+"&&"+actionB;
-	}
-
-	@Override
-	public String projection(int index, int totIndex, ArrayList<Node> modules) {
-		return null;
 	}
 	
 	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName, int counter) {
-		if(actionB==null) {
-			return actionA;
+	public ArrayList<String> getRoles(){
+		return new ArrayList<String>();
+	}
+
+	@Override
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+		if(actionB==null || actionB.equals(" ") ) {
+			actionB = " ";
 		}
 		return actionA+"&&"+actionB;
 	}

@@ -2,8 +2,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -17,7 +15,7 @@ import parser.LanguageParser;
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		String fileName = "./generated-sources/example2";
+		String fileName = "./generated-sources/example-sintax";
 		FileInputStream is = new FileInputStream(fileName+".language");
 		@SuppressWarnings("deprecation")
 		ANTLRInputStream input = new ANTLRInputStream(is);
@@ -27,14 +25,14 @@ public class Main {
 		ParseTree t = parser.protocol();
 		LanguageVisitorImpl visitor = new LanguageVisitorImpl();
 		Node ast = visitor.visit(t);
-		String code = ast.generateCode("",-1,-1,null,null,"",0);
+		String code = ast.generateCode(null,0,0,false,null);
 		File file = new File(fileName+".prism");
 		if (!file.exists()) {
-            file.createNewFile();
-        }
+			file.createNewFile();
+		}
 		BufferedWriter output = new BufferedWriter(new FileWriter(file));
-	    output.write(code);
-	    output.close();
+		output.write(code);
+		output.close();
 	}
-	
+
 }

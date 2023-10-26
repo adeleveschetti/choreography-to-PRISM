@@ -3,13 +3,14 @@ package ast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.antlr.v4.runtime.Token;
-
 import lib.Pair;
 import parser.LanguageBaseVisitor;
 import parser.LanguageParser.*;
 
 public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
+
+	private ArrayList<String> protocolsNames = new ArrayList<String>();
+
 
 	@Override
 	public Node visitProtocol(ProtocolContext ctx) {
@@ -17,6 +18,7 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 		if(ctx.preamble()!=null) {
 			preamble = visitPreamble(ctx.preamble());
 		}
+		
 		int valueVar = -1;
 		if(ctx.varDef()!=null) {
 			valueVar = Integer.valueOf(ctx.varDef().INTEGER().getText());
@@ -76,21 +78,17 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 				modules.add(new ModuleNode(el,modVars));
 			}
 		}
-		ArrayList<Pair<Node,ArrayList<Node>>> prot = new ArrayList<Pair<Node,ArrayList<Node>>>();
+		ArrayList<Node> protocols = new ArrayList<Node>();
 		for(int i=0; i<ctx.protocolID().size(); i++) {
-			String protID = ctx.protocolID().get(i).ID().getText();
-			ArrayList<Node> statements = new ArrayList<Node>();
-			for(StatementContext stm : ctx.blockStatement().get(i).statement()) {
-				statements.add(visitStatement(stm));
+			String name = ctx.protocolID().get(i).getText();
+			protocolsNames.add(name);
+			ArrayList<Node> blockStat = new ArrayList<Node>();
+			for(StatementContext el : ctx.blockStatement().get(i).statement()) {
+				blockStat.add(visitStatement(el));
 			}
-			if(ctx.protocolID().size()>1 && i>0) {
-				prot.add(new Pair(new RecNode(protID,false),statements));
-			}
-			else {
-				prot.add(new Pair(new RecNode(protID,true),statements));
-			}
+			protocols.add(new ProtocolNode(name,blockStat));
 		}
-		return new ProgramNode(valueVar,modules,preamble,prot);
+		return new ProgramNode(preamble,modules,protocols,valueVar);
 	}
 
 	@Override 
@@ -99,9 +97,14 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 		for(VariableDeclContext el : ctx.variableDecl()) {
 			vars.add(el.getText());
 		}
-		return new PreambleNode(vars);
+		boolean isCtmc = false;
+		if(ctx.modelType()!=null) {
+			isCtmc = true;
+		}
+		return new PreambleNode(vars, isCtmc);
 	}
 
+	
 	@Override
 	public Node visitStatement(StatementContext ctx) {
 		if(ctx.branch()!=null) {
@@ -118,7 +121,8 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 		}
 		return visitInternalAction(ctx.internalAction());
 	}
-	
+
+
 	@Override 
 	public Node visitEnd(EndContext ctx) {
 		ArrayList<Node> roles = null;
@@ -144,6 +148,18 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 		Node stats = visitStatement(ctx.statement());
 		return new InternalActionNode(rate,role,upds,stats);
 	}
+	
+	@Override
+	public Node visitActions(ActionsContext ctx) {
+
+		String actionA = ctx.action.get(0).getText().substring(1,ctx.action.get(0).getText().length()-1);
+		String actionB = null;
+		if(ctx.action.size()>1) {
+			actionB = ctx.action.get(1).getText().substring(1,ctx.action.get(1).getText().length()-1);
+		}
+		return new ActionNode(actionA,actionB);
+	}
+
 
 
 	@Override 
@@ -189,87 +205,76 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 
 
 
-@Override
-public Node visitMessage(MessageContext ctx) {
-	Node actions = null;
-	if(ctx.actions()!=null) {
-		actions = visitActions(ctx.actions());
-	}
-	ArrayList<Node> loops = null;
-	if(ctx.loop()!=null && ctx.loop().size()>0) {
-		loops = new ArrayList<Node>();
-		for(LoopContext el : ctx.loop()) {
-			loops.add(visitLoop(el));
+	@Override
+	public Node visitMessage(MessageContext ctx) {
+		Node actions = null;
+		if(ctx.actions()!=null) {
+			actions = visitActions(ctx.actions());
 		}
+		ArrayList<Node> loops = null;
+		if(ctx.loop()!=null && ctx.loop().size()>0) {
+			loops = new ArrayList<Node>();
+			for(LoopContext el : ctx.loop()) {
+				loops.add(visitLoop(el));
+			}
+		}
+		String message = null;
+		boolean beforeAction = false;
+		if(ctx.first!=null) {
+			beforeAction = true;
+			message = ctx.first.getText().substring(1,ctx.first.getText().length()-1);
+		}
+		if(ctx.second!=null) {
+			message = ctx.second.getText().substring(1,ctx.second.getText().length()-1);
+		}
+		return new MessageNode(actions,loops,message,beforeAction);
 	}
-	String message = null;
-	boolean beforeAction = false;
-	if(ctx.first!=null) {
-		beforeAction = true;
-		message = ctx.first.getText().substring(1,ctx.first.getText().length()-1);
-	}
-	if(ctx.second!=null) {
-		message = ctx.second.getText().substring(1,ctx.second.getText().length()-1);
-	}
-	return new MessageNode(actions,loops,message,beforeAction);
-}
 
-@Override
-public Node visitLoop(LoopContext ctx) {
-	String role = "";
-	if(ctx.role().roleIndex()!=null) {
-		role = ctx.role().roleIndex().ID().getText()+"["+ctx.role().roleIndex().index().CHAR().getText()+"]";
-	}
-	else {
-		role = ctx.role().roleGroup().ID().getText();
-	}
-	String message =  ctx.DOUBLE_STRING().getText().substring(1,ctx.DOUBLE_STRING().getText().length()-1);
-
-	return new LoopNode(message,ctx.indexIteration.CHAR().getText(),ctx.upperBound.CHAR().getText(),ctx.op.getText(),role);
-}
-
-
-@Override
-public Node visitActions(ActionsContext ctx) {
-
-	String actionA = ctx.action.get(0).getText().substring(1,ctx.action.get(0).getText().length()-1);
-	String actionB = null;
-	if(ctx.action.size()>1) {
-		actionB = ctx.action.get(1).getText().substring(1,ctx.action.get(1).getText().length()-1);
-	}
-	return new ActionNode(actionA,actionB);
-}
-
-@Override
-public Node visitRole(RoleContext ctx) {
-	String role = "" ;
-	if(ctx.roleGroup()!=null) {
-		role = ctx.roleGroup().ID().getText();
-	}
-	else {
-		if(ctx.roleIndex().BRANCH()==null) {
-			role = ctx.roleIndex().ID().getText()+"["+ctx.roleIndex().index().CHAR().getText()+"]";
+	@Override
+	public Node visitLoop(LoopContext ctx) {
+		String role = "";
+		if(ctx.role().roleIndex()!=null) {
+			role = ctx.role().roleIndex().ID().getText()+"["+ctx.role().roleIndex().index().CHAR().getText()+"]";
 		}
 		else {
-			role = ctx.roleIndex().ID().getText()+"["+ctx.roleIndex().index().CHAR().getText()+"+"+ctx.roleIndex().INTEGER().getText()+"]";
+			role = ctx.role().roleGroup().ID().getText();
 		}
-	}
-	return new RoleNode(role);
-}
+		String message =  ctx.DOUBLE_STRING().getText().substring(1,ctx.DOUBLE_STRING().getText().length()-1);
 
-public Node visitIfThenElse(IfThenElseContext ctx) {
-	Node elseStatement = null;
-	if(ctx.elseStat!=null) {
-		elseStatement = visitStatement(ctx.elseStat);
+		return new LoopNode(message,ctx.indexIteration.CHAR().getText(),ctx.upperBound.CHAR().getText(),ctx.op.getText(),role);
 	}
-	ArrayList<String> roles = new ArrayList<String>();
-	for(RoleContext el : ctx.role()) {
-		roles.add(el.getText());
+
+	@Override
+	public Node visitRole(RoleContext ctx) {
+		String role = "" ;
+		if(ctx.roleGroup()!=null) {
+			role = ctx.roleGroup().ID().getText();
+		}
+		else {
+			if(ctx.roleIndex().BRANCH()==null) {
+				role = ctx.roleIndex().ID().getText()+"["+ctx.roleIndex().index().CHAR().getText()+"]";
+			}
+			else {
+				role = ctx.roleIndex().ID().getText()+"["+ctx.roleIndex().index().CHAR().getText()+"+"+ctx.roleIndex().INTEGER().getText()+"]";
+			}
+		}
+		return new RoleNode(role);
 	}
-	ArrayList<String> conds = new ArrayList<String>();
-	for(CondContext el : ctx.cond()) {
-		conds.add(el.getText().substring(1,el.getText().length()-1));
+
+	public Node visitIfThenElse(IfThenElseContext ctx) {
+		Node elseStatement = null;
+		if(ctx.elseStat!=null) {
+			elseStatement = visitStatement(ctx.elseStat);
+		}
+		ArrayList<String> roles = new ArrayList<String>();
+		for(RoleContext el : ctx.role()) {
+			roles.add(el.getText());
+		}
+		ArrayList<String> conds = new ArrayList<String>();
+		for(CondContext el : ctx.cond()) {
+			conds.add(el.getText().substring(1,el.getText().length()-1));
+		}
+		return new IfThenElseNode(roles,conds,visitStatement(ctx.thenStat),elseStatement);
 	}
-	return new IfThenElseNode(roles,conds,visitStatement(ctx.thenStat),elseStatement);
-}
+
 }

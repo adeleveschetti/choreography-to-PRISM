@@ -1,7 +1,7 @@
 package ast;
 
 import java.util.ArrayList;
-import java.util.function.Function;
+import java.util.Iterator;
 
 import lib.Functions;
 
@@ -18,134 +18,109 @@ public class IfThenElseNode implements Node {
 		thenStat = then;
 		elseStat = elseS;
 	}
+	
+	@Override
+	public ArrayList<String> getRoles(){
+		
+		return roles;
+	}
 
 	@Override
 	public String toPrint() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getRole() {
-		return roles.get(0);
+		return "if-then-else";
 	}
 
 	@Override
-	public String projection(int index, int totIndex, ArrayList<Node> modules) {
-		return null;
-	}
+	public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels) {
+		ArrayList<String> rolesTmp = new ArrayList<String>();
+		ArrayList<String> condsTmp = new ArrayList<String>();
 
-	public Node getThenStatement() {
-		return thenStat;
-	}
-
-	@Override
-	public String generateCode(String code, int index, int totIndex, ArrayList<Node> modules, ArrayList<String> labels, String protocolName, int counter) {
-		Functions funs = new Functions();
-		String codeToRet = "" ;
-		for(int i=0; i<roles.size(); i++) {
-			String roleTmp = funs.changeIndex(roles.get(i),index,totIndex);
-
-			int stateModule = -1;
-			for(Node el : modules) {
-				if(el.toPrint().equals(roleTmp)) {
-					stateModule = ((ModuleNode) el).getState();
-				}
-			}
-			String toRet = "[] (" + roleTmp +"=" + Integer.toString(stateModule) + ")&" + Functions.returnStringNewIndex(conds.get(i),index,totIndex) + " -> ;" ;
-			if(thenStat instanceof RecNode) {
-				if(((RecNode)thenStat).getState()!=-1) {
-					toRet = toRet.substring(0,toRet.length()-1) + "(" + roleTmp +"'=" + Integer.toString(((RecNode) thenStat).getState()) + ");";
-				}
-				else {
-					toRet = toRet.substring(0,toRet.length()-1) + "(" + roleTmp +"'=" + ((RecNode) thenStat).getName() + ");";			}
-			}
-			else if(thenStat instanceof EndNode) {
-				toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(stateModule) + ");";
-			}
-			else if(thenStat instanceof IfThenElseNode) {
-				toRet = toRet.substring(0,toRet.length()-1) + "(" + roleTmp +"'=" + Integer.toString(stateModule+1) + ");";
-			}
-			else if(thenStat instanceof BranchNode ) {
-				toRet = toRet + "\n[] (" + roleTmp +"=" + Integer.toString(stateModule) + ")&" + Functions.returnStringNewIndex(conds.get(i),index,totIndex) + " -> ;";
-			}
-
-			for(Node el : modules) {
-				if(el.toPrint().equals(roleTmp) && !(elseStat instanceof EndNode)) {
-					((ModuleNode) el).setState(stateModule+1);
-				}
-			}
-
-			int indexRoleA = code.indexOf("module "+roleTmp);
-			int whereToAdd = code.indexOf("endmodule",indexRoleA);
-
-			codeToRet = code.substring(0,whereToAdd) ;
-			codeToRet = codeToRet + "\n" + toRet;
-			codeToRet = codeToRet + "\n" + code.substring(whereToAdd,code.length());
-
-			if(!(thenStat instanceof RecNode) && !(thenStat instanceof EndNode)  ) {
-				codeToRet = thenStat.generateCode(codeToRet,index,totIndex,modules,labels,protocolName,counter);
-			}
-			/*if(thenStat instanceof EndNode && ((EndNode) thenStat).getRoles()!=null) {
-			for(Node el : ((EndNode) thenStat).getRoles()) {
-				String name = el.toPrint();
-				name = funs.changeIndex(name,index,totIndex);
-				if(!name.equals(roleTmp)) {
-					for(Node el2 : modules) {
-						if(el2.toPrint().equals(name)) {
-							stateModule = ((ModuleNode) el2).getState();
-						}
-					}
-					System.out.println(roleTmp + " " + name);
-					String toRetB = "[] (" + name +"=" + Integer.toString(stateModule) + ") -> 1 : (" + name +"'=" + Integer.toString(stateModule) + ");" ;
-					System.out.println(toRetB);
-					int indexRoleB = codeToRet.indexOf("module "+name);
-					int whereToAddB = codeToRet.indexOf("endmodule",indexRoleB);
-					String codeToRetB = codeToRet.substring(0,whereToAddB) ;
-					codeToRetB = codeToRetB + "\n" + toRetB;
-					codeToRetB = codeToRetB + "\n" + codeToRet.substring(whereToAdd,codeToRet.length());
-					codeToRet = codeToRetB;
-				}
-
-			}
-		}*/
-			if(elseStat!=null) {
-				int newStateModule = -1;
-				for(Node el : modules) {
-					if(el.toPrint().equals(roleTmp)) {
-						newStateModule = ((ModuleNode) el).getState();
-					}
-				}
-				toRet = "[] (" + roleTmp +"=" + Integer.toString(stateModule) + ")&!(" + Functions.returnStringNewIndex(conds.get(i),index,totIndex) + ") -> ;" ;
-
-				if(elseStat instanceof RecNode) {
-					toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + ((RecNode) elseStat).getName() + ");";
-				}
-				else if(elseStat instanceof EndNode) {
-					toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(newStateModule) + ");";
-				}
-				else if(!(elseStat instanceof InternalActionNode)) {
-					toRet = toRet.substring(0,toRet.length()-1) + "1 : (" + roleTmp +"'=" + Integer.toString(newStateModule+1) + "); ";
-					for(Node el : modules) {
-						if(el.toPrint().equals(roleTmp)) {
-							((ModuleNode) el).setState(((ModuleNode) el).getState()+1);
-						}
-					}
-				}
-
-				indexRoleA = codeToRet.indexOf("module "+roleTmp);
-				whereToAdd = codeToRet.indexOf("endmodule",indexRoleA);
-				String codeToRetElse = codeToRet.substring(0,whereToAdd) ;
-				codeToRetElse = codeToRetElse + "\n" + toRet;
-				codeToRetElse = codeToRetElse + "\n" + codeToRet.substring(whereToAdd,codeToRet.length());
-				if(!(elseStat instanceof RecNode) && !(elseStat instanceof EndNode)) {
-					codeToRetElse = elseStat.generateCode(codeToRetElse,index,totIndex,modules,labels,protocolName,1);
-				}
-				codeToRet = codeToRetElse;
-			}
-			code = codeToRet;
+		for(String el : roles) {
+			rolesTmp.add(Functions.changeIndex(el,index,maxIndex));
 		}
-		return codeToRet;
+		for(String el : conds) {
+			condsTmp.add(Functions.returnStringNewIndex(el,index,maxIndex));
+		}
+		for(int i=0; i<roles.size(); i++) {
+			for(Node el2 : mods) {
+				if(el2.toPrint().equals(rolesTmp.get(i))) {
+					int state = ((ModuleNode) el2).getState();
+					String stat = "";
+					boolean ifte = false;
+					for(String comms : ((ModuleNode) el2).getCommands()) {
+						if(comms.contains("IFTE")) {
+							stat = comms.substring(0,comms.indexOf(" -> IFTE"));
+							ifte = true;
+						}
+					}
+					String stat2 = "";
+					boolean ifte2 = false;
+					for(String comms : ((ModuleNode) el2).getCommands()) {
+						if(comms.contains("IFTE")) {
+							stat2 = comms.substring(0,comms.indexOf(" -> IFTE"));
+							ifte2 = true;
+						}
+					}
 
+					if(!ifte) {
+						stat = "[] (" + rolesTmp.get(i) + "=" +  state + ")" ;
+					}
+					String statTmp = stat;
+
+					stat = stat + "&"+condsTmp.get(i) + " -> " ;
+
+					if(thenStat instanceof RecNode) {
+						stat = stat + "(" + rolesTmp.get(i) + "'=" + 0 + ");"; //TOBECHANGED
+					}
+					else if(thenStat instanceof EndNode) {
+						stat = stat + "(" + rolesTmp.get(i) + "'=" + state + ");";
+					}
+					else {
+						stat = stat + "IFTE";
+					}
+
+					Iterator<String> itr = ((ModuleNode) el2).getCommands().iterator();
+					while (itr.hasNext()) {
+						String comms = itr.next();
+						if(comms.contains("IFTE") && ifte && comms.substring(0, comms.indexOf(" -> IFTE")).equals(statTmp)) {
+							itr.remove();
+						}
+					}
+
+					((ModuleNode) el2).addCommand(stat);
+					thenStat.generateCode(mods,index,maxIndex,isCtmc,labels);
+					
+					if(!ifte2) {
+						stat2 = "[] (" + rolesTmp.get(i) + "=" +  state + ")" ;
+					}
+					String statTmp2 = stat2;
+					stat2 = stat2 + "&!"+condsTmp.get(i) + " -> " ;
+
+					if(elseStat instanceof RecNode) {
+						stat2 = stat2 + "1 : (" + rolesTmp.get(i) + "'=" + 0 + ");"; //TOBECHANGED
+					}
+					else if(elseStat instanceof EndNode) {
+						stat2 = stat2 + "1 : (" + rolesTmp.get(i) + "'=" + state + ");";
+					}
+					else {
+						stat2 = stat2 + "IFTE";
+					}
+										
+					Iterator<String> itr2 = ((ModuleNode) el2).getCommands().iterator();
+					while (itr2.hasNext()) {
+						String comms = itr2.next();
+						if(comms.contains("IFTE") && ifte2 && comms.substring(0, comms.indexOf(" -> IFTE")).equals(statTmp2)) {
+							itr.remove();
+						}
+					}
+					((ModuleNode) el2).addCommand(stat2);
+					elseStat.generateCode(mods,index,maxIndex,isCtmc,labels);
+
+				}
+			}
+		}
+
+		return null;
 	}
 
 }
