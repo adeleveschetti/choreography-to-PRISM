@@ -1,11 +1,12 @@
-In this section, we provide the formal definition of our choreographic
+This section provides the formal definition of our choreographic
 language as well as process algebra representing
 PRISM~\cite{prismsemantics}.
 
-
-\subsection{PRISM} We start by describing PRISM semantics. Except from
-transforming some informal text in precise rules, Our formalisation
-closely follows that found on the PRISM website~\cite{prismemantics}.
+\subsection{PRISM} We start by describing PRISM semantics. To the best
+of our knowledge, the only formalisation of a semantics for PRISM can
+be found on the PRISM website~\cite{prismemantics}. Our approach
+starts from this and attempts to make more precise some informal
+assumptions and definitions.
 
 \smallskip
 
@@ -13,8 +14,8 @@ closely follows that found on the PRISM website~\cite{prismemantics}.
 module names $\mathcal R$, $a$ over a (possibly infinite) set of
 labels $\mathcal L$, $x$ over a (possibly infinite) set of variables
 $\mathsf{Var}$, and $v$ over a (possibly infinite) set of values
-$\mathsf{Val}$. Then, the syntax of PRISM is given by the following
-grammar:
+$\mathsf{Val}$. Then, the syntax of the PRISM language is given by the
+following grammar:
 \begin{displaymath}
   \begin{array}{lrllll}
     \text{(Networks)}  \quad
@@ -26,7 +27,7 @@ grammar:
     &       &      & \mid & \sigma M   & \text{substitution}\\
     \\
     \text{(Commands)}  \quad
-    & F     & ::=  &      & [a] g \rightarrow \Sigma_{i\in I}\{\lambda_i: u_i\}
+    & F     & ::=  &      & \command ag\lambda u
                                   & \text{$g$ is a boolean expression in $E$} \\
     \\[1mm]
     \text{(Assignment)} \quad
@@ -44,7 +45,9 @@ grammar:
   \end{array}
 \end{displaymath}
 Networks are the top syntactic category for system of modules composed
-together. The term $\CEnd$ represent an empty network. A module
+together. The term $\CEnd$ represent an empty network. A module is
+meant to represent a process running in the system, and is denoted by
+its variables and its commands. Formally, a module
 $\role{p}:\{F_i\}_i$ is identified by its name $\role p$ and a set of
 commands $F_i$. Networks can be composed in parallel, in a CSP style:
 a term like $M_1 \ppp A M_2$ says that networks $M_1$ and $M_2$ can
@@ -55,8 +58,18 @@ $x$. A substitution is a function that given a variable returns a
 value. When we write $\sigma N$ we refer to the term obtained by
 replacing every free variable $x$ in $N$ with $\sigma(x)$. \marco{Is
   this really the way substitution is used? Where does it become
-  important?}
-
+  important?}  Commands in a module have the form
+$[a] g \rightarrow \Sigma_{i\in I}\{\lambda_i: u_i\}$. The label $a$
+is used for synchronisation (it is a condition that allows the command
+to be executed when all other modules having a command on the same
+label also execute).  The term $g$ is a guard on the current variable
+state. If both label and the guards are enabled, then the command
+executes in a probabilistic way one of the branches.  Depending on the
+model we are going to use, the value $\lambda_j$ is either a real
+number representing a rate (when adapting an exponential distribution)
+or a probability. If we are using probabilities, then we assume that
+terms in every choice are such that the sum of the probabilities is
+equal to 1.
 
 \mypar{Semantics.} In order to give a probabilistic semantics to
 PRISM, we proceed by steps. First, we define $\sem{-}$, as the closure
@@ -149,25 +162,31 @@ all commands present in the syntax, we do some filtering and renaming,
 based on the structure of the network.
 
 Now, given $\sem N$, we define a transition system that shows how the
-system evolves. In order to do so, let $\state$ be a function that
-given a variable in $\mathsf{Var}$ returns a value in
-$\mathsf{Val}$. Then, given an initial state $\state_0$, we can define
-a transition system where each of node is a (different) $\state$
-function. Then, we can move from $\state_1$ to $\state_2$ whenever
+system evolves.  Let $\state$ be a function that given a variable in
+$\mathsf{Var}$ returns a value in $\mathsf{Val}$. Then, given an
+initial state $\state_0$, we can define a transition system where each
+of node is a (different) $\state$ function. Then, we can move from
+$\state_1$ to $\state_2$ whenever ... Formally, a transition system is
+defined as:
+\begin{definition}[Transition System] 
+  [put definition of transition system here. ]
+\end{definition}
+We can then define a transition system
+$\mathcal T = (2^\state,\state_0,\ldots)$ [fix details here].
 
-That means that ones we have a set of executable rules, we can start
-building a transition system. In order to do so, we
+% That means that once we have a set of executable rules, we can start
+% building a transition system. In order to do so, we
 
-
-\begin{displaymath}
-  \begin{array}{lll}
-    W(M) = \{F \mid F\in\sem{M}\}
-    \\\\
-    X = \{x_1,\ldots,x_n\}
-    \\\\
-    \sigma : X \rightarrow V
-  \end{array}
-\end{displaymath}
+% No idea what this stuff below is. 
+% \begin{displaymath}
+%   \begin{array}{lll}
+%     W(M) = \{F \mid F\in\sem{M}\}
+%     \\\\
+%     X = \{x_1,\ldots,x_n\}
+%     \\\\
+%     \sigma : X \rightarrow V
+%   \end{array}
+% \end{displaymath}
 
 
 
@@ -182,22 +201,31 @@ syntax:
 %
 \begin{displaymath}
   \begin{array}{lll}
-    \text{(Chor)}  \quad & C \ ::=\
-    & \{\role p_i\}_{i\in I}\,\Sigma\{\lambda_j: x_j=E_j;\ C_j\}_{j\in J}
+    \text{(Chor)}
+    \quad & C \ ::=\
+    &
+      \interact{p}{\role p_1,\ldots,\role p_n}
       \ \mid\
-      \textsf{if } E@\{\role p_i\}_{i\in I} \textsf{ then } C_1 \textsf{ else } C_2
+      \ifTE {E}{p}{C_1}{C_2}
       \ \mid\
       X
       \ \mid\
       \CEnd
   \end{array}
 \end{displaymath}
-We briefly comment the various constructs. The syntactic category $C$
-denotes choreographic programmes. The term
-$\{\role p_i\}_{i\in I}\,+\!\{\lambda_j: x_j=E_j;\ C_j\}_{j\in J}$
-denotes an interaction between the roles $\role p_i$. The value
-$\lambda_j$ is a real number representing the rate. ...
-
+We comment the various constructs. The syntactic category $C$ denotes
+choreographic programmes. The term
+$\role p\rightarrow \{\role p_1,\ldots,\role p_n\}\,\Sigma\{\lambda_j:
+x_j=E_j;\ C_j\}_{j\in J}$ denotes an interaction initiated by role
+$\role p$ with roles $\role p_i$. Unlike in PRISM, a choreography
+specifies what interaction must be executed next, shifting the focus
+from what can happen to what must happen. When the synchronisation
+happens then, in a probabilistic way, one of the branches is selected
+as a continuation. The term
+$\textsf{if } E@\role p \textsf{ then } C_1 \textsf{
+  else } C_2$ factors in some local choices for some particular
+roles. [write a bit more about procedure calls, recursion and the zero
+process]
 
 
 \subsection{Projection from Choreographies to PRISM}
@@ -205,6 +233,80 @@ $\lambda_j$ is a real number representing the rate. ...
 static checks because, since there is branching, some terms may not be
 projectable.
 %
+\begin{displaymath}
+  \begin{array}{lllll}
+    \big(q\in\{\role p, \role p_1,\ldots,\role p_n\}\big)\\
+    \proj (q,\interact{p}{\role p_1,\ldots,\role p_n}, s)= \\
+    \qquad\{ 
+    \command l {s_{\role p_1} = s} \lambda: s_{\role p_1} = s_{\role p_1} +1,  
+    \command l {s_{\role p_1} = s} \lambda: s_{\role p_1} = s_{\role p_1} +1  
+    \}
+    \quad\cup\\
+    \qquad \proj (\role{p}_1, C_1, s+1)
+    \quad\cup\quad
+    \proj (\role{p}_1, C_2, s+\mathsf{depth}(C_1))
+    \\\\
+    \big(q\notin\{\role p, \role p_1,\ldots,\role p_n\}\big)\\
+    \proj (q,\interact{p}{\role p_1,\ldots,\role p_n}, s)\ = \ \proj (\role{p}_1, C_1, s)
+    \ \cup\
+    \proj (\role{p}_1, C_2, s+\mathsf{depth}(C_1))
+    \\\\
+    \big(q = \role p\big)\\
+    \proj (q,\ifTE {E}{p}{C_1}{C_2}, s)= \\
+    \qquad\{ 
+    \command {} {s_{\role p_1} = s \& E} \lambda: s_{\role p_1} = s_{\role p_1} +1,  
+    \command {} {s_{\role p_1} = s \& \mathsf{not}(E)} \lambda: s_{\role p_1} = s_{\role p_1} +1  
+    \}
+    \quad\cup\\
+    \qquad \proj (\role{p}_1, C_1, s+1)
+    \quad\cup\quad
+    \proj (\role{p}_1, C_2, s+\mathsf{depth}(C_1))
+  \end{array}
+\end{displaymath}
+
+
+       
+
+
+% proj (p2, p -> {p1} [ lambda1: (x  = 4). C1   +_l   lambda2: (x  = 4123). C2 ], s) = 
+%      proj (p2, C1, s+1)
+%      \union
+%      proj (p2, C2, s+1)
+
+
+
+
+% proj (p, if E@p then C1 else C2, s) = 
+%      {
+%       [] s_p = s & E s_p = s_p+1, 
+%       [] s_p = s & E s_p = s_p+length(C1)
+%       }   
+
+% \begin{displaymath}
+%   \begin{array}{ll}
+%     f\Big(\; \role p_1\longrightarrow\{\role
+%     p_i\}_{i\in I} +\{\lambda_j : x_j=E_j: C_j\}_{j\in J}, \texttt{network}, \overline{s}
+%     \Big)
+%     \\\\
+%     =
+%     \\\\
+%     \ell \text{ fresh};\\
+%     %\textsf{label} = \texttt{newlabel}();\\
+%     \textsf{for } \role p_k \in \mathbf{roles} \{\\
+%     \quad\textsf{for } j \in J \{\\
+%     \quad\quad \texttt{network} = \texttt{add}(\role p_k,[\ell]\; {s_{\role p_k} = s_k}
+%     \rightarrow\ \Sigma_j\lambda_j : x_j=E_j\;\& \;s_{\role p_k}'=s_k+1);\\
+%   	\quad\}\\
+%   	\}\\
+% 	\textsf{for } j \in J \{\\
+% 	\quad \texttt{network} = f(C_j, \texttt{network}, \overline{s}');  \\ 
+% 	\}\\
+%   	\textsf{return } \texttt{network}
+%   \end{array}
+% \end{displaymath}
+
+
+
 
 \begin{comment}
 \begin{displaymath}
@@ -243,49 +345,49 @@ projectable.
 \hrule
 \end{comment}
 
-\begin{displaymath}
-	f : C\times\texttt{network}\times States \longrightarrow \texttt{network} \quad\quad \texttt{network} : \mathcal R \longrightarrow \text{Set}(F)
-\end{displaymath}
+% \begin{displaymath}
+% 	f : C\times\texttt{network}\times States \longrightarrow \texttt{network} \quad\quad \texttt{network} : \mathcal R \longrightarrow \text{Set}(F)
+% \end{displaymath}
 
-\begin{displaymath}
-  \begin{array}{ll}
-    f\Big(\; \role p_1\longrightarrow\{\role
- p_i\}_{i\in I} +\{\lambda_j : x_j=E_j: C_j\}_{j\in J}, \texttt{network}, \overline{s}
-    \Big)
-    \\\\
-    =
-    \\\\
-    \ell \text{ fresh};\\
-    %\textsf{label} = \texttt{newlabel}();\\
-    \textsf{for } \role p_k \in \mathbf{roles} \{\\
-    \quad\textsf{for } j \in J \{\\
-    \quad\quad \texttt{network} = \texttt{add}(\role p_k,[\ell]\; {s_{\role p_k} = s_k}
-    \rightarrow\ \Sigma_j\lambda_j : x_j=E_j\;\& \;s_{\role p_k}'=s_k+1);\\
-  	\quad\}\\
-  	\}\\
-	\textsf{for } j \in J \{\\
-	\quad \texttt{network} = f(C_j, \texttt{network}, \overline{s}');  \\ 
-	\}\\
-  	\textsf{return } \texttt{network}
-  \end{array}
-\end{displaymath}
+% \begin{displaymath}
+%   \begin{array}{ll}
+%     f\Big(\; \role p_1\longrightarrow\{\role
+%  p_i\}_{i\in I} +\{\lambda_j : x_j=E_j: C_j\}_{j\in J}, \texttt{network}, \overline{s}
+%     \Big)
+%     \\\\
+%     =
+%     \\\\
+%     \ell \text{ fresh};\\
+%     %\textsf{label} = \texttt{newlabel}();\\
+%     \textsf{for } \role p_k \in \mathbf{roles} \{\\
+%     \quad\textsf{for } j \in J \{\\
+%     \quad\quad \texttt{network} = \texttt{add}(\role p_k,[\ell]\; {s_{\role p_k} = s_k}
+%     \rightarrow\ \Sigma_j\lambda_j : x_j=E_j\;\& \;s_{\role p_k}'=s_k+1);\\
+%   	\quad\}\\
+%   	\}\\
+% 	\textsf{for } j \in J \{\\
+% 	\quad \texttt{network} = f(C_j, \texttt{network}, \overline{s}');  \\ 
+% 	\}\\
+%   	\textsf{return } \texttt{network}
+%   \end{array}
+% \end{displaymath}
 
-where $\overline{s} = (s_1, \ldots, s_n)$ and $\overline{s}' = (s_1+1, \ldots, s_n+1)$ for $n = |\mathbf{roles}|$.
-\begin{displaymath}
-  \begin{array}{ll}
-    f\Big(\; \textsf{if } E@\{\role p_i\}_{i\in I} \textsf{ then } C_1 \textsf{ else } C_2, \texttt{network}, \overline{s} 
-    \Big)
-    \\\\
-    =
-    \\\\
-    \textsf{for } \role p_k \in \mathbf{roles} \{\\
-    \quad\texttt{network} = \texttt{add}(\role p_k,[\;]\; s_{\role p_k} = s_k \;\& \;f(E))+f(C_1, \texttt{network},\overline{s});\\
-    \quad\texttt{network} = \texttt{add}(\role p_k,[\;]\; s_{\role p_k} = s_k \;\& \;!f(E))+f(C_1, \texttt{network},\overline{s});\\
-  \}\\
-  \text{return } \texttt {network}\\
+% where $\overline{s} = (s_1, \ldots, s_n)$ and $\overline{s}' = (s_1+1, \ldots, s_n+1)$ for $n = |\mathbf{roles}|$.
+% \begin{displaymath}
+%   \begin{array}{ll}
+%     f\Big(\; \textsf{if } E @ \role p \textsf{ then } C_1 \textsf{ else } C_2, \texttt{network}, \overline{s} 
+%     \Big)
+%     \\\\
+%     =
+%     \\\\
+%     \textsf{for } \role p_k \in \mathbf{roles} \{\\
+%     \quad\texttt{network} = \texttt{add}(\role p_k,[\;]\; s_{\role p_k} = s_k \;\& \;f(E))+f(C_1, \texttt{network},\overline{s});\\
+%     \quad\texttt{network} = \texttt{add}(\role p_k,[\;]\; s_{\role p_k} = s_k \;\& \;!f(E))+f(C_1, \texttt{network},\overline{s});\\
+%   \}\\
+%   \text{return } \texttt {network}\\
 
-  \end{array}
-\end{displaymath}
+%   \end{array}
+% \end{displaymath}
 
 
 

@@ -14,7 +14,15 @@
 
 \newcommand{\state}{\mathsf{state}}
 
+\newcommand{\proj}{\mathsf{proj}}
+
 \newcommand{\marco}[1]{\textcolor{cyan}{{\footnotesize Marco: #1}}}
+
+
+% Syntax
+\newcommand{\interact}[2]{\role{#1}\rightarrow \{#2\}\,\Sigma\{\lambda_j: x_j=E_j;\ C_j\}_{j\in J}}
+\newcommand{\command}[4] {[#1] #2 \rightarrow \Sigma_{i\in I}\{#3_i: #4_i\}}
+\newcommand{\ifTE}[4]{\textsf{if } #1@\role {#2} \textsf{ then } {#3} \textsf{ else } {#4}}
 
 %%% Local Variables: 
 %%% mode: latex
