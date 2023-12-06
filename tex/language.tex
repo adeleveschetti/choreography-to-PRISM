@@ -235,21 +235,22 @@ projectable.
 %
 \begin{displaymath}
   \begin{array}{lllll}
-    \big(q\in\{\role p, \role p_1,\ldots,\role p_n\}\big)\\
+    \big(q\in\{\role p, \role p_1,\ldots,\role p_n\}, J=\{1,2\},\ l_1, l_2 \text{ fresh}  
+\big)\\
     \proj (q,\interact{p}{\role p_1,\ldots,\role p_n}, s)= \\
     \qquad\{ 
-    \command l {s_{\role p_1} = s} \lambda: s_{\role p_1} = s_{\role p_1} +1,  
-    \command l {s_{\role p_1} = s} \lambda: s_{\role p_1} = s_{\role p_1} +1  
+    \commandBase {l_1} {s_{\role p_1} = s} {\lambda_1: s_{\role p_1} = s_{\role p_1} +1},\  
+    \commandBase {l_2} {s_{\role p_1} = s} {\lambda_2: s_{\role p_1} = s_{\role p_1} +2}  
     \}
     \quad\cup\\
     \qquad \proj (\role{p}_1, C_1, s+1)
     \quad\cup\quad
-    \proj (\role{p}_1, C_2, s+\mathsf{depth}(C_1))
+    \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
     \\\\
     \big(q\notin\{\role p, \role p_1,\ldots,\role p_n\}\big)\\
     \proj (q,\interact{p}{\role p_1,\ldots,\role p_n}, s)\ = \ \proj (\role{p}_1, C_1, s)
     \ \cup\
-    \proj (\role{p}_1, C_2, s+\mathsf{depth}(C_1))
+    \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
     \\\\
     \big(q = \role p\big)\\
     \proj (q,\ifTE {E}{p}{C_1}{C_2}, s)= \\
@@ -260,7 +261,7 @@ projectable.
     \quad\cup\\
     \qquad \proj (\role{p}_1, C_1, s+1)
     \quad\cup\quad
-    \proj (\role{p}_1, C_2, s+\mathsf{depth}(C_1))
+    \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
   \end{array}
 \end{displaymath}
 
