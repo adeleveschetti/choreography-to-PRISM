@@ -245,9 +245,13 @@ transition function for the state space as follows:
   \end{array}
 \end{displaymath}
 From the transition relation above, we can immediately define an LTS
-on the state space. Given initial state $\sigma_0$ and a choreography
-$C$, the LTS is given by all the states reachable from the pair
-$(\sigma_0,C)$.
+on the state space. Given an initial state $\sigma_0$ and a
+choreography $C$, the LTS is given by all the states reachable from
+the pair $(\sigma_0,C)$. I.e., for all derivations
+$(\sigma_0,C)\red{\lambda_0}\ldots\red{\lambda_n}(\sigma_n, C_n)$ and
+$i<n$, we have that $(\sigma_i,\sigma_{i+1})\in\delta$ [adjust once
+the definition of probabilistic LTS is in].
+
 
 
 
