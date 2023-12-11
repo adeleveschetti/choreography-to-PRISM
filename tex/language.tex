@@ -227,6 +227,29 @@ $\textsf{if } E@\role p \textsf{ then } C_1 \textsf{
 roles. [write a bit more about procedure calls, recursion and the zero
 process]
 
+\mypar{Semantics.} Similarly to how we did for the PRISM language, we
+consider the state space $\mathsf{Val}^n$ where $n$ is the number of
+variables present in the choreography. We then inductively define the
+transition function for the state space as follows: 
+\begin{displaymath}
+  \begin{array}{lllll}
+    (\sigma, \interact{p}{\role p_1,\ldots,\role p_n}) 
+    \red{\lambda_j}
+    (\sigma[\sigma(E_j)/x_j], C_j) 
+    \\\\
+    (\sigma,\ifTE {E}{p}{C_1}{C_2}) 
+    \red{}
+    (\sigma, C_1)
+    \\\\
+    X\stackrel{\mathsf{def}}{=} C \quad\Rightarrow\quad (\sigma, X) \red{}(\sigma,C)
+  \end{array}
+\end{displaymath}
+From the transition relation above, we can immediately define an LTS
+on the state space. Given initial state $\sigma_0$ and a choreography
+$C$, the LTS is given by all the states reachable from the pair
+$(\sigma_0,C)$.
+
+
 
 \subsection{Projection from Choreographies to PRISM}
 \mypar{Mapping Choreographies to PRISM.} We need to run some standard
