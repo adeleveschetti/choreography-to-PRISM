@@ -1,4 +1,0 @@
-A -> B . + C->D x'=5;
-		 + C->D x'=5; 
-		 
--> se metto in tutti e due x'=5, cosa fa?
