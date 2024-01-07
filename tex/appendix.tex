@@ -1,0 +1,104 @@
+\section{A denotational semantics for PRISM} 
+
+We proceed by steps. First, we define $\sem{-}$, as the closure of the
+following rules:
+% 
+\begin{displaymath}\small
+  \begin{array}{ccc}
+    \infer[\mathsf{(Module)}]
+    {F_i\in\sem{\role{p}:\{F_i\}_i}}
+    {}
+    \qquad
+    \infer[\mathsf{(Par_1)}]
+    {\cmd{}E{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_1\ppp A M_2}}
+    {\cmd{}E{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_j}
+    & j\in\{1,2\}}
+    \\\\
+    \infer[\mathsf{(Par_2)}]
+    {\cmd aE{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_1\ppp A M_2}}
+    {\cmd aE{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_j}
+    & a\not\in A    & j\in\{1,2\}}
+    \\\\
+    \infer[\mathsf{(Par_3)}]
+    {
+    [] E\land E' \rightarrow \{\lambda_i * \lambda_j': x_i = E_i \land y_j = E_j' \}_{i\in I, j\in J}
+    \in \sem{M_1\ppp A M_2}
+    }
+    {\cmd aE{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_1}{}
+    & \cmd a{E'}{\lambda_j'}{y_j}{E_j'}{j\in J}\in \sem{M_2}{}
+    & a\in A}
+    \\\\
+    \infer[\mathsf{(Hide_1)}]
+    {
+    \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M/A}{}
+    }
+    {
+    \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
+    }
+    \qquad
+    \infer[\mathsf{(Hide_2)}]
+    {
+    \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M/A}{}
+    }
+    {
+    \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
+    & a\not\in A
+      }
+    \\\\
+    \infer[\mathsf{(Hide_3)}]
+    {
+    \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M/A}{}
+    }
+    {
+    \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
+    & a\in A
+      }
+      \qquad
+      \infer[\mathsf{(Subst_1)}]
+      {
+      \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{\sigma M}{}
+      }
+      {
+      \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
+      }
+    \\\\
+    \infer[\mathsf{(Subst_2)}]
+    {
+    \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{\sigma M}{}
+    }
+    {
+    \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
+    & a\not\in\mathsf{dom}(\sigma)
+      }
+    \\\\
+    \infer[\mathsf{(Subst_3)}]
+    {
+    \cmd {\sigma a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{\sigma M}{}
+    }
+    {
+    \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
+    & a\in\mathsf{dom}(\sigma)
+      }
+  \end{array}
+\end{displaymath}
+The rules above work with modules, parallel composition, name hiding,
+and substitution. The idea is that given a network, we wish to collect
+all those commands $F$ that are contained in the network,
+independently from which module they are being executed
+in. Intuitively, we can regard $\sem{N}$ as a set, where starting from
+all commands present in the syntax, we do some filtering and renaming,
+based on the structure of the network.
+
+Now, given $\sem N$, we define a transition system that shows how the
+system evolves.  Let $\state$ be a function that given a variable in
+$\mathsf{Var}$ returns a value in $\mathsf{Val}$. Then, given an
+initial state $\state_0$, we can define a transition system where each
+of node is a (different) $\state$ function. Then, we can move from
+$\state_1$ to $\state_2$. 
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
