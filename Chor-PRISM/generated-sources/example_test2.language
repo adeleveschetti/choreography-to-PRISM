@@ -1,0 +1,16 @@
+preamble
+
+" "
+
+endpreamble
+
+n = 1;
+P1 -> ;
+P2 -> ;
+
+{
+Test := 
+	P1 -> P2 :
+	(+["1*1"]  " "&&" " . if "(x=0)"@P1, "(x2=0)"@P2 then { END } else {END}
+	+["1*1"]  " "&&" " . if "(x=1)"@P1 then { END } else {END})
+}

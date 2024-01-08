@@ -1,0 +1,33 @@
+preamble
+
+"ctmc"
+
+"const int N=5;"
+
+"const double mu= 1;"
+"const double gamma= 200;"
+"const double lambda= mu/N;"
+
+endpreamble
+
+n = 5;
+
+Server -> 
+Server : "a : [0..1];" ;
+
+Station[i] -> i in [1...n]
+Station[i] : 	"s[i] : [0..1];"; 
+
+{
+ServerPolling := 
+		if "(a=0)"@Server then{
+			Server -> Station[i] :
+			(+["gamma*1"]  " "&&"(s[i]'=0)" . ServerPolling 
+			+["gamma*lambda"]  "(a'=1)"&&"(s[i]'=1)" .  Server -> Station[i] : (["mu*1"] "(a'=0)"&&"(s[i]'=0)".ServerPolling ))
+		}
+		else{
+			Server -> Station[i] :
+			(+["mu*1"]  " "&&"(s[i]'=0)" . ServerPolling) 
+		}
+		
+}

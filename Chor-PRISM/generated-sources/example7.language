@@ -1,0 +1,38 @@
+preamble
+"mdp"
+"const double p;"
+endpreamble
+
+n = 3;
+
+
+phil[i] -> i in [1...n]
+phil[i] : "varModule[i] : bool;";
+
+{
+RandPhils := 
+	phil[i]->phil[i] :
+	(+["1*1"]  " "&&" " . RandPhils
+	+["1*1"]  " "&&" " . phil[i]->phil[i] :
+							(+["0.5*1"]  " "&&" " . if "(lfree)"@phil[i] then {
+														if "(rfree)"@phil[i] then {
+															phil[i] -> phil[i] : (["1*1"] " "&&" " . RandPhils)
+															} else{
+															END
+															}
+													} else{
+														END
+													}
+							+["0.5*1"]  " "&&" " . if "(rfree)"@phil[i] then {
+														if "(lfree)"@phil[i] then {
+														phil[i] -> phil[i] : (["1*1"] " "&&" " . RandPhils)
+															} else{
+															END
+															}
+													} else{
+														END
+													})
+	)					  
+}
+
+

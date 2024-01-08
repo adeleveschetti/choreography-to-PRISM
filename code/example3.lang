@@ -1,0 +1,25 @@
+preamble
+
+"ctmc"
+
+"const int N=5;"
+
+"const double mu= 1;"
+"const double gamma= 200;"
+"const double lambda= mu/N;"
+
+endpreamble
+
+n = 5;
+
+Server -> 
+Server : "s : [1..5];", "a : [0..1];" ;
+
+Station[i] -> i in [1...n]
+Station[i] : 	"s[i] : [0..1];"; 
+
+PoW := 
+	Server -> Station[i] 
+		+["gamma*1"] "(s=[i])&(a=0)"&&"(s[i]=0)" -> "(s'=s+1)"&&"(s[i]'=0)" : PoW 
+		+["gamma*lambda"] "(s=[i])&(a=0)"&&"(s[i]=0)" -> "(a'=1)"&&"(s[i]'=1)" :  Server -> Station[i] : ["mu*1"] "(s=[i])&(a=1)"&&"(s[i]=1)" -> "(s'=s+1)&(a'=0)"&&"(s[i]'=0)".PoW  
+	

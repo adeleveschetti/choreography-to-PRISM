@@ -1,0 +1,129 @@
+mdp
+const double p;
+
+module PC
+PC : [0..1] init 0;
+  
+
+
+
+
+
+[QQPAS] (PC=0)&(s=1)  -> 1 :  (PC'=0); 
+[JMTMP] (PC=0)&(s=1)  -> 1 :  (PC'=0); 
+
+[] (PC=0)&!((s=1)) -> 1 : (PC'=0);
+
+
+
+
+[JBDYL] (PC=0)&(s=2)  -> 1 :  (PC'=0); 
+[OYXML] (PC=0)&(s=2)  -> 1 :  (PC'=0); 
+
+[] (PC=0)&!((s=2)) -> 1 : (PC'=0);
+
+
+
+
+[AIYLS] (PC=0)&(s=3)  -> 1 :  (PC'=0); 
+[MRLKV] (PC=0)&(s=3)  -> 1 :  (PC'=0); 
+
+[] (PC=0)&!((s=3)) -> 1 : (PC'=0);
+
+
+
+
+[ZRHRH] (PC=0)&(s=1)  -> 1 :  (PC'=0); 
+[FYIZC] (PC=0)&(s=1)  -> 1 :  (PC'=0); 
+
+[] (PC=0)&!((s=1)) -> 1 : (PC'=0);
+
+
+
+
+[CAQOB] (PC=0)&(s=2)  -> 1 :  (PC'=0); 
+[UKCMD] (PC=0)&(s=2)  -> 1 :  (PC'=0); 
+
+[] (PC=0)&!((s=2)) -> 1 : (PC'=0);
+
+
+
+
+[AKEHT] (PC=0)&(s=0)  -> 1 :  (PC'=0); 
+[DLNJK] (PC=0)&(s=0)  -> 1 :  (PC'=0); 
+
+[] (PC=0)&!((s=0)) -> 1 : (PC'=0);
+endmodule
+
+
+module Process1
+Process1 : [0..2] init 0;
+var1 : bool; 
+
+
+[ZRHRH] (Process1=0)  -> p : (var1'=true)(Process1'=0); 
+[FYIZC] (Process1=0)  -> (1-p) : (var1'=false)&(Process1'=1); 
+
+[] (Process1=1)&(PC=6)&!var1&((var1 & varModule1) | (varModule2 & var3))  -> 1 : (var1'=true)&(Process1'=0); 
+
+[] (Process1=1)&!((PC=6)&!var1&((var1 & varModule1) | (varModule2 & var3)) ) -> 1 : (Process1'=1);
+endmodule
+
+
+module Process2
+Process2 : [0..2] init 0;
+var2 : bool; 
+
+
+[CAQOB] (Process2=0)  -> p : (var2'=true)(Process2'=0); 
+[UKCMD] (Process2=0)  -> (1-p) : (var2'=false)&(Process2'=1); 
+
+[] (Process2=1)&(PC=6)&!var2&((var2 & varModule2) | (varModule3 & var1))  -> 1 : (var2'=true)&(Process2'=0); 
+
+[] (Process2=1)&!((PC=6)&!var2&((var2 & varModule2) | (varModule3 & var1)) ) -> 1 : (Process2'=1);
+endmodule
+
+
+module Process3
+Process3 : [0..2] init 0;
+var3 : bool; 
+
+
+[AKEHT] (Process3=0)  -> p : (var3'=true)(Process3'=0); 
+[DLNJK] (Process3=0)  -> (1-p) : (var3'=false)&(Process3'=1); 
+
+[] (Process3=1)&(PC=6)&!var3&((var3 & varModule3) | (varModule1 & var2))  -> 1 : (var3'=true)&(Process3'=0); 
+
+[] (Process3=1)&!((PC=6)&!var3&((var3 & varModule3) | (varModule1 & var2)) ) -> 1 : (Process3'=1);
+endmodule
+
+
+module Module1
+Module1 : [0..1] init 0;
+varModule1 : bool; 
+
+
+[QQPAS] (Module1=0)  -> p : (varModule1'=true)(Module1'=0); 
+[JMTMP] (Module1=0)  -> (1-p) : (varModule1'=false)(Module1'=0); 
+endmodule
+
+
+module Module2
+Module2 : [0..1] init 0;
+varModule2 : bool; 
+
+
+[JBDYL] (Module2=0)  -> p : (varModule2'=true)(Module2'=0); 
+[OYXML] (Module2=0)  -> (1-p) : (varModule2'=false)(Module2'=0); 
+endmodule
+
+
+module Module3
+Module3 : [0..1] init 0;
+varModule3 : bool; 
+
+
+[AIYLS] (Module3=0)  -> p : (varModule3'=true)(Module3'=0); 
+[MRLKV] (Module3=0)  -> (1-p) : (varModule3'=false)(Module3'=0); 
+endmodule
+

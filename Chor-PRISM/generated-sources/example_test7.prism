@@ -1,0 +1,35 @@
+ 
+
+module Network2
+Network2 : [0..1] init 0;
+
+[OTOZC] (Network2=0)  -> 1 : x2'=1&(Network2'=0); 
+
+[XQUUF] (Network2=0)  -> 1 : x2'=1&(Network2'=0); 
+endmodule
+
+
+module Network3
+Network3 : [0..1] init 0;
+
+[RFTOK] (Network3=0)  -> 1 : x3'=2&(Network3'=0); 
+[MJXBQ] (Network3=0)  -> 1 : x3'=1&(Network3'=0); 
+endmodule
+
+
+module Network4
+Network4 : [0..1] init 0;
+
+[RFTOK] (Network4=0)  -> 1 : x4'=2&(Network4'=0); 
+[MJXBQ] (Network4=0)  -> 1 : x4'=1&(Network4'=0); 
+endmodule
+
+
+module Network1
+Network1 : [0..1] init 0;
+
+[OTOZC] (Network1=0)  -> 1 : x1'=1&(Network1'=0); 
+
+[XQUUF] (Network1=0)  -> 1 : x1'=1&(Network1'=0); 
+endmodule
+

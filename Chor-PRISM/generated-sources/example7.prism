@@ -1,0 +1,107 @@
+mdp
+const double p;
+
+module phil1
+phil1 : [0..4] init 0;
+varModule1 : bool; 
+
+
+[] (phil1=0)  -> 1 :  (phil1'=0); 
+[] (phil1=0)  -> 1 :  (phil1'=1); 
+
+[] (phil1=1)  -> 0.5 :  (phil1'=2); 
+[] (phil1=1)  -> 0.5 :  (phil1'=3); 
+
+[] (phil1=2)&(lfree) -> (phil1'=3);
+
+
+
+
+[] (phil1=2)&(rfree)  -> 1 :  (phil1'=0); 
+
+[] (phil1=2)&!((rfree)) -> 1 : (phil1'=2);
+
+[] (phil1=2)&!((lfree)) -> 1 : (phil1'=2);
+
+[] (phil1=3)&(rfree) -> (phil1'=4);
+
+[] (phil1=3)&(lfree) -> ;
+[] (phil1=3)&(lfree) -> ;
+
+[] (phil1=2)&(rfree)  -> 1 :  (phil1'=0); 
+
+[] (phil1=3)&!((lfree)) -> 1 : (phil1'=3);
+
+[] (phil1=3)&!((rfree)) -> 1 : (phil1'=3);
+endmodule
+
+
+module phil2
+phil2 : [0..4] init 0;
+varModule2 : bool; 
+
+
+[] (phil2=0)  -> 1 :  (phil2'=0); 
+[] (phil2=0)  -> 1 :  (phil2'=1); 
+
+[] (phil2=1)  -> 0.5 :  (phil2'=2); 
+[] (phil2=1)  -> 0.5 :  (phil2'=3); 
+
+[] (phil2=2)&(lfree) -> (phil2'=3);
+
+[] (phil2=2)&(rfree) -> ;
+[] (phil2=2)&(rfree) -> ;
+
+[] (phil2=2)  -> 1 :  (phil2'=0); 
+
+[] (phil2=2)&!((rfree)) -> 1 : (phil2'=2);
+
+[] (phil2=2)&!((lfree)) -> 1 : (phil2'=2);
+
+[] (phil2=3)&(rfree) -> (phil2'=4);
+
+[] (phil2=3)&(lfree) -> ;
+[] (phil2=3)&(lfree) -> ;
+
+[] (phil2=3)  -> 1 :  (phil2'=0); 
+
+[] (phil2=3)&!((lfree)) -> 1 : (phil2'=3);
+
+[] (phil2=3)&!((rfree)) -> 1 : (phil2'=3);
+endmodule
+
+
+module phil3
+phil3 : [0..4] init 0;
+varModule3 : bool; 
+
+
+[] (phil3=0)  -> 1 :  (phil3'=0); 
+[] (phil3=0)  -> 1 :  (phil3'=1); 
+
+[] (phil3=1)  -> 0.5 :  (phil3'=2); 
+[] (phil3=1)  -> 0.5 :  (phil3'=3); 
+
+[] (phil3=2)&(lfree) -> (phil3'=3);
+
+[] (phil3=2)&(rfree) -> ;
+[] (phil3=2)&(rfree) -> ;
+
+[] (phil3=2)  -> 1 :  (phil3'=0); 
+
+[] (phil3=2)&!((rfree)) -> 1 : (phil3'=2);
+
+[] (phil3=2)&!((lfree)) -> 1 : (phil3'=2);
+
+[] (phil3=3)&(rfree) -> (phil3'=4);
+
+[] (phil3=3)&(lfree) -> ;
+[] (phil3=3)&(lfree) -> ;
+
+[] (phil3=3)  -> 1 :  (phil3'=0); 
+
+[] (phil3=3)&!((lfree)) -> 1 : (phil3'=3);
+
+[] (phil3=3)&!((rfree)) -> 1 : (phil3'=3);
+endmodule
+

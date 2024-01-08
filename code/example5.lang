@@ -1,0 +1,34 @@
+preamble 
+
+"mdp"
+
+"const N=4;"
+
+endpreamble
+
+n = 3;
+
+phil[i] -> i in [1...n]
+phil[i] : 	" ";
+
+Philosophers := phil[i] -> phil[i]
+			(+["1"] -> " "&&" " : Philosophers
+			 +["1"]  -> " "&&" " : phil[i] -> phil[i] 
+												(+["1/2"]  -> " "&&" " : 
+													phil[i] -> phil[i] 
+													(+["1"] "lfree" -> " "&&" ":
+														phil[i] -> phil[i] 
+														(+["1"] "rfree" -> " "&&" ": phil[i] -> phil[i] (+["1"] " " -> " "&&" " : phil[i] -> phil[i] (+["1"] " " -> " "&&" " : phil[i] -> phil[i] (+["1"] " " -> " "&&" " : Philosophers)
+																										+["1"] " " -> " "&&" " : phil[i] -> phil[i] (+["1"] " " -> " "&&" " : Philosophers))	))
+														+["1"] "(!rfree)" -> " "&&" ": phil[i] -> phil[i] (+["1"] " " -> "(phil[i]_STATE'=2)"&&" " : Philosophers ))
+													+["1"] "(!lfree)" -> "(phil[i]_STATE'=4)"&&" ":Philosophers		)						   								   	 
+												+["1/2"] " " -> " "&&" " : 
+													phil[i] -> phil[i] 
+														(+["1"] "rfree" -> " "&&" " : 	phil[i] -> phil[i] 
+																						(+["1"] "lfree" -> "(phil1_STATE'=8)"&&" " : Philosophers
+																						+["1"] "(!lfree)" -> " "&&" " : phil[i] -> phil[i] (+["1"] " " -> "(phil[i]_STATE'=2)"&&" "  : Philosophers ))
+														+["1"] "(!rfree)" -> "(phil[i]_STATE'=6)"&&" " : Philosophers)))
+														
+														
+														
+
