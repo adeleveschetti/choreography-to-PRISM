@@ -1,0 +1,42 @@
+
+EPL
+
+- pi-calculus like
+- N -> N'
+- (state, l1[P1| ... | Pn]     ||   l2[Q1| ... | Qm]   ||  .... )
+
+  -->
+
+  (state',  l1[P1'| ... | Pn]     ||   l2[Q1' | ... | Qm]   ||  ....) 
+
+
+
+
+
+Chor
+
+- (state, l1 -> l2 : lskadjasldj;  l2 -> l3:lkafjlsdkfj; .... ) 
+
+
+  --->
+
+
+  (state', l2 -> l3:lkafjlsdkfj; .... )
+
+
+
+Proj : Chor -> EPL
+
+
+
+
+Theorem (EPP Theorem)
+
+- C -> C'		then	epp(C) ->* epp(C')
+- epp(C) -> N		then  exists C'. N -> epp(C') and C -> C'
+
+
+
+Theorem
+
+TS di C   === TS epp(C) 
