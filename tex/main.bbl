@@ -3,6 +3,9 @@
 \providecommand{\urlprefix}{URL }
 \providecommand{\doi}[1]{https://doi.org/#1}
 
+\bibitem{ANTLR}
+{ANTLR} - another tool for language recognition. \url{https://www.antlr.org/}
+
 \bibitem{PRISMdoc}
 Prism documentation. \url{https://www.prismmodelchecker.org/}, accessed: 2023-09-05
 

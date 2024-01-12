@@ -6,46 +6,47 @@ Database file #1: biblio.bib
 Warning--I didn't find a database entry for "prismemantics"
 Warning--I didn't find a database entry for "P80"
 Warning--I didn't find a database entry for "BRW86"
+Warning--to sort, need author or key in ANTLR
 Warning--to sort, need author or key in PRISMdoc
-You've used 6 entries,
+You've used 7 entries,
             2850 wiz_defined-function locations,
-            639 strings with 5669 characters,
-and the built_in function-call counts, 2632 in all, are:
-= -- 197
-> -- 81
+            643 strings with 5754 characters,
+and the built_in function-call counts, 2850 in all, are:
+= -- 211
+> -- 82
 < -- 4
-+ -- 34
++ -- 35
 - -- 28
-* -- 162
-:= -- 339
-add.period$ -- 8
-call.type$ -- 6
-change.case$ -- 32
+* -- 168
+:= -- 356
+add.period$ -- 9
+call.type$ -- 7
+change.case$ -- 35
 chr.to.int$ -- 0
-cite$ -- 7
-duplicate$ -- 236
-empty$ -- 264
+cite$ -- 9
+duplicate$ -- 258
+empty$ -- 297
 format.name$ -- 31
-if$ -- 569
+if$ -- 622
 int.to.chr$ -- 0
-int.to.str$ -- 6
-missing$ -- 49
-newline$ -- 24
+int.to.str$ -- 7
+missing$ -- 53
+newline$ -- 27
 num.names$ -- 10
-pop$ -- 106
+pop$ -- 122
 preamble$ -- 1
-purify$ -- 26
+purify$ -- 28
 quote$ -- 0
-skip$ -- 63
+skip$ -- 75
 stack$ -- 0
-substring$ -- 107
-swap$ -- 123
+substring$ -- 112
+swap$ -- 131
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 22
-warning$ -- 1
+type$ -- 26
+warning$ -- 2
 while$ -- 18
-width$ -- 7
-write$ -- 67
-(There were 4 warnings)
+width$ -- 8
+write$ -- 74
+(There were 5 warnings)

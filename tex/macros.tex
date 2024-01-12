@@ -28,7 +28,39 @@
   
 % Semantics
 \newcommand{\red}[1]{\ \longrightarrow_{#1}\ } 
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+\definecolor{keywordColor}{rgb}{0.50,0.00,0.33}
+\definecolor{stringColor}{rgb}{0.16,0.00,1.00}
+\definecolor{lineNumberColor}{rgb}{0.47,0.47,0.47}
 
+\lstdefinelanguage{Eclipse}{
+language=Java,
+tabsize=3,
+showspaces=false,
+captionpos=b,
+breaklines=true,
+extendedchars=true,
+numbers=none,
+postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}},
+  basicstyle=\ttfamily\footnotesize,
+  emphstyle=\bfseries,
+  keywordstyle=\color{keywordColor}\bfseries,
+  commentstyle=\markupComments,
+  stringstyle=\color{stringColor},
+  numberstyle=\color{lineNumberColor}\tiny,
+  morecomment=[s][\markupJavadocs]{/**}{*/}, % For Javadoc comments
+  showstringspaces=false,
+  morekeywords={and},
+  numbers=left,
+  mathescape=true
+%  ,frame=lines%shadowbox%trBL
+}
+
+\definecolor{carminepink}{rgb}{0.92, 0.3, 0.26}
+\newcommand{\AV}[1]{\todo[inline, color=carminepink]{\textbf{AV}:~#1}}
 
 %%% Local Variables: 
 %%% mode: latex
