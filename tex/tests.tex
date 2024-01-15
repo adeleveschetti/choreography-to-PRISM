@@ -4,7 +4,6 @@ test cases reported in the PRISM repository\footnote{\url{https://www.prismmodel
 the Bitcoin proof of work protocol and the Hybrid Casper protocol, 
 presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/distribledger/GallettaLMV23}.
 \subsection{Implementation}
-\AV{To be finished}
 We implemented our language in 1246 lines of Java.
 We defined the grammar of our language and generated both the parser and the visitor components with ANTLR \cite{ANTLR}.
 Each abstract syntax tree (AST) node, such as {\tt ActionNode}, {\tt IfThenElseNode}, {\tt BranchNode}, {\tt InternalActionNode}, {\tt LoopNode}, {\tt MessageNode}, {\tt ModuleNode}, {\tt PreambleNode}, {\tt ProtocolNode}, {\tt RecNode}, {\tt RoleNode}, and {\tt ProgramNode}, was encapsulated in a corresponding {\tt Node} class. The methods of these classes were then utilized to generate PRISM code.
