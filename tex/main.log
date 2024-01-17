@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.10.6)  12 JAN 2024 11:54
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023) (preloaded format=pdflatex 2023.10.6)  17 JAN 2024 12:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -657,79 +657,89 @@ Overfull \hbox (79.62086pt too wide) detected at line 97
 Excluding 'comment' comment.) [4] (./tests.tex (/usr/local/texlive/2023/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2023/02/27 1.9 listings language file
 )
-Overfull \hbox (13.89941pt too wide) in paragraph at lines 8--11
+Overfull \hbox (13.89941pt too wide) in paragraph at lines 7--10
 \T1/cmtt/m/n/10 ModuleNode\T1/cmr/m/n/10 , \T1/cmtt/m/n/10 PreambleNode\T1/cmr/m/n/10 , \T1/cmtt/m/n/10 ProtocolNode\T1/cmr/m/n/10 , \T1/cmtt/m/n/10 RecNode\T1/cmr/m/n/10 , \T1/cmtt/m/n/10 RoleNode\T1/cmr/m/n/10 , and \T1/cmtt/m/n/10 ProgramNode\T1/cmr/m/n/10 ,
  []
 
-LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <9> not available
-(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 12.
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <5> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 11.
 
-Overfull \hbox (7.06775pt too wide) in paragraph at lines 14--16
+Overfull \hbox (7.06775pt too wide) in paragraph at lines 13--15
 \T1/cmr/m/n/10 The \T1/cmtt/m/n/10 generateCode \T1/cmr/m/n/10 func-tion gen-er-ates the pro-jec-tion from our lan-guage to PRISM.
  []
 
 [5]
-<Figures//diagram-20230927.pdf, id=56, 218.80275pt x 208.53381pt>
-File: Figures//diagram-20230927.pdf Graphic file (type pdf)
-<use Figures//diagram-20230927.pdf>
-Package pdftex.def Info: Figures//diagram-20230927.pdf  used on input line 30.
-(pdftex.def)             Requested size: 98.46031pt x 93.83934pt.
- [6 <./Figures//diagram-20230927.pdf>]
-<Figures//example2-results.jpeg, id=67, 488.82625pt x 230.8625pt>
+LaTeX Font Info:    Font shape `T1/cmtt/bx/n' in size <7> not available
+(Font)              Font shape `T1/cmtt/m/n' tried instead on input line 36.
+ Excluding 'comment' comment.
+<Figures//example2-results.jpeg, id=57, 488.82625pt x 230.8625pt>
 File: Figures//example2-results.jpeg Graphic file (type jpg)
 <use Figures//example2-results.jpeg>
-Package pdftex.def Info: Figures//example2-results.jpeg  used on input line 105.
-(pdftex.def)             Requested size: 293.298pt x 138.51855pt.
- Excluding 'comment' comment.
+Package pdftex.def Info: Figures//example2-results.jpeg  used on input line 78.
+(pdftex.def)             Requested size: 195.52702pt x 92.34335pt.
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+Overfull \hbox (21.96526pt too wide) in paragraph at lines 78--80
+ [][] 
+ []
 
-[7] Excluding 'comment' comment.
-<Figures//bitcoin.pdf, id=72, 294.0309pt x 227.33647pt>
+
+Underfull \hbox (badness 1609) in paragraph at lines 81--81
+[]\T1/cmr/bx/n/9 Fig.1. \T1/cmr/m/n/9 Prob-a-bil-ity of reach-ing a state
+ []
+
+
+Overfull \hbox (0.76288pt too wide) in paragraph at lines 84--86
+[][]\T1/cmr/m/n/10 By com-par-ing the gen-er-ated model
+ []
+
+Excluding 'comment' comment.
+<Figures//bitcoin.pdf, id=58, 294.0309pt x 227.33647pt>
 File: Figures//bitcoin.pdf Graphic file (type pdf)
 <use Figures//bitcoin.pdf>
-Package pdftex.def Info: Figures//bitcoin.pdf  used on input line 269.
+Package pdftex.def Info: Figures//bitcoin.pdf  used on input line 245.
 (pdftex.def)             Requested size: 132.31267pt x 102.30046pt.
 
-Overfull \hbox (18.50165pt too wide) in paragraph at lines 269--270
+Overfull \hbox (18.50165pt too wide) in paragraph at lines 245--246
 [][] 
  []
 
-[8 <./Figures//example2-results.jpeg> <./Figures//bitcoin.pdf>] [9]
-<Figures//example4-results.jpeg, id=84, 595.22375pt x 278.03876pt>
+[6 <./Figures//example2-results.jpeg>]
+Overfull \hbox (0.36333pt too wide) in paragraph at lines 253--254
+[]\T1/cmr/m/n/10 The \T1/cmr/m/it/10 Net-work \T1/cmr/m/n/10 pro-cess mod-els the broad-cast com-
+ []
+
+Excluding 'comment' comment.
+<Figures//example4-results.jpeg, id=62, 595.22375pt x 278.03876pt>
 File: Figures//example4-results.jpeg Graphic file (type jpg)
 <use Figures//example4-results.jpeg>
-Package pdftex.def Info: Figures//example4-results.jpeg  used on input line 368.
-(pdftex.def)             Requested size: 297.61115pt x 139.01903pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<Figures//ethereum.pdf, id=85, 292.69753pt x 230.82416pt>
+Package pdftex.def Info: Figures//example4-results.jpeg  used on input line 322.
+(pdftex.def)             Requested size: 178.5685pt x 83.41226pt.
+ [7 <./Figures//bitcoin.pdf> <./Figures//example4-results.jpeg>]
+<Figures//ethereum.pdf, id=72, 292.69753pt x 230.82416pt>
 File: Figures//ethereum.pdf Graphic file (type pdf)
 <use Figures//ethereum.pdf>
-Package pdftex.def Info: Figures//ethereum.pdf  used on input line 376.
+Package pdftex.def Info: Figures//ethereum.pdf  used on input line 333.
 (pdftex.def)             Requested size: 131.71266pt x 103.8699pt.
 
-Overfull \hbox (3.67526pt too wide) in paragraph at lines 376--377
+Overfull \hbox (3.67526pt too wide) in paragraph at lines 333--334
 [][] 
  []
 
-[10 <./Figures//ethereum.pdf>] [11 <./Figures//example4-results.jpeg>] [12]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [13]
-<Figures//example6-results.jpeg, id=102, 488.82625pt x 230.8625pt>
+[8 <./Figures//ethereum.pdf>] Excluding 'comment' comment.
+<Figures//example6-results.jpeg, id=79, 488.82625pt x 230.8625pt>
 File: Figures//example6-results.jpeg Graphic file (type jpg)
 <use Figures//example6-results.jpeg>
-Package pdftex.def Info: Figures//example6-results.jpeg  used on input line 508.
-(pdftex.def)             Requested size: 293.298pt x 138.51855pt.
- [14 <./Figures//example6-results.jpeg>]
-Overfull \hbox (18.20807pt too wide) in paragraph at lines 521--526
+Package pdftex.def Info: Figures//example6-results.jpeg  used on input line 457.
+(pdftex.def)             Requested size: 195.52702pt x 92.34335pt.
+
+Underfull \vbox (badness 2229) has occurred while \output is active []
+
+ [9 <./Figures//example6-results.jpeg>]
+Overfull \hbox (18.20807pt too wide) in paragraph at lines 470--475
 \T1/cmr/m/n/10 bel but the con-di-tions are dif-fer-ent. We in-clude in our lan-guage the \T1/cmtt/m/n/10 it-then-else
  []
 
-) (./discussion.tex) (./main.bbl [15]) [16] (./appendix.tex
+) (./discussion.tex) (./main.bbl [10]) [11] (./appendix.tex
 
 LaTeX Font Warning: Command \small invalid in math mode on input line 6.
 
@@ -738,20 +748,20 @@ Overfull \hbox (45.61981pt too wide) detected at line 83
 []
  []
 
-) [17] (./main.aux) ) 
+) [12] (./main.aux) ) 
 Here is how much of TeX's memory you used:
- 17517 strings out of 476025
- 338899 string characters out of 5790017
- 2470388 words of memory out of 5000000
- 37604 multiletter control sequences out of 15000+600000
+ 17343 strings out of 476025
+ 336964 string characters out of 5790017
+ 2107388 words of memory out of 5000000
+ 37431 multiletter control sequences out of 15000+600000
  532619 words of font info for 74 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 99i,12n,99p,864b,1859s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfss0800.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfss0900.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfss1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on main.pdf (17 pages, 704135 bytes).
+ 99i,12n,99p,864b,1855s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx0900.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1200.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfbx1440.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm0600.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm0700.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm0900.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfss0800.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfss0900.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfss1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sftt0800.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sftt0900.pfb></usr/local/texlive/2023/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on main.pdf (12 pages, 709837 bytes).
 PDF statistics:
- 259 PDF objects out of 1000 (max. 8388607)
- 159 compressed objects within 2 object streams
+ 240 PDF objects out of 1000 (max. 8388607)
+ 146 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 43 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 38 words of extra memory for PDF output out of 10000 (max. 10000000)
 
