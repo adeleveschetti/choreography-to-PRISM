@@ -226,10 +226,12 @@ projectable.
 
 \subsection{Correctness}
 
+In the sequel, $S_+$ is a state $S$ extended with extra variables used
+by the projection.
 \begin{theorem}[EPP]\label{thm:epp}
-  Given a well-formed choreography $C$, we have that:
+  Given a well-formed choreography $C$, we have that
   $(S,C) \red{\lambda} (S', C')$ iff
-  $\proj (*, C)\vdash S\red{\lambda} S'$
+  $\proj (*, C)\vdash S_+\red{\lambda} S'_+$.
 \end{theorem} 
 
 %%% Local Variables: 
