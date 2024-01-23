@@ -172,7 +172,8 @@ following rules:
   \end{array}
 \end{displaymath}
 
-We then define a reduction relation $M\vdash \sigma\red{\lambda}\sigma'$ as follows
+Then, we define the transition relation $M\vdash S\red{\lambda}S'$ as
+follows
 $$
 \infer[\mathsf{(Transition)}]
 {
@@ -184,6 +185,12 @@ $$
   S\vdash g_i
 }
 $$
+Note that if the $\lambda$'s are probabilities, hence, we deal with an
+DTMC, then the probabilities of the branches outgoing from a give
+state $S$ must be normalised -- this is because the sum at the bottom
+of the $\mathsf{Transition}$ rule can be more than one. This is not
+the case if we have a CTMC with rates.
+
 
 %%% Local Variables: 
 %%% mode: latex
