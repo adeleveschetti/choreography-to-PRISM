@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.2.9)  23 JAN 2024 15:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.2.9)  23 JAN 2024 16:11
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -795,17 +795,6 @@ LaTeX Warning: Citation `BRW86' on page 2 undefined on input line 75.
 
 LaTeX Font Warning: Command \small invalid in math mode on input line 111.
 
-./prism.tex:123: Undefined control sequence.
-<argument> \aplha 
-                  
-l.123     }
-           
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
 
 Overfull \hbox (52.87294pt too wide) detected at line 173
 []
@@ -829,7 +818,14 @@ Overfull \hbox (80.5895pt too wide) detected at line 97
 []
  []
 
-Excluding 'comment' comment.) [4] (./tests.tex
+Excluding 'comment' comment.
+Overfull \hbox (21.91953pt too wide) in paragraph at lines 229--233
+[]\T1/cmr/bx/n/10 (EPP). []\T1/cmr/m/it/10 Given a well-formed chore-og-ra-phy 
+$\OML/cmm/m/it/10 C$\T1/cmr/m/it/10 , we have that: $\OT1/cmr/m/n/10 (\OML/cmm/
+m/it/10 S; C\OT1/cmr/m/n/10 )  [][]\OMS/cmsy/m/n/10 ![]
+ []
+
+) [4] (./tests.tex
 (/usr/local/texlive/2022/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2020/03/24 1.8d listings language file
 )
@@ -936,8 +932,8 @@ Overfull \hbox (45.61981pt too wide) detected at line 83
 ) [12] (./main.aux) ) 
 Here is how much of TeX's memory you used:
  17776 strings out of 478268
- 341329 string characters out of 5846348
- 1039224 words of memory out of 5000000
+ 341333 string characters out of 5846348
+ 1039232 words of memory out of 5000000
  35600 multiletter control sequences out of 15000+600000
  491706 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -981,7 +977,7 @@ fonts/type1/public/cm-super/sfti1000.pfb></usr/local/texlive/2022/texmf-dist/fo
 nts/type1/public/cm-super/sftt0800.pfb></usr/local/texlive/2022/texmf-dist/font
 s/type1/public/cm-super/sftt0900.pfb></usr/local/texlive/2022/texmf-dist/fonts/
 type1/public/cm-super/sftt1000.pfb>
-Output written on main.pdf (12 pages, 732016 bytes).
+Output written on main.pdf (12 pages, 734008 bytes).
 PDF statistics:
  250 PDF objects out of 1000 (max. 8388607)
  152 compressed objects within 2 object streams

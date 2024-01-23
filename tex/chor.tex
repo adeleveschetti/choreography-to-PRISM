@@ -37,15 +37,15 @@ variables present in the choreography. We then inductively define the
 transition function for the state space as follows: 
 \begin{displaymath}
   \begin{array}{lllll}
-    (\sigma, \interact{p}{\role p_1,\ldots,\role p_n}) 
+    (S, \interact{p}{\role p_1,\ldots,\role p_n}) 
     \red{\lambda_j}
-    (\sigma[\sigma(E_j)/x_j], C_j) 
+    (S[\sigma(E_j)/x_j], C_j) 
     \\\\
-    (\sigma,\ifTE {E}{p}{C_1}{C_2}) 
+    (S,\ifTE {E}{p}{C_1}{C_2}) 
     \red{}
-    (\sigma, C_1)
+    (S, C_1)
     \\\\
-    X\stackrel{\mathsf{def}}{=} C \quad\Rightarrow\quad (\sigma, X) \red{}(\sigma,C)
+    X\stackrel{\mathsf{def}}{=} C \quad\Rightarrow\quad (S, X) \red{}(S,C)
   \end{array}
 \end{displaymath}
 From the transition relation above, we can immediately define an LTS
@@ -222,6 +222,15 @@ projectable.
 % \end{displaymath}
 
 
+
+
+\subsection{Correctness}
+
+\begin{theorem}[EPP]\label{thm:epp}
+  Given a well-formed choreography $C$, we have that:
+  $(S,C) \red{\lambda} (S', C')$ iff
+  $\proj (*, C)\vdash S\red{\lambda} S'$
+\end{theorem} 
 
 %%% Local Variables: 
 %%% mode: latex
