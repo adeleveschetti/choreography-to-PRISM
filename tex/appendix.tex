@@ -12,12 +12,12 @@ following rules:
     \infer[\mathsf{(Par_1)}]
     {\cmd{}E{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_1\ppp A M_2}}
     {\cmd{}E{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_j}
-    & j\in\{1,2\}}
+    & j=1 \lor j=2}
     \\\\
     \infer[\mathsf{(Par_2)}]
     {\cmd aE{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_1\ppp A M_2}}
     {\cmd aE{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_j}
-    & a\not\in A    & j\in\{1,2\}}
+    & a\not\in A    & j=1 \lor j=2}
     \\\\
     \infer[\mathsf{(Par_3)}]
     {

@@ -1,8 +1,3 @@
-% This section provides the formal definition of our choreographic
-% language as well as process algebra representing
-% PRISM~\cite{prismsemantics}.
-%
-% \subsection{PRISM} 
 We start by describing the PRISM language syntax and semantics. To the
 best of our knowledge, the only formalisation of a semantics for PRISM
 can be found on the PRISM website~\cite{prismemantics}. Our approach
@@ -18,7 +13,7 @@ $\mathsf{Var}$, and $v$ over a (possibly infinite) set of values
 $\mathsf{Val}$. Then, the syntax of the PRISM language is given by the
 following grammar:
 \begin{displaymath}
-  \begin{array}{lrllll}
+  \begin{array}{lrlll@{\qquad}l}
     \text{(Networks)}  \quad
     & N, M  & ::=  &      & \CEnd & \text{empty network}\\
     &       &      & \mid & \role{p}:\{F_i\}_i & \text{module}\\
@@ -29,14 +24,15 @@ following grammar:
     \\
     \text{(Commands)}  \quad
     & F     & ::=  &      & \command ag\lambda u
-                                  & \text{$g$ is a boolean expression in $E$} \\
+                                  & \text{} \\
     \\[1mm]
     \text{(Assignment)} \quad
-    & u     & ::=  &      & (x' = E) & \text{update $x$, element of $\mathcal V$, with $E$}\\
-    &       &      & \mid & A \& A   & \text{multiple assignments}
+    & u     & ::=  &      & (x' = E) & \text{update $x$ % , element of $\mathcal V$, 
+                                       with $E$}\\
+    &       &      & \mid & u\ \&\ u   & \text{multiple assignments}
     \\[1mm]
     \text{(Expr)}\quad
-    & E     & ::= &       & f(\tilde E)\quad\mid\quad x\quad\mid\quad v
+    & E, g     & ::= &       & f(\tilde E)\quad\mid\quad x\quad\mid\quad v & \text{expressions}
     % \\[1mm]
     % \text{(Rates)}\quad   &     \lambda\in\mathbb R
     %  \\[1mm]
@@ -101,88 +97,111 @@ our semeantics is a Markov chain/process/whatever]
   \end{itemize}
 \end{definition}
 
+\newpage
+
+{\bf in the sequel, we assume that in every command, each branch
+  effect on any state is injective.}
+
 
 We now define the operational semantics as the minimum relation
-$\red{}$ satisfying the following rules:
+$\prismred{}{}$ satisfying the following rules:
 % 
 \begin{displaymath}\small
   \begin{array}{ccc}
-    \infer[\mathsf{(Module)}]
-    {F_i\in\sem{\role{p}:\{F_i\}_i}}
-    {}
+    \infer[\mathsf{(M_1)}]
+    { {\role{p}:\{F_k\}_k} \prismred{}\lab{g}{\lambda_i}{u_i} }
+    {\command {}g\lambda u\in\{F_k\}_k}
     \qquad
-    \infer[\mathsf{(Par_1)}]
-    {\cmd{}E{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_1\ppp A M_2}}
-    {\cmd{}E{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_j}
-    & j\in\{1,2\}}
+    \infer[\mathsf{(M_2)}]
+    { {\role{p}:\{F_k\}_k} \prismred{a}\lab{g}{\lambda_i}{u_i} }
+    {\command ag\lambda u\in\{F_k\}_k}
     \\\\
+    \infer[\mathsf{(Par_1)}]
+    {M_1\ppp A M_2\prismred{}\lab g\lambda u }
+    {
+    \exists j\in\{1,2\}.\ 
+    M_j\prismred{}\lab g\lambda u}
+    \quad
     \infer[\mathsf{(Par_2)}]
-    {\cmd aE{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_1\ppp A M_2}}
-    {\cmd aE{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_j}
-    & a\not\in A    & j\in\{1,2\}}
+    {M_1\ppp A M_2\prismred{a}\lab g\lambda u }
+    {
+    \exists j\in\{1,2\}.\ 
+    M_j\prismred{a}\lab g\lambda u
+    & a\not\in A
+    }
     \\\\
     \infer[\mathsf{(Par_3)}]
+    {M_1\ppp A M_2\prismred{a}\lab{g_1\land g_2}{\lambda_1*\lambda_2}{u_1\land u_2} }
     {
-    [] E\land E' \rightarrow \{\lambda_i * \lambda_j': x_i = E_i \land y_j = E_j' \}_{i\in I, j\in J}
-    \in \sem{M_1\ppp A M_2}
-    }
-    {\cmd aE{\lambda_i}{x_i}{E_i}{i\in I}\in \sem{M_1}{}
-    & \cmd a{E'}{\lambda_j'}{y_j}{E_j'}{j\in J}\in \sem{M_2}{}
-    & a\in A}
-    \\\\
-    \infer[\mathsf{(Hide_1)}]
-    {
-    \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M/A}{}
-    }
-    {
-    \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
-    }
-    \qquad
-    \infer[\mathsf{(Hide_2)}]
-    {
-    \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M/A}{}
-    }
-    {
-    \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
-    & a\not\in A
-      }
-    \\\\
-    \infer[\mathsf{(Hide_3)}]
-    {
-    \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M/A}{}
-    }
-    {
-    \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
-    & a\in A
-      }
-      \qquad
-      \infer[\mathsf{(Subst_1)}]
-      {
-      \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{\sigma M}{}
-      }
-      {
-      \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
-      }
-    \\\\
-    \infer[\mathsf{(Subst_2)}]
-    {
-    \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{\sigma M}{}
-    }
-    {
-    \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
-    & a\not\in\mathsf{dom}(\sigma)
-      }
-    \\\\
-    \infer[\mathsf{(Subst_3)}]
-    {
-    \cmd {\sigma a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{\sigma M}{}
-    }
-    {
-    \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
-    & a\in\mathsf{dom}(\sigma)
-      }
+    M_1\prismred{a}\lab{g_1}{\lambda_1}{u_1} 
+    & M_2\prismred{a}\lab{g_2}{\lambda_2}{u_2} 
+                 & a\in A}
+    % \infer[\mathsf{(Hide_1)}]
+    % {
+    % \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M/A}{}
+    % }
+    % {
+    % \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
+    % }
+    % \qquad
+    % \infer[\mathsf{(Hide_2)}]
+    % {
+    % \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M/A}{}
+    % }
+    % {
+    % \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
+    % & a\not\in A
+    %   }
+    % \\\\
+    % \infer[\mathsf{(Hide_3)}]
+    % {
+    % \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M/A}{}
+    % }
+    % {
+    % \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
+    % & a\in A
+    %   }
+    %   \qquad
+    %   \infer[\mathsf{(Subst_1)}]
+    %   {
+    %   \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{\sigma M}{}
+    %   }
+    %   {
+    %   \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
+    %   }
+    % \\\\
+    % \infer[\mathsf{(Subst_2)}]
+    % {
+    % \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{\sigma M}{}
+    % }
+    % {
+    % \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
+    % & a\not\in\mathsf{dom}(\sigma)
+    %   }
+    % \\\\
+    % \infer[\mathsf{(Subst_3)}]
+    % {
+    % \cmd {\sigma a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{\sigma M}{}
+    % }
+    % {
+    % \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
+    % & a\in\mathsf{dom}(\sigma)
+    %   }
   \end{array}
 \end{displaymath}
+
+We then define a reduction relation $M\vdash \sigma\red{\lambda}\sigma'$ as follows
+$$
+\infer[\mathsf{(Transition)}]
+{
+  M\vdash \sigma\red{\sum_{\sigma'= \sigma[u_j]} \lambda_j}\sigma'
+}
+{
+  \forall i.\ M\prismred{a}\lab {g_i}{\lambda_i}{u_i}
+  \quad&\quad
+  \sigma\vdash g_i
+}
+$$
 
 %%% Local Variables: 
 %%% mode: latex
