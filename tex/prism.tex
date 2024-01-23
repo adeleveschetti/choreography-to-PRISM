@@ -103,8 +103,10 @@ our semeantics is a Markov chain/process/whatever]
   effect on any state is injective.}
 
 
-We now define the operational semantics as the minimum relation
-$\prismred{}{}$ satisfying the following rules:
+In the sequel, we assumet $\alpha\in\{\epsilon\}\cup \mathcal L$ where
+$\epsilon$ is the empty string. We now define the operational
+semantics as the minimum relation $\prismred{}{}$ satisfying the
+following rules:
 % 
 \begin{displaymath}\small
   \begin{array}{ccc}
@@ -112,81 +114,61 @@ $\prismred{}{}$ satisfying the following rules:
     { {\role{p}:\{F_k\}_k} \prismred{}\lab{g}{\lambda_i}{u_i} }
     {\command {}g\lambda u\in\{F_k\}_k}
     \qquad
-    \infer[\mathsf{(M_2)}]
-    { {\role{p}:\{F_k\}_k} \prismred{a}\lab{g}{\lambda_i}{u_i} }
-    {\command ag\lambda u\in\{F_k\}_k}
-    \\\\
     \infer[\mathsf{(Par_1)}]
-    {M_1\ppp A M_2\prismred{}\lab g\lambda u }
-    {
-    \exists j\in\{1,2\}.\ 
-    M_j\prismred{}\lab g\lambda u}
-    \quad
-    \infer[\mathsf{(Par_2)}]
     {M_1\ppp A M_2\prismred{a}\lab g\lambda u }
     {
     \exists j\in\{1,2\}.\ 
-    M_j\prismred{a}\lab g\lambda u
-    & a\not\in A
+    M_j\prismred{\aplha}\lab g\lambda u
+    & \alpha\not\in A
     }
     \\\\
-    \infer[\mathsf{(Par_3)}]
+    \infer[\mathsf{(M_2)}]
+    { {\role{p}:\{F_k\}_k} \prismred{a}\lab{g}{\lambda_i}{u_i} }
+    {\command ag\lambda u\in\{F_k\}_k}
+    \quad
+    \infer[\mathsf{(Par_2)}]
     {M_1\ppp A M_2\prismred{a}\lab{g_1\land g_2}{\lambda_1*\lambda_2}{u_1\land u_2} }
     {
     M_1\prismred{a}\lab{g_1}{\lambda_1}{u_1} 
     & M_2\prismred{a}\lab{g_2}{\lambda_2}{u_2} 
                  & a\in A}
-    % \infer[\mathsf{(Hide_1)}]
-    % {
-    % \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M/A}{}
-    % }
-    % {
-    % \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
-    % }
-    % \qquad
-    % \infer[\mathsf{(Hide_2)}]
-    % {
-    % \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M/A}{}
-    % }
-    % {
-    % \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
-    % & a\not\in A
-    %   }
-    % \\\\
-    % \infer[\mathsf{(Hide_3)}]
-    % {
-    % \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M/A}{}
-    % }
-    % {
-    % \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
-    % & a\in A
-    %   }
-    %   \qquad
-    %   \infer[\mathsf{(Subst_1)}]
-    %   {
-    %   \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{\sigma M}{}
-    %   }
-    %   {
-    %   \cmd {}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
-    %   }
-    % \\\\
-    % \infer[\mathsf{(Subst_2)}]
-    % {
-    % \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{\sigma M}{}
-    % }
-    % {
-    % \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
-    % & a\not\in\mathsf{dom}(\sigma)
-    %   }
-    % \\\\
-    % \infer[\mathsf{(Subst_3)}]
-    % {
-    % \cmd {\sigma a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{\sigma M}{}
-    % }
-    % {
-    % \cmd {a}E{\lambda_j}{x_i}{E_i}{i\in I}\in \sem{M}{}
-    % & a\in\mathsf{dom}(\sigma)
-    %   }
+    \\\\\
+    \infer[\mathsf{(Hide_1)}]
+    {
+    M/A\prismred{\alpha}\lab g\lambda u
+    }
+    {
+    M\prismred{\alpha}\lab g\lambda u
+    & \alpha\not\in A
+    }
+    \qquad
+    \infer[\mathsf{(Hide_2)}]
+    {
+    M/A\prismred{}\lab g\lambda u
+    }
+    {
+    M\prismred{a}\lab g\lambda u
+    & a\in A
+    }
+    \\\\
+    \infer[\mathsf{(Subst_1)}]
+    {
+    \sigma M\prismred{\alpha}\lab g\lambda u
+    }
+    {
+    M\prismred{\alpha}\lab g\lambda u
+    & \alpha\not\in\mathsf{dom}(\sigma)
+      }
+    \quad
+    \infer[\mathsf{(Subst_2)}]
+    {
+    \sigma M\prismred{\sigma a}\lab g\lambda u
+    }
+    {
+    M\prismred{a}\lab g\lambda u
+    & a\in\mathsf{dom}(\sigma)
+      }
+    
   \end{array}
 \end{displaymath}
 
@@ -194,12 +176,12 @@ We then define a reduction relation $M\vdash \sigma\red{\lambda}\sigma'$ as foll
 $$
 \infer[\mathsf{(Transition)}]
 {
-  M\vdash \sigma\red{\sum_{\sigma'= \sigma[u_j]} \lambda_j}\sigma'
+  M\vdash S\red{\sum_{S'= S[u_j]} \lambda_j}S'
 }
 {
-  \forall i.\ M\prismred{a}\lab {g_i}{\lambda_i}{u_i}
+  \forall i,\alpha.\ M\prismred{\alpha}\lab {g_i}{\lambda_i}{u_i}
   \quad&\quad
-  \sigma\vdash g_i
+  S\vdash g_i
 }
 $$
 
