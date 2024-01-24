@@ -34,16 +34,18 @@ public class ProgramNode implements Node{
 		program = program + "\n";
 		for(Node el : modules) {
 			program = program + "module " + el.toPrint() + "\n\n";
+			program = program + el.toPrint() + " : [0..TBD] init 0;\n";
 			if(((ModuleNode) el).getVars()!=null) {
 				for(String el2 : ((ModuleNode) el).getVars()) {
 					program = program + el2 + "\n";
 				}
 			}
 			program = program + "\n";
-			for(String el2 : ((ModuleNode) el).getCommands()) {
+			for(String el2 : ((ModuleNode) el).getCommands()) {				
 				program = program + el2 + "\n";
 			}
 			program = program + "\nendmodule\n\n";
+			program = program.replaceAll("TBD", String.valueOf(((ModuleNode) el).getState()+1));
 		}
 		return program;
 	}

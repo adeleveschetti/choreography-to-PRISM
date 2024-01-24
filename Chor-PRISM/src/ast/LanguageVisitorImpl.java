@@ -169,6 +169,7 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 		for(RoleContext el : ctx.outputRole) {
 			rolesOut.add(visitRole(el).toPrint());
 		}
+		
 		ArrayList<Node> stats = new ArrayList<Node>();
 		ArrayList<String> rates = new ArrayList<String>();
 		ArrayList<Node> messages = new ArrayList<Node>();

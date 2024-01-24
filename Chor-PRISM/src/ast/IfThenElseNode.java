@@ -44,7 +44,24 @@ public class IfThenElseNode implements Node {
 		for(int i=0; i<roles.size(); i++) {
 			for(Node el2 : mods) {
 				if(el2.toPrint().equals(rolesTmp.get(i))) {
-					int state = ((ModuleNode) el2).getState();
+					int state = ((ModuleNode) el2).getValueRecursion(prot);
+					
+					if(state == -1) {
+						state = ((ModuleNode) el2).getMaxState();
+						((ModuleNode) el2).setValueRecursion(prot,state);
+					}
+					else {
+						if(((ModuleNode) el2).getMaxValueRecursion(prot)<=((ModuleNode) el2).getNewState(prot) && ((ModuleNode) el2).getNewState(prot)!=-1) {
+							state = ((ModuleNode) el2).getNewState(prot);
+							((ModuleNode) el2).setValueRecursion(prot,state);
+							((ModuleNode) el2).removeNewState(prot);
+						}
+						else {
+							state = ((ModuleNode) el2).getMaxValueRecursion(prot);
+						}
+					}
+					((ModuleNode) el2).setNewState(prot, state);
+
 					String stat = "";
 					boolean ifte = false;
 					for(String comms : ((ModuleNode) el2).getCommands()) {
@@ -69,12 +86,24 @@ public class IfThenElseNode implements Node {
 
 					stat = stat + "&"+condsTmp.get(i) + " -> " ;
 
-					if(thenStat instanceof RecNode) {
-						stat = stat + "(" + rolesTmp.get(i) + "'=" + 0 + ");"; //TOBECHANGED
+					if(thenStat instanceof RecNode){
+
+						int stateRec = ((ModuleNode) el2).getValueRecursion(thenStat.toPrint());
+						if(stateRec == -1) {
+
+							((ModuleNode) el2).setValueRecursion(thenStat.toPrint(),state+1);
+							state = state + 1 ;
+						}
+						else {
+							state = stateRec;
+						}
+
 					}
-					else if(thenStat instanceof EndNode) {
-						stat = stat + "(" + rolesTmp.get(i) + "'=" + state + ");";
+					
+					if(thenStat instanceof RecNode || thenStat instanceof EndNode) {
+						stat = stat + "(" + rolesTmp.get(i) + "'=" + state + ");"; 
 					}
+					
 					else {
 						stat = stat + "IFTE";
 					}
@@ -96,11 +125,21 @@ public class IfThenElseNode implements Node {
 					String statTmp2 = stat2;
 					stat2 = stat2 + "&!"+condsTmp.get(i) + " -> " ;
 
-					if(elseStat instanceof RecNode) {
-						stat2 = stat2 + "1 : (" + rolesTmp.get(i) + "'=" + 0 + ");"; //TOBECHANGED
+					if(elseStat instanceof RecNode){
+
+						int stateRec = ((ModuleNode) el2).getValueRecursion(elseStat.toPrint());
+						if(stateRec == -1) {
+
+							((ModuleNode) el2).setValueRecursion(elseStat.toPrint(),state+1);
+							state = state + 1 ;
+						}
+						else {
+							state = stateRec;
+						}
 					}
-					else if(elseStat instanceof EndNode) {
-						stat2 = stat2 + "1 : (" + rolesTmp.get(i) + "'=" + state + ");";
+					
+					if(elseStat instanceof RecNode || elseStat instanceof EndNode) {
+						stat2 = stat2 + "1 : (" + rolesTmp.get(i) + "'=" + state + ");"; //TOBECHANGED
 					}
 					else {
 						stat2 = stat2 + "IFTE";

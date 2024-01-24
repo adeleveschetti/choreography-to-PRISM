@@ -57,15 +57,37 @@ public class InternalActionNode implements Node{
 		if(!updatesNew.equals(" ")) {
 			updatesNew = updatesNew.substring(0,updatesNew.length()-3) + "&";
 		}
-		int upState = -1;
-		if(statement instanceof RecNode) {
-			upState = 0; //TOBECHANGED
-		}
-		else if(statement instanceof EndNode) {
-			upState = ((ModuleNode) mods.get(iA)).getState();
+		
+		int upState = ((ModuleNode) mods.get(iA)).getValueRecursion(prot);
+
+		if(upState == -1) {
+			upState = ((ModuleNode) mods.get(iA)).getMaxState();
+			((ModuleNode) mods.get(iA)).setValueRecursion(prot,upState);
 		}
 		else {
-			upState = ((ModuleNode) mods.get(iA)).getState()+1;
+			if(((ModuleNode) mods.get(iA)).getMaxValueRecursion(prot)<=((ModuleNode) mods.get(iA)).getNewState(prot) && ((ModuleNode) mods.get(iA)).getNewState(prot)!=-1) {
+				upState = ((ModuleNode) mods.get(iA)).getNewState(prot);
+				((ModuleNode) mods.get(iA)).setValueRecursion(prot,upState);
+				((ModuleNode) mods.get(iA)).removeNewState(prot);
+
+			}
+			else {
+				upState = ((ModuleNode) mods.get(iA)).getMaxValueRecursion(prot);
+			}
+		}
+		upState = upState+1;
+		if(statement instanceof RecNode){
+			int stateRec = ((ModuleNode) mods.get(iA)).getValueRecursion(statement.toPrint());	
+			
+			if(stateRec == -1) {
+
+				((ModuleNode) mods.get(iA)).setValueRecursion(statement.toPrint(),upState+1);
+				upState = upState + 1 ;
+			}
+			else {
+				upState = stateRec;
+			}
+
 		}
 		updatesNew = updatesNew + "(" + roleTmp +"'=" + upState + "); ";
 		
@@ -84,12 +106,12 @@ public class InternalActionNode implements Node{
 				itr.remove();
 			}
 		}
-
 		if(!(statement instanceof EndNode)) {
-			((ModuleNode) mods.get(iA)).setState();
+			((ModuleNode) mods.get(iA)).setNewState(prot, upState);
 		}
+		System.out.println("internal");
+
 		statement.generateCode(mods,index,maxIndex,isCtmc,labels,prot);
-		
 		return null;
 	}
 
