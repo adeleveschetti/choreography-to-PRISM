@@ -1,0 +1,22 @@
+preamble
+"ctmc";
+"ctmc"
+"const int N = 10;"
+"const double mu = 1/10;"
+"const double lambda1 = 1/2;"
+"const double lambda2 = 1/3;"
+
+endpreamble
+
+n = 1;
+
+Queue -> 
+Queue : "q : [0..N] init 0;", "t : [0..N] init 0;" ;
+
+Server -> 
+Server : "s : [0..3] init 0;" ;
+
+{
+Protocol := Queue -> Server : (+["lambda1*1"] "(q'=5)"&&"(s'=1)" . END
+							   +["lambda2*1"] "(t'=5)"&&"(s'=2)" . END)
+}
