@@ -19,8 +19,8 @@ following grammar:
     &       &      & \mid & \role{p}:\{F_i\}_i & \text{module}\\
 %    &       &      & \mid & M \pp M    & \text{parallel composition}\\
     &       &      & \mid & M \ppp A M & \text{parallel composition}\\
-    &       &      & \mid & M/A        & \text{action hiding}\\
-    &       &      & \mid & \sigma M   & \text{substitution}\\
+    % &       &      & \mid & M/A        & \text{action hiding}\\
+    % &       &      & \mid & \sigma M   & \text{substitution}\\
     \\
     \text{(Commands)}  \quad
     & F     & ::=  &      & \command ag\lambda u
@@ -127,48 +127,47 @@ following rules:
     {\command ag\lambda u\in\{F_k\}_k}
     \quad
     \infer[\mathsf{(Par_2)}]
-    {M_1\ppp A M_2\prismred{a}\lab{g_1\land g_2}{\lambda_1*\lambda_2}{u_1\land u_2} }
+    {M_1\ppp A M_2\prismred{a}\lab{g_1\land g_2}{\lambda_1*\lambda_2}{u_1\& u_2} }
     {
     M_1\prismred{a}\lab{g_1}{\lambda_1}{u_1} 
     & M_2\prismred{a}\lab{g_2}{\lambda_2}{u_2} 
                  & a\in A}
-    \\\\\
-    \infer[\mathsf{(Hide_1)}]
-    {
-    M/A\prismred{\alpha}\lab g\lambda u
-    }
-    {
-    M\prismred{\alpha}\lab g\lambda u
-    & \alpha\not\in A
-    }
-    \qquad
-    \infer[\mathsf{(Hide_2)}]
-    {
-    M/A\prismred{}\lab g\lambda u
-    }
-    {
-    M\prismred{a}\lab g\lambda u
-    & a\in A
-    }
-    \\\\
-    \infer[\mathsf{(Subst_1)}]
-    {
-    \sigma M\prismred{\alpha}\lab g\lambda u
-    }
-    {
-    M\prismred{\alpha}\lab g\lambda u
-    & \alpha\not\in\mathsf{dom}(\sigma)
-      }
-    \quad
-    \infer[\mathsf{(Subst_2)}]
-    {
-    \sigma M\prismred{\sigma a}\lab g\lambda u
-    }
-    {
-    M\prismred{a}\lab g\lambda u
-    & a\in\mathsf{dom}(\sigma)
-      }
-    
+    % \\\\
+    % \infer[\mathsf{(Hide_1)}]
+    % {
+    % M/A\prismred{\alpha}\lab g\lambda u
+    % }
+    % {
+    % M\prismred{\alpha}\lab g\lambda u
+    % & \alpha\not\in A
+    % }
+    % \qquad
+    % \infer[\mathsf{(Hide_2)}]
+    % {
+    % M/A\prismred{}\lab g\lambda u
+    % }
+    % {
+    % M\prismred{a}\lab g\lambda u
+    % & a\in A
+    % }
+    % \\\\
+    % \infer[\mathsf{(Subst_1)}]
+    % {
+    % \sigma M\prismred{\alpha}\lab g\lambda u
+    % }
+    % {
+    % M\prismred{\alpha}\lab g\lambda u
+    % & \alpha\not\in\mathsf{dom}(\sigma)
+    %   }
+    % \quad
+    % \infer[\mathsf{(Subst_2)}]
+    % {
+    % \sigma M\prismred{\sigma a}\lab g\lambda u
+    % }
+    % {
+    % M\prismred{a}\lab g\lambda u
+    % & a\in\mathsf{dom}(\sigma)
+    %   }
   \end{array}
 \end{displaymath}
 

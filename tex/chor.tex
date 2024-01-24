@@ -67,16 +67,16 @@ projectable.
 \begin{displaymath}
   \begin{array}{lllll}
     \big(q\in\{\role p, \role p_1,\ldots,\role p_n\}, J=\{1,2\},\ l_1, l_2 \text{ fresh}  
-\big)\\
+    \big)\\
     \proj (q,\interact{p}{\role p_1,\ldots,\role p_n}, s)= \\
     \qquad\{ 
-    \commandBase {l_1} {s_{\role p_1} = s} {\lambda_1: s_{\role p_1} = s_{\role p_1} +1},\  
-    \commandBase {l_2} {s_{\role p_1} = s} {\lambda_2: s_{\role p_1} = s_{\role p_1} +2}  
+    \commandBase {l_1} {s_{q} = s} {\lambda_1: s_{q} = s_{q} +1},\  
+    \commandBase {l_2} {s_{q} = s} {\lambda_2: s_{q} = s_{q} +\mathsf{nodes}(C_1)}  
     \}
     \quad\cup\\
-    \qquad \proj (\role{p}_1, C_1, s+1)
+    \qquad \proj (q, C_1, s+1)
     \quad\cup\quad
-    \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
+    \proj (q, C_2, s+\mathsf{nodes}(C_1))
     \\\\
     \big(q\notin\{\role p, \role p_1,\ldots,\role p_n\}\big)\\
     \proj (q,\interact{p}{\role p_1,\ldots,\role p_n}, s)\ = \ \proj (\role{p}_1, C_1, s)
@@ -233,6 +233,44 @@ by the projection.
   $(S,C) \red{\lambda} (S', C')$ iff
   $\proj (*, C)\vdash S_+\red{\lambda} S'_+$.
 \end{theorem} 
+\begin{proof} We prove each direction separately.
+  \begin{itemize}
+  \item (only if). Assume that
+    % 
+    $$(S, \interact{p}{\role p_1,\ldots,\role
+      p_n})\red{\lambda_j}(S[\sigma(E_j)/x_j], C_j)$$
+    % 
+    and let us consider the projection of the term
+    %
+    $$\interact{p}{\role p_1,\ldots,\role p_n}$$
+    % 
+    For each element $q$ in $\{\role p, \role p_1,\ldots,\role p_n\}$
+    and some fresh $l_1,\ldots, l_n$, we generate a module that
+    includes the following commands:
+    % 
+    $$
+    \Big\{\commandBase {l_j} {\ s_{q}\!=\! s} {\lambda_j:\ s_{q}\!=\!
+      s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\Big\}_{j\in J}
+    $$
+
+
+
+
+
+
+
+    $$\{ 
+    \commandBase {l_1} {s_{\role p_1} = s} {\lambda_1: s_{\role p_1} = s_{\role p_1} +1},\  
+    \commandBase {l_2} {s_{\role p_1} = s} {\lambda_2: s_{\role p_1} = s_{\role p_1} +2}  
+    \}
+    \quad\cup\\
+    \qquad \proj (\role{p}_1, C_1, s+1)
+    \quad\cup\quad
+    \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
+    $$
+  \item
+  \end{itemize}
+\end{proof}
 
 %%% Local Variables: 
 %%% mode: latex
