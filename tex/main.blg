@@ -6,8 +6,8 @@ Database file #1: biblio.bib
 Warning--I didn't find a database entry for "prismemantics"
 Warning--I didn't find a database entry for "P80"
 Warning--I didn't find a database entry for "BRW86"
-Warning--to sort, need author or key in ANTLR
 Warning--to sort, need author or key in PRISMdoc
+Warning--to sort, need author or key in ANTLR
 You've used 7 entries,
             2850 wiz_defined-function locations,
             643 strings with 5754 characters,
