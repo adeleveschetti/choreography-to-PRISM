@@ -1,26 +1,8 @@
-In this section we present the implementation and our experimental evaluation of our language. 
-We focus on four benchmarks: the dice program and the random graphs protocol that we compare with the  
+In  this section, we report our experimental evaluation of our language. 
+We focus on three benchmarks: the dice program that we compare with the  
 test cases reported in the PRISM repository\footnote{\url{https://www.prismmodelchecker.org/casestudies/}}; 
 the Bitcoin proof of work protocol and the Hybrid Casper protocol, 
 presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/distribledger/GallettaLMV23}.
-\subsection{Implementation}
-We implemented our language in 1246 lines of Java.
-We defined the grammar of our language and generated both the parser and the visitor components with ANTLR \cite{ANTLR}.
-Each abstract syntax tree (AST) node, such as {\tt ActionNode}, {\tt IfThenElseNode}, {\tt BranchNode}, {\tt InternalActionNode}, {\tt LoopNode}, {\tt MessageNode}, {\tt ModuleNode}, {\tt PreambleNode}, {\tt ProtocolNode}, {\tt RecNode}, {\tt RoleNode}, and {\tt ProgramNode}, was encapsulated in a corresponding {\tt Node} class. The methods of these classes were then utilized to generate PRISM code.
-\begin{lstlisting}[language=Eclipse,caption=The \texttt{generateCode} function.,label=genfun1,numbers=none]
-	String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot);	
-\end{lstlisting}
-The {\tt generateCode} function generates the projection from our language to PRISM.
-The input parameters for the projection function include:
-\begin{itemize}
-\item \texttt{mods}: a list containing the choreography modules. As new commands are generated, they are appended to the set of commands for the respective module;
-\item \texttt{index} and \texttt{maxIndex}: indices used to keep track of the currently analyzed role;
-\item \texttt{isCtmc}: a boolean flag indicating whether a Continuous-Time Markov Chain (CTMC) is being generated. This flag is crucial as the projection generation logic depends on it;
-\item \texttt{labels}: the pre-existing labels. This parameter is necessary for checking the uniqueness of a label;
-\item \texttt{prot}: the name of the protocol currently under analysis.
-\end{itemize}
-The projection function operates recursively on each command in the choreographic language, systematically generating PRISM code based on the type of command being analyzed. While most code generations are straightforward, the focal point lies in how new states are created. Each module maintains its set of states, and when a new state is to be generated, the function examines the last available state for the corresponding module and increments it by one.
-Recursion follows a similar pattern: every module possesses a table that accumulates recursion protocols, along with the first and last states associated with each recursion. This recursive approach ensures a systematic and coherent generation of states within the modules, enhancing the overall efficiency and clarity of the projection function.
 
 \subsection{The Dice Program}
  The first test case we focus on the Dice Program\footnote{\url{https://www.prismmodelchecker.org/casestudies/dice.php}} \cite{KY76}.
@@ -462,6 +444,7 @@ The code closely resembles the one outlined in \cite{DBLP:journals/distribledger
 
 
 \subsection{Problems}
+\label{sec:problems}
 While testing our choreographic language, we noticed that some of the case studies presented in the 
 PRISM documentation \cite{PRISMdoc} cannot be modeled by using our language.
 The reasons are various, in this section we try to outline the problems.
