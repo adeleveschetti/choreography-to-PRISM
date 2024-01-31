@@ -8,45 +8,46 @@ Warning--I didn't find a database entry for "P80"
 Warning--I didn't find a database entry for "BRW86"
 Warning--to sort, need author or key in PRISMdoc
 Warning--to sort, need author or key in ANTLR
-You've used 7 entries,
+Warning--to sort, need author or key in repository
+You've used 8 entries,
             2850 wiz_defined-function locations,
-            643 strings with 5754 characters,
-and the built_in function-call counts, 2850 in all, are:
-= -- 211
-> -- 82
+            647 strings with 5856 characters,
+and the built_in function-call counts, 3090 in all, are:
+= -- 228
+> -- 83
 < -- 4
-+ -- 35
++ -- 36
 - -- 28
-* -- 168
-:= -- 356
-add.period$ -- 9
-call.type$ -- 7
-change.case$ -- 35
+* -- 176
+:= -- 374
+add.period$ -- 10
+call.type$ -- 8
+change.case$ -- 39
 chr.to.int$ -- 0
-cite$ -- 9
-duplicate$ -- 258
-empty$ -- 297
+cite$ -- 11
+duplicate$ -- 283
+empty$ -- 331
 format.name$ -- 31
-if$ -- 622
+if$ -- 680
 int.to.chr$ -- 0
-int.to.str$ -- 7
-missing$ -- 53
-newline$ -- 27
+int.to.str$ -- 8
+missing$ -- 58
+newline$ -- 30
 num.names$ -- 10
-pop$ -- 122
+pop$ -- 141
 preamble$ -- 1
-purify$ -- 28
+purify$ -- 30
 quote$ -- 0
-skip$ -- 75
+skip$ -- 84
 stack$ -- 0
-substring$ -- 112
-swap$ -- 131
+substring$ -- 119
+swap$ -- 141
 text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 26
-warning$ -- 2
+type$ -- 30
+warning$ -- 3
 while$ -- 18
-width$ -- 8
-write$ -- 74
-(There were 5 warnings)
+width$ -- 9
+write$ -- 82
+(There were 6 warnings)

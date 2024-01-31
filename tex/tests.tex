@@ -317,49 +317,27 @@ Nevertheless, in the case of this specific test scenario, the experimental resul
 We now present the Hybrid Casper Protocol as modeled in PRISM, as detailed in \cite{DBLP:journals/distribledger/GallettaLMV23}. The Hybrid Casper protocol represents a hybrid consensus protocol for blockchains, merging features from both Proof of Work and Proof of Stake protocols. Initially, it was implemented in the Ethereum blockchain \cite{ethereum} as a testing phase before switching to a pure Proof of Stake protocol.
 
 The modeling approach is very similar to the one used for the Proof of Work Bitcoin protocol. Specifically, the Hybrid Casper protocol is represented in PRISM as the parallel composition of $n$ \texttt{Validator} modules, along with the modules \texttt{Vote\_Manager} and \texttt{Network}. The \texttt{Validator} module closely resembles the \texttt{Miner} module from the preceding protocol. The only module necessitating clarification is \texttt{Vote\_Manager}, responsible for storing tables containing votes for each checkpoint and computing associated rewards/penalties.
-The modeling language is reported in Listing \ref{ex5-code}.
-\AV{Riscrivere/sistemare codice}
+Part of the code is reported in Listing \ref{ex5-code}, the complete model can be found in \cite{repository}. 
+\AV{Change repository}
 \begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Choreographic language for the Hybrid Casper Protocol.},captionpos=b,label={ex5-code}]
 $\ldots$
 {
 PoS := Validator[i] -> Validator[i] :
 (+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"&&" " .
-		if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{
-			Validator[i] -> Network : (["1*1"] "(L[i]'=addBlock(L[i],b[i]))" && foreach(k!=i) "(set[k]'=addBlockSet(set[k],b[i]))"@Network .PoS)
-		}
-		else{
-			Validator[i] -> Vote_Manager :(["1*1"] " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS)
-		}
- +["hR*1"] " "&&" " . if "!isEmpty(set[i])"@Validator[i] then {
- 				  ["1"] "(b[i]'=extractBlock(set[i]))"@Validator[i] . if "!canBeInserted(L[i],b[i])"@Validator[i] then {
- 				  															PoS
- 				  											}
- 				  											else{
- 				  												Validator[i] -> Network : (["1*1"] "(setMiner[i]' = addBlockSet(setMiner[i] , b[i]))"&&"(set[i]' = removeBlock(set[i],b[i]))" . 
- 				  												if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then {
- 				  																 PoS
- 				  														}
- 				  														else{
- 				  	 															Validator[i] -> Vote_Manager : (["1*1"] " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS )
- 				  														})
- 				  											}
- 			}
- 			else{
- 				PoS
- 			}
- +["rC*1"] "(lastCheck[i]'=extractCheckpoint(listCheckpoints[i],lastCheck[i]))&(heightLast[i]'=getHeight(extractCheckpoint(listCheckpoints[i],lastCheck[i])))&(votes[i]'=calcVotes(Votes,extractCheckpoint(listCheckpoints[i],lastCheck[i])))"&&" " . if "(heightLast[i]=heightCheckpoint[i]+EpochSize)&(votes[i]>=2/3*tot_stake)"@Validator[i] then{
- 									if "(heightLast[i]=heightCheckpoint[i]+EpochSize)"@Validator[i] then{
- 										["1"] "(lastJ[i]'=b[i])&(L[i]'= updateHF(L[i],lastJ[i]))" @Validator[i].Validator[i]->Vote_Manager :(["1*1"]" "&&"(epoch'=height(lastF(L[i]))&(Stakes'=addVote(Votes,b[i],stake[i]))".PoS)
- 									}
- 									else{
- 										["1"] "(lastJ[i]'=b[i])"@Validator[i] . PoS
- 									}
- 								}
- 								else{
- 									PoS
- 								}
- 		)
- 								
+	if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{
+		$\ldots$
+	}
+	else{
+		Validator[i] -> Vote_Manager :(["1*1"] " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS)
+	}
+ +["hR*1"] " "&&" " . 
+ 	if "!isEmpty(set[i])"@Validator[i] then {
+ 		$\dots$
+ 	}
+ 	else{
+ 		PoS
+ 	}
+ +["rC*1"] $\ldots$							
 }
 
 \end{lstlisting}

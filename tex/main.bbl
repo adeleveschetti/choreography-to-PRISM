@@ -9,6 +9,9 @@
 \bibitem{PRISMdoc}
 Prism documentation. \url{https://www.prismmodelchecker.org/}, accessed: 2023-09-05
 
+\bibitem{repository}
+Repository. \url{https://github.com/adeleveschetti/choreography-to-PRISM/}, accessed: 2024-01-31
+
 \bibitem{DBLP:journals/concurrency/BistarelliNGLMV23}
 Bistarelli, S., Nicola, R.D., Galletta, L., Laneve, C., Mercanti, I., Veschetti, A.: Stochastic modeling and analysis of the bitcoin protocol in the presence of block communication delays. Concurr. Comput. Pract. Exp.  \textbf{35}(16) (2023). \doi{10.1002/cpe.6749}, \url{https://doi.org/10.1002/cpe.6749}
 
