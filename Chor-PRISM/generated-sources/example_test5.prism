@@ -1,35 +1,38 @@
  
 
-module Network2
-Network2 : [0..3] init 0;
+module P0
 
-[LDVRA] (Network2=0)  -> 1 :  (Network2'=1); 
-[ZIYKC] (Network2=0)  -> 1 :  (Network2'=2); 
+P0 : [0..1] init 0;
 
-[KPEXY] (Network2=1)  -> 1 : x'=2&(Network2'=0); 
+[LZDVV] (P0=0) -> lambda1 : (P0'=0);
+[LMXKP] (P0=0) -> lambda2 : (P0'=0);
 
-[VPFWF] (Network2=2)  -> 1 : x'=1&(Network2'=0); 
 endmodule
 
+module T0
 
-module Network3
-Network3 : [0..1] init 0;
+T0 : [0..1] init 0;
+
+[DVDPO] (T0=0) -> 1 : y'=1&(T0'=1);
+
 endmodule
 
+module R0
 
-module Network4
-Network4 : [0..1] init 0;
+R0 : [0..1] init 0;
 
-[KPEXY] (Network4=0)  -> 1 : y'=2&(Network4'=0); 
+[OPPFX] (R0=0) -> 1 : y'=2&(R0'=1);
+[DVDPO] (R0=0) -> lambda4 : x'=1&(R0'=1);
 
-[VPFWF] (Network4=0)  -> 1 : y'=1&(Network4'=0); 
 endmodule
 
+module Q0
 
-module Network1
-Network1 : [0..1] init 0;
+Q0 : [0..2] init 0;
 
-[LDVRA] (Network1=0)  -> 1 :  (Network1'=0); 
-[ZIYKC] (Network1=0)  -> 1 :  (Network1'=0); 
+[LZDVV] (Q0=0) -> 1 : (Q0'=1);
+[LMXKP] (Q0=0) -> 1 : (Q0'=1);
+[OPPFX] (Q0=1) -> lambda3 : x'=2&(Q0'=2);
+
 endmodule
 

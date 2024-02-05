@@ -1,33 +1,38 @@
  
 
 module Network2
+
 Network2 : [0..1] init 0;
 
-[ZXXBK] (Network2=0)  -> 1 :  (Network2'=0); 
-[ZCBUJ] (Network2=0)  -> 1 :  (Network2'=0); 
-endmodule
+[SAKRC] (Network2=0) -> 1 : (Network2'=0);
+[QXLRL] (Network2=0) -> 1 : (Network2'=0);
 
+endmodule
 
 module Network3
+
 Network3 : [0..1] init 0;
 
-[HQSYR] (Network3=0)  -> 1 : x'=1&(Network3'=0); 
-[WOWEU] (Network3=0)  -> 1 : x'=1&(Network3'=0); 
-endmodule
+[RBEVR] (Network3=0) -> 1 : x'=1&(Network3'=0);
+[EOFTV] (Network3=0) -> 1 : x'=1&(Network3'=0);
 
+endmodule
 
 module Network4
+
 Network4 : [0..1] init 0;
 
-[HQSYR] (Network4=0)  -> 1 : y'=1&(Network4'=0); 
-[WOWEU] (Network4=0)  -> 1 : y'=1&(Network4'=0); 
+[RBEVR] (Network4=0) -> 1 : y'=1&(Network4'=0);
+[EOFTV] (Network4=0) -> 1 : y'=1&(Network4'=0);
+
 endmodule
 
-
 module Network1
+
 Network1 : [0..1] init 0;
 
-[ZXXBK] (Network1=0)  -> 1 :  (Network1'=0); 
-[ZCBUJ] (Network1=0)  -> 1 :  (Network1'=0); 
+[SAKRC] (Network1=0) -> 1 : (Network1'=0);
+[QXLRL] (Network1=0) -> 1 : (Network1'=0);
+
 endmodule
 

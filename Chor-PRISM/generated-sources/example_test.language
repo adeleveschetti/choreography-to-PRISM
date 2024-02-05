@@ -1,6 +1,7 @@
 preamble
 
-" "
+"ctmc";
+" " 
 
 endpreamble
 
@@ -10,7 +11,9 @@ Network2 -> ;
 Network3 -> ;
 Network4 -> ;
 
+{
 Test :=
 	Network1 -> Network2 :
-	+["1*1"]  " "&&" " . Network2 -> Network3 :["1*1"]  " "&&" ".end
-	+["1*1"]  " "&&" " . Network2 -> Network4 :["1*1"]  " "&&" ".end
+	(+["1*1"]  " "&&" " . Network2 -> Network3 :(["1*1"]  " "&&" ".END)
+	+["1*1"]  " "&&" " . Network2 -> Network4 :(["1*1"]  " "&&" ".END))
+}

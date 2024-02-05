@@ -45,7 +45,7 @@ public class ProgramNode implements Node{
 				program = program + el2 + "\n";
 			}
 			program = program + "\nendmodule\n\n";
-			program = program.replaceAll("TBD", String.valueOf(((ModuleNode) el).getState()+1));
+			//program = program.replaceAll("TBD", String.valueOf(((ModuleNode) el).getMaxFinState()+1));
 		}
 		return program;
 	}

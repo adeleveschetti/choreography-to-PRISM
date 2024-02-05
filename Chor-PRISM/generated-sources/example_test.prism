@@ -1,39 +1,52 @@
  
 
 module Network2
-Network2 : [0..10] init 0;
 
+Network2 : [0..1] init 0;
 
-[JTBZW] (Network2=0)  -> 1 :  (Network2'=1); 
-[VOILT] (Network2=0)  -> 1 :  (Network2'=2); 
+[QTFJY] (Network2=0) -> 1 : (Network2'=0);
+[VNVOX] (Network2=0) -> 1 : (Network2'=0);
 
-[ZFBPI] (Network2=1)  -> 1 :  (Network2'=0); 
-
-[UBCDU] (Network2=2)  -> 1 :  (Network2'=0); 
 endmodule
-
 
 module Network3
-Network3 : [0..10] init 0;
 
+Network3 : [0..2] init 0;
 
-[ZFBPI] (Network3=0)  -> 1 :  (Network3'=0); 
+[QEVIP] (Network3=0) -> 1 : (Network3'=2);
+
 endmodule
-
 
 module Network4
-Network4 : [0..10] init 0;
 
+Network4 : [0..2] init 0;
 
-[UBCDU] (Network4=0)  -> 1 :  (Network4'=0); 
+[QEVIP] (Network4=0) -> 1 : (Network4'=2);
+
 endmodule
 
+module Network5
+
+Network5 : [0..2] init 0;
+
+[LSWLK] (Network5=0) -> 1 : (Network5'=2);
+
+endmodule
 
 module Network1
-Network1 : [0..10] init 0;
 
+Network1 : [0..1] init 0;
 
-[JTBZW] (Network1=0)  -> 1 :  (Network1'=0); 
-[VOILT] (Network1=0)  -> 1 :  (Network1'=0); 
+[QTFJY] (Network1=0) -> 1 : (Network1'=0);
+[VNVOX] (Network1=0) -> 1 : (Network1'=0);
+
+endmodule
+
+module Network6
+
+Network6 : [0..2] init 0;
+
+[LSWLK] (Network6=0) -> 1 : (Network6'=2);
+
 endmodule
 

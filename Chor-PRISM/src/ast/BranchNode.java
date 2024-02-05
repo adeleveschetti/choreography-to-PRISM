@@ -68,9 +68,8 @@ public class BranchNode implements Node{
 					sameRole = true;
 				}
 			}
-
+			boolean stateUsed = false;
 			if(!sameRole && (!isCtmc) || isCtmc) {
-
 				while(!firstLabel) {
 					String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 					StringBuilder salt = new StringBuilder();
@@ -94,7 +93,9 @@ public class BranchNode implements Node{
 					}
 				}
 			}
+			int checkStateUsed = -1;
 			int stateA = ((ModuleNode) mods.get(iA)).getValueRecursion(prot);
+
 			if(stateA == -1) {
 				stateA = ((ModuleNode) mods.get(iA)).getMaxState();
 				((ModuleNode) mods.get(iA)).setValueRecursion(prot,stateA);
@@ -104,23 +105,36 @@ public class BranchNode implements Node{
 
 				int stateTmpNew = ((ModuleNode) mods.get(iA)).getNewState(prot);
 
-				if(((ModuleNode) mods.get(iA)).getMaxValueRecursion(prot)<=stateTmpNew && ((ModuleNode) mods.get(iA)).getNewState(prot)!=-1) {
-
-					stateA = stateTmpNew;
-					((ModuleNode) mods.get(iA)).setValueRecursion(prot,stateA);
-					((ModuleNode) mods.get(iA)).removeNewState(prot);
-
-					
+				//if(((ModuleNode) mods.get(iA)).getMaxValueRecursion(prot)<=stateTmpNew && ((ModuleNode) mods.get(iA)).getNewState(prot)!=-1) {
+				if(((ModuleNode) mods.get(iA)).getLastState()==-1) {
+					if(stateTmpNew!=-1) {
+						stateA = stateTmpNew;
+					}
+					else {
+						stateA = ((ModuleNode) mods.get(iA)).getMaxValueRecursion(prot)+1;
+					}
+					checkStateUsed = stateA;
+					((ModuleNode) mods.get(iA)).setLastState(stateA);
 				}
+
 				else {
+					if(((ModuleNode) mods.get(iA)).getMaxValueRecursion(prot)<((ModuleNode) mods.get(iA)).getNewState(prot)) {
+						stateA = ((ModuleNode) mods.get(iA)).getNewState(prot);
+						stateA++;
+						while((stateA)>=((ModuleNode) mods.get(iA)).getNewState(prot)) {
+							((ModuleNode) mods.get(iA)).removeNewState(prot);
 
-					stateA = ((ModuleNode) mods.get(iA)).getMaxValueRecursion(prot);
+						}
 
+					}
+					else {
+
+						stateA = ((ModuleNode) mods.get(iA)).getMaxValueRecursion(prot);
+					}
 				}
+
 
 			}
-
-
 			if(isCtmc && k==0) {
 				stateCtmc = stateA;
 			}
@@ -137,6 +151,7 @@ public class BranchNode implements Node{
 					ifte = true;
 				}
 			}
+
 			if(statementA == null && (isCtmc || sameRole)) {
 				if(isCtmc ) {
 					if(rates.size()>1) {
@@ -157,6 +172,7 @@ public class BranchNode implements Node{
 			else if(statementA == null && !isCtmc) {
 				statementA = "[] (" + roleTmp + "=" + stateA + ") -> " ;
 				stAprob = "[" + label + "] (" + roleTmp + "="  ;
+
 			}
 			else if(statementA!=null && !isCtmc){
 				if(!sameRole) {
@@ -165,8 +181,16 @@ public class BranchNode implements Node{
 				if(!ifte) {
 					statementA = statementA  + " + ";
 				}
-			}
 
+			}
+			String tmpStr = roleTmp+"=";
+			int indexTmp = statementA.indexOf(tmpStr);
+			int stateNewA = Character.getNumericValue(statementA.charAt(indexTmp+tmpStr.length()))+1;
+
+			if(stateNewA == checkStateUsed) {
+				((ModuleNode) mods.get(iA)).removeNewState(prot);
+
+			}
 			statementA = statementA + rateA + " : ";
 
 			String upA = "";
@@ -178,7 +202,6 @@ public class BranchNode implements Node{
 
 				}
 			}
-
 			boolean roleAContained = false;
 			for(String tmp : statements.get(k).getRoles()) {
 				if(roleTmp.equals(funs.changeIndex(tmp,index,maxIndex))) {
@@ -196,9 +219,9 @@ public class BranchNode implements Node{
 					stateA = stateA + k +1;
 				}
 				else {
+
 					allA.add(stateA);
 					stateA = stateRec;
-
 				}
 
 			}
@@ -207,10 +230,24 @@ public class BranchNode implements Node{
 				stateA = ((ModuleNode) mods.get(iA)).getMaxState() + k+1;
 				allA.add(((ModuleNode) mods.get(iA)).getMaxState()+k+1);
 			}
+			if(statements.get(k) instanceof EndNode || statements.get(k) instanceof RecNode) {
+				((ModuleNode) mods.get(iA)).setLastState(-1);
+			}
 			if(isCtmc || sameRole) {
 
-				statementA = statementA + upA + "(" + roleTmp + "'=" + stateA +")";
-				System.out.println(stateA);
+				statementA = statementA + upA + "(" + roleTmp + "'=" ;
+				if(statements.get(k) instanceof EndNode) {
+					statementA = statementA + "TBD" ;
+					allA.add(stateA+1);
+				}
+				if(!(statements.get(k) instanceof RecNode)) {
+					stateA = stateA + 1 ;
+				}
+
+				statementA = statementA + stateA;
+				allA.add(stateA);
+
+				statementA = statementA +")";
 
 			}
 
@@ -218,8 +255,8 @@ public class BranchNode implements Node{
 
 				statementA = statementA + "(" + roleTmp + "'=" + (stateA) +")";
 				if(statements.get(k) instanceof EndNode) {
-					stAprob = stAprob + (stateA) + ") -> 1 : " + upA + "(" + roleTmp + "'=" + (stateA) +")";
-					allA.add(stateA);
+					stAprob = stAprob + (stateA) + ") -> 1 : " + upA + "(" + roleTmp + "'=" + "TBD" +")";
+					allA.add(stateA+1);
 
 				}
 				else {
@@ -345,15 +382,24 @@ public class BranchNode implements Node{
 
 					}
 					if(isCtmc ) {
-						statementB = statementB + upB + "(" + outRolesTmp.get(kk) + "'=" + stateB +")";
+						statementB = statementB + upB + "(" + outRolesTmp.get(kk) + "'=" ;
+						if(statements.get(k) instanceof EndNode) {
+							statementB = statementB + "TBD" ;
+							allB.add(stateB+1);
+
+						}
+						else {
+							statementB = statementB + stateB;
+						}
+						statementB = statementB +")";
 					}
 
 					else {
 
 						statementB = statementB + "(" + outRolesTmp.get(kk) + "'=" + (stateB) +")";
 						if(statements.get(k) instanceof EndNode) {
-							stBprob = stBprob + (stateB) + ") -> 1 : " + upB + "(" + outRolesTmp.get(kk) + "'=" + (stateB) +")";
-							allB.add(stateB);
+							stBprob = stBprob + (stateB) + ") -> 1 : " + upB + "(" + outRolesTmp.get(kk) + "'=" + "TBD" +")";
+							allB.add(stateB+1);
 
 						}
 						else {
@@ -364,6 +410,7 @@ public class BranchNode implements Node{
 						stateB = stateB  + 1;
 
 					}
+
 					if(isCtmc || k==rates.size()-1) {
 						((ModuleNode) mods.get(iB)).addCommand(statementB+";");
 					}
@@ -380,8 +427,6 @@ public class BranchNode implements Node{
 						((ModuleNode) mods.get(iB)).setNewState(prot, el);
 
 					}
-
-
 				}
 
 			}

@@ -1,16 +1,19 @@
 preamble
 
+"ctmc";
 " "
 
 endpreamble
 
 n = 1;
-Network1 -> ;
-Network2 -> ;
-Network3 -> ;
-Network4 -> ;
+P0 -> ;
+Q0 -> ;
+R0 -> ;
+T0 -> ;
 
-Test :=
-	Network1 -> Network2 :
-	+["1*1"]  " "&&" " . Network2 -> Network4 :["1*1"]  "x'=2"&&"y'=2".Test
-	+["1*1"]  " "&&" " . Network2 -> Network4 :["1*1"]  "x'=1"&&"y'=1".Test
+{
+PoW := P0 -> Q0 :(
+	+["lambda1*1"]  " "&&" " . Q0 -> R0 :(["lambda3*1"]  "x'=2"&&"y'=2".END)
+	+["lambda2*1"]  " "&&" " . R0 -> T0 :(["lambda4*1"]  "x'=1"&&"y'=1".END)
+	)
+}

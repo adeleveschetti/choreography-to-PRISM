@@ -18,10 +18,10 @@ public class IfThenElseNode implements Node {
 		thenStat = then;
 		elseStat = elseS;
 	}
-	
+
 	@Override
 	public ArrayList<String> getRoles(){
-		
+
 		return roles;
 	}
 
@@ -45,23 +45,61 @@ public class IfThenElseNode implements Node {
 			for(Node el2 : mods) {
 				if(el2.toPrint().equals(rolesTmp.get(i))) {
 					int state = ((ModuleNode) el2).getValueRecursion(prot);
-					
+
+
 					if(state == -1) {
 						state = ((ModuleNode) el2).getMaxState();
 						((ModuleNode) el2).setValueRecursion(prot,state);
 					}
 					else {
-						if(((ModuleNode) el2).getMaxValueRecursion(prot)<=((ModuleNode) el2).getNewState(prot) && ((ModuleNode) el2).getNewState(prot)!=-1) {
+
+						if(((ModuleNode) el2).getLastState()==-1) {
 							state = ((ModuleNode) el2).getNewState(prot);
+
+							String tmp = rolesTmp.get(i)+"=";
+							String tmpStm = tmp + (state-1);
+							int indexCont = -1;
+							boolean flag = false;
+							for(String stm :  ((ModuleNode) el2).getCommands()) {
+								if(stm.contains(tmpStm)) {
+									flag = true;
+								}
+							}
+							if(!flag) {state--;}
+							else {
+								((ModuleNode) el2).removeNewState(prot);
+							}
 							((ModuleNode) el2).setValueRecursion(prot,state);
-							((ModuleNode) el2).removeNewState(prot);
+
 						}
 						else {
-							state = ((ModuleNode) el2).getMaxValueRecursion(prot);
+							if(((ModuleNode) el2).getMaxValueRecursion(prot)<((ModuleNode) el2).getNewState(prot)) {
+								state = ((ModuleNode) el2).getNewState(prot);
+								if(state==1) {state = state + 1;}
+								while((state-1)>=((ModuleNode) el2).getNewState(prot)) {
+									((ModuleNode) el2).removeNewState(prot);
+								}
+
+							}
+							else {
+
+								state = ((ModuleNode) el2).getMaxValueRecursion(prot);
+
+							}
+
+						}
+
+
+					}
+					String tmp = rolesTmp.get(i)+"=";
+					String tmpStm = tmp + state;
+					int indexCont = -1;
+					for(String stm :  ((ModuleNode) el2).getCommands()) {
+						if(stm.contains(tmpStm)) {
+							state++;
+							tmpStm = tmp + state;
 						}
 					}
-					((ModuleNode) el2).setNewState(prot, state);
-
 					String stat = "";
 					boolean ifte = false;
 					for(String comms : ((ModuleNode) el2).getCommands()) {
@@ -82,11 +120,12 @@ public class IfThenElseNode implements Node {
 					if(!ifte) {
 						stat = "[] (" + rolesTmp.get(i) + "=" +  state + ")" ;
 					}
+					int indexTmp = stat.indexOf(tmp);
 					String statTmp = stat;
 
 					stat = stat + "&"+condsTmp.get(i) + " -> " ;
 
-					if(thenStat instanceof RecNode){
+					/*if(thenStat instanceof RecNode){
 
 						int stateRec = ((ModuleNode) el2).getValueRecursion(thenStat.toPrint());
 						if(stateRec == -1) {
@@ -98,16 +137,28 @@ public class IfThenElseNode implements Node {
 							state = stateRec;
 						}
 
+					}*/
+					String statNew = "";
+
+					int stateNew = Character.getNumericValue(stat.charAt(indexTmp+tmp.length()))+1;
+					if(stateNew<=((ModuleNode) el2).getMaxFinState()) {
+
+						stateNew = ((ModuleNode) el2).getMaxFinState() + 1;
+
 					}
-					
-					if(thenStat instanceof RecNode || thenStat instanceof EndNode) {
-						stat = stat + "(" + rolesTmp.get(i) + "'=" + state + ");"; 
+					if(thenStat instanceof RecNode) {
+						stateNew = ((ModuleNode) el2).getValueRecursion(thenStat.toPrint());
 					}
-					
-					else {
-						stat = stat + "IFTE";
+					if(thenStat instanceof EndNode || stateNew == -1) {
+						stat = stat + "(" + rolesTmp.get(i) + "'=" + "TBD" + ");"; 
 					}
 
+					else {
+						stat = stat + "1 : (" + rolesTmp.get(i) + "'=" + stateNew + ");"; 
+						if(!(thenStat instanceof RecNode) ){
+							statNew = "[] (" + rolesTmp.get(i) + "=" +  stateNew + ") -> " + "IFTE";
+						}
+					}
 					Iterator<String> itr = ((ModuleNode) el2).getCommands().iterator();
 					while (itr.hasNext()) {
 						String comms = itr.next();
@@ -115,36 +166,53 @@ public class IfThenElseNode implements Node {
 							itr.remove();
 						}
 					}
-
+					if(thenStat instanceof IfThenElseNode) {
+						((ModuleNode) el2).setNewStateIndex(prot, stateNew,0);
+					}
+					else {
+						((ModuleNode) el2).setNewState(prot, stateNew);
+					}
+					((ModuleNode) el2).addCommand(statNew);
 					((ModuleNode) el2).addCommand(stat);
+					if(thenStat instanceof EndNode || thenStat instanceof RecNode) {
+						((ModuleNode) el2).setLastState(-1);
+					}
 					thenStat.generateCode(mods,index,maxIndex,isCtmc,labels,prot);
-					
+
 					if(!ifte2) {
 						stat2 = "[] (" + rolesTmp.get(i) + "=" +  state + ")" ;
+
 					}
+
+					String tmp2 = rolesTmp.get(i)+"=";
+					int indexTmp2 = stat2.indexOf(tmp);
 					String statTmp2 = stat2;
 					stat2 = stat2 + "&!"+condsTmp.get(i) + " -> " ;
 
-					if(elseStat instanceof RecNode){
-
-						int stateRec = ((ModuleNode) el2).getValueRecursion(elseStat.toPrint());
-						if(stateRec == -1) {
-
-							((ModuleNode) el2).setValueRecursion(elseStat.toPrint(),state+1);
-							state = state + 1 ;
-						}
-						else {
-							state = stateRec;
-						}
+					String statNew2 = "";
+					int stateNew2 = Character.getNumericValue(stat2.charAt(indexTmp2+tmp2.length()))+1;
+					if(stateNew2<=((ModuleNode) el2).getMaxFinState()) {
+						stateNew2 = ((ModuleNode) el2).getMaxFinState() + 1;
 					}
-					
-					if(elseStat instanceof RecNode || elseStat instanceof EndNode) {
-						stat2 = stat2 + "1 : (" + rolesTmp.get(i) + "'=" + state + ");"; //TOBECHANGED
+					if(stateNew2==stateNew) {
+						stateNew2++;
+					}
+					if(elseStat instanceof EndNode || elseStat instanceof RecNode) {
+						((ModuleNode) el2).setLastState(-1);
+					}
+					if(elseStat instanceof RecNode) {
+						stateNew2 = ((ModuleNode) el2).getValueRecursion(elseStat.toPrint());
+					}
+					if(elseStat instanceof EndNode || stateNew2 == -1) {
+						stat2 = stat2 + "1 : (" + rolesTmp.get(i) + "'=" + "TBD" + ");"; 
 					}
 					else {
-						stat2 = stat2 + "IFTE";
+						stat2 = stat2 + "1 : (" + rolesTmp.get(i) + "'=" + stateNew2 + ");"; 
+						if(!(elseStat instanceof RecNode) ){
+							statNew2 = "[] (" + rolesTmp.get(i) + "=" +  stateNew2 + ") -> " + "IFTE";
+						}
 					}
-										
+
 					Iterator<String> itr2 = ((ModuleNode) el2).getCommands().iterator();
 					while (itr2.hasNext()) {
 						String comms = itr2.next();
@@ -152,7 +220,17 @@ public class IfThenElseNode implements Node {
 							itr.remove();
 						}
 					}
+
+					//((ModuleNode) el2).setNewState(prot, state);
+					if(elseStat instanceof IfThenElseNode) {
+						((ModuleNode) el2).setNewStateIndex(prot, stateNew2,0);
+					}
+					else {
+						((ModuleNode) el2).setNewState(prot, stateNew2);
+					}
+
 					((ModuleNode) el2).addCommand(stat2);
+					((ModuleNode) el2).addCommand(statNew2);
 					elseStat.generateCode(mods,index,maxIndex,isCtmc,labels,prot);
 
 				}

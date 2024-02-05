@@ -6,119 +6,129 @@ const double lambda= mu/N;
 
 module Server
 
-Server : [0..1] init 0;
+Server : [0..6] init 0;
 a : [0..1];
 
-[CBDIP] (Server=0) -> 1 : (Server'=2);
-[] (Server=0)&(a=0) -> gamma : (Server'=0) + gamma : (Server'=1);
-[ADSWJ] (Server=1) -> 1 : (a'=1)&(Server'=3);
-[] (Server=0) -> mu : (Server'=0);
-[RTLJB] (Server=0) -> 1 : (a'=0)&(Server'=1);
-[] (Server=0)&!(a=0) -> mu : (Server'=0);
-[SSTBW] (Server=0) -> 1 : (Server'=1);
-[VMWBC] (Server=0) -> 1 : (Server'=2);
-[] (Server=0)&(a=0) -> gamma : (Server'=0) + gamma : (Server'=1);
-[SFXDZ] (Server=1) -> 1 : (a'=1)&(Server'=3);
-[] (Server=0) -> mu : (Server'=0);
-[TIHUW] (Server=0) -> 1 : (a'=0)&(Server'=1);
-[] (Server=0)&!(a=0) -> mu : (Server'=0);
-[NFQEN] (Server=0) -> 1 : (Server'=1);
-[KZYOZ] (Server=0) -> 1 : (Server'=2);
-[] (Server=0)&(a=0) -> gamma : (Server'=0) + gamma : (Server'=1);
-[PLXCN] (Server=1) -> 1 : (a'=1)&(Server'=3);
-[] (Server=0) -> mu : (Server'=0);
-[YUDVO] (Server=0) -> 1 : (a'=0)&(Server'=1);
-[] (Server=0)&!(a=0) -> mu : (Server'=0);
-[SKNCM] (Server=0) -> 1 : (Server'=1);
-[KJQMC] (Server=0) -> 1 : (Server'=2);
-[] (Server=0)&(a=0) -> gamma : (Server'=0) + gamma : (Server'=1);
-[MQGEN] (Server=1) -> 1 : (a'=1)&(Server'=3);
-[] (Server=0) -> mu : (Server'=0);
-[KXBZQ] (Server=0) -> 1 : (a'=0)&(Server'=1);
-[] (Server=0)&!(a=0) -> mu : (Server'=0);
-[VEEVZ] (Server=0) -> 1 : (Server'=1);
-[FLOGI] (Server=0) -> 1 : (Server'=2);
-[] (Server=0)&(a=0) -> gamma : (Server'=0) + gamma : (Server'=1);
-[KWSOB] (Server=1) -> 1 : (a'=1)&(Server'=3);
-[] (Server=0) -> mu : (Server'=0);
-[PDGPR] (Server=0) -> 1 : (a'=0)&(Server'=1);
-[] (Server=0)&!(a=0) -> mu : (Server'=0);
-[CHKTK] (Server=0) -> 1 : (Server'=1);
+[] (Server=0)&(a=0) -> 1 : (Server'=1);
+[FFAAC] (Server=0) -> 1 : (Server'=2);
+[] (Server=1) -> gamma : (Server'=0) + gamma : (Server'=3);
+[TMNSK] (Server=3) -> 1 : (a'=1)&(Server'=5);
+[] (Server=1) -> mu : (Server'=0);
+[JZNVY] (Server=0) -> 1 : (a'=0)&(Server'=1);
+[] (Server=0)&!(a=0) -> 1 : (Server'=2);
+[] (Server=2) -> mu : (Server'=0);
+[QWTPY] (Server=0) -> 1 : (Server'=1);
+[] (Server=1)&(a=0) -> 1 : (Server'=2);
+[OTHQM] (Server=0) -> 1 : (Server'=2);
+[] (Server=2) -> gamma : (Server'=0) + gamma : (Server'=3);
+[UPXOZ] (Server=3) -> 1 : (a'=1)&(Server'=5);
+[] (Server=1) -> mu : (Server'=0);
+[GJMUJ] (Server=0) -> 1 : (a'=0)&(Server'=1);
+[] (Server=1)&!(a=0) -> 1 : (Server'=3);
+[] (Server=3) -> mu : (Server'=0);
+[BYEKF] (Server=0) -> 1 : (Server'=1);
+[] (Server=1)&(a=0) -> 1 : (Server'=2);
+[PBBNA] (Server=0) -> 1 : (Server'=2);
+[] (Server=2) -> gamma : (Server'=0) + gamma : (Server'=3);
+[VWCRB] (Server=3) -> 1 : (a'=1)&(Server'=5);
+[] (Server=1) -> mu : (Server'=0);
+[ABMHB] (Server=0) -> 1 : (a'=0)&(Server'=1);
+[] (Server=1)&!(a=0) -> 1 : (Server'=3);
+[] (Server=3) -> mu : (Server'=0);
+[IRWOR] (Server=0) -> 1 : (Server'=1);
+[] (Server=1)&(a=0) -> 1 : (Server'=2);
+[EULQX] (Server=0) -> 1 : (Server'=2);
+[] (Server=2) -> gamma : (Server'=0) + gamma : (Server'=3);
+[AKNWA] (Server=3) -> 1 : (a'=1)&(Server'=5);
+[] (Server=1) -> mu : (Server'=0);
+[NIOYE] (Server=0) -> 1 : (a'=0)&(Server'=1);
+[] (Server=1)&!(a=0) -> 1 : (Server'=3);
+[] (Server=3) -> mu : (Server'=0);
+[AZMRM] (Server=0) -> 1 : (Server'=1);
+[] (Server=1)&(a=0) -> 1 : (Server'=2);
+[OOUZL] (Server=0) -> 1 : (Server'=2);
+[] (Server=2) -> gamma : (Server'=0) + gamma : (Server'=3);
+[POZHH] (Server=3) -> 1 : (a'=1)&(Server'=5);
+[] (Server=1) -> mu : (Server'=0);
+[SYJKB] (Server=0) -> 1 : (a'=0)&(Server'=1);
+[] (Server=1)&!(a=0) -> 1 : (Server'=3);
+[] (Server=3) -> mu : (Server'=0);
+[CRXGG] (Server=0) -> 1 : (Server'=1);
 
 endmodule
 
 module Station1
 
-Station1 : [0..1] init 0;
+Station1 : [0..4] init 0;
 s1 : [0..1];
 
-[CBDIP] (Station1=0) -> 1 : (s1'=0)&(Station1'=2);
-[] (Station1=2) -> lambda : (Station1'=3);
-[ADSWJ] (Station1=3) -> 1 : (s1'=1)&(Station1'=5);
-[] (Station1=5) -> 1 : (Station1'=0);
-[RTLJB] (Station1=0) -> 1 : (s1'=0)&(Station1'=1);
-[] (Station1=5) -> 1 : (Station1'=0);
-[SSTBW] (Station1=0) -> 1 : (s1'=0)&(Station1'=1);
+[FFAAC] (Station1=0) -> 1 : (s1'=0)&(Station1'=2);
+[] (Station1=0) -> lambda : (Station1'=1);
+[TMNSK] (Station1=1) -> 1 : (s1'=1)&(Station1'=3);
+[] (Station1=2) -> 1 : (Station1'=0);
+[JZNVY] (Station1=0) -> 1 : (s1'=0)&(Station1'=1);
+[] (Station1=2) -> 1 : (Station1'=0);
+[QWTPY] (Station1=0) -> 1 : (s1'=0)&(Station1'=1);
 
 endmodule
 
 module Station2
 
-Station2 : [0..1] init 0;
+Station2 : [0..4] init 0;
 s2 : [0..1];
 
-[VMWBC] (Station2=0) -> 1 : (s2'=0)&(Station2'=2);
-[] (Station2=2) -> lambda : (Station2'=3);
-[SFXDZ] (Station2=3) -> 1 : (s2'=1)&(Station2'=5);
-[] (Station2=5) -> 1 : (Station2'=0);
-[TIHUW] (Station2=0) -> 1 : (s2'=0)&(Station2'=1);
-[] (Station2=5) -> 1 : (Station2'=0);
-[NFQEN] (Station2=0) -> 1 : (s2'=0)&(Station2'=1);
+[OTHQM] (Station2=0) -> 1 : (s2'=0)&(Station2'=2);
+[] (Station2=0) -> lambda : (Station2'=1);
+[UPXOZ] (Station2=1) -> 1 : (s2'=1)&(Station2'=3);
+[] (Station2=2) -> 1 : (Station2'=0);
+[GJMUJ] (Station2=0) -> 1 : (s2'=0)&(Station2'=1);
+[] (Station2=2) -> 1 : (Station2'=0);
+[BYEKF] (Station2=0) -> 1 : (s2'=0)&(Station2'=1);
 
 endmodule
 
 module Station3
 
-Station3 : [0..1] init 0;
+Station3 : [0..4] init 0;
 s3 : [0..1];
 
-[KZYOZ] (Station3=0) -> 1 : (s3'=0)&(Station3'=2);
-[] (Station3=2) -> lambda : (Station3'=3);
-[PLXCN] (Station3=3) -> 1 : (s3'=1)&(Station3'=5);
-[] (Station3=5) -> 1 : (Station3'=0);
-[YUDVO] (Station3=0) -> 1 : (s3'=0)&(Station3'=1);
-[] (Station3=5) -> 1 : (Station3'=0);
-[SKNCM] (Station3=0) -> 1 : (s3'=0)&(Station3'=1);
+[PBBNA] (Station3=0) -> 1 : (s3'=0)&(Station3'=2);
+[] (Station3=0) -> lambda : (Station3'=1);
+[VWCRB] (Station3=1) -> 1 : (s3'=1)&(Station3'=3);
+[] (Station3=2) -> 1 : (Station3'=0);
+[ABMHB] (Station3=0) -> 1 : (s3'=0)&(Station3'=1);
+[] (Station3=2) -> 1 : (Station3'=0);
+[IRWOR] (Station3=0) -> 1 : (s3'=0)&(Station3'=1);
 
 endmodule
 
 module Station4
 
-Station4 : [0..1] init 0;
+Station4 : [0..4] init 0;
 s4 : [0..1];
 
-[KJQMC] (Station4=0) -> 1 : (s4'=0)&(Station4'=2);
-[] (Station4=2) -> lambda : (Station4'=3);
-[MQGEN] (Station4=3) -> 1 : (s4'=1)&(Station4'=5);
-[] (Station4=5) -> 1 : (Station4'=0);
-[KXBZQ] (Station4=0) -> 1 : (s4'=0)&(Station4'=1);
-[] (Station4=5) -> 1 : (Station4'=0);
-[VEEVZ] (Station4=0) -> 1 : (s4'=0)&(Station4'=1);
+[EULQX] (Station4=0) -> 1 : (s4'=0)&(Station4'=2);
+[] (Station4=0) -> lambda : (Station4'=1);
+[AKNWA] (Station4=1) -> 1 : (s4'=1)&(Station4'=3);
+[] (Station4=2) -> 1 : (Station4'=0);
+[NIOYE] (Station4=0) -> 1 : (s4'=0)&(Station4'=1);
+[] (Station4=2) -> 1 : (Station4'=0);
+[AZMRM] (Station4=0) -> 1 : (s4'=0)&(Station4'=1);
 
 endmodule
 
 module Station5
 
-Station5 : [0..1] init 0;
+Station5 : [0..4] init 0;
 s5 : [0..1];
 
-[FLOGI] (Station5=0) -> 1 : (s5'=0)&(Station5'=2);
-[] (Station5=2) -> lambda : (Station5'=3);
-[KWSOB] (Station5=3) -> 1 : (s5'=1)&(Station5'=5);
-[] (Station5=5) -> 1 : (Station5'=0);
-[PDGPR] (Station5=0) -> 1 : (s5'=0)&(Station5'=1);
-[] (Station5=5) -> 1 : (Station5'=0);
-[CHKTK] (Station5=0) -> 1 : (s5'=0)&(Station5'=1);
+[OOUZL] (Station5=0) -> 1 : (s5'=0)&(Station5'=2);
+[] (Station5=0) -> lambda : (Station5'=1);
+[POZHH] (Station5=1) -> 1 : (s5'=1)&(Station5'=3);
+[] (Station5=2) -> 1 : (Station5'=0);
+[SYJKB] (Station5=0) -> 1 : (s5'=0)&(Station5'=1);
+[] (Station5=2) -> 1 : (Station5'=0);
+[CRXGG] (Station5=0) -> 1 : (s5'=0)&(Station5'=1);
 
 endmodule
 

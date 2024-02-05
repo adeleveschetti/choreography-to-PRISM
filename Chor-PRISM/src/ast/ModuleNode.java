@@ -12,7 +12,9 @@ public class ModuleNode implements Node{
 	private ArrayList<String> commands = new ArrayList<String>();
 	private ArrayList<Pair<String,ArrayList<Integer>>> recursions = new ArrayList<Pair<String,ArrayList<Integer>>>();
 	private ArrayList<Pair<String,ArrayList<Integer>>> notUsedRecursions = new ArrayList<Pair<String,ArrayList<Integer>>>();
-
+	private int lastState = -1;
+	
+	
 	public ModuleNode(String _name, ArrayList<String> _vars) {
 		name = _name;
 		vars = _vars;
@@ -32,7 +34,13 @@ public class ModuleNode implements Node{
 		return maxState;
 	}
 
-
+	public int getLastState() {
+		return lastState;
+	}
+	
+	public void setLastState(int val) {
+		lastState = val;
+	}
 
 	public int getValueRecursion(String rec) {
 
@@ -80,7 +88,7 @@ public class ModuleNode implements Node{
 		}
 		return max;
 	}
-	
+
 	public int getMinNewStates(String rec) {
 		int min = -1;
 		for(Pair<String,ArrayList<Integer>> el : notUsedRecursions) {
@@ -119,6 +127,26 @@ public class ModuleNode implements Node{
 		}
 	}
 
+	public void removeState(String rec, int _state) {
+		int indexState = -1;
+		for(Pair<String,ArrayList<Integer>> el : notUsedRecursions) {
+			if(el.getFirst().equals(rec)) {
+				for(int i=0; i<el.getSecond().size(); i++) {
+					if(el.getSecond().get(i)==_state) {
+						indexState = i;
+					}
+				}
+			}
+		}
+		if(indexState!=-1) {
+			for(Pair<String,ArrayList<Integer>> el : notUsedRecursions) {
+				if(el.getFirst().equals(rec)) {
+					el.getSecond().remove(indexState);
+				}
+			}
+		}
+	}
+
 	public void setNewState(String rec, int state) {
 		boolean found = false;
 		for(Pair<String,ArrayList<Integer>> el : notUsedRecursions) {
@@ -130,7 +158,7 @@ public class ModuleNode implements Node{
 					el.setSecond(tmp) ;
 				}
 				else {
-					
+
 					if(!el.getSecond().contains(state)) {
 						el.getSecond().add(state);
 					}
@@ -197,8 +225,23 @@ public class ModuleNode implements Node{
 		return name;
 	}
 
-	public int getState() {
-		return state;
+	public int getMaxFinState() {
+		int maxState = 0;
+		for(Pair<String,ArrayList<Integer>> pair : recursions) {
+			for(int i : pair.getSecond()) {
+				if(i>=maxState) {
+					maxState = i;
+				}
+			}
+		}
+		for(Pair<String,ArrayList<Integer>> pair : notUsedRecursions) {
+			for(int i : pair.getSecond()) {
+				if(i>=maxState) {
+					maxState = i;
+				}
+			}
+		}
+		return maxState;
 	}
 
 	public void setState() {

@@ -39,8 +39,7 @@ PoS := Validator[i] -> Validator[i] :
 			Validator[i] -> Vote_Manager :(["1*1"] " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS)
 		}
  +["hR*1"] " "&&" " . if "!isEmpty(set[i])"@Validator[i] then {
- 				  ["1"] "(b[i]'=extractBlock(set[i]))"@Validator[i] . 
- 				  if "!canBeInserted(L[i],b[i])"@Validator[i] then {
+ 				  ["1"] "(b[i]'=extractBlock(set[i]))"@Validator[i] . if "!canBeInserted(L[i],b[i])"@Validator[i] then {
  				  															PoS
  				  											}
  				  											else{

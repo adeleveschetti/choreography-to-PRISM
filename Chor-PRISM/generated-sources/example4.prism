@@ -2,7 +2,7 @@ dtmc
 
 module Dice
 
-Dice : [0..1] init 0;
+Dice : [0..11] init 0;
 d : [0..6] init 0;
 
 [] (Dice=0) -> 0.5 : (Dice'=1) + 0.5 : (Dice'=2);
@@ -12,7 +12,7 @@ d : [0..6] init 0;
 [] (Dice=2) -> 0.5 : (Dice'=7) + 0.5 : (Dice'=8);
 [] (Dice=7) -> 0.5 : (Dice'=2) + 0.5 : (d'=4)&(Dice'=6);
 [] (Dice=8) -> 0.5 : (d'=5)&(Dice'=6) + 0.5 : (d'=6)&(Dice'=6);
-[] (Dice=6) -> 1 : (Dice'=9);
+[] (Dice=6) -> 1 : (Dice'=11);
 
 endmodule
 
