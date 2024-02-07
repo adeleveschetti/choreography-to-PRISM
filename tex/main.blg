@@ -11,7 +11,7 @@ Warning--to sort, need author or key in ANTLR
 Warning--to sort, need author or key in repository
 You've used 8 entries,
             2850 wiz_defined-function locations,
-            647 strings with 5856 characters,
+            647 strings with 5845 characters,
 and the built_in function-call counts, 3090 in all, are:
 = -- 228
 > -- 83

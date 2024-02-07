@@ -318,7 +318,6 @@ We now present the Hybrid Casper Protocol as modeled in PRISM, as detailed in \c
 
 The modeling approach is very similar to the one used for the Proof of Work Bitcoin protocol. Specifically, the Hybrid Casper protocol is represented in PRISM as the parallel composition of $n$ \texttt{Validator} modules, along with the modules \texttt{Vote\_Manager} and \texttt{Network}. The \texttt{Validator} module closely resembles the \texttt{Miner} module from the preceding protocol. The only module necessitating clarification is \texttt{Vote\_Manager}, responsible for storing tables containing votes for each checkpoint and computing associated rewards/penalties.
 Part of the code is reported in Listing \ref{ex5-code}, the complete model can be found in \cite{repository}. 
-\AV{Change repository}
 \begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Choreographic language for the Hybrid Casper Protocol.},captionpos=b,label={ex5-code}]
 $\ldots$
 {
