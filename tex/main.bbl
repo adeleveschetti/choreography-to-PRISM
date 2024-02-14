@@ -7,24 +7,37 @@
 {ANTLR} - another tool for language recognition. \url{https://www.antlr.org/}
 
 \bibitem{PRISMdoc}
-Prism documentation. \url{https://www.prismmodelchecker.org/}, accessed: 2023-09-05
+Prism documentation. \url{https://www.prismmodelchecker.org/}, accessed:
+  2023-09-05
 
 \bibitem{repository}
-Repository. \url{https://github.com/adeleveschetti/ChoreoPRISM}, accessed: 2024-01-31
+Repository. \url{https://github.com/adeleveschetti/ChoreoPRISM}, accessed:
+  2024-01-31
 
 \bibitem{DBLP:journals/concurrency/BistarelliNGLMV23}
-Bistarelli, S., Nicola, R.D., Galletta, L., Laneve, C., Mercanti, I., Veschetti, A.: Stochastic modeling and analysis of the bitcoin protocol in the presence of block communication delays. Concurr. Comput. Pract. Exp.  \textbf{35}(16) (2023). \doi{10.1002/cpe.6749}, \url{https://doi.org/10.1002/cpe.6749}
+Bistarelli, S., Nicola, R.D., Galletta, L., Laneve, C., Mercanti, I.,
+  Veschetti, A.: Stochastic modeling and analysis of the bitcoin protocol in
+  the presence of block communication delays. Concurr. Comput. Pract. Exp.
+  \textbf{35}(16) (2023). \doi{10.1002/cpe.6749},
+  \url{https://doi.org/10.1002/cpe.6749}
 
 \bibitem{ethereum}
-Buterin, V.: Ethereum white paper. \url{https://github.com/ethereum/wiki/wiki/White-Paper} (2013)
+Buterin, V.: Ethereum white paper.
+  \url{https://github.com/ethereum/wiki/wiki/White-Paper} (2013)
 
 \bibitem{DBLP:journals/distribledger/GallettaLMV23}
-Galletta, L., Laneve, C., Mercanti, I., Veschetti, A.: Resilience of hybrid casper under varying values of parameters. Distributed Ledger Technol. Res. Pract.  \textbf{2}(1),  5:1--5:25 (2023). \doi{10.1145/3571587}, \url{https://doi.org/10.1145/3571587}
+Galletta, L., Laneve, C., Mercanti, I., Veschetti, A.: Resilience of hybrid
+  casper under varying values of parameters. Distributed Ledger Technol. Res.
+  Pract.  \textbf{2}(1),  5:1--5:25 (2023). \doi{10.1145/3571587},
+  \url{https://doi.org/10.1145/3571587}
 
 \bibitem{KY76}
-Knuth, D., Yao, A.: Algorithms and Complexity: New Directions and Recent Results, chap. The complexity of nonuniform random number generation. Academic Press (1976)
+Knuth, D., Yao, A.: Algorithms and Complexity: New Directions and Recent
+  Results, chap. The complexity of nonuniform random number generation.
+  Academic Press (1976)
 
 \bibitem{bitcoin}
-Nakamoto, S.: Bitcoin: A peer-to-peer electronic cash system. \url{https://bitcoin.org/bitcoin.pdf} (2008)
+Nakamoto, S.: Bitcoin: A peer-to-peer electronic cash system.
+  \url{https://bitcoin.org/bitcoin.pdf} (2008)
 
 \end{thebibliography}
