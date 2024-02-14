@@ -1,7 +1,25 @@
-This is the motivational example file...
 
-
-
+In some instances within PRISM, the clarity of a process may be compromised, potentially leading to errors due to ambiguous or unclear steps. However, with our choreographic language, such uncertainties are effectively mitigated. By employing choreographies, we gain a clear and comprehensive view of the interactions occurring within the system, allowing us to discern the flow of processes and detect any potential sources of error. This transparency ensures that each step is understood and executed accurately, minimizing the likelihood of errors and enhancing the reliability of the system.
+\AV{Example to be changed}
+\begin{lstlisting}[style=prism-color,caption={A PRISM example},captionpos=b,label={example1}]
+    dtmc
+    
+    module Dice
+        Dice : [0..11] init 0;
+        d : [0..6] init 0; 
+    
+        [] (Dice=0)  $\rightarrow$ 0.5 :  (Dice'=2) + 0.5 :  (Dice'=6); 
+        [] (Dice=2)  $\rightarrow$ 0.5 :  (Dice'=3) + 0.5 :  (Dice'=4); 
+        [] (Dice=3)  $\rightarrow$ 0.5 :  (Dice'=2) + 0.5 : (d'=1)&(Dice'=10); 
+        [] (Dice=4)  $\rightarrow$ 0.5 : (d'=2)$\&$(Dice'=10) + 0.5 : (d'=3)$\&$(Dice'=10);
+        [] (Dice=6)  $\rightarrow$ 0.5 :  (Dice'=7) + 0.5 : (Dice'=8); 
+        [] (Dice=7)  $\rightarrow$ 0.5 :  (Dice'=6) + 0.5 : (d'=4)$\&$(Dice'=10);
+        [] (Dice=8)  $\rightarrow$ 0.5 : (d'=5)$\&$(Dice'=10) + 0.5 : (d'=6)$\&$(Dice'=10); 
+        [] (Dice=10)  $\rightarrow$ 1 :  (Dice'=10);
+    
+    endmodule
+        
+    \end{lstlisting}
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "main"
