@@ -7,6 +7,15 @@ presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/dis
 \subsection{The Dice Program}
  The first test case we focus on the Dice Program\footnote{\url{https://www.prismmodelchecker.org/casestudies/dice.php}} \cite{KY76}.
  The following program simulates a die using only unbiased coins. Commencing from the initial vertex (state $s_0$), the process involves the iterative flipping of a coin. Upon obtaining heads, the upper branch is chosen, and in the case of tails, the lower branch is taken. This sequential process persists until the final determination of the die's value.
+ In particular, the PRISM model uses two variables: 
+ \begin{itemize}
+	\item \texttt{d}: This variable represents the state of the system, ranging from 0 to 7. Initially, it is set to 0.
+	\item \texttt{STATE}: This variable represents the value of the die, ranging from 0 to 6. Initially, it is set to 0.
+ \end{itemize}
+ The PRISM code defines the possible transitions between states.
+For example, \texttt{[] s=0 -> 0.5 : (s'=1) + 0.5 : (s'=2);} means that when the system is in state 0 (i.e., the die hasn't been rolled yet), there is a 50\% chance it will transition to state 1 (die rolls a 1) and a 50\% chance it will transition to state 2 (die rolls a 2).
+Other transition blocks follow similar logic for states 1 to 6.
+State 7 represents an absorbing state where the die has come to rest after being rolled. Transitions from state 7 always lead back to itself.
  In Listing \ref{ex1-code}, we provide part of the program utilizing the choreographic language. %Meanwhile, Listing \ref{ex1-gen} exhibits part of the generated PRISM program.
 
 
@@ -53,7 +62,6 @@ module Dice
 endmodule
 	
 \end{lstlisting}
-\end{comment}
 \begin{wrapfigure}[10]{r}{.5\textwidth}
     \centering
 	\vspace{-20pt}
@@ -63,10 +71,13 @@ endmodule
 	\caption{Probability of reaching a state where $d=k$, for $k=1,\ldots,6.$}
 	\label{ex1-res}
 \end{wrapfigure}
+\end{comment}
+
 By comparing the generated model with the one presented in the PRISM documentation, we notice that the difference is the number assumed by the variable {\tt Dice}. 
 Specifically, this variable takes on different values due to the manner in which generation occurs in the presence of a branch. Fortunately, this discrepancy doesn't lead to any issues, as the updates are executed accurately, and the states remain distinct.
 
-Furthermore, to establish the correctness of the generated program, we test that the probability of reaching a state where $\texttt{d=k}$ for $\texttt{k}=1,\ldots,6$ is $\frac{1}{6}$. The outcomes are depicted in Figure \ref{ex1-res}, where we compare the probabilities obtained from our generated model with those from the original PRISM model. As expected, the results align perfectly.
+Additionally, to ensure the generated program's accuracy, 
+we evaluated whether the probability of reaching a state where the die displays \texttt{d=k} for every possible \texttt{k} from 1 to 6 equals 1/6. This reflects the expected behavior of a fair die. In particular, the probabilities calculated by our generated model fully matched those from the original PRISM model. This confirms the faithful simulation of dice rolling by the generated program.
 
 \begin{comment}
 \subsection{Simple Peer-To-Peer Protocol}
