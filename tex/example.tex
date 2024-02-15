@@ -1,25 +1,41 @@
 
 In some instances within PRISM, the clarity of a process may be compromised, potentially leading to errors due to ambiguous or unclear steps. However, with our choreographic language, such uncertainties are effectively mitigated. By employing choreographies, we gain a clear and comprehensive view of the interactions occurring within the system, allowing us to discern the flow of processes and detect any potential sources of error. This transparency ensures that each step is understood and executed accurately, minimizing the likelihood of errors and enhancing the reliability of the system.
-\AV{Example to be changed}
 \begin{lstlisting}[style=prism-color,caption={A PRISM example},captionpos=b,label={example1}]
-    dtmc
-    
-    module Dice
-        Dice : [0..11] init 0;
-        d : [0..6] init 0; 
-    
-        [] (Dice=0)  $\rightarrow$ 0.5 :  (Dice'=2) + 0.5 :  (Dice'=6); 
-        [] (Dice=2)  $\rightarrow$ 0.5 :  (Dice'=3) + 0.5 :  (Dice'=4); 
-        [] (Dice=3)  $\rightarrow$ 0.5 :  (Dice'=2) + 0.5 : (d'=1)&(Dice'=10); 
-        [] (Dice=4)  $\rightarrow$ 0.5 : (d'=2)$\&$(Dice'=10) + 0.5 : (d'=3)$\&$(Dice'=10);
-        [] (Dice=6)  $\rightarrow$ 0.5 :  (Dice'=7) + 0.5 : (Dice'=8); 
-        [] (Dice=7)  $\rightarrow$ 0.5 :  (Dice'=6) + 0.5 : (d'=4)$\&$(Dice'=10);
-        [] (Dice=8)  $\rightarrow$ 0.5 : (d'=5)$\&$(Dice'=10) + 0.5 : (d'=6)$\&$(Dice'=10); 
-        [] (Dice=10)  $\rightarrow$ 1 :  (Dice'=10);
-    
-    endmodule
-        
-    \end{lstlisting}
+module User
+	User_STATE : [0..2] init User;
+
+	[alpha_1] (User_STATE=0) $\rightarrow$ lambda : (User_STATE'=1);
+	[alpha_2] (User_STATE=0) $\rightarrow$ lambda : (User_STATE'=2);
+	[beta] (User_STATE=1) $\rightarrow$ mu : (User_STATE'=0);
+	[gamma_1] (User_STATE=2) $\rightarrow$ theta : (User_STATE'=1);
+	[gamma_2] (User_STATE=2) $\rightarrow$ theta : (User_STATE'=2);
+endmodule
+
+module CheckOut
+	CheckOut_STATE : [0..1] init CheckOut;
+
+	[alpha_0,alpha_1] (CheckOut_STATE=0) $\rightarrow$ 1 : (CheckOut_STATE'=1);
+	[beta] (CheckOut_STATE=1) $\rightarrow$ 1 : (CheckOut_STATE'=0);
+	[gamma_1,gamma_2] (CheckOut_STATE=1) $\rightarrow$ 1 : (CheckOut_STATE'=1);
+endmodule
+\end{lstlisting}
+
+As an example we report in Listing \ref{example1} a simplified version of the one presented in the PRISM documentation\footnote{\url{https://www.prismmodelchecker.org/casestudies/thinkteam.php}}. The model represents a system where users move between different states (0, 1, or 2) based on certain events $(\alpha, \beta, \gamma)$ with corresponding rates $(\lambda, \mu, \theta)$, and there's also a checkout process that transitions between two states (0 or 1).
+Understanding the interactions between processes in this example might indeed be challenging, especially without additional context or explanation. 
+Alternatively, when formalized using our choreographic language, the same model becomes significantly clearer, as shown in Listing \ref{example2}. The choreographic language facilitates a straightforward understanding of the interactions between processes, minimizing the likelihood of errors.
+
+\begin{lstlisting}[style=chor-color,caption={Example of Listing \ref{example1} in our choreographic language},captionpos=b,label={example2}]
+{
+    C0 := User[i] -> Check : (+["lambda*1"]  " "&&" " . C1								+["lambda*1"]  " "&&" " .  C2)
+    C1 := User[i] -> Check : (+["beta*1"]  " "&&" " . C0)  
+    C2 := User[i] -> Check : (+["mu*1"]  " "&&" " . C1
+                                  +["mu*1"]  " "&&" " .  C2)
+}
+\end{lstlisting}
+
+
+
+
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "main"
