@@ -1,18 +1,5 @@
 %%% Random Macros
 
-\newcommand{\role}[1]{\textsf{#1}}
-\newcommand{\Var}{\mathsf{Var}}
-\newcommand{\Val}{\mathsf{Val}}
-
-
-\newcommand{\CEnd}{\mathbf{0}}
-\newcommand{\pp}{|\!|}
-\newcommand{\ppp}[1]{|[#1]|}
-\newcommand{\cmd}[6]{[#1] #2 \rightarrow \{#3: #4 = #5\}_{#6}}
-
-
-
-
 \newcommand{\sem}[1]{\{\![#1]\!\}}
 
 
@@ -27,12 +14,26 @@
 
 
 % Syntax
-\newcommand{\interact}[2]{\role{#1}\rightarrow \{#2\}\,\Sigma_{j\in J}
-  \lambda_j: u_j;\ C_j}
+\newcommand{\interactBase}[2]{\role{#1}\rightarrow \{\role{#2}\}}
+\newcommand{\interact}[2]{\interactBase{#1}{#2}\,\Sigma_{j\in J}\lambda_j: u_j;\ C_j}
 
 \newcommand{\command}[4] {[#1] #2 \rightarrow \Sigma_{i\in I}#3_i: #4_i}
 \newcommand{\commandBase}[3] {[#1] #2 \rightarrow #3}
 \newcommand{\ifTE}[4]{\textsf{if } #1@\role {#2} \textsf{ then } {#3} \textsf{ else } {#4}}
+
+
+\newcommand{\role}[1]{\mathsf{#1}}
+\newcommand{\Var}{\mathsf{Var}}
+\newcommand{\Val}{\mathsf{Val}}
+
+
+\newcommand{\CEnd}{\mathbf{0}}
+\newcommand{\pp}{|\!|}
+\newcommand{\ppp}[1]{|[#1]|}
+\newcommand{\cmd}[6]{[#1] #2 \rightarrow \{#3: #4 = #5\}_{#6}}
+
+
+
   
 % Semantics
 \newcommand{\red}[1]{\ \longrightarrow_{#1}\ } 
