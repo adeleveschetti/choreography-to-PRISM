@@ -86,11 +86,13 @@ S\times C$ such that:
     (S[S(E_j)/x_j], C_j) 
     \\[1mm]
     \textsf{(IfThenElseT)} &
+    S(E) = \mathsf{tt} \quad\Rightarrow\quad
     (S,\ifTE {E}{p}{C_1}{C_2}) 
     \red{1}
     (S, C_1)
     \\[1mm]
     \textsf{(IfThenElseF)} &
+    S(E) = \mathsf{ff} \quad\Rightarrow\quad
     (S,\ifTE {E}{p}{C_1}{C_2}) 
     \red{1}
     (S, C_2)
@@ -107,6 +109,40 @@ branching construct~\cite{ctmc}. States of the Markov chain are the
 pairs $(S,C)$.
 %
 
+Below, we look at two corner-case examples.
+\begin{example}
+  Consider the following definition:
+  \begin{displaymath}
+    \begin{array}{lll}
+      C \ {=}\ \interactBase{p}{q}\ \lambda_1: (x'=1);\quad \interactBase{p}{q}\ \lambda_1: (x'=1);\CEnd
+    \end{array}
+  \end{displaymath}
+  The semantics of $C$ starting from a state in which $S(x)=S(y)=0$
+  can be depicted as follows (for
+  $C'= \interactBase{p}{q}\ \lambda_1: (x'=1);\CEnd$):
+
+\bigskip
+
+\begin{tikzpicture}\small
+    \node[state, initial] (1) 
+    {\tiny$\begin{array}{c}
+      C \\ x=0
+    \end{array}$};
+    \node[state, right of=1, xshift=3cm] (2) 
+        {\tiny$\begin{array}{c}
+      C' \\ x=1
+    \end{array}$};
+    \node[state, right of=2, xshift=3cm] (3) 
+        {\tiny$\begin{array}{c}
+      \CEnd \\ x=1
+    \end{array}$};
+     \draw   (1) edge[above] node{$\lambda_1$} (2)
+             (2) edge[below] node{$\lambda_2$} (3)
+     ;
+\end{tikzpicture}
+\end{example}
+
+
 \begin{example}
   Consider the following definition:
   \begin{displaymath}
@@ -121,7 +157,6 @@ pairs $(S,C)$.
       \right.
     \end{array}
   \end{displaymath}
-\end{example}
 The semantics of $C$ starting from a state in which $S(x)=S(y)=0$ can
 be depicted as follows:
 
@@ -148,6 +183,7 @@ be depicted as follows:
              (3) edge[above] node{$\lambda_1$} (2)
      ;
 \end{tikzpicture}
+\end{example}
 
 %%% Local Variables: 
 %%% mode: latex
