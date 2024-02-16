@@ -1,17 +1,15 @@
-We start by describing the PRISM language syntax and semantics. To the
-best of our knowledge, the only formalisation of a semantics for PRISM
-can be found on the PRISM website~\cite{prismemantics}. Our approach
-starts from this and attempts to make more precise some informal
-assumptions and definitions.
+We now move to the formalities for the PRISM language. To the best of
+our knowledge, the only formalisation of a semantics for PRISM can be
+found on the PRISM website~\cite{prismemantics}. Our approach starts
+from this and attempts to make more precise some informal assumptions
+and definitions.
 
 \smallskip
 
-\mypar{Syntax.} Let $\role p$ range over a (possibly infinite) set of
-module names $\mathcal R$, $a$ over a (possibly infinite) set of
-labels $\mathcal L$, $x$ over a (possibly infinite) set of variables
-$\mathsf{Var}$, and $v$ over a (possibly infinite) set of values
-$\mathsf{Val}$. Then, the syntax of the PRISM language is given by the
-following grammar:
+\mypar{Syntax.} In this section, we will reuse some of the syntactic
+terms used for our choreography language, including assignments and
+expressions. We define the syntax of (a subset of) the PRISM language
+as follows:
 \begin{displaymath}
   \begin{array}{lrlll@{\qquad}l}
     \text{(Networks)}  \quad
@@ -25,151 +23,125 @@ following grammar:
     \text{(Commands)}  \quad
     & F     & ::=  &      & \command \alpha g\lambda u
                                   & \text{} (\alpha\in\{\epsilon\}\cup\mathcal L) \\
-    \\[1mm]
-    \text{(Assignment)} \quad
-    & u     & ::=  &      & (x' = E) & \text{update $x$ % , element of $\mathcal V$, 
-                                       with $E$}\\
-    &       &      & \mid & u\ \&\ u   & \text{multiple assignments}
-    \\[1mm]
-    \text{(Expr)}\quad
-    & E, g     & ::= &       & f(\tilde E)\quad\mid\quad x\quad\mid\quad v & \text{expressions}
     % \\[1mm]
-    % \text{(Rates)}\quad   &     \lambda\in\mathbb R
-    %  \\[1mm]
-    %   \text{(Variables)}\quad &   x\in\mathsf{Var} 
-    %  \\[1mm]
-    %   \text{(Values)}\quad     &  v\in\mathsf{Val} 
+    % \text{(Assignment)} \quad
+    % & u     & ::=  &      & (x' = E) & \text{update $x$ % , element of $\mathcal V$, 
+    %                                    with $E$}\\
+    % &       &      & \mid & u\ \&\ u   & \text{multiple assignments}
+    % \\[1mm]
+    % \text{(Expr)}\quad
+    % & E, g     & ::= &       & f(\tilde E)\quad\mid\quad x\quad\mid\quad v & \text{expressions}
+    % % \\[1mm]
+    % % \text{(Rates)}\quad   &     \lambda\in\mathbb R
+    % %  \\[1mm]
+    % %   \text{(Variables)}\quad &   x\in\mathsf{Var} 
+    % %  \\[1mm]
+    % %   \text{(Values)}\quad     &  v\in\mathsf{Val} 
   \end{array}
 \end{displaymath}
 Networks are the top syntactic category for system of modules composed
 together. The term $\CEnd$ represent an empty network. A module is
 meant to represent a process running in the system, and is denoted by
-its variables and its commands. Formally, a module
-$\role{p}:\{F_i\}_i$ is identified by its name $\role p$ and a set of
-commands $F_i$. Networks can be composed in parallel, in a CSP style:
-a term like $M_1 \ppp A M_2$ says that networks $M_1$ and $M_2$ can
-interact with each other using labels in the finite set $A$. The term
-$M/A$ is the standard CSP/CCS hiding operator. Finally $\sigma M$ is
-equivalent to applying the substitution $\sigma$ to all variables in
-$x$. A substitution is a function that given a variable returns a
-value. When we write $\sigma N$ we refer to the term obtained by
-replacing every free variable $x$ in $N$ with $\sigma(x)$. \marco{Is
-  this really the way substitution is used? Where does it become
-  important?}  Commands in a module have the form
+its role name and its commands, formally written as
+$\role{p}:\{F_i\}_i$, where $\role p$ is a role and $F_i$ are
+commands. Networks can be composed in parallel, in a CSP style: a term
+like $M_1 \ppp A M_2$ says that networks $M_1$ and $M_2$ can
+synchronise using labels in the finite set $A$.
+%
+In this work, we omit PRISM hiding and substitution as they are
+irrelevant for our current choreography language.
+% The term $M/A$ is the standard CSP/CCS hiding operator. Finally
+% $\sigma M$ is equivalent to applying the substitution $\sigma$ to
+% all variables in $x$. A substitution is a function that given a
+% variable returns a value. When we write $\sigma N$ we refer to the
+% term obtained by replacing every free variable $x$ in $N$ with
+% $\sigma(x)$. \marco{Is this really the way substitution is used?
+% Where does it become important?}
+%
+Commands in a module have the form
 $[a] g \rightarrow \Sigma_{i\in I}\{\lambda_i: u_i\}$. The label $a$
 is used for synchronisation (it is a condition that allows the command
 to be executed when all other modules having a command on the same
 label also execute).  The term $g$ is a guard on the current variable
 state. If both label and the guards are enabled, then the command
-executes in a probabilistic way one of the branches.  Depending on the
-model we are going to use, the value $\lambda_j$ is either a real
-number representing a rate (when adapting an exponential distribution)
-or a probability. If we are using probabilities, then we assume that
-terms in every choice are such that the sum of the probabilities is
-equal to 1.
+executes a branch $i$ with probability/rate $\lambda_i$. As for
+choreographies, if the $\lambda_i$ probabilities, we assume that terms
+in every choice are such that the sum of the probabilities is equal to
+1.
 
 \mypar{Semantics.} In order to give a probabilistic semantics to
-PRISM, we have two possibilities: we can either proceed
-denotationally, following the approach given on the PRISM
-website~\cite{prismemantics} or define an operational semantics in the
-style of Plotkin~\cite{P80} and Bookes et al.~\cite{BRW86}. Since the
-semantics of the choreographic language we present is purely
-operational, we will opt for the second choice.
+PRISM, we follow the approach given in the PRISM
+website~\cite{prismemantics}. 
+%
+% , we have two possibilities: we can either proceed
+% denotationally, following the approach given on the PRISM
+% website~\cite{prismemantics} or define an operational semantics in the
+% style of Plotkin~\cite{P80} and Bookes et al.~\cite{BRW86}. Since the
+% semantics of the choreographic language we present is purely
+% operational, we will opt for the second choice.
 
-[HERE WE NEED FORMAL DEFINITIONS OF TRANSITION SYSTEM, Markov Chain,
-etc. But perhaps not because of space reason we can just claim that
-our semeantics is a Markov chain/process/whatever]
-\begin{definition}[Discrete Time Markov Chain (DTMC)]
-  A Discrete Time Markov Chain (DTMC) is a pair $(S,P)$ where
-  \begin{itemize}
-  \item $S$ is a set of states
-  \item $P: S\times S \rightarrow [0,1]$ is the probability transition
-    matrix such that, for all $s\in S$, $\sum_{s'\in S}P(s,s')=1$.
-  \end{itemize}
-\end{definition}
+% [HERE WE NEED FORMAL DEFINITIONS OF TRANSITION SYSTEM, Markov Chain,
+% etc. But perhaps not because of space reason we can just claim that
+% our semeantics is a Markov chain/process/whatever]
+% \begin{definition}[Discrete Time Markov Chain (DTMC)]
+%   A Discrete Time Markov Chain (DTMC) is a pair $(S,P)$ where
+%   \begin{itemize}
+%   \item $S$ is a set of states
+%   \item $P: S\times S \rightarrow [0,1]$ is the probability transition
+%     matrix such that, for all $s\in S$, $\sum_{s'\in S}P(s,s')=1$.
+%   \end{itemize}
+% \end{definition}
 
-\begin{definition}[Continuous Time Markov Chain (CTMC)]
-  A Continuous Time Markov Chain (DTMC) is a pair $(S,R)$ where
-  \begin{itemize}
-  \item $S$ is a set of states
-  \item $P: S\times S \rightarrow  R^{\geq 0}$ is the rate
-    transition matrix.
-  \end{itemize}
-\end{definition}
+% \begin{definition}[Continuous Time Markov Chain (CTMC)]
+%   A Continuous Time Markov Chain (DTMC) is a pair $(S,R)$ where
+%   \begin{itemize}
+%   \item $S$ is a set of states
+%   \item $P: S\times S \rightarrow  R^{\geq 0}$ is the rate
+%     transition matrix.
+%   \end{itemize}
+% \end{definition}
 
-\newpage
+% \newpage
 
-{\bf in the sequel, we assume that in every command, each branch
-  effect on any state is injective.}
+% {\bf in the sequel, we assume that in every command, each branch
+%   effect on any state is injective.}
 
 
 In the sequel, we assumet $\alpha\in\{\epsilon\}\cup \mathcal L$ where
 $\epsilon$ is the empty string. We now define the operational
-semantics as the minimum relation $\prismred{}{}$ satisfying the
-following rules:
+semantics as the minimum relation $\prismred{}{}$ satisfying the rules
+given in Figure~\ref{fig:semantics}.
 % 
-\begin{displaymath}\small
-  \begin{array}{ccc}
-    \infer[\mathsf{(M_1)}]
-    { {\role{p}:\{F_k\}_k} \prismred{}\lab{g}{\lambda_i}{u_i} }
-    {\command {}g\lambda u\in\{F_k\}_k}
-    \qquad
-    \infer[\mathsf{(Par_1)}]
-    {M_1\ppp A M_2\prismred{a}\lab g\lambda u }
-    {
-    \exists j\in\{1,2\}.\ 
-    M_j\prismred{\alpha}\lab g\lambda u
-    & \alpha\not\in A
-    }
-    \\\\
-    \infer[\mathsf{(M_2)}]
-    { {\role{p}:\{F_k\}_k} \prismred{a}\lab{g}{\lambda_i}{u_i} }
-    {\command ag\lambda u\in\{F_k\}_k}
-    \quad
-    \infer[\mathsf{(Par_2)}]
-    {M_1\ppp A M_2\prismred{a}\lab{g_1\land g_2}{\lambda_1*\lambda_2}{u_1\& u_2} }
-    {
-    M_1\prismred{a}\lab{g_1}{\lambda_1}{u_1} 
-    & M_2\prismred{a}\lab{g_2}{\lambda_2}{u_2} 
-                 & a\in A}
-    % \\\\
-    % \infer[\mathsf{(Hide_1)}]
-    % {
-    % M/A\prismred{\alpha}\lab g\lambda u
-    % }
-    % {
-    % M\prismred{\alpha}\lab g\lambda u
-    % & \alpha\not\in A
-    % }
-    % \qquad
-    % \infer[\mathsf{(Hide_2)}]
-    % {
-    % M/A\prismred{}\lab g\lambda u
-    % }
-    % {
-    % M\prismred{a}\lab g\lambda u
-    % & a\in A
-    % }
-    % \\\\
-    % \infer[\mathsf{(Subst_1)}]
-    % {
-    % \sigma M\prismred{\alpha}\lab g\lambda u
-    % }
-    % {
-    % M\prismred{\alpha}\lab g\lambda u
-    % & \alpha\not\in\mathsf{dom}(\sigma)
-    %   }
-    % \quad
-    % \infer[\mathsf{(Subst_2)}]
-    % {
-    % \sigma M\prismred{\sigma a}\lab g\lambda u
-    % }
-    % {
-    % M\prismred{a}\lab g\lambda u
-    % & a\in\mathsf{dom}(\sigma)
-    %   }
-  \end{array}
-\end{displaymath}
+\begin{figure}[t]
+  \begin{displaymath}\small
+    \begin{array}{ccc}
+      \infer[\mathsf{(M_1)}]
+      { {\role{p}:\{F_k\}_k} \prismred{}\lab{g}{\lambda_i}{u_i} }
+      {\command {}g\lambda u\in\{F_k\}_k}
+      \qquad
+      \infer[\mathsf{(Par_1)}]
+      {M_1\ppp A M_2\prismred{a}\lab g\lambda u }
+      {
+      \exists j\in\{1,2\}.\ 
+      M_j\prismred{\alpha}\lab g\lambda u
+      & \alpha\not\in A
+        }
+      \\\\
+      \infer[\mathsf{(M_2)}]
+      { {\role{p}:\{F_k\}_k} \prismred{a}\lab{g}{\lambda_i}{u_i} }
+      {\command ag\lambda u\in\{F_k\}_k}
+      \quad
+      \infer[\mathsf{(Par_2)}]
+      {M_1\ppp A M_2\prismred{a}\lab{g_1\land g_2}{\lambda_1*\lambda_2}{u_1\& u_2} }
+      {
+      M_1\prismred{a}\lab{g_1}{\lambda_1}{u_1} 
+      & M_2\prismred{a}\lab{g_2}{\lambda_2}{u_2} 
+      & a\in A}
+    \end{array}
+  \end{displaymath}
+  \caption{LTS for PRISM networks} 
+  \label{fig:semantics}
+\end{figure}
 
 Then, we define the transition relation $M\vdash S\red{\lambda}S'$ as
 follows
