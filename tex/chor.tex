@@ -114,7 +114,7 @@ Below, we look at two corner-case examples.
   Consider the following definition:
   \begin{displaymath}
     \begin{array}{lll}
-      C \ {=}\ \interactBase{p}{q}\ \lambda_1: (x'=1);\quad \interactBase{p}{q}\ \lambda_1: (x'=1);\CEnd
+      C \ {=}\ \interactBase{p}{q}\ \lambda_1: (x'=1);\quad \interactBase{p}{q}\ \lambda_2: (x'=1);\CEnd
     \end{array}
   \end{displaymath}
   The semantics of $C$ starting from a state in which $S(x)=S(y)=0$
@@ -136,13 +136,13 @@ Below, we look at two corner-case examples.
         {\tiny$\begin{array}{c}
       \CEnd \\ x=1
     \end{array}$};
-     \draw   (1) edge[above] node{$\lambda_1$} (2)
+     \draw[->]   (1) edge[above] node{$\lambda_1$} (2)
              (2) edge[below] node{$\lambda_2$} (3)
      ;
 \end{tikzpicture}
 \end{example}
 
-
+\AV{Ho sistemato le frecce e i $\lambda$ (prima erano due $\lambda_1$ nell'esempio 1). Nell'esempio 2 non c'erano $\lambda$ nella definizione  }
 \begin{example}
   Consider the following definition:
   \begin{displaymath}
@@ -150,9 +150,9 @@ Below, we look at two corner-case examples.
       C \stackrel{\mathsf{def}}{=} \interactBase{p}{q}
       \left\{
       \begin{array}{lll}
-        42: (x'=1)\&(y'=2);\ C
+        \lambda_1: (x'=1)\&(y'=2);\ C
         \\
-        404: (x'=3)\&(y'=1);\ C
+        \lambda_2: (x'=3)\&(y'=1);\ C
       \end{array}
       \right.
     \end{array}
@@ -175,7 +175,7 @@ be depicted as follows:
         {\tiny$\begin{array}{c}
       C \\ x=3\\ y=1
     \end{array}$};
-     \draw   (1) edge[above, bend left] node{$\lambda_1$} (2)
+     \draw [->]  (1) edge[above, bend left] node{$\lambda_1$} (2)
              (1) edge[below, bend right] node{$\lambda_2$} (3)
              (2) edge[loop right] node{$\lambda_1$} (2)
              (3) edge[loop below] node{$\lambda_2$} (3)
