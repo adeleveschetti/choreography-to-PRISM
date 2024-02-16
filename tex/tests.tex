@@ -309,15 +309,16 @@ Hasher1 : [0..1] init 0;
 
 endmodule
 \end{lstlisting}
-\end{comment}
 \begin{figure}[h]
 	\centering
 	\includegraphics[scale=0.3]{example4-results.jpeg}	
 	\caption{Probability at least one miner has created a block.}
 	\label{ex3-res}
 	\end{figure}
+\end{comment}
+
 The PRISM model we generated exhibits greater verbosity compared to the one presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}. This difference arises from our approach of consistently generating the \texttt{else} branch for the \texttt{if-then-else} expression, resulting in an increased number of instructions.
-Nevertheless, in the case of this specific test scenario, the experimental results remain unaffected, as illustrated in Figure \ref{ex3-res}, where a comparison of the outcomes is presented. In this instance, the slight disparity in probabilities between the two results is unrelated to the model itself, but it is due to the fact that we are comparing two simulations.
+Nevertheless, in the case of this specific test scenario, we proved that the experimental results remain unaffected.
 
 
 
@@ -421,15 +422,15 @@ endmodule
 
 \end{lstlisting}
 \end{comment}
-The code closely resembles the one outlined in \cite{DBLP:journals/distribledger/GallettaLMV23}, with the main distinction being the greater number of lines in our generated model. This difference is due to the fact that certain commands that could be combined, but our generation lacks the automatic capability to perform this check. The divergence between the two models is evident in simulations, as depicted in Figure \ref{ex5-res}. While the results exhibit similarity, running simulations for the generated model takes PRISM 39.016 seconds, compared to the 22.051 seconds required for the original model.
-
+The code closely resembles the one outlined in \cite{DBLP:journals/distribledger/GallettaLMV23}, with the main distinction being the greater number of lines in our generated model. This difference is due to the fact that certain commands that could be combined, but our generation lacks the automatic capability to perform this check. While the results exhibit similarity, running simulations for the generated model takes PRISM 39.016 seconds, compared to the 22.051 seconds required for the original model.
+\begin{comment}
 \begin{figure}[h]
 \centering
 \includegraphics[scale=0.4]{example6-results.jpeg}	
 \caption{Probability that a block has been created.}
 \label{ex5-res}
 \end{figure}
-
+\end{comment}
 
 \begin{comment}
 \subsection{Problems}
