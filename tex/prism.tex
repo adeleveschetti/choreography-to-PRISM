@@ -70,8 +70,8 @@ a branch $i$ with probability/rate $\lambda_i$. As for choreographies,
 if the $\lambda_i$'s are probabilities, we must have that
 $\Sigma_{i\in I}\lambda_i=1$.
 
-\mypar{Semantics.} In order to give a probabilistic semantics to
-PRISM, we follow the approach given in the PRISM
+\mypar{Semantics.} In order to give a probabilistic semantics to the
+PRISM language, we follow the approach given in the PRISM
 website~\cite{prismemantics}.  Hereby, we do that by defining two
 relations: one with labels for networks and one on states. Our
 relation on networks is the minimum relation $\prismred{}{}$
@@ -81,27 +81,41 @@ satisfying the rules given in Figure~\ref{fig:semantics}.
   \begin{displaymath}\small
     \begin{array}{ccc}
       \infer[\mathsf{(M)}]
-      { {\role{p}:\{F_k\}_k} \prismred{\alpha}\lab{g}{\Sigma_{i\in I}\lambda_i\!}{u_i} }
-      {\command {\alpha}g\lambda u\in\{F_k\}_k}
+      { {\role{p}:\{F_k\}_k} \prismred{} F
+      % {\alpha}\lab{g}{\Sigma_{i\in I}\lambda_i\!}{u_i} 
+      }
+      {
+      % \command {\alpha}g\lambda u
+      F\in\{F_k\}_k
+      }
       \quad
       \infer[\mathsf{(P_1)}]
-      {M_1\ppp A M_2\prismred{\alpha}\lab{g}{\Sigma_{i\in I}\lambda_i\!}{u_i}}
+      {M_1\ppp A M_2\prismred{}\command {\alpha}g\lambda u
+      % {\alpha}\lab{g}{\Sigma_{i\in I}\lambda_i\!}{u_i}
+      }
       {
       \exists j\in\{1,\!2\}.\ 
-      M_j\prismred{\alpha}\lab{g}{\Sigma_{i\in I}\lambda_i\!}{u_i}
+      M_j\prismred{} \command {\alpha}g\lambda u
+      % {\alpha}\lab{g}{\Sigma_{i\in I}\lambda_i\!}{u_i}
       & \alpha\!\not\in\! A
         }
       \\\\
       \infer[\mathsf{(P_2)}]
-      {M_1\ppp A M_2\prismred{a}\lab{g\land g'}
-      {\Sigma_{i,j}\,\lambda_i*\lambda_j\!\!}{u_i\& u_j} }
+      {M_1\ppp A M_2\prismred{}
+      \commandBase a{g\land g'}
+      {\Sigma_{i,j}\,\lambda_i*\lambda_j}: {u_i\& u_j} 
+      }
       {
-      M_1\prismred{a}\lab{g}{\Sigma_{i\in I}\lambda_i}{\!u_i} 
-      & M_2\prismred{a}\lab{g'}{\Sigma_{j\in J}\lambda'_j}{\!u'_j} 
-      & a\!\in\! A}
+      M_1\prismred{}\command {\alpha}g\lambda u
+      % {a}\lab{g}{\Sigma_{i\in I}\lambda_i}{\!u_i} 
+      \quad&\quad 
+        M_2\prismred{}\commandBase {\alpha} {g'} \Sigma_{j\in J}\lambda_j: u'_j
+        % {a}\lab{g'}{\Sigma_{j\in J}\lambda'_j}{\!u'_j} 
+      \ &\
+             a\!\in\! A}
     \end{array}
   \end{displaymath}
-  \caption{LTS for PRISM networks} 
+  \caption{Semantics for PRISM networks} 
   \label{fig:semantics}
 \end{figure}
 Rule $\mathsf{(M)}$ just exposes a command at network level. Rule
@@ -112,45 +126,58 @@ the product of the probabilities/rates must be taken by extending the
 two different branches to every possible combination. 
 
 Based on the relation above, given
-$M_j\prismred{\alpha}\lab{g}{\Sigma_{i\in I}\lambda_i\!}{u_i}$ and two
+$M\prismred{}\command \alpha g\lambda u$ and two
 states $S$ and $S'$, we define the function
-$$\mu(F,S,S') = \Sigma_{u_j(S)=S'}\lambda_j$$
-where $u_j(S) = S'$ means executing the assignments in $u_j$ in state
-$S$ from which we obtain state $S"$. If we are dealing with
-probabilities, then the function is a probability distribution.
-
-
-we can define a transition relation on
-states $M\vdash S\red{\lambda}S'$. More precisely, this is given by
-the following rule
+$$\mu(\command \alpha g\lambda u,\ S,\ S'\ ) = \Sigma_{S[u_i]=S',i\in I}\lambda_i$$
+which gives the probability/rate for the system to go from state $S$
+to state $S'$ after executing command $\command \alpha g \lambda u$,
+for some $\alpha$.
+%
+If the $\lambda_i$ are probabilities, then the function must be a
+probability distribution. Note that $\mu(F,S,S')$ only denotes the
+probability/rate for the system to move from state $S$ to state $S'$
+after executing command $F$. However, there could be several commands
+derived from $M$ through the relation $\prismred{}$ that could be
+executed to move from $S$ to $S'$. Therefore, we define the transition
+relation on states $M\vdash S\red{\lambda}S'$ as
 $$
 \infer[\mathsf{(Transition)}]
 {
-  M\vdash S\red{\sum_{S'= S[u_j]} \lambda_j}S'
+  M\vdash S\red{\sum_{j} \mu(F_j,S,S')}S'
+  % M\vdash S\red{\sum_{S'= S[u_j]} \lambda_j}S'
 }
 {
-  \forall i,\alpha.\ M\prismred{\alpha}\lab {g_i}{\lambda_i}{u_i}
+  \forall j,\alpha.\ M\prismred{}F_j
+  % \command{\alpha_j} {g_j}{{\lambda_j}} {{u_j}}
   \quad&\quad
-  S\vdash g_i
+  S\vdash F_j
 }
 $$
-Note that given the declarative
-aspect of the PRISM language, the syntax is constant and never
-changes.
+where $S\vdash \command \alpha g\lambda u$ is defined as $\eval gS$.
+Note that given the declarative aspect of the PRISM language, the
+syntax is constant and never changes.
 
-At this point, we need to make a first observation about this
-construction whenever we are using probabilities [PUT NORMALISATION
-CONSTRAINT HERE].
+It is important to point out that, in general, the transition rule
+above does not give the exact probability of a transition in case of a
+Markov chain (DTMC), since the sum ${\sum_{j} \mu(F_j,S,S')}$ could be
+a value greater than $1$. In order to get the right probability, the
+value has to be normalised for all reachable $S'$. In the next
+section, we will show that this is not an issue for networks that are
+obtained from our translation from choreography to PRISM.
 
+% At this point, we need to make a first observation about this
+% construction whenever we are using probabilities [PUT NORMALISATION
+% CONSTRAINT HERE].
+% % Then, we define the transition relation $M\vdash S\red{\lambda}S'$ as
+% % follows Note that if the $\lambda$'s are probabilities, hence, we deal
+% % with an DTMC, then the probabilities of the branches outgoing from a
+% % give state $S$ must be normalised -- this is because the sum at the
+% % bottom of the $\mathsf{Transition}$ rule can be more than one. This is
+% % not the case if we have a CTMC with rates.
 
-Then, we define the transition relation $M\vdash S\red{\lambda}S'$ as
-follows
-Note that if the $\lambda$'s are probabilities, hence, we deal with an
-DTMC, then the probabilities of the branches outgoing from a give
-state $S$ must be normalised -- this is because the sum at the bottom
-of the $\mathsf{Transition}$ rule can be more than one. This is not
-the case if we have a CTMC with rates.
-
+\begin{example}
+  Consider the following network:
+\end{example}
 
 % SEMANTICS WITH GUESS (Early)
 %

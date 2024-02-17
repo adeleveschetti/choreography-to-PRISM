@@ -17,7 +17,7 @@
 \newcommand{\interactBase}[2]{\role{#1}\rightarrow \{\role{#2}\}}
 \newcommand{\interact}[2]{\interactBase{#1}{#2}\,\Sigma_{j\in J}\lambda_j: u_j;\ C_j}
 
-\newcommand{\command}[4] {[#1] #2 \rightarrow \Sigma_{i\in I}#3_i: #4_i}
+\newcommand{\command}[4] {\commandBase {#1} {#2} \Sigma_{i\in I}#3_i: #4_i}
 \newcommand{\commandBase}[3] {[#1] #2 \rightarrow #3}
 \newcommand{\ifTE}[4]{\textsf{if } #1@\role {#2} \textsf{ then } {#3} \textsf{ else } {#4}}
 
