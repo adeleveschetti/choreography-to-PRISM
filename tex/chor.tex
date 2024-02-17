@@ -21,8 +21,8 @@ following syntax:
       \ifTE {E}{p}{C_1}{C_2}
       \ \mid\ X \ \mid\  \CEnd
     \\[1mm]
-    u     & ::=  &       (x' = E) \quad\mid\quad  u\ \&\ u 
-    \qquad\qquad\qquad\qquad
+    u     & ::=  & (x' = E)\ \&\ u \quad\mid\quad    (x' = E)
+    \qquad\qquad\qquad
     E, g     ::=        f(\tilde E)\quad\mid\quad x\quad\mid\quad v
 
   \end{array}
@@ -63,16 +63,21 @@ denotes the system finishing its computation.
 
 \mypar{Semantics.} In the sequel, we define a state, denoted by $S$,
 as a mapping from variables to values, i.e.,
-$S: \Var \rightarrow\Val$. Then, given a value $v$ and a variable $x$,
-a substitution $[v/x]$ is an update on a state, i.e.,
+$S: \Var \rightarrow\Val$. Given a value $v$ and a variable $x$, a
+substitution $[v/x]$ is an update on a state, i.e.,
 $\small S[v/x] (y)= \left\{
   \begin{array}{ll} 
     v    & \text{ if } y=x\\ 
     S(y) & \text{ otherwise}
   \end{array} \right.
 $
+%
+Then, the update $S[u]$ is such that
+$S[x'=E\ \&\ u] = S[\eval ES/x][u]$ and $S[x'=E] = S[\eval ES/x]$,
+where $\eval ES$ is an unspecified (decidable) evaluations of the
+expression $E$ in the state $S$.
 
-Then, given the set of all possible states $\mathcal S$ and a set of
+Given the set of all possible states $\mathcal S$ and a set of
 definitions $\Sigma$ of the form $X\stackrel{\mathsf{def}}{=} C$, we
 can define the operational semantics of choreographies as the minimal
 relation relation
@@ -83,16 +88,16 @@ S\times C$ such that:
     \textsf{(Interact)} &
     (S, \interact{p}{\role p_1,\ldots,\role p_n}) 
     \red{\lambda_j}
-    (S[S(E_j)/x_j], C_j) 
+    (S[u_j], C_j) 
     \\[1mm]
     \textsf{(IfThenElseT)} &
-    S(E) = \mathsf{tt} \quad\Rightarrow\quad
+    \eval ES = \mathsf{tt} \quad\Rightarrow\quad
     (S,\ifTE {E}{p}{C_1}{C_2}) 
     \red{1}
     (S, C_1)
     \\[1mm]
     \textsf{(IfThenElseF)} &
-    S(E) = \mathsf{ff} \quad\Rightarrow\quad
+    \eval ES = \mathsf{ff} \quad\Rightarrow\quad
     (S,\ifTE {E}{p}{C_1}{C_2}) 
     \red{1}
     (S, C_2)
@@ -101,8 +106,7 @@ S\times C$ such that:
     X\stackrel{\mathsf{def}}{=} C\in\Sigma \quad\Rightarrow\quad (S, X) \red{1}(S,C)
   \end{array}
 \end{displaymath}
-Above, $S(E_j)$ and $S(E)$ are unspecified (decidable) evaluations of
-the expression $E$ under state $S$. The transition relation is a
+The transition relation is a
 Discrete Time Markov Chain (DTMC) or a Continuous Time Markov Chain
 (CTMC) depending on whether we use probabilities or rates in the
 branching construct~\cite{ctmc}. States of the Markov chain are the

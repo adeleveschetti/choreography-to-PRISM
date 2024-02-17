@@ -59,92 +59,70 @@ irrelevant for our current choreography language.
 % Where does it become important?}
 %
 Commands in a module have the form
-$[a] g \rightarrow \Sigma_{i\in I}\{\lambda_i: u_i\}$. The label $a$
-is used for synchronisation (it is a condition that allows the command
-to be executed when all other modules having a command on the same
-label also execute).  The term $g$ is a guard on the current variable
-state. If both label and the guards are enabled, then the command
-executes a branch $i$ with probability/rate $\lambda_i$. As for
-choreographies, if the $\lambda_i$ probabilities, we assume that terms
-in every choice are such that the sum of the probabilities is equal to
-1.
+$[\alpha] g \rightarrow \Sigma_{i\in I}\{\lambda_i: u_i\}$. The label
+$\alpha$ can either be the empty string $\epsilon$ or a label $a$,
+i.e., $\alpha\in\{\epsilon\}\cup \mathcal L$. If $\epsilon$ then no
+synchronisation is required. On the other hand, if there is label $a$
+then there will be a synchronisation with other modules that must
+synchronise on $a$. The term $g$ is a guard on the current variable
+state. If both label and guard are enabled, then the command executes
+a branch $i$ with probability/rate $\lambda_i$. As for choreographies,
+if the $\lambda_i$'s are probabilities, we must have that
+$\Sigma_{i\in I}\lambda_i=1$.
 
 \mypar{Semantics.} In order to give a probabilistic semantics to
 PRISM, we follow the approach given in the PRISM
-website~\cite{prismemantics}. 
-%
-% , we have two possibilities: we can either proceed
-% denotationally, following the approach given on the PRISM
-% website~\cite{prismemantics} or define an operational semantics in the
-% style of Plotkin~\cite{P80} and Bookes et al.~\cite{BRW86}. Since the
-% semantics of the choreographic language we present is purely
-% operational, we will opt for the second choice.
-
-% [HERE WE NEED FORMAL DEFINITIONS OF TRANSITION SYSTEM, Markov Chain,
-% etc. But perhaps not because of space reason we can just claim that
-% our semeantics is a Markov chain/process/whatever]
-% \begin{definition}[Discrete Time Markov Chain (DTMC)]
-%   A Discrete Time Markov Chain (DTMC) is a pair $(S,P)$ where
-%   \begin{itemize}
-%   \item $S$ is a set of states
-%   \item $P: S\times S \rightarrow [0,1]$ is the probability transition
-%     matrix such that, for all $s\in S$, $\sum_{s'\in S}P(s,s')=1$.
-%   \end{itemize}
-% \end{definition}
-
-% \begin{definition}[Continuous Time Markov Chain (CTMC)]
-%   A Continuous Time Markov Chain (DTMC) is a pair $(S,R)$ where
-%   \begin{itemize}
-%   \item $S$ is a set of states
-%   \item $P: S\times S \rightarrow  R^{\geq 0}$ is the rate
-%     transition matrix.
-%   \end{itemize}
-% \end{definition}
-
-% \newpage
-
-% {\bf in the sequel, we assume that in every command, each branch
-%   effect on any state is injective.}
-
-
-In the sequel, we assumet $\alpha\in\{\epsilon\}\cup \mathcal L$ where
-$\epsilon$ is the empty string. We now define the operational
-semantics as the minimum relation $\prismred{}{}$ satisfying the rules
-given in Figure~\ref{fig:semantics}.
+website~\cite{prismemantics}.  Hereby, we do that by defining two
+relations: one with labels for networks and one on states. Our
+relation on networks is the minimum relation $\prismred{}{}$
+satisfying the rules given in Figure~\ref{fig:semantics}.
 % 
 \begin{figure}[t]
   \begin{displaymath}\small
     \begin{array}{ccc}
-      \infer[\mathsf{(M_1)}]
-      { {\role{p}:\{F_k\}_k} \prismred{}\lab{g}{\lambda_i}{u_i} }
-      {\command {}g\lambda u\in\{F_k\}_k}
-      \qquad
-      \infer[\mathsf{(Par_1)}]
-      {M_1\ppp A M_2\prismred{a}\lab g\lambda u }
+      \infer[\mathsf{(M)}]
+      { {\role{p}:\{F_k\}_k} \prismred{\alpha}\lab{g}{\Sigma_{i\in I}\lambda_i\!}{u_i} }
+      {\command {\alpha}g\lambda u\in\{F_k\}_k}
+      \quad
+      \infer[\mathsf{(P_1)}]
+      {M_1\ppp A M_2\prismred{\alpha}\lab{g}{\Sigma_{i\in I}\lambda_i\!}{u_i}}
       {
-      \exists j\in\{1,2\}.\ 
-      M_j\prismred{\alpha}\lab g\lambda u
-      & \alpha\not\in A
+      \exists j\in\{1,\!2\}.\ 
+      M_j\prismred{\alpha}\lab{g}{\Sigma_{i\in I}\lambda_i\!}{u_i}
+      & \alpha\!\not\in\! A
         }
       \\\\
-      \infer[\mathsf{(M_2)}]
-      { {\role{p}:\{F_k\}_k} \prismred{a}\lab{g}{\lambda_i}{u_i} }
-      {\command ag\lambda u\in\{F_k\}_k}
-      \quad
-      \infer[\mathsf{(Par_2)}]
-      {M_1\ppp A M_2\prismred{a}\lab{g_1\land g_2}{\lambda_1*\lambda_2}{u_1\& u_2} }
+      \infer[\mathsf{(P_2)}]
+      {M_1\ppp A M_2\prismred{a}\lab{g\land g'}
+      {\Sigma_{i,j}\,\lambda_i*\lambda_j\!\!}{u_i\& u_j} }
       {
-      M_1\prismred{a}\lab{g_1}{\lambda_1}{u_1} 
-      & M_2\prismred{a}\lab{g_2}{\lambda_2}{u_2} 
-      & a\in A}
+      M_1\prismred{a}\lab{g}{\Sigma_{i\in I}\lambda_i}{\!u_i} 
+      & M_2\prismred{a}\lab{g'}{\Sigma_{j\in J}\lambda'_j}{\!u'_j} 
+      & a\!\in\! A}
     \end{array}
   \end{displaymath}
   \caption{LTS for PRISM networks} 
   \label{fig:semantics}
 \end{figure}
+Rule $\mathsf{(M)}$ just exposes a command at network level. Rule
+$\mathsf{(P_1)}$ propagates a command through parallel composition if
+$\alpha$ is empty or if the label $a$ is not part of the set $A$. When
+the label $a$ is in $A$, we apply rule $\mathsf{(P_2)}$. In this case,
+the product of the probabilities/rates must be taken by extending the
+two different branches to every possible combination. 
 
-Then, we define the transition relation $M\vdash S\red{\lambda}S'$ as
-follows
+Based on the relation above, given
+$M_j\prismred{\alpha}\lab{g}{\Sigma_{i\in I}\lambda_i\!}{u_i}$ and two
+states $S$ and $S'$, we define the function
+$$\mu(F,S,S') = \Sigma_{u_j(S)=S'}\lambda_j$$
+where $u_j(S) = S'$ means executing the assignments in $u_j$ in state
+$S$ from which we obtain state $S"$. If we are dealing with
+probabilities, then the function is a probability distribution.
+
+
+we can define a transition relation on
+states $M\vdash S\red{\lambda}S'$. More precisely, this is given by
+the following rule
 $$
 \infer[\mathsf{(Transition)}]
 {
@@ -156,12 +134,56 @@ $$
   S\vdash g_i
 }
 $$
+Note that given the declarative
+aspect of the PRISM language, the syntax is constant and never
+changes.
+
+At this point, we need to make a first observation about this
+construction whenever we are using probabilities [PUT NORMALISATION
+CONSTRAINT HERE].
+
+
+Then, we define the transition relation $M\vdash S\red{\lambda}S'$ as
+follows
 Note that if the $\lambda$'s are probabilities, hence, we deal with an
 DTMC, then the probabilities of the branches outgoing from a give
 state $S$ must be normalised -- this is because the sum at the bottom
 of the $\mathsf{Transition}$ rule can be more than one. This is not
 the case if we have a CTMC with rates.
 
+
+% SEMANTICS WITH GUESS (Early)
+%
+% \begin{figure}[t]
+%   \begin{displaymath}\small
+%     \begin{array}{ccc}
+%       \infer[\mathsf{(M_1)}]
+%       { {\role{p}:\{F_k\}_k} \prismred{}\lab{g}{\lambda_i}{u_i} }
+%       {\command {}g\lambda u\in\{F_k\}_k}
+%       \qquad
+%       \infer[\mathsf{(P_1)}]
+%       {M_1\ppp A M_2\prismred{\alpha}\lab g\lambda u }
+%       {
+%       \exists j\in\{1,2\}.\ 
+%       M_j\prismred{\alpha}\lab g\lambda u
+%       & \alpha\not\in A
+%         }
+%       \\\\
+%       \infer[\mathsf{(M_2)}]
+%       { {\role{p}:\{F_k\}_k} \prismred{a}\lab{g}{\lambda_i\!\!}{u_i} }
+%       {\command ag\lambda u\in\{F_k\}_k}
+%       \quad
+%       \infer[\mathsf{(P_2)}]
+%       {M_1\ppp A M_2\prismred{a}\lab{g_1\land g_2}{\lambda_1*\lambda_2\!\!}{u_1\& u_2} }
+%       {
+%       M_1\!\!\!\prismred{a}\!\!\!\lab{g_1}{\lambda_1\!\!}{\!\!u_1} 
+%       & M_2\!\!\!\prismred{a}\!\!\!\lab{g_2}{\lambda_2\!\!}{\!\!u_2} 
+%       & a\!\in\! A}
+%     \end{array}
+%   \end{displaymath}
+%   \caption{LTS for PRISM networks} 
+%   \label{fig:semantics}
+% \end{figure}
 
 %%% Local Variables: 
 %%% mode: latex
