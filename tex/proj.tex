@@ -55,22 +55,26 @@ $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
           {E_j}q\Big\}_{j\in J}
           \\
           \qquad\cup\ \bigcup_{j} \proj (q, C_j, s+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
-          % \\\\
-          % \big(q\notin\{\role p, \role p_1,\ldots,\role p_n\}\big)\\
-          % \proj (q,\interact{p}{\role p_1,\ldots,\role p_n}, s)\ = \ \proj (\role{p}_1, C_1, s)
-          % \ \cup\
-          % \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
-          % \\\\
-          % \big(q = \role p\big)\\
-          % \proj (q,\ifTE {E}{p}{C_1}{C_2}, s)= \\
-          % \qquad\{ 
-          % \command {} {s_{\role p_1} = s \& E} \lambda: s_{\role p_1} = s_{\role p_1} +1,  
-          % \command {} {s_{\role p_1} = s \& \mathsf{not}(E)} \lambda: s_{\role p_1} = s_{\role p_1} +1  
-          % \}
-          % \quad\cup\\
-          % \qquad \proj (\role{p}_1, C_1, s+1)
-          % \quad\cup\quad
-          % \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
+          \\\\
+
+          \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)= 
+          &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\not\in\{\role p, 
+            \role p_1,\ldots,\role p_n\}}\\[2mm]
+          \qquad\ \proj (\role{p}_1, C_1, s)=
+          \ \cup\
+          \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
+          \\\\
+
+          \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
+          &  \boxed{\text{if }\role q=\role p}\\[2mm]
+          \qquad\{ 
+          \command {} {s_{\role p_1} = s \& E} \lambda: s_{\role p_1} = s_{\role p_1} +1,  
+          \command {} {s_{\role p_1} = s \& \mathsf{not}(E)} \lambda: s_{\role p_1} = s_{\role p_1} +1  
+          \}
+          \quad\cup\\
+          \qquad \proj (\role{p}_1, C_1, s+1)
+          \quad\cup\quad
+          \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
         \end{array}
       \end{displaymath}
 \end{definition}
