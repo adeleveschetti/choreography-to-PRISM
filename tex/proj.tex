@@ -25,11 +25,11 @@ $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
       projectable.}
 %
 
-
     We can now formally define the projection of a choreography with
     rates into the PRISM language.
     % 
-    \begin{definition} Given a well-annotated choreography $C$ with
+    \begin{definition}[Projection, CTMC]\label{def:projCTMC} Given a
+      well-annotated choreography $C$ with
       rates, a module $\role p$, and a natural number $\iota$, we
       define the projection function $\proj$ as:
       \begin{displaymath}\small
@@ -39,7 +39,7 @@ $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
           &  \boxed{\text{if }\role q=\role p}\\[2mm]
           \qquad
           % \{ 
-          \Big\{\commandBase {l_j} {\ s_{q}\!=\! s} {\lambda_j:\ s_{q}\!=\!
+          \Big\{\commandBase {l_j} {\ s_{q}\!=\! \iota} {\lambda_j:\ s_{q}\!=\!
           s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
           {E_j}q\Big\}_{j\in J}
           \\
@@ -50,7 +50,7 @@ $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
           &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
           \qquad
           % \{ 
-          \Big\{\commandBase {l_j} {\ s_{q}\!=\! s} {1:\ s_{q}\!=\!
+          \Big\{\commandBase {l_j} {\ s_{q}\!=\! \iota} {1:\ s_{q}\!=\!
           s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
           {E_j}q\Big\}_{j\in J}
           \\
@@ -60,21 +60,62 @@ $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
           \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)= 
           &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\not\in\{\role p, 
             \role p_1,\ldots,\role p_n\}}\\[2mm]
-          \qquad\ \proj (\role{p}_1, C_1, s)=
+          \qquad\ \proj (\role{q}, C_1, s)=
           \ \cup\
-          \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
+          \proj (\role{q}, C_2, s+\mathsf{nodes}(C_1))
           \\\\
 
           \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
           &  \boxed{\text{if }\role q=\role p}\\[2mm]
-          \qquad\{ 
-          \command {} {s_{\role p_1} = s \& E} \lambda: s_{\role p_1} = s_{\role p_1} +1,  
-          \command {} {s_{\role p_1} = s \& \mathsf{not}(E)} \lambda: s_{\role p_1} = s_{\role p_1} +1  
-          \}
-          \quad\cup\\
-          \qquad \proj (\role{p}_1, C_1, s+1)
+          \qquad\left\{ 
+          \begin{array}{lll}
+            \commandBase {} {s_{q}\!=\! \iota\ \&\ E}{\ 1: s'_{q}\!=\! \iota+1},\\ 
+            \commandBase {} {s_{q}\!=\! \iota\ \&\ \mathsf{not}(E)}
+            {\ 1: s'_{q}\!=\! \iota+\mathsf{nodes}(C_1)+1}
+          \end{array}
+          \right\}
+          \\
+          \qquad\cup\quad \proj (\role{p}, C_1, \iota+1)
           \quad\cup\quad
-          \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
+          \proj (\role{p}, C_2, \iota+\mathsf{nodes}(C_1)+1)
+          \\\\
+
+          \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
+          &  \boxed{\text{if }\role q\neq\role p}\\[2mm]
+          \qquad\proj (\role{q}, C_1, \iota+1)
+          \quad\cup\quad
+          \proj (\role{q}, C_2, \iota+\mathsf{nodes}(C_1)+1)
+
+          \\\\
+
+          \proj (\role q,\CEnd, \iota) = \emptyset
+
+        \end{array}
+      \end{displaymath}
+    \end{definition}
+
+
+
+    \begin{definition}[Projection, DTMC] Given a well-annotated
+      choreography $C$ with probabilities, a module $\role p$, and a
+      natural number $\iota$, we define the projection function
+      $\proj$ as:
+      \begin{displaymath}\small
+        \begin{array}{lr}
+
+          \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)= 
+          &  \boxed{\text{if }\role q=\role p}\\[2mm]
+          \qquad
+          % \{ 
+          \Big\{\commandBase {l_j} {\ s_{q}\!=\! \iota} {\lambda_j:\ s_{q}\!=\!
+          s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
+          {E_j}q\Big\}_{j\in J}
+          \\
+          \qquad\cup\ \bigcup_{j} \proj (q, C_j, s+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+          \\\\
+          
+          \{\ldots \text{same as Definition~\ref{def:projCTMC}}\ldots\}
+
         \end{array}
       \end{displaymath}
 \end{definition}
