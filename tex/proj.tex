@@ -43,7 +43,7 @@ $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
           s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
           {E_j}q\Big\}_{j\in J}
           \\
-          \qquad\cup\ \bigcup_{j} \proj (q, C_j, s+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+          \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, s+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
           \\\\
 
           \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)= 
@@ -54,7 +54,7 @@ $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
           s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
           {E_j}q\Big\}_{j\in J}
           \\
-          \qquad\cup\ \bigcup_{j} \proj (q, C_j, s+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+          \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, s+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
           \\\\
 
           \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)= 
@@ -106,18 +106,21 @@ $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
           \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)= 
           &  \boxed{\text{if }\role q=\role p}\\[2mm]
           \qquad
-          % \{ 
-          \Big\{\commandBase {l_j} {\ s_{q}\!=\! \iota} {\lambda_j:\ s_{q}\!=\!
-          s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
-          {E_j}q\Big\}_{j\in J}
+          \left\{
+          \begin{array}{lll}
+            \commandBase {} {s_{q}\!=\! \iota}{\ \sum_{j\in J} \lambda_j: s'_{q}\!=\! \iota+1+j},\\ 
+            \{\commandBase {l_j} {s_{q}\!=\! \iota+1+j}
+            \ 1: s'_{q}\!=\! \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})\ \&\ \projE
+            {E_j}q\}_{j\in J}
+          \end{array}
+          \right\}
           \\
-          \qquad\cup\ \bigcup_{j} \proj (q, C_j, s+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+          \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, s+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
           \\\\
-          
-          \{\ldots \text{same as Definition~\ref{def:projCTMC}}\ldots\}
 
         \end{array}
       \end{displaymath}
+      For the other cases, the definitions are equivalent to the one presented in Definition \ref{def:projCTMC}.
 \end{definition}
 
 
