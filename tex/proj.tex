@@ -1,41 +1,79 @@
-\subsection{Projection from Choreographies to PRISM}
-\mypar{Mapping Choreographies to PRISM.} We need to run some standard
-static checks because, since there is branching, some terms may not be
-projectable.
+Our next task is to provide a mapping that can translate
+choreographies into the PRISM language. The goal of this section is to
+address the theoretical aspect of this.
+
+\mypar{Mapping Choreographies to PRISM.}  The operation of generating
+endpoint code from a choreography is known as {\em
+  projection}. Normally, projection is defined separately for each
+module appearing in the choreography program. We first observe that in
+order to simulate interactions in PRISM, we need to use labels on
+which each module in the interaction can synchronise. Therefore,
+without loss of generality, we make a slight abuse of notation and
+assume that each step in a choreography is annotated with unique
+labels that then it is going to be used by the projection. We call
+such a choreography a {\em well-annotated choreography}. For example,
+the choreography
+$\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
+  {E}{p}{\CEnd}{\CEnd}$ is going to be annotated as
+  $\interactBasel{p}{a_1}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTEl
+    {E}{a_2}{p}{\CEnd}{\CEnd}$.
+
+
 %
-\begin{displaymath}
-  \begin{array}{lllll}
-    \big(q\in\{\role p, \role p_1,\ldots,\role p_n\}, J=\{1,\ldots,n\},\ l_1,\ldots, l_n \text{ fresh}  
-    \big)\\
-    \proj (q,\interact{p}{\role p_1,\ldots,\role p_n}, s)= \\
-    \qquad
-    % \{ 
-    \Big\{\commandBase {l_j} {\ s_{q}\!=\! s} {\kappa_j:\ s_{q}\!=\!
-    s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
-    {E_j}q\Big\}_{j\in J}
-    % \commandBase {l_1} {s_{q} = s} {\lambda_1: s_{q} = s_{q} +1},\  
-    % \commandBase {l_2} {s_{q} = s} {\lambda_2: s_{q} = s_{q} +\mathsf{nodes}(C_1)}  
-    % \}
-    \quad\cup\\
-    \qquad\bigcup_{j} \proj (q, C_j, s+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
-    \\\\
-    \big(q\notin\{\role p, \role p_1,\ldots,\role p_n\}\big)\\
-    \proj (q,\interact{p}{\role p_1,\ldots,\role p_n}, s)\ = \ \proj (\role{p}_1, C_1, s)
-    \ \cup\
-    \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
-    \\\\
-    \big(q = \role p\big)\\
-    \proj (q,\ifTE {E}{p}{C_1}{C_2}, s)= \\
-    \qquad\{ 
-    \command {} {s_{\role p_1} = s \& E} \lambda: s_{\role p_1} = s_{\role p_1} +1,  
-    \command {} {s_{\role p_1} = s \& \mathsf{not}(E)} \lambda: s_{\role p_1} = s_{\role p_1} +1  
-    \}
-    \quad\cup\\
-    \qquad \proj (\role{p}_1, C_1, s+1)
-    \quad\cup\quad
-    \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
-  \end{array}
-\end{displaymath}
+    \MC{We need to say that we must run some standard static checks
+      because, since there is branching, some terms may not be
+      projectable.}
+%
+
+
+    We can now formally define the projection of a choreography with
+    rates into the PRISM language.
+    % 
+    \begin{definition} Given a well-annotated choreography $C$ with
+      rates, a module $\role p$, and a natural number $\iota$, we
+      define the projection function $\proj$ as:
+      \begin{displaymath}\small
+        \begin{array}{lr}
+
+          \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)= 
+          &  \boxed{\text{if }\role q=\role p}\\[2mm]
+          \qquad
+          % \{ 
+          \Big\{\commandBase {l_j} {\ s_{q}\!=\! s} {\lambda_j:\ s_{q}\!=\!
+          s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
+          {E_j}q\Big\}_{j\in J}
+          \\
+          \qquad\cup\ \bigcup_{j} \proj (q, C_j, s+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+          \\\\
+
+          \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)= 
+          &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
+          \qquad
+          % \{ 
+          \Big\{\commandBase {l_j} {\ s_{q}\!=\! s} {1:\ s_{q}\!=\!
+          s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
+          {E_j}q\Big\}_{j\in J}
+          \\
+          \qquad\cup\ \bigcup_{j} \proj (q, C_j, s+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+          % \\\\
+          % \big(q\notin\{\role p, \role p_1,\ldots,\role p_n\}\big)\\
+          % \proj (q,\interact{p}{\role p_1,\ldots,\role p_n}, s)\ = \ \proj (\role{p}_1, C_1, s)
+          % \ \cup\
+          % \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
+          % \\\\
+          % \big(q = \role p\big)\\
+          % \proj (q,\ifTE {E}{p}{C_1}{C_2}, s)= \\
+          % \qquad\{ 
+          % \command {} {s_{\role p_1} = s \& E} \lambda: s_{\role p_1} = s_{\role p_1} +1,  
+          % \command {} {s_{\role p_1} = s \& \mathsf{not}(E)} \lambda: s_{\role p_1} = s_{\role p_1} +1  
+          % \}
+          % \quad\cup\\
+          % \qquad \proj (\role{p}_1, C_1, s+1)
+          % \quad\cup\quad
+          % \proj (\role{p}_1, C_2, s+\mathsf{nodes}(C_1))
+        \end{array}
+      \end{displaymath}
+\end{definition}
 
 
        
