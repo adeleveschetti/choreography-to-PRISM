@@ -27,6 +27,22 @@ following syntax:
 
   \end{array}
 \end{displaymath}
+
+\begin{displaymath}\small
+  \begin{array}{llllllllllll}
+    C \ & ::= & \
+      \textcolor{red}{\role p \rightarrow {\role p_1,\ldots,\role p_n} : (+[\lambda_1*\lambda_{i_1}]\ u_1 \ \doubleand \ u_{i_1} . C_1 \ldots +[\lambda_n*\lambda_{i_n}]\ u_n\ \doubleand\ u_{i_n} . C_n)}
+      \\
+      && \mid\
+      \ifTE {E}{p}{C_1}{C_2}
+      \ \mid\ X \ \mid\  \CEnd
+    \\[1mm]
+    u     & ::=  & (x' = E)\ \&\ u \quad\mid\quad    (x' = E)
+    \qquad\qquad\qquad
+    E, g     ::=        f(\tilde E)\quad\mid\quad x\quad\mid\quad v
+
+  \end{array}
+\end{displaymath}
 % We comment the various constructs. 
 The syntactic category $C$ denotes choreographic programs. The
 interaction term
