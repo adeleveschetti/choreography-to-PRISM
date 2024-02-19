@@ -16,16 +16,16 @@
 % Syntax
 \newcommand{\interactBase}[2]{\role{#1}\rightarrow \{\role{#2}\}}
 \newcommand{\interactBasel}[3]{\role{#1}\rightarrow^{#2} \{\role{#3}\}}
-\newcommand{\interact}[2]{\interactBase{#1}{#2}\,\Sigma_{j\in J}\lambda_j: u_j.\ C_j}
+\newcommand{\interact}[2]{\interactBase{#1}{#2}:\,\Sigma_{j\in J}\lambda_j: u_j.\ C_j}
 \newcommand{\doubleand}{\text{\&\&}}
 
 \newcommand{\command}[4] {\commandBase {#1} {#2} \Sigma_{i\in I}#3_i: #4_i}
 \newcommand{\commandBase}[3] {[#1]\ #2\ \rightarrow #3}
-\newcommand{\ifTE}[4]{\textsf{if } #1@\role {#2} \textsf{ then } {#3} \textsf{ else } {#4}}
-\newcommand{\ifTEl}[5]{\textsf{if } #1@^{#2}\role {#3} \textsf{ then } {#4} \textsf{ else } {#5}}
+\newcommand{\ifTE}[4]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@\role {#2}\ \textcolor{sh_keyword}{\mathtt{then}}\ {#3} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#4}}
+\newcommand{\ifTEl}[5]{\mathtt{if } #1@^{#2}\role {#3} \mathtt{ then } {#4} \mathtt{ else } {#5}}
 
 
-\newcommand{\role}[1]{\mathsf{#1}}
+\newcommand{\role}[1]{\mathtt{#1}}
 \newcommand{\Var}{\mathsf{Var}}
 \newcommand{\Val}{\mathsf{Val}}
 

@@ -26,9 +26,9 @@ Alternatively, when formalized using our choreographic language, the same model 
 
 \begin{lstlisting}[style=chor-color,caption={Example of Listing \ref{example1} in our choreographic language},captionpos=b,label={example2}]
 {
-    C0 := User[i] -> Check : (+["lambda*1"]  " "&&" " . C1								+["lambda*1"]  " "&&" " .  C2)
-    C1 := User[i] -> Check : (+["beta*1"]  " "&&" " . C0)  
-    C2 := User[i] -> Check : (+["mu*1"]  " "&&" " . C1
+    C0 := User[i] $\rightarrow$ Check : (+["lambda*1"]  " "&&" " . C1								+["lambda*1"]  " "&&" " .  C2)
+    C1 := User[i] $\rightarrow$ Check : (+["beta*1"]  " "&&" " . C0)  
+    C2 := User[i] $\rightarrow$ Check : (+["mu*1"]  " "&&" " . C1
                                   +["mu*1"]  " "&&" " .  C2)
 }
 \end{lstlisting}
