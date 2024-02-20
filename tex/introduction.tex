@@ -1,17 +1,3 @@
-\begin{comment}
-This is the introduction
-
-- introduce the PRISM language and use a running example.
-
-- argue that these sorts of distributed programs are hard to
-understand and it is hard to programme them as intended since we may
-miss hidden cases.
-
-- introduce the concept of choreography and show how the example in
-PRISM could be rewritten in a more concise way.
-
-- End with a statement that says what this paper is doing.
-\end{comment}
 PRISM \cite{PRISMdoc} is a probabilistic model checker that offers a specialized language for the specification and verification of probabilistic systems. Originally developed for modeling and analyzing systems in the domain of probabilistic model checking, PRISM has evolved into a versatile platform with applications spanning various fields, including multimedia protocols, randomised distributed algorithms, security protocols, biological systems.
 At its core, PRISM provides a rich set of constructs for describing probabilistic behaviors, transitions, and properties within a system. 
 Let's consider a distributed voting system where multiple nodes collaborate to reach a consensus. In PRISM, we would describe the behavior of each voting node individually, specifying states, transitions, and communication protocols between nodes. However, this approach can become difficult to manage as the number of nodes increases.
