@@ -21,17 +21,16 @@ One of the primary challenges in understanding distributed systems lies in the f
 Furthermore, the inherent asynchrony of distributed systems complicates the task of programming them as intended. Conventional programming paradigms, which rely on sequential execution and shared state, struggle to capture the asynchronous nature of distributed systems accurately. As a result, developers may inadvertently overlook edge cases or race conditions, leading to unintended behaviors and system failures.
 
 Choreographic programming offers a paradigm for designing coordination plans for distributed systems from a global perspective. This approach enables the automatic generation of decentralized implementations that are inherently correct-by-construction.
-In partiicular, instead of relying on a central orchestrator or controller to dictate the behavior of individual components, choreographic languages focus on defining communication patterns and protocols that govern the interactions between entities.
+In particular, instead of relying on a central orchestrator or controller to dictate the behavior of individual components, choreographic languages focus on defining communication patterns and protocols that govern the interactions between entities.
 In essence, choreography abstracts away the internal details of individual components and emphasizes the global behavior of the system as a composition of decentralized interactions. Within the context of concurrent and distributed systems, choreographic languages serve as tools for defining interaction protocols that govern the communication between processes. 
 
-By using a choreographic language, we can model in a more concise way the voting system example, focusing on the high-level coordination patterns that govern the behavior of the entire system. In this concise choreographic representation, we specify that when a voter casts a vote, the system counts the votes. If a consensus is reached among the nodes, the system proceeds to declare a winner. This choreography encapsulates the global coordination of the voting process, abstracting away the complexities of individual node behaviors. This approach not only simplifies the design process but also facilitates the automated generation of correct-by-construction decentralized implementations, as the choreography directly translates into executable code for each voting node in the system.
 
 In this paper, we present a choreographic language designed for modeling concurrent probabilistic systems with clarity and precision. Additionally, we introduce a compiler capable of translating protocols described in this language into PRISM code. This choreographic approach not only simplifies the modeling process but also ensures integration with PRISM's powerful analysis capabilities. Through our contributions, we aim to provide a smooth workflow for modeling, analyzing, and verifying concurrent probabilistic systems, ultimately increasing their usability in various application domains. 
 
 \mypar{Contributions and Overview.} Our contributions can be categorised as follows: 
-\begin{itemize}
-\item Firstly, we introduce a simplified semantics for PRISM, enhancing its usability and facilitating clearer understanding for users. 
-\item Then, we propose a novel choreographic language equipped with well-defined syntax and semantics, tailored specifically for describing concurrent systems with probabilistic behaviors. 
+\begin{itemize} 
+\item Firstly, we propose a novel choreographic language equipped with well-defined syntax and semantics, tailored specifically for describing concurrent systems with probabilistic behaviors. 
+\item Then, we introduce a simplified semantics for PRISM, enhancing its usability and facilitating clearer understanding for users.
 \item Furthermore, we establish a rigorous definition for a projection function, showing its correctness through formal proofs. This projection function serves as a crucial intermediary step in transforming models described in our choreographic language into PRISM-compatible representations. 
 \item Lastly, we create a compiler that translates the choreographic language models into PRISM, allowing users to use PRISM's robust analysis features while benefiting from the expressiveness of our choreographic language.
 \end{itemize}
