@@ -16,5 +16,43 @@ The input parameters for the projection function include:
 The projection function operates recursively on each command in the choreographic language, systematically generating PRISM code based on the type of command being analyzed. While most code generations are straightforward, the focal point lies in how new states are created. Each module maintains its set of states, and when a new state is to be generated, the function examines the last available state for the corresponding module and increments it by one.
 Recursion follows a similar pattern: every module possesses a table that accumulates recursion protocols, along with the first and last states associated with each recursion. This recursive approach ensures a systematic and coherent generation of states within the modules, enhancing the overall efficiency and clarity of the projection function.
 
+One of the differences between formal syntax and implementation is the presence of module parameterizations in the latter. Specifically, to avoid repeating the same commands for each duplicated module, we utilize the notation "\texttt{[i]}" for each module with the same behaviour.   
+\begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Example of an use of parameterization in the choreographic language},captionpos=b,label={ex-syntax}]
+	C $\coloneqq$ P $\rightarrow$ Q[i] : (+["lambda1*mu[i]"]  "(x'=1)"&&"(y[i]'=2)" . C
+			    +["lambda2*mu[i]"]  "(x'=3)"&&"(y[i]'=1)" . C )
+\end{lstlisting}
+This enables us to perform module renaming, a principle that also extends to variables and their updates. For instance, in Listing \ref{ex-syntax}, the process \texttt{P} performs the same branch for each process \texttt{Q[i]}, with our notation we are able to write the commands only once. 
+For every module in the system, where the index 
+$i$ ranges from 1 to $n$, there exists a corresponding PRISM module. For instance, for the example in Listing \ref{ex-syntax}, let's suppose that $i$ ranges  from 1 to 2, we will generate the respective PRISM code as depicted in Listing \ref{ex-syntax2}. 
+\begin{lstlisting}[style=prism-color,caption={PRISM code generated for the choreography in Listing \ref{ex-syntax}},captionpos=b,label={ex-syntax2}]
+ctmc
+module Q1
+   Q1_STATE : [0..1] init 0;
+   y1 : [0..N] init 0;
+   [RLICV] (Q1_STATE=0) $\rightarrow$ mu1 : (y1'=2)&(Q1_STATE'=0);
+   [OKAMT] (Q1_STATE=0) $\rightarrow$ mu1 : (y1'=1)&(Q1_STATE'=0);
+endmodule
+
+module Q2
+   Q2_STATE : [0..1] init 0;
+   y2 : [0..N] init 0;
+   [OMPXG] (Q2_STATE=0) $\rightarrow$ mu2 : (y2'=2)&(Q2_STATE'=0);
+   [AQNZR] (Q2_STATE=0) $\rightarrow$ mu2 : (y2'=1)&(Q2_STATE'=0);
+endmodule
+
+module P
+   P_STATE : [0..2] init 0;
+   x : [0..N] init 0;
+   [RLICV] (P_STATE=0) $\rightarrow$ lambda1 : (x'=1)&(P_STATE'=0);
+   [OKAMT] (P_STATE=0) $\rightarrow$ lambda2 : (x'=3)&(P_STATE'=0);
+   [OMPXG] (P_STATE=0) $\rightarrow$ lambda1 : (x'=1)&(P_STATE'=0);
+   [AQNZR] (P_STATE=0) $\rightarrow$ lambda2 : (x'=3)&(P_STATE'=0);
+endmodule
+\end{lstlisting}
+This modular approach ensures that each component of the system is systematically represented and integrated within the Prism framework, facilitating a comprehensive analysis and synthesis of the entire system's behavior.
+Importantly, this shortcut does not impact the projection process, because they do not alter the overall structure or behavior of the projection, which focuses on the external relationships and interactions between modules and variables. Therefore, while these internal optimizations are beneficial for efficiency and code management, they do not affect the outcomes of the projection.
+
+The other differences are primarily syntactic. We use strings to represent updates (for instance \texttt{"(x'=1)"}), enabling us to automatically generate the command for PRISM. Another distinction lies in how rates and probabilities are represented. Since choreography involves considering interactions between various processes, we represent the rate/probability of interaction as the product of the rates/probabilities of each process. In the example presented in Listing \ref{ex-syntax}, we utilize the expression \texttt{lambda1*mu[i]}. This signifies that the rate of the first process, denoted as \texttt{P}, is \texttt{lambda1}, while the rate of the second process is represented by \texttt{mu[i]}. If multiple processes are interacting, then the rate/probability is the product of all corresponding rates/probabilities (\texttt{lambda\_1*$\ldots$*lambda\_n}).
+
 We have been able to assure that only one action is enabled for each state within a system through two fundamental factors. Firstly, the uniqueness of labels plays a crucial role. This principle ensures that only the labels projected for each step are involved in the determination of the enabled action. By maintaining uniqueness, it becomes clear which label is associated with the enabled action, avoiding ambiguity within the system.
 Secondly, the uniqueness of state variables is pivotal. Each state in the system possesses its own distinct set of variables. This uniqueness is crucial in determining which action is enabled at any given state. By having exclusive state variables, the system can accurately identify the enabled action without any overlap or confusion between different states. This clarity not only enhances the reliability of the system's behavior but also facilitates easier analysis and comprehension of its dynamics.
