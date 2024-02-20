@@ -13,7 +13,7 @@ presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/dis
 	\item \texttt{STATE}: This variable represents the value of the die, ranging from 0 to 6. Initially, it is set to 0.
  \end{itemize}
  The PRISM code defines the possible transitions between states.
-For example, \texttt{[] s=0 -> 0.5 : (s'=1) + 0.5 : (s'=2);} means that when the system is in state 0 (i.e., the die hasn't been rolled yet), there is a 50\% chance it will transition to state 1 (die rolls a 1) and a 50\% chance it will transition to state 2 (die rolls a 2).
+For example, \texttt{[] s=0 $\rightarrow$ 0.5 : (s'=1) + 0.5 : (s'=2);} means that when the system is in state 0 (i.e., the die hasn't been rolled yet), there is a 50\% chance it will transition to state 1 (die rolls a 1) and a 50\% chance it will transition to state 2 (die rolls a 2).
 Other transition blocks follow similar logic for states 1 to 6.
 State 7 represents an absorbing state where the die has come to rest after being rolled. Transitions from state 7 always lead back to itself.
  In Listing \ref{ex1-code}, we provide part of the program utilizing the choreographic language. %Meanwhile, Listing \ref{ex1-gen} exhibits part of the generated PRISM program.
