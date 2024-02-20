@@ -124,7 +124,7 @@ $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
     distribution imposed by the $\lambda_i$'s. In order to fix this
     problem, we have the following definition instead:
     % 
-    \begin{definition}[Projection, DTMC] Given a well-annotated
+    \begin{definition}[Projection, DTMC]\label{def:projDTMC} Given a well-annotated
       choreography $C$ with probabilities, a module $\role p$, and a
       natural number $\iota$, we define the projection function
       $\proj$ as:
@@ -159,13 +159,29 @@ $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
     \mypar{Correctness.} We now show that our projection operations
     are correct with respect to the semantics of choreographies and
     PRISM. In the sequel, $S_+$ is a state $S$ extended with extra
-    variables used by the projection.
+    variables used by the projection. Moreover, we say that a
+    choreography is {\em well-formed} if the behaviour in each
+    branching for modules who do not participate to the interaction is
+    identical.
       \begin{theorem}[EPP]\label{thm:epp}
         Given a well-formed choreography $C$, we have that
         $(S,C) \red{\lambda} (S', C')$ iff
         $\proj (*, C)\vdash S\uplus S_{+}\red{\lambda} S'\uplus S_{+}'$.
       \end{theorem} 
-      \begin{proof} We prove each direction separately.
+      \begin{proof} We need to build an argument for rates and
+        probabilities separately. Let us focus on the projection in
+        Definition~\ref{def:projCTMC} first. The proof proceeds by
+        induction on the term $C$. For
+        $C=\interact{p}{\role p_1,\ldots,\role p_n}$, we clearly have
+        that, for any state $S$ there exists $S'$ such that
+        $(S,C)\red{\lambda_j}(S',C_j)$. We need to show two things:
+        first, that the projection of $C$ can make the same
+        transition; second, that if the projection makes a transition,
+        it must be corresponding to that of the choreography above.
+
+
+
+        \newpage We prove each direction separately.
         \begin{itemize}
         \item (only if). Assume that
           % 
