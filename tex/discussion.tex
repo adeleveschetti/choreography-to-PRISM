@@ -1,18 +1,103 @@
-In this section, we discuss the choices made in the development of the choreographic language for modeling and analyzing concurrent probabilistic systems as presented in this paper. The framework covers  several key components aimed at improving usability, correctness, and efficiency in modeling and analyzing such systems.
+%
+\mypar{Related Work.}  Choreographic programming~\cite{M23} is a
+language paradigm for writing the expected interactions
+(communications) for a distributed systems from a global viewpoint,
+from which decentralised implementations can be generated via
+projection. The field has been substantially explored in the last
+decade. Nevertheless, there is a scarcity of research on probabilistic
+aspects of choreographic programming.
+%
+To the best of our knowledge, Aman and Ciobanu~\cite{AC19,AC22} are
+the only ones who studied the concept of choreography and
+probabilities. Their work augments multiparty session types (types
+abstractions for communicating systems that use the concept of
+choreography) with a probabilistic internal choice similar to the one
+used by our choreographic branching. However, they do not provide any
+semantics in terms of Markov chains, and, most importantly, they do
+not project into a probabilistic declarative model such as PRISM.
+%
+And, as far as our knowledge extends, there are currently no works
+that generate model checker models from choreographic languages.
+However, the concept of synthesizing local participant specifications
+in accordance with choreographies has been a prominent research focus
+for over two decades. Research in this domain commonly relies on
+abstractions rooted in automata or process calculi
+\cite{DBLP:conf/popl/HondaYC08,DBLP:journals/scp/AutiliIT18}.  Earlier
+implementations of choreographic programming include Chor
+\cite{DBLP:conf/popl/CarboneM13} and AIOCJ
+\cite{DBLP:journals/corr/PredaGGLM16} both of which are grounded in
+process calculi and capable of generating executable Jolie code.
 
-The decision to introduce a choreographic language for modeling processes for PRISM stems from the recognition of the need to improve the usability of this probabilistic model checker. PRISM, while powerful, can be complex and daunting for users, particularly those without a strong background in formal methods. 
-The development of a choreographic language with tailored syntax and semantics represents a significant methodological choice aimed at improving the intuitiveness of modeling concurrent probabilistic systems. Traditional modeling languages may lack the expressive clarity necessary to capture the intricacies of such systems effectively. By designing a language specifically geared towards choreographing system behaviors, we provide practitioners with a more intuitive means of specifying system dynamics. This choice facilitates a more natural and straightforward approach to modeling, which is essential for accurately representing real-world systems and ensuring the efficacy of subsequent analysis.
 
-The choreographic language and projection function aim to abstract away low-level details and provide a higher-level representation of system behaviors. While this abstraction facilitates intuitive modeling, it also introduces the risk of oversimplification. Certain aspects in the behavior of concurrent probabilistic systems may be lost during the abstraction process, potentially leading to inaccuracies in the analysis results. Moreover, while testing our choreographic language, we noticed that some of the case studies presented in the 
-PRISM documentation \cite{PRISMdoc} cannot be modeled by using our language. Specifically, there are three cases where our modelization approach encounters limitations.
-\textit{(i)} In the context of asynchronous leader election, processes synchronize with the same label but under different conditions. Our choreographic language includes the "it-then-else" statement but disallows the "if-then" statement without an accompanying "else." This design choice prevents deadlock states from occurring.
-\textit{(ii)} Similarly, in probabilistic broadcast protocols, the issue lies in the labels of synchronizations. Here, all processes synchronize with the same label for every action. However, our language prohibits this behavior, as each label must be unique for every synchronization between two or more processes.
-\textit{(iii)} In the cyclic server polling system model, the processes "station$_i$" perform two distinct actions in the same state. Specifically, at state 0 ("s$_i$=0"), processes may either synchronize with the "server" process or transition to a different state without synchronization. Our language cannot express this scenario, as synchronization is treated as a branch action, necessitating an alternative option with synchronization.
 
-\AV{Aggiungere related works choreographic languages}
-As far as our knowledge extends, there are currently no works that generate model checker models from choreographic languages.
-However, the concept of synthesizing local participant specifications in accordance with choreographies has been a prominent research focus for over two decades. Research in this domain commonly relies on abstractions rooted in automata or process calculi \cite{DBLP:conf/popl/HondaYC08,DBLP:journals/scp/AutiliIT18}. 
-Earlier implementations of choreographic programming include Chor \cite{DBLP:conf/popl/CarboneM13} and AIOCJ \cite{DBLP:journals/corr/PredaGGLM16} both of which are grounded in process calculi and capable of generating executable Jolie code.
+\mypar{Discussion and Future Work.}
+% In this section, we discuss the choices made in the development of the choreographic language for modeling and analyzing concurrent probabilistic systems as presented in this paper. 
+%
+The general goal of the proposed framework based on the concept of
+choreographic programming is to improve several aspects, including
+usability, correctness, and, efficiency in modeling and analyzing such
+systems.
+%
+The decision to introduce a choreographic language for modelling
+processes for PRISM is based on the need to improve the usability of
+the model checker. Its language, while very powerful, can be complex
+and daunting for users, particularly those without a strong background
+in formal methods.
+
+% The development of a
+Our choreographic language % with tailored syntax and semantics
+% represents a significant methodological choice aimed
+aims at improving the intuitiveness of modelling concurrent
+probabilistic systems. Traditional modeling languages may lack the
+expressive clarity necessary to capture the intricacies of such
+systems effectively. By designing a language specifically geared
+towards choreographing system behaviors, we lay the basis for
+providing practitioners with a more intuitive means of specifying
+system dynamics. This choice facilitates a more natural and
+straightforward approach to modeling, which is essential for
+accurately representing real-world systems and ensuring the efficacy
+of subsequent analysis.
+%
+The choreographic language and projection function aim to abstract
+away low-level details and provide a higher-level representation of
+system behaviors. 
+% However, while this abstraction facilitates intuitive modeling, it
+% also introduces the risk of oversimplification. Certain aspects in
+% the behavior of concurrent probabilistic systems may be lost during
+% the abstraction process, potentially leading to inaccuracies in the
+% analysis results [REALLY?  WHAT IS THIS?].
+However, a choreographic approach can have some limitations in
+expressivity. Some of the case studies presented in the PRISM
+documentation~\cite{PRISMdoc} cannot be modeled by using our
+language. Specifically, there are three cases where our approach
+encounters limitations:
+\begin{itemize}
+\item \textit{(i)} In the context of asynchronous leader election,
+  processes synchronize with the same label but under different
+  conditions. Our choreographic language includes the "it-then-else"
+  statement but disallows the "if-then" statement without an
+  accompanying "else." This design choice prevents deadlock states
+  from occurring.
+\item \textit{(ii)} Similarly, in probabilistic broadcast protocols,
+  the issue lies in the labels of synchronizations. Here, all
+  processes synchronize with the same label for every action. However,
+  our language prohibits this behavior, as each label must be unique
+  for every synchronization between two or more processes.
+\item \textit{(iii)} In the cyclic server polling system model, the
+  processes "station$_i$" perform two distinct actions in the same
+  state. Specifically, at state 0 ("s$_i$=0"), processes may either
+  synchronize with the "server" process or transition to a different
+  state without synchronization. Our language cannot express this
+  scenario, as synchronization is treated as a branch action,
+  necessitating an alternative option with synchronization.
+\end{itemize}
+
 
 In conclusion, this paper has introduced a unified framework that addresses the challenges of modeling and analyzing concurrent probabilistic systems. By presenting a simpler semantics for PRISM, the usability of the platform has been enhanced. Moreover, the definition of a choreographic language with tailored syntax and semantics offers an intuitive modeling approach. The correctness of a projection function, which translates choreographic models to PRISM-compatible formats, has been established. Additionally, the development of a compiler enables seamless translation of choreographic models to PRISM, thereby facilitating powerful analysis while maintaining expressive clarity. These contributions effectively bridge the gap between high-level modeling and robust analysis in probabilistic systems, paving the way for advancements in the field. 
 A possible avenue for future work could involve directly projecting choreographic models onto a Continuous-Time Markov Chain (CTMC). This approach would enable the use of our choreographic language with various model checkers, enhancing its versatility and applicability in probabilistic system analysis.
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
