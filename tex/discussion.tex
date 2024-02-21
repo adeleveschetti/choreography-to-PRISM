@@ -54,19 +54,7 @@ the model checker. Its language, while very powerful, can be complex
 and daunting for users, particularly those without a strong background
 in formal methods.
 
-% The development of a
-Our choreographic language % with tailored syntax and semantics
-% represents a significant methodological choice aimed
-aims at improving the intuitiveness of modelling concurrent
-probabilistic systems. Traditional modeling languages may lack the
-expressive clarity necessary to capture the intricacies of such
-systems effectively. By designing a language specifically geared
-towards choreographing system behaviors, we lay the basis for
-providing practitioners with a more intuitive means of specifying
-system dynamics. This choice facilitates a more natural and
-straightforward approach to modeling, which is essential for
-accurately representing real-world systems and ensuring the efficacy
-of subsequent analysis.
+Our choreographic language aims to improve the intuitive modeling of concurrent probabilistic systems. Traditional modeling languages often lack the expressive clarity needed to effectively capture the intricacies of such systems. By designing a language specific for choreographing system behaviors, we provide practitioners with an intuitive means of specifying system dynamics. This approach enables a more natural and straightforward modeling process, essential for accurately representing real-world systems and ensuring the efficacy of subsequent analysis.
 %
 The choreographic language and projection function aim to abstract
 away low-level details and provide a higher-level representation of
@@ -82,15 +70,9 @@ documentation~\cite{PRISMdoc} cannot be modeled by using our
 language. Specifically, there are two main cases where our approach
 encounters limitations:
 %
-\textit{(i)} in asynchronous leader election case study, it would be
-necessary to use an ``if-then'' statement (without an accompanying
-``else'') and this is not allowed in our language since we wish to
-prevent deadlocked states from occurring; 
+\textit{(i)} in the asynchronous leader election case study, our language prohibits the use of an 'if-then' statement without an accompanying 'else' to prevent deadlocked states; 
 %
-\textit{(ii)} in probabilistic broadcast protocols or in the cyclic
-server polling system model, the system requires a probabilistic
-branching that may synchronise different modules, depending on the
-branch selected.
+\textit{(ii)} in probabilistic broadcast protocols or cyclic server polling system models, the system requires probabilistic branching to synchronize different modules based on the selected branch.
 %
 % \begin{itemize}
 % \item \textit{(i)} In the context of asynchronous leader election,
@@ -115,27 +97,7 @@ branch selected.
 These issues could be fixed by extending our choreographic language
 further and are therefore left as future work.
 
-In conclusion, this paper has introduced a unified framework that
-addresses the challenges of modeling and analyzing concurrent
-probabilistic systems. By presenting a simpler semantics for PRISM,
-the usability of the platform has been enhanced. Moreover, the
-definition of a choreographic language with tailored syntax and
-semantics offers an intuitive modeling approach. The correctness of a
-projection function, which translates choreographic models to
-PRISM-compatible formats, has been established. Additionally, the
-development of a compiler enables seamless translation of
-choreographic models to PRISM, thereby facilitating powerful analysis
-while maintaining expressive clarity. These contributions effectively
-bridge the gap between high-level modeling and robust analysis in
-probabilistic systems, paving the way for advancements in the field.
-%
-A possible avenue for future work could involve directly projecting
-choreographic models onto a CTMC or a DTMC. This approach would enable
-the use of our choreographic language with various model checkers,
-enhancing its versatility and applicability in probabilistic system
-analysis. It remains unclear if a choreographic program can have an
-effect in the performance of the model-checker.
-
+In conclusion, this paper has introduced a unified framework addressing the challenges of modeling and analyzing concurrent probabilistic systems. By presenting a simplified semantics for PRISM, we enhance the platform's usability. Furthermore, the development of a choreographic language with tailored syntax and semantics offers an intuitive modeling approach. We have established the correctness of a projection function that translates choreographic models to PRISM-compatible formats. Additionally, our compiler enables seamless translation of choreographic models to PRISM, facilitating powerful analysis while maintaining expressive clarity. These contributions bridge the gap between high-level modeling and robust analysis in probabilistic systems, paving the way for advancements in the field. Future work could involve directly projecting choreographic models onto a CTMC or a DTMC, enhancing their versatility and applicability in probabilistic system analysis. However, it remains unclear if a choreographic program can impact the performance of the model-checker.
 
 %%% Local Variables: 
 %%% mode: latex
