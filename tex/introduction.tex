@@ -1,9 +1,25 @@
+Understanding and programming distributed systems pose formidable
+challenges due to their inherent complexity and the potential for
+elusive edge cases to lurk within their intricate interactions. Unlike
+monolithic systems, distributed programs involve multiple nodes
+operating concurrently and communicating over networks, introducing a
+multitude of potential failure scenarios and nondeterministic
+behaviours.
+%
+One of the primary challenges in understanding distributed systems
+lies in the fact that the interactions between multiple components can
+diverge from the sum of their individual behaviours. This emergent
+behaviour often results from subtle interactions between nodes, making
+it difficult to predict and reason about the system's overall
+behaviour.
+
 PRISM \cite{PRISMdoc} is a probabilistic model checker that offers a
-specialized language for the specification and verification of
-probabilistic systems. PRISM has been used in various fields, including multimedia protocols, randomised
-distributed algorithms, security protocols, biological systems.  At
-its core, PRISM provides a rich set of constructs for describing
-probabilistic behaviors, transitions, and properties within a system.
+specialised language for the specification and verification of
+probabilistic systems. PRISM has been used in various fields,
+including multimedia protocols, randomised distributed algorithms,
+security protocols, biological systems.  At its core, PRISM provides a
+declarative language with a rich set of constructs for describing
+probabilistic behaviours, transitions, and properties within a system.
 For example, let us consider a distributed voting system where
 multiple nodes collaborate to reach a consensus. In PRISM, we would
 describe the behavior of each voting node individually, specifying
@@ -11,20 +27,6 @@ states, transitions, and communication protocols between
 nodes. However, this approach can become difficult to manage as the
 number of nodes increases.
 
-Understanding and programming distributed systems pose formidable
-challenges due to their inherent complexity and the potential for
-elusive edge cases to lurk within their intricate interactions. Unlike
-their centralized counterparts, distributed programs involve multiple
-nodes operating concurrently and communicating over networks,
-introducing a multitude of potential failure scenarios and
-nondeterministic behaviours.
-%
-One of the primary challenges in understanding distributed systems
-lies in the fact that the interactions between multiple components can
-diverge from the sum of their individual behaviors. This emergent
-behavior often results from subtle interactions between nodes, making
-it difficult to predict and reason about the system's overall
-behaviour.
 %
 %Furthermore, the inherent asynchrony of distributed systems
 %complicates the task of programming them as intended. Conventional
@@ -34,10 +36,13 @@ behaviour.
 %edge cases or race conditions, leading to unintended behaviors and
 %system failures. [NON É MEGLIO EVITARE QUESTO? QUA ABBIAMO TUTTO
 %SINCRONO]
-Choreographic programming offers a paradigm for designing coordination
-plans for distributed systems from a global perspective. This approach
-enables the automatic generation of decentralized implementations that
-are inherently correct-by-construction.
+
+Choreographic programming~\cite{M23} is an emerging programming
+paradigm where programs (choreographies) serve as specifications
+providing a global perspective on the communication patterns inherent
+in a distributed system. This approach facilitates the automatic
+generation of decentralised implementations that are inherently
+correct-by-construction.
 %
 In particular, instead of relying on a central orchestrator or
 controller to dictate the behavior of individual components,
@@ -45,36 +50,52 @@ choreographic languages focus on defining communication patterns and
 protocols that govern the interactions between entities.
 %
 In essence, choreography abstracts away the internal details of
-individual components and emphasizes the global behavior of the system
-as a composition of decentralized interactions. Within the context of
-concurrent and distributed systems, choreographic languages serve as
-tools for defining interaction protocols that govern the communication
-between processes.
-In this paper, we present a choreographic language designed for
-modeling concurrent probabilistic systems with clarity and
-precision. Additionally, we introduce a compiler capable of
-translating protocols described in this language into PRISM code. This
-choreographic approach not only simplifies the modeling process but
-also ensures integration with PRISM's powerful analysis
-capabilities. Through our contributions, we aim to provide a smooth
-workflow for modeling, analyzing, and verifying concurrent
-probabilistic systems, ultimately increasing their usability in
-various application domains.
+individual components and emphasises the global behavior of the system
+as a composition of decentralised interactions. % Within the context of
+% concurrent and distributed systems, choreographic languages serve as
+% tools for defining interaction protocols that govern the communication
+% between processes. 
+%
+This paper presents a choreographic language designed for modelling
+concurrent probabilistic systems.
+% with clarity and precision. 
+Additionally, we introduce a compiler capable of translating protocols
+described in this language into PRISM code. This choreographic
+approach not only simplifies the modelling process but also ensures
+integration with PRISM's powerful analysis capabilities. 
+
 \input{example.tex}
 
+
+Through our contributions, we aim to provide a smooth workflow for
+modeling, analyzing, and verifying concurrent probabilistic systems,
+ultimately increasing their usability in various application domains.
+%
+In particular, by employing choreographies, we gain a clear and
+comprehensive view of the interactions occurring within the system,
+allowing us to discern the flow of processes and detect any potential
+sources of error. This transparency ensures that each step is
+understood and executed accurately, minimizing the likelihood of
+errors and enhancing the reliability of the system.
+
+
 \mypar{Contributions and Overview.} Our contributions can be
-categorised as follows:
+categorised as:
 \begin{itemize} 
 \item Firstly, we propose a novel choreographic language equipped with
   well-defined syntax and semantics, tailored specifically for
-  describing concurrent systems with probabilistic behaviors.
-\item Then, we introduce a simplified semantics for PRISM, enhancing
-  its usability and facilitating clearer understanding for users.
-\item Furthermore, we establish a rigorous definition for a projection
-  function, and discuss its correctness. This projection function
-  serves as a crucial intermediary step in transforming (compiling)
-  models described in our choreographic language into PRISM-compatible
-  representations.
+  describing concurrent systems with probabilistic behaviours
+  (\S~\ref{sec:chor}).
+\item Then, we introduce a semantics for PRISM (\S~\ref{sec:prism}),
+  based on the original semantics for PRISM~\cite{PRISMdoc}
+  % enhancing its usability and facilitating clearer understanding for
+  % users.
+\item Furthermore, we establish a rigorous definition for a
+  translation function from choreographies to PRISM
+  (\S~\ref{sec:proj}), and address its correctness. This translation
+  (projection) serves as a crucial intermediary step in transforming
+  (compiling) models described in our choreographic language into
+  PRISM-compatible representations.
 \item Lastly, we create a compiler implementation that translates the
   choreographic language models into PRISM, allowing users to use
   PRISM's robust analysis features while benefiting from the
