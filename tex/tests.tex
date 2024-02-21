@@ -234,9 +234,11 @@ However, this does not affect the behaviour of the model, as the reader can noti
 \end{figure}
 \end{comment}
 \subsection{Proof of Work Bitcoin Protocol}
+\begin{comment}
 \begin{wrapfigure}[11]{r}{4cm}
 	\includegraphics[scale=0.45]{bitcoin.pdf}	
 \end{wrapfigure} 
+\end{comment}
 In the work presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, the authors chose to enhance the capabilities of the PRISM model checker by incorporating dynamic data types. This extension aimed to effectively model the Proof of Work protocol implemented in the Bitcoin blockchain \cite{bitcoin}.
 
 The Bitcoin system is modeled as a parallel composition of $n$ Miner processes, $n$ \emph{Hasher} processes, and a process denoted as \emph{Network}. Specifically:
@@ -309,32 +311,33 @@ Hasher1 : [0..1] init 0;
 
 endmodule
 \end{lstlisting}
+
+\end{comment}
 \begin{figure}[h]
 	\centering
-	\includegraphics[scale=0.3]{example4-results.jpeg}	
+	\includegraphics[scale=0.2]{example4-results.jpeg}	
 	\caption{Probability at least one miner has created a block.}
 	\label{ex3-res}
 	\end{figure}
-\end{comment}
-
 The PRISM model we generated exhibits greater verbosity compared to the one presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}. This difference arises from our approach of consistently generating the \texttt{else} branch for the \texttt{if-then-else} expression, resulting in an increased number of instructions.
-Nevertheless, in the case of this specific test scenario, we proved that the experimental results remain unaffected.
+Nevertheless, in the case of this specific test scenario, we proved that the experimental results remain unaffected, as reported in Figure \ref{ex3-res}.
 
 
 
 
 \subsection{Hybrid Casper Protocol}
+\begin{comment}
 \begin{wrapfigure}[12]{l}{4.5cm}
 	\includegraphics[scale=0.45]{ethereum.pdf}	
 \end{wrapfigure} 
+\end{comment}
 We now present the Hybrid Casper Protocol as modeled in PRISM, as detailed in \cite{DBLP:journals/distribledger/GallettaLMV23}. The Hybrid Casper protocol represents a hybrid consensus protocol for blockchains, merging features from both Proof of Work and Proof of Stake protocols. Initially, it was implemented in the Ethereum blockchain \cite{ethereum} as a testing phase before switching to a pure Proof of Stake protocol.
 
 The modeling approach is very similar to the one used for the Proof of Work Bitcoin protocol. Specifically, the Hybrid Casper protocol is represented in PRISM as the parallel composition of $n$ \texttt{Validator} modules, along with the modules \texttt{Vote\_Manager} and \texttt{Network}. The \texttt{Validator} module closely resembles the \texttt{Miner} module from the preceding protocol. The only module necessitating clarification is \texttt{Vote\_Manager}, responsible for storing tables containing votes for each checkpoint and computing associated rewards/penalties.
 Part of the code is reported in Listing \ref{ex5-code}, the complete model can be found in \cite{repository}. 
 \begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Choreographic language for the Hybrid Casper Protocol.},captionpos=b,label={ex5-code}]
 $\ldots$
-{
-PoS := Validator[i] -> Validator[i] :
+{PoS := Validator[i] -> Validator[i] :
 (+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"&&" " .
 	if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{
 		$\ldots$
@@ -342,15 +345,9 @@ PoS := Validator[i] -> Validator[i] :
 	else{
 		Validator[i] -> Vote_Manager :(["1*1"] " "&&"(Votes'=addVote(Votes,b[i],stake[i]))".PoS)
 	}
- +["hR*1"] " "&&" " . 
- 	if "!isEmpty(set[i])"@Validator[i] then {
- 		$\dots$
- 	}
- 	else{
- 		PoS
- 	}
- +["rC*1"] $\ldots$							
-}
+ +["hR*1"] " "&&" " . if "!isEmpty(set[i])"@Validator[i] then { $\dots$ }
+ 												 else{ PoS }
+ +["rC*1"] $\ldots$}
 
 \end{lstlisting}
 \begin{comment}
@@ -422,15 +419,15 @@ endmodule
 
 \end{lstlisting}
 \end{comment}
-The code closely resembles the one outlined in \cite{DBLP:journals/distribledger/GallettaLMV23}, with the main distinction being the greater number of lines in our generated model. This difference is due to the fact that certain commands that could be combined, but our generation lacks the automatic capability to perform this check. While the results exhibit similarity, running simulations for the generated model takes PRISM 39.016 seconds, compared to the 22.051 seconds required for the original model.
-\begin{comment}
+The code closely resembles the one outlined in \cite{DBLP:journals/distribledger/GallettaLMV23}, with the main distinction being the greater number of lines in our generated model. 
 \begin{figure}[h]
-\centering
-\includegraphics[scale=0.4]{example6-results.jpeg}	
-\caption{Probability that a block has been created.}
-\label{ex5-res}
-\end{figure}
-\end{comment}
+	\centering
+	\includegraphics[scale=0.25]{example6-results.jpeg}	
+	\caption{Probability that a block has been created.}
+	\label{ex5-res}
+	\end{figure}
+This difference is due to the fact that certain commands that could be combined, but our generation lacks the automatic capability to perform this check. While the results exhibit similarity, running simulations for the generated model takes PRISM 39.016 seconds, compared to the 22.051 seconds required for the original model.
+
 
 \begin{comment}
 \subsection{Problems}
