@@ -1,9 +1,6 @@
 PRISM \cite{PRISMdoc} is a probabilistic model checker that offers a
 specialized language for the specification and verification of
-probabilistic systems. Originally developed for modeling and analyzing
-systems in the domain of probabilistic model checking [I DONT GET
-THIS], PRISM has evolved into a versatile platform with applications
-spanning various fields, including multimedia protocols, randomised
+probabilistic systems. PRISM has been used in various fields, including multimedia protocols, randomised
 distributed algorithms, security protocols, biological systems.  At
 its core, PRISM provides a rich set of constructs for describing
 probabilistic behaviors, transitions, and properties within a system.
@@ -29,15 +26,14 @@ behavior often results from subtle interactions between nodes, making
 it difficult to predict and reason about the system's overall
 behaviour.
 %
-Furthermore, the inherent asynchrony of distributed systems
-complicates the task of programming them as intended. Conventional
-programming paradigms, which rely on sequential execution and shared
-state, struggle to capture the asynchronous nature of distributed
-systems accurately. As a result, developers may inadvertently overlook
-edge cases or race conditions, leading to unintended behaviors and
-system failures. [NON É MEGLIO EVITARE QUESTO? QUA ABBIAMO TUTTO
-SINCRONO]
-
+%Furthermore, the inherent asynchrony of distributed systems
+%complicates the task of programming them as intended. Conventional
+%programming paradigms, which rely on sequential execution and shared
+%state, struggle to capture the asynchronous nature of distributed
+%systems accurately. As a result, developers may inadvertently overlook
+%edge cases or race conditions, leading to unintended behaviors and
+%system failures. [NON É MEGLIO EVITARE QUESTO? QUA ABBIAMO TUTTO
+%SINCRONO]
 Choreographic programming offers a paradigm for designing coordination
 plans for distributed systems from a global perspective. This approach
 enables the automatic generation of decentralized implementations that
@@ -54,8 +50,6 @@ as a composition of decentralized interactions. Within the context of
 concurrent and distributed systems, choreographic languages serve as
 tools for defining interaction protocols that govern the communication
 between processes.
-
-
 In this paper, we present a choreographic language designed for
 modeling concurrent probabilistic systems with clarity and
 precision. Additionally, we introduce a compiler capable of
@@ -66,6 +60,7 @@ capabilities. Through our contributions, we aim to provide a smooth
 workflow for modeling, analyzing, and verifying concurrent
 probabilistic systems, ultimately increasing their usability in
 various application domains.
+\input{example.tex}
 
 \mypar{Contributions and Overview.} Our contributions can be
 categorised as follows:
