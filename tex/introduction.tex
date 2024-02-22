@@ -82,10 +82,11 @@ errors and enhancing the reliability of the system.
 \mypar{Contributions and Overview.} Our contributions can be
 categorised as:
 \begin{itemize} 
-\item Firstly, we propose a novel choreographic language equipped with
+\item Firstly, we propose a choreographic language equipped with
   well-defined syntax and semantics, tailored specifically for
   describing concurrent systems with probabilistic behaviours
-  (\S~\ref{sec:chor}).
+  (\S~\ref{sec:chor}). To the best of our knowledge, this is the first
+  probabilistic choreography language that is not a type abstraction.
 \item Then, we introduce a semantics for PRISM (\S~\ref{sec:prism}),
   based on the original semantics for PRISM~\cite{PRISMdoc}
   % enhancing its usability and facilitating clearer understanding for
@@ -96,10 +97,10 @@ categorised as:
   (projection) serves as a crucial intermediary step in transforming
   (compiling) models described in our choreographic language into
   PRISM-compatible representations.
-\item Lastly, we create a compiler implementation that translates the
-  choreographic language models into PRISM, allowing users to use
-  PRISM's robust analysis features while benefiting from the
-  expressiveness of our choreographic language.
+\item Lastly, we implement a compiler that translates choreographies
+  into PRISM, allowing users to use PRISM's robust analysis features
+  while benefiting from the expressiveness of our choreographic
+  language.
 \end{itemize}
 
 
