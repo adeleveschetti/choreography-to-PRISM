@@ -12,8 +12,8 @@ endpoint code from a choreography is known as {\em
 We observe that in order to simulate a choreography interaction in
 PRISM, we need to use labels on which each involved module can
 synchronise. Therefore, without loss of generality, we make a slight
-abuse of notation and assume that each step in a choreography is
-annotated with unique labels (which will be used by the
+abuse of notation and assume that each interaction in a choreography
+is annotated with a unique label (which will be used by the
 projection). We call such a choreography an {\em annotated
   choreography}. For example, the choreography
 $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
@@ -52,7 +52,7 @@ with rates:
           &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
           \qquad
           % \{ 
-          \Big\{\commandBase {l_j} {\ s_{q}\!=\! \iota} {1:\ s_{q}\!=\!
+          \Big\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {1:\ s_{q}\!=\!
           s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
           {E_j}q\Big\}_{j\in J}
           \\
@@ -70,7 +70,7 @@ with rates:
           \qquad\text{such that } \forall i,j.\ \proj (\role{q}, C_i, \iota)= \proj (\role{q}, C_j, \iota)
           \\\\
 
-          \proj (\role q,\ifTEl {E}a{p}{C_1}{C_2}, \iota) = 
+          \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
           &  \boxed{\text{if }\role q=\role p}\\[2mm]
           \qquad\left\{ 
           \begin{array}{lll}
@@ -85,7 +85,7 @@ with rates:
           \proj (\role{p}, C_2, \iota+\mathsf{nodes}(C_1)+1)
           \\\\
 
-          \proj (\role q,\ifTEl {E}a{p}{C_1}{C_2}, \iota) = 
+          \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
           &  \boxed{\text{if }\role q\neq\role p}\\[2mm]
           \qquad\proj (\role{q}, C_1, \iota+1)
           \quad\cup\quad
@@ -136,8 +136,7 @@ with rates:
     % 
     \begin{definition}[Projection, DTMC]\label{def:projDTMC} Given an annotated
       choreography with probabilities $C$, a module $\role p$, and a
-      natural number $\iota$, we define the projection function
-      $\proj$ as:
+      natural number $\iota$, we define $\proj$ as:
       \begin{displaymath}\small
         \begin{array}{lr}
 
@@ -158,54 +157,59 @@ with rates:
 
         \end{array}
       \end{displaymath}
-      For the other cases, the definitions are equivalent to the one
-      presented in Definition \ref{def:projCTMC}.
+      The other cases of the definition are equivalent to those in
+      Definition \ref{def:projCTMC}.
     \end{definition}
     The fix is immediate: module $\role p$ takes a (probabilistic)
     internal decision on the $j^{\text{th}}$ branch and then
     synchronises on label $l_j$ with $\{\role p_1,\ldots,\role p_n\}$.       
 
+\smallskip
 
-    \mypar{Correctness.} We now show that our projection operations
-    are correct with respect to the semantics of choreographies and
-    PRISM. In the sequel, $S_+$ is a state $S$ extended with extra
-    variables $s_{\role q}$ (for each module in a choreography) used
-    by the projection. Moreover, we say that a choreography is {\em
-      well-formed} if the behaviour in each branching for modules who
-    do not participate to the interaction is identical.
-      \begin{theorem}[EPP]\label{thm:epp}
-        Given a well-formed annotated choreography $C$, we have that
-        $(S,C) \red{\lambda} (S', C')$ iff
-        $\pp_{\role q}\proj (\role q, C,\iota)\vdash S\uplus
-        S_{+}\red{\lambda} S'\uplus S_{+}'$.
-      \end{theorem} 
-      \begin{proof} We separate the proof to one for choreographies
-        with rates and one with probabilities. Let us focus on the
-        projection in Definition~\ref{def:projCTMC} first. The proof
-        proceeds by induction on the term $C$. For
-        $C=\interact{p}{\role p_1,\ldots,\role p_n}$, we clearly have
-        that, for any state $S$ there exists $S'$ such that
-        $(S,C)\red{\lambda_j}(S',C_j)$. We need to show two things:
-        first, that the projection, for all $\role q$,
-        $\proj{(\role{q},C,\iota)}$ of $C$ can make the same
-        transition; second, that if the projection makes a transition,
-        it must be corresponding to that of the choreography above.
+\mypar{Correctness.} We now show that our projection operations are
+correct with respect to the semantics of choreographies and PRISM. In
+the sequel, $S_+$ is a state $S$ extended with the extra variables
+$s_{\role q}$ (for each module in a choreography) used by the
+projection. 
+% Moreover, we say that a choreography is {\em well-formed} if the
+% behaviour in each branching for modules who do not participate to
+% the interaction is identical.
+\begin{theorem}[EPP]\label{thm:epp}
+  Given a well-formed annotated choreography $C$, we have that
+  $(S,C) \red{\lambda} (S', C')$ iff
+  $\pp_{\role q}\proj (\role q, C,\iota)\vdash S\uplus
+  S_{+}\red{\lambda} S'\uplus S_{+}'$.
+\end{theorem}
+\begin{proof} The proof must be separated into whether we deal with
+  rates and with probabilities. Let us focus on the projection in
+  Definition~\ref{def:projCTMC}. The proof proceeds by induction on
+  the term $C$. For $C=\interact{p}{\role p_1,\ldots,\role p_n}$, the
+  key case, we clearly have that, for any state $S$ there exists $S'$
+  such that $(S,C)\red{\lambda_j}(S',C_j)$. We need to show two
+  things: first, that the projection
+  $\pp_\role q\ \proj{(\role{q},C,\iota)}$ of $C$ can make the same
+  transition; second, that if the projection makes a transition, it
+  must be corresponding to that of the choreography above.
 
-        We now observe that this state of the CTMC in the translation
-        is uniquely identified by the fresh label $l$ and the counter
-        $\iota$. Technically, this follows by the definition of
-        projection and annotation. That implies that the commands
-        generated by this step of the translation are such that any
-        state $S_+$ is exclusively going to enable these commands
-        (because of the guard $s_{\role q}=\iota$) which obviously
-        implies that it must be done with rate $\lambda_j$ applying
-        the rules in Figure~\ref{fig:semantics}. The same argument can
-        be applied for the opposite direction. Note that having a
-        unique label for each step of the choreography is only
-        necessary for recursion. Without recursion, having a unique
-        state identifying this particular step of the choreography
-        would have been sufficient. The other cases are similar. The
-        case for DTMC is also similar.
+  We now observe that this state of the CTMC in the translation is
+  uniquely identified by the counter $\iota$. 
+  % Technically, this follows by the definition of projection and
+  % annotation.
+  Moreover, the uniqueness of the label $a$ makes sure that all and
+  only those modules involved in this interaction synchronise with
+  this action (this can shown from the rules in
+  Figure~\ref{fig:semantics}).  As a consequence, the commands
+  generated by this step of the translation are such that any state
+  $S_+$ is exclusively going to enable these commands (because of the
+  guard $s_{\role q}=\iota$) which obviously implies that it must be
+  done with rate $\lambda_j$ applying the rules in
+  Figure~\ref{fig:semantics}. The same argument can be applied for the
+  opposite direction. 
+  % Note that having a unique label for each step of the choreography
+  % is only necessary for recursion. Without recursion, having a
+  % unique state identifying this particular step of the choreography
+  % would have been sufficient.
+  The other cases are similar. The case for DTMC is also similar.
 
 
 
