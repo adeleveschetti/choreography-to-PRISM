@@ -10,10 +10,10 @@ endpoint code from a choreography is known as {\em
 % Normally, projection is defined separately for each module appearing
 % in the choreography program.
 We observe that in order to simulate a choreography interaction in
-PRISM, we need to use labels on which each module in the interaction
-can synchronise. Therefore, without loss of generality, we make a
-slight abuse of notation and assume that each step in a choreography
-is annotated with unique labels (which will be used by the
+PRISM, we need to use labels on which each involved module can
+synchronise. Therefore, without loss of generality, we make a slight
+abuse of notation and assume that each step in a choreography is
+annotated with unique labels (which will be used by the
 projection). We call such a choreography an {\em annotated
   choreography}. For example, the choreography
 $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
@@ -37,18 +37,18 @@ with rates:
   \begin{displaymath}\small
         \begin{array}{lr}
 
-          \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)= 
+          \proj (\role q,\interactl{p}{a}{\role p_1,\ldots,\role p_n}, \iota)= 
           &  \boxed{\text{if }\role q=\role p}\\[2mm]
           \qquad
           % \{ 
-          \Big\{\commandBase {l_j} {\ s_{q}\!=\! \iota} {\lambda_j:\ s_{q}\!=\!
+          \Big\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {\lambda_j:\ s_{q}\!=\!
           s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
           {E_j}q\Big\}_{j\in J}
           \\
           \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
           \\\\
 
-          \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)= 
+          \proj (\role q,\interactl{p}{a}{\role p_1,\ldots,\role p_n}, \iota)= 
           &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
           \qquad
           % \{ 
@@ -59,7 +59,7 @@ with rates:
           \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
           \\\\
 
-          \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)=\ \proj (\role{q}, C_1, \iota)
+          \proj (\role q,\interactl{p}a{\role p_1,\ldots,\role p_n}, \iota)=\ \proj (\role{q}, C_1, \iota)
           &  \hspace{-1.8cm}\boxed{\text{if }\role q\not\in\{\role p, 
             \role p_1,\ldots,\role p_n\}}
           % \\[2mm]
@@ -70,7 +70,7 @@ with rates:
           \qquad\text{such that } \forall i,j.\ \proj (\role{q}, C_i, \iota)= \proj (\role{q}, C_j, \iota)
           \\\\
 
-          \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
+          \proj (\role q,\ifTEl {E}a{p}{C_1}{C_2}, \iota) = 
           &  \boxed{\text{if }\role q=\role p}\\[2mm]
           \qquad\left\{ 
           \begin{array}{lll}
@@ -85,7 +85,7 @@ with rates:
           \proj (\role{p}, C_2, \iota+\mathsf{nodes}(C_1)+1)
           \\\\
 
-          \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
+          \proj (\role q,\ifTEl {E}a{p}{C_1}{C_2}, \iota) = 
           &  \boxed{\text{if }\role q\neq\role p}\\[2mm]
           \qquad\proj (\role{q}, C_1, \iota+1)
           \quad\cup\quad
@@ -109,11 +109,15 @@ with rates:
     $\mathsf{nodes}(C)$ which returns the number of nodes of $C$,
     i.e., the number of steps of the projection function. Obviously,
     when projecting the next branch we need to take into account all
-    other possible branches that may have been already projected. For
-    the sake of space, we do not define the function precisely, but we
-    observe that this could also be easily defined via the label
-    annotations. The second case defines the projection of an
-    interaction when we are projecting one of the roles in
+    other possible branches that may have been already
+    projected. Intuitively, a label and an integer (ranged by $\iota$)
+    identifies a node in the abstract syntax tree of a
+    choreography. Also, note that we assume that from a label $a$ we
+    can generate distinct sublabels $a_j$ just by adding some index
+    $j$. For the sake of space, we do not define the function
+    precisely, but we observe that this could also be easily defined
+    via the label annotations. The second case defines the projection
+    of an interaction when we are projecting one of the modules
     $\{\role p_1,\ldots,\role p_n\}$. Similarly to the previous case,
     we define a command for each branch of the interaction. However,
     the rate of each command is going to be $1$. The if-then-else
@@ -125,12 +129,13 @@ with rates:
     As hinted above, the projection in Definition~\ref{def:projCTMC}
     would be incorrect if instead of using rates we used
     probabilities. This is simply because we cannot force both
-    $\role p$ and $\{\role p_1,\ldots,\role p_n\}$ with the
-    distribution imposed by the $\lambda_i$'s. In order to fix this
-    problem, we have the following definition instead:
+    $\role p$ and $\{\role p_1,\ldots,\role p_n\}$ to take the same
+    branch with the probability distribution of the $\lambda_i$'s. In
+    order to fix this problem, we have the following definition
+    instead:
     % 
-    \begin{definition}[Projection, DTMC]\label{def:projDTMC} Given a well-annotated
-      choreography $C$ with probabilities, a module $\role p$, and a
+    \begin{definition}[Projection, DTMC]\label{def:projDTMC} Given an annotated
+      choreography with probabilities $C$, a module $\role p$, and a
       natural number $\iota$, we define the projection function
       $\proj$ as:
       \begin{displaymath}\small
@@ -164,8 +169,8 @@ with rates:
     \mypar{Correctness.} We now show that our projection operations
     are correct with respect to the semantics of choreographies and
     PRISM. In the sequel, $S_+$ is a state $S$ extended with extra
-    variables $s_{\role q}$ (for each role in a choreography) used by
-    the projection. Moreover, we say that a choreography is {\em
+    variables $s_{\role q}$ (for each module in a choreography) used
+    by the projection. Moreover, we say that a choreography is {\em
       well-formed} if the behaviour in each branching for modules who
     do not participate to the interaction is identical.
       \begin{theorem}[EPP]\label{thm:epp}
