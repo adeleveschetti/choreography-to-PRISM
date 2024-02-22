@@ -1,38 +1,40 @@
 Our next task is to provide a mapping that can translate
-choreographies into the PRISM language. The goal of this section is to
-address the theoretical aspect of this.
+choreographies into the PRISM language. This section addresses
+projection formally.
+% The goal of this section is to address the theoretical aspect of
+% this.
 
 \mypar{Mapping Choreographies to PRISM.}  The operation of generating
 endpoint code from a choreography is known as {\em
-  projection}. Normally, projection is defined separately for each
-module appearing in the choreography program. We first observe that in
-order to simulate interactions in PRISM, we need to use labels on
-which each module in the interaction can synchronise. Therefore,
-without loss of generality, we make a slight abuse of notation and
-assume that each step in a choreography is annotated with unique
-labels that then it is going to be used by the projection. We call
-such a choreography a {\em well-annotated choreography}. For example,
-the choreography
+  projection}. 
+% Normally, projection is defined separately for each module appearing
+% in the choreography program.
+We observe that in order to simulate a choreography interaction in
+PRISM, we need to use labels on which each module in the interaction
+can synchronise. Therefore, without loss of generality, we make a
+slight abuse of notation and assume that each step in a choreography
+is annotated with unique labels (which will be used by the
+projection). We call such a choreography an {\em annotated
+  choreography}. For example, the choreography
 $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
   {E}{p}{\CEnd}{\CEnd}$ is going to be annotated as
   $\interactBasel{p}{a_1}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTEl
-    {E}{a_2}{p}{\CEnd}{\CEnd}$.
-
-
-%
-    \MC{We need to say that we must run some standard static checks
-      because, since there is branching, some terms may not be
-      projectable.}
-%
-
-    We can now formally define the projection of a choreography with
-    rates into the PRISM language.
-    % 
-    \begin{definition}[Projection, CTMC]\label{def:projCTMC} Given a
-      well-annotated choreography $C$ with
-      rates, a module $\role p$, and a natural number $\iota$, we
-      define the projection function $\proj$ as:
-      \begin{displaymath}\small
+    {E}{a_2}{p}{\CEnd}{\CEnd}$, with $a_1$ and $a_2$ distinct.
+% %
+% \MC{We need to say that we must run some standard static checks
+% because, since there is branching, some terms may not be
+% projectable.}
+% %
+We now separate the definition of projection based on whether we
+are dealing with rates or probabilities.  We start with choreographies 
+with rates: 
+% can then define the projection of a choreography with rates into the
+% PRISM language.
+% 
+\begin{definition}[Projection, CTMC]\label{def:projCTMC} Given an
+  annotated choreography with rates $C$, a module $\role p$, and a
+  natural number $\iota$, we define the function $\proj$ as:
+  \begin{displaymath}\small
         \begin{array}{lr}
 
           \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)= 
@@ -43,7 +45,7 @@ $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
           s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
           {E_j}q\Big\}_{j\in J}
           \\
-          \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, s+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+          \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
           \\\\
 
           \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)= 
@@ -54,16 +56,18 @@ $\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
           s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
           {E_j}q\Big\}_{j\in J}
           \\
-          \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, s+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+          \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
           \\\\
 
-          \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)= 
-          &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\not\in\{\role p, 
-            \role p_1,\ldots,\role p_n\}}\\[2mm]
-          \qquad\ \proj (\role{q}, C_1, s)=
-          \ \cup\
-          \proj (\role{q}, C_2, s+\mathsf{nodes}(C_1)) 
-          \\ \text{ADD SIDE CONDITION ABOUT PROJECTABILITY}
+          \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)=\ \proj (\role{q}, C_1, \iota)
+          &  \hspace{-1.8cm}\boxed{\text{if }\role q\not\in\{\role p, 
+            \role p_1,\ldots,\role p_n\}}
+          % \\[2mm]
+          % \qquad\ \proj (\role{q}, C_1, s)=
+          % \ \cup\
+          % \proj (\role{q}, C_2, s+\mathsf{nodes}(C_1)) 
+          \\[2mm]
+          \qquad\text{such that } \forall i,j.\ \proj (\role{q}, C_i, \iota)= \proj (\role{q}, C_j, \iota)
           \\\\
 
           \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
