@@ -1,14 +1,14 @@
-We now move to the formalities for the PRISM language. To the best of
-our knowledge, the only formalisation of a semantics for PRISM can be
-found on the PRISM website~\cite{prismemantics}. Our approach starts
-from this and attempts to make more precise some informal assumptions
-and definitions.
+We now give a formal definition of a fragment of the PRISM language by
+introducing its formal syntax and semantics.
+% We follow the formalisation of a semantics for PRISM can be found on
+% the PRISM website~\cite{prismemantics}. Our approach starts from
+% this and attempts to make more precise some informal assumptions and
+% definitions.
 
-\smallskip
-
-\mypar{Syntax.} In this section, we will reuse some of the syntactic
-terms used for our choreography language, including assignments and
-expressions. We define the syntax of (a subset of) the PRISM language
+\mypar{Syntax.} We reuse some of the syntactic terms used for our
+choreography language, including assignments and expressions. In the
+sequel, let $a$ range over a (possibly infinite) set of labels
+$\mathcal L$. We define the syntax of (a subset of) the PRISM language
 as follows:
 \begin{displaymath}
   \begin{array}{lrlll@{\qquad}l}
@@ -42,14 +42,14 @@ as follows:
 Networks are the top syntactic category for system of modules composed
 together. The term $\CEnd$ represent an empty network. A module is
 meant to represent a process running in the system, and is denoted by
-its role name and its commands, formally written as
-$\role{p}:\{F_i\}_i$, where $\role p$ is a role and $F_i$ are
-commands. Networks can be composed in parallel, in a CSP style: a term
-like $M_1 \ppp A M_2$ says that networks $M_1$ and $M_2$ can
-synchronise using labels in the finite set $A$.
+its name and its commands, formally written as $\role{p}:\{F_i\}_i$,
+where $\role p$ is the name and the $F_i$'s are commands. Networks can
+be composed in parallel, in a CSP style: a term like $M_1 \ppp A M_2$
+says that networks $M_1$ and $M_2$ can synchronise using labels in the
+finite set $A$.
 %
-In this work, we omit PRISM hiding and substitution as they are
-irrelevant for our current choreography language.
+In this work, we omit PRISM's hiding and substitution constructs as
+they are irrelevant for our current choreography language.
 % The term $M/A$ is the standard CSP/CCS hiding operator. Finally
 % $\sigma M$ is equivalent to applying the substitution $\sigma$ to
 % all variables in $x$. A substitution is a function that given a
@@ -59,20 +59,20 @@ irrelevant for our current choreography language.
 % Where does it become important?}
 %
 Commands in a module have the form
-$[\alpha] g \rightarrow \Sigma_{i\in I}\{\lambda_i: u_i\}$. The label
-$\alpha$ can either be the empty string $\epsilon$ or a label $a$,
-i.e., $\alpha\in\{\epsilon\}\cup \mathcal L$. If $\epsilon$ then no
-synchronisation is required. On the other hand, if there is label $a$
-then there will be a synchronisation with other modules that must
-synchronise on $a$. The term $g$ is a guard on the current variable
-state. If both label and guard are enabled, then the command executes
-a branch $i$ with probability/rate $\lambda_i$. As for choreographies,
-if the $\lambda_i$'s are probabilities, we must have that
-$\Sigma_{i\in I}\lambda_i=1$.
+$[\alpha] g \rightarrow \Sigma_{i\in I}\{\lambda_i: u_i\}$. The
+character $\alpha$ can either be the empty string $\epsilon$ or a
+label $a$, i.e., $\alpha\in\{\epsilon\}\cup \mathcal L$. If $\epsilon$
+then no synchronisation is required. On the other hand, if there is
+label $a$ then there will be a synchronisation with other modules that
+must synchronise on $a$. The term $g$ is a guard on the current
+variable state. If both label and guard are enabled, then the command
+executes a branch $i$ with probability/rate $\lambda_i$. As for
+choreographies, if the $\lambda_i$'s are probabilities, we must have
+that $0\leq\lambda_i\leq 1$ and $\Sigma_{i\in I}\lambda_i=1$.
 
 \mypar{Semantics.} In order to give a probabilistic semantics to the
 PRISM language, we follow the approach given in the PRISM
-website~\cite{prismemantics}.  Hereby, we do that by defining two
+documentation~\cite{PRISMdoc}.  Hereby, we do that by defining two
 relations: one with labels for networks and one on states. Our
 relation on networks is the minimum relation $\prismred{}{}$
 satisfying the rules given in Figure~\ref{fig:semantics}.
@@ -123,7 +123,8 @@ $\mathsf{(P_1)}$ propagates a command through parallel composition if
 $\alpha$ is empty or if the label $a$ is not part of the set $A$. When
 the label $a$ is in $A$, we apply rule $\mathsf{(P_2)}$. In this case,
 the product of the probabilities/rates must be taken by extending the
-two different branches to every possible combination. 
+two different branches to every possible combination. This also
+includes the combination of the associated assignments.
 
 Based on the relation above, given
 $M\prismred{}\command \alpha g\lambda u$ and two
@@ -136,10 +137,10 @@ for some $\alpha$.
 If the $\lambda_i$ are probabilities, then the function must be a
 probability distribution. Note that $\mu(F,S,S')$ only denotes the
 probability/rate for the system to move from state $S$ to state $S'$
-after executing command $F$. However, there could be several commands
-derived from $M$ through the relation $\prismred{}$ that could be
-executed to move from $S$ to $S'$. Therefore, we define the transition
-relation on states $M\vdash S\red{\lambda}S'$ as
+after executing command $F$. However, there can be other commands
+derived from a given network $M$ through the relation $\prismred{}$
+that would cause a transition from $S$ to $S'$. Therefore, we define
+the transition relation on states $M\vdash S\red{\lambda}S'$ as
 $$
 \infer[\mathsf{(Transition)}]
 {
