@@ -41,7 +41,7 @@ as follows:
 \end{displaymath}
 Networks are the top syntactic category for system of modules composed
 together. The term $\CEnd$ represent an empty network. A module is
-meant to represent a process running in the system, and is denoted by
+meant to represent a process running in the system and is denoted by
 its name and its commands, formally written as $\role{p}:\{F_i\}_i$,
 where $\role p$ is the name and the $F_i$'s are commands. Networks can
 be composed in parallel, in a CSP style: a term like $M_1 \ppp A M_2$
@@ -70,7 +70,7 @@ executes a branch $i$ with probability/rate $\lambda_i$. As for
 choreographies, if the $\lambda_i$'s are probabilities, we must have
 that $0\leq\lambda_i\leq 1$ and $\Sigma_{i\in I}\lambda_i=1$.
 
-\mypar{Semantics.} In order to give a probabilistic semantics to the
+\mypar{Semantics.} To give a probabilistic semantics to the
 PRISM language, we follow the approach given in the PRISM
 documentation~\cite{PRISMdoc}.  Hereby, we do that by defining two
 relations: one with labels for networks and one on states. Our
@@ -181,16 +181,16 @@ obtained from our translation from choreography to PRISM.
   \begin{displaymath}
     \begin{array}{llll}
       \role{p}: \{ & \quad \commandBase {}{x=0} {1:(x'=1)}\\
-                   & \quad \commandBase {a}{y<1} {0.4: (x'=x+1)\ +\ 0.6: x'=x}\quad \}\\[2mm]
+                   & \quad \commandBase {a}{y<1} {0.4: (x'=x+1)\ +\ 0.6: (x'=x)}\quad \}\\[2mm]
       \role{q}: \{ & \quad \commandBase {}{y=0} {1:(y'=1)}\\
-                   & \quad \commandBase {a}{x<1} {0.5: (y'=y+1)\ +\ 0.5: y'=y}\quad \}\\
+                   & \quad \commandBase {a}{x<1} {0.5: (y'=y+1)\ +\ 0.5: (y'=y)}\quad \}\\
     \end{array}
   \end{displaymath}
   above, the two modules $\role p$ and $\role q$ can both do
   independent actions, as well as synchronising on label $a$. Applying
   the semantics, we can easily derive
   $M\prismred{}\commandBase {}{x=0} {1:(x'=1)}$,
-  $M\prismred{}\commandBase {}{y=0} {1:(y'=1)}$, and, $M\prismred{}F$,
+  $M\prismred{}\commandBase {}{y=0} {1:(y'=1)}$, and $M\prismred{}F$,
   such that
   \begin{displaymath}\small
     \begin{array}{rlll}
