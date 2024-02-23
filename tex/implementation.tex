@@ -19,8 +19,8 @@ This enables us to perform module renaming, a principle that also extends to var
 For every module in the system, where the index 
 $i$ ranges from 1 to $n$, there exists a corresponding PRISM module. For instance, for the example in Listing \ref{ex-syntax}, let's suppose that $i$ ranges  from 1 to 2, we will generate the respective PRISM code as depicted in Listing \ref{ex-syntax2}. 
 \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Example of an use of parameterization in the choreographic language},captionpos=b,label={ex-syntax}]
-	C $\coloneqq$ P $\rightarrow$ Q[i] : (+["lambda1*mu[i]"]  "(x'=1)" "(y[i]'=2)" . C
-			    +["lambda2*mu[i]"]  "(x'=3)" "(y[i]'=1)" . C )
+	C $\coloneqq$ P $\rightarrow$ Q[i] : (+["lambda1*mu[i]"]  "(x'=1)" "(y[i]'=2)" ; C
+			    +["lambda2*mu[i]"]  "(x'=3)" "(y[i]'=1)" ; C )
 \end{lstlisting}
 \begin{lstlisting}[style=prism-color,caption={PRISM code generated for the choreography in Listing \ref{ex-syntax}},captionpos=b,label={ex-syntax2}]
 ctmc

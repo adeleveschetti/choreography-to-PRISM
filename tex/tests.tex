@@ -17,17 +17,17 @@ For lack of space, we do not report the generated PRISM files, they can be found
  \begin{lstlisting}[style=chor-color,caption={Choreographic language for the Dice Program},captionpos=b,label={ex1-code}]
 	$\ldots$
 	{
-	DiceProtocol0 $\coloneqq$  Dice $\rightarrow$ Dice : (+["0.5*1"] . DiceProtocol1
-						 +["0.5*1"] .  DiceProtocol2)
+	DiceProtocol0 $\coloneqq$  Dice $\rightarrow$ Dice : (+["0.5*1"] ; DiceProtocol1
+						 +["0.5*1"] ;  DiceProtocol2)
 	
-	DiceProtocol1 $\coloneqq$ Dice $\rightarrow$ Dice : (+["0.5*1"] . Dice $\rightarrow$ Dice : 
-							(+["0.5*1"]  . DiceProtocol1
-							  +["0.5*1"]  "(d'=1)" . DiceProtocol7)
-						 +["0.5*1"] .  Dice $\rightarrow$ Dice : 
-							(+["0.5*1"]  "(d'=2)" . DiceProtocol7
-							  +["0.5*1"]  "(d'=3)" . DiceProtocol7))
+	DiceProtocol1 $\coloneqq$ Dice $\rightarrow$ Dice : (+["0.5*1"] ; Dice $\rightarrow$ Dice : 
+							(+["0.5*1"]  ; DiceProtocol1
+							 +["0.5*1"]  "(d'=1)" ; DiceProtocol7)
+					     +["0.5*1"] ;  Dice $\rightarrow$ Dice : 
+							(+["0.5*1"]  "(d'=2)" ; DiceProtocol7
+							 +["0.5*1"]  "(d'=3)" ; DiceProtocol7))
 	$\ldots$
-	DiceProtocol7 $\coloneqq$ Dice $\rightarrow$ Dice : (["1*1"] . END)
+	DiceProtocol7 $\coloneqq$ Dice $\rightarrow$ Dice : (["1*1"] ; END)
 	}
 		
 	\end{lstlisting}
@@ -240,22 +240,22 @@ The choreographic model of the Proof of Work protocol is in Listing \ref{ex3-cod
 \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreographic language for the Proof of Work Bitcoin Protocol},captionpos=b,label={ex3-code}]
 $\ldots$
 {PoW $\coloneqq$ Hasher[i] $\rightarrow$ Miner[i] :
-(+["mR*hR[i]"]  " " "(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" . 
+(+["mR*hR[i]"]  " " "(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" ; 
 	Miner[i] $\rightarrow$ Network : (["rB*1"] "(B[i]'=addBlock(B[i],b[i]))"   
-		foreach(k!=i) "(set[k]'=addBlockSet(set[k],b[i]))"@Network.PoW)
- +["lR*hR[i]"] " "   " ".if "!isEmpty(set[i])"@Miner[i] then { 
-  	   			["r"] "(b[i]'=extractBlock(set[i]))"@Miner[i] .  
-				   Miner[i] $\rightarrow$ Network : 
+		foreach(k!=i) "(set[k]'=addBlockSet(set[k],b[i]))"@Network;PoW)
+ +["lR*hR[i]"] ; if "!isEmpty(set[i])"@Miner[i] then { 
+  	   		["r"] "(b[i]'=extractBlock(set[i]))"@Miner[i] ;  
+				Miner[i] $\rightarrow$ Network : 
 					(["1*1"] "(setMiner[i]'=addBlockSet(setMiner[i],b[i]))"
-		 			  "(set[i]' = removeBlock(set[i],b[i]))".PoW) 
- 			     }
- 			     else{
- 	   			if "canBeInserted(B[i],b[i])"@Miner[i] then { 
- 	      			   ["1"] "(B[i]'=addBlock(B[i],b[i]))
-				   &(setMiner[i]'=removeBlock(setMiner[i],b[i]))"@Miner[i].PoW 
- 	   			}
-	   			else{PoW}
-			     })} 
+		 			"(set[i]' = removeBlock(set[i],b[i]))";PoW) 
+ 		   }
+ 		   else{
+ 	   		if "canBeInserted(B[i],b[i])"@Miner[i] then { 
+ 	      			["1"] "(B[i]'=addBlock(B[i],b[i]))
+				&(setMiner[i]'=removeBlock(setMiner[i],b[i]))"@Miner[i];PoW 
+ 	   		}
+	   		else{PoW}
+		   })} 
 \end{lstlisting}
 \begin{comment}
 \begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Peer-To-Peer Protocol.},captionpos=b,label={ex3-gen}]
@@ -330,12 +330,12 @@ Part of the choreographic modelization is reported in Listing \ref{ex5-code}, th
 \begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Choreographic language for the Hybrid Casper Protocol},captionpos=b,label={ex5-code}]
 $\ldots$
 {PoS := Validator[i] -> Validator[i] :
-(+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"  .
+(+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"; 
 	if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{$\ldots$}
 	else{
-		Validator[i] -> Vote_Manager :(["1*1"]  "(Votes'=addVote(Votes,b[i],stake[i]))".PoS)
+		Validator[i] -> Vote_Manager :(["1*1"]  "(Votes'=addVote(Votes,b[i],stake[i]))"; PoS)
 	}
- +["hR*1"]  . if "!isEmpty(set[i])"@Validator[i] then { $\dots$ }
+ +["hR*1"]  ; if "!isEmpty(set[i])"@Validator[i] then { $\dots$ }
  							else{ PoS }
  +["rC*1"] $\ldots$}
 
