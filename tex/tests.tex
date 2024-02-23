@@ -269,15 +269,15 @@ endmodule
 
 \end{comment}
 
-\begin{wrapfigure}{r}{0.41\textwidth}
-	\vspace{-0.75cm}
-	\centering
-	\includegraphics[scale=0.28]{example4-results.jpeg}	
-	\vspace{-0.25cm}
-	\caption{}
-	\label{ex3-res}
-	\vspace{-0.25cm}
-	\end{wrapfigure}
+\begin{wrapfigure}{r}{0.38\textwidth}
+		\vspace{-0.75cm}
+		\centering
+		\includegraphics[scale=0.35]{example.pdf}	
+		\vspace{-0.35cm}
+		\caption{}
+		\label{ex3-res}
+		\vspace{-0.5cm}
+		\end{wrapfigure}
 
 The PRISM model we generated exhibits greater verbosity compared to the one presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}. This difference arises from our approach of consistently generating the \texttt{else} branch for the \texttt{if-then-else} expression, resulting in an increased number of instructions.
 Nevertheless, in the case of this specific test scenario, we proved that the experimental results remain unaffected, as reported in Figure \ref{ex3-res}.
@@ -378,14 +378,14 @@ endmodule
 \end{lstlisting}
 \end{comment}
 
-\begin{wrapfigure}{r}{0.4\textwidth}
+\begin{wrapfigure}{r}{0.38\textwidth}
 	\vspace{-0.75cm}
 	\centering
-	\includegraphics[scale=0.35]{example6-results.jpeg}	
+	\includegraphics[scale=0.35]{example2.pdf}	
+	\vspace{-0.35cm}
 	\caption{}
-	\vspace{-0.25cm}
 	\label{ex5-res}
-	\vspace{-0.25cm}
+	\vspace{-0.5cm}
 	\end{wrapfigure}
 The code closely resembles the one outlined in \cite{DBLP:journals/distribledger/GallettaLMV23}, with the main distinction being the greater number of lines in our generated model. 
 This difference is due to the fact that certain commands could be combined, but our generation lacks the automatic capability to perform this check. While the results exhibit similarity, running simulations for the generated model takes PRISM 39.016 seconds, compared to the 22.051 seconds required for the original model.
