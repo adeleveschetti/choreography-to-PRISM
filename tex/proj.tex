@@ -16,10 +16,10 @@ abuse of notation and assume that each interaction in a choreography
 is annotated with a unique label (which will be used by the
 projection). We call such a choreography an {\em annotated
   choreography}. For example, the choreography
-$\interactBase{p}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
+$\interactBase{p}{q} +\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
   {E}{p}{\CEnd}{\CEnd}$ is going to be annotated as
-  $\interactBasel{p}{a_1}{q}\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTEl
-    {E}{a_2}{p}{\CEnd}{\CEnd}$, with $a_1$ and $a_2$ distinct.
+  $\interactBasel{p}{a}{q} +\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTEl
+    {E}{}{p}{\CEnd}{\CEnd}$.
 % %
 % \MC{We need to say that we must run some standard static checks
 % because, since there is branching, some terms may not be
