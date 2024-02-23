@@ -1,5 +1,5 @@
 We implemented our language in 1246 lines of Java, defining its grammar and utilizing ANTLR \cite{ANTLR} to generate both parser and visitor components. Each syntax node within the abstract syntax tree (AST) was encapsulated in a corresponding {\tt Node} class, with methods within these classes used for PRISM code generation.
-\begin{lstlisting}[language=Eclipse,caption=The \texttt{generateCode} function.,label=genfun1,numbers=none]
+\begin{lstlisting}[language=Eclipse,caption=The \texttt{generateCode} function,label=genfun1,numbers=none]
 	String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot);	
 \end{lstlisting}
 The {\tt generateCode} function generates the projection from our language to PRISM.

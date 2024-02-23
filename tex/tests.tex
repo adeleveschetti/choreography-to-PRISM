@@ -31,38 +31,6 @@ For lack of space, we do not report the generated PRISM files, they can be found
 	}
 		
 	\end{lstlisting}
-	\vspace{-0.25cm}
-
-\begin{comment}
-\begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Dice Program.},captionpos=b,label={ex1-gen}]
-dtmc
-
-module Dice
-	Dice : [0..11] init 0;
-	d : [0..6] init 0; 
-
-	[] (Dice=0)  $\rightarrow$ 0.5 :  (Dice'=2) + 0.5 :  (Dice'=6); 
-	[] (Dice=2)  $\rightarrow$ 0.5 :  (Dice'=3) + 0.5 :  (Dice'=4); 
-	[] (Dice=3)  $\rightarrow$ 0.5 :  (Dice'=2) + 0.5 : (d'=1)&(Dice'=10); 
-	[] (Dice=4)  $\rightarrow$ 0.5 : (d'=2)$\&$(Dice'=10) + 0.5 : (d'=3)$\&$(Dice'=10);
-	[] (Dice=6)  $\rightarrow$ 0.5 :  (Dice'=7) + 0.5 : (Dice'=8); 
-	[] (Dice=7)  $\rightarrow$ 0.5 :  (Dice'=6) + 0.5 : (d'=4)$\&$(Dice'=10);
-	[] (Dice=8)  $\rightarrow$ 0.5 : (d'=5)$\&$(Dice'=10) + 0.5 : (d'=6)$\&$(Dice'=10); 
-	[] (Dice=10)  $\rightarrow$ 1 :  (Dice'=10);
-
-endmodule
-	
-\end{lstlisting}
-\begin{wrapfigure}[10]{r}{.5\textwidth}
-    \centering
-	\vspace{-20pt}
-	\includegraphics[scale=0.4]{example2-results.jpeg}	
-	\vspace{-25pt}
-
-	\caption{Probability of reaching a state where $d=k$, for $k=1,\ldots,6.$}
-	\label{ex1-res}
-\end{wrapfigure}
-\end{comment}
 
 The PRISM model produced by our method closely aligns with the original model with only minimal details that differ between the two.
 Additionally, to ensure the generated program's accuracy, 
