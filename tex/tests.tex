@@ -4,6 +4,7 @@ test cases reported in the PRISM repository\footnote{\url{https://www.prismmodel
 the Bitcoin Proof of Work protocol and the Hybrid Casper protocol, 
 presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/distribledger/GallettaLMV23}.
 For lack of space, we do not report the generated PRISM files, they can be found in the online repository \cite{repository}.
+
 \subsection{The Dice Program}
  The first test case we focus on is the Dice Program \cite{KY76}.
  The following program simulates a die using only unbiased coins. Starting from the initial vertex (state $s_0$), the process involves the iterative flipping of a coin. Upon obtaining heads, the upper branch is chosen, and in the case of tails, the lower branch is taken. This sequential process persists until the final determination of the die's value.
@@ -206,7 +207,6 @@ The Bitcoin system is modeled as a parallel composition of $n$ \emph{Miner} proc
 \end{itemize}
 The choreographic model of the Proof of Work protocol is in Listing \ref{ex3-code}.
 \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreographic language for the Proof of Work Bitcoin Protocol},captionpos=b,label={ex3-code}]
-$\ldots$
 {PoW $\coloneqq$ Hasher[i] $\rightarrow$ Miner[i] :
 (+["mR*hR[i]"]  " " "(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" ; 
 	Miner[i] $\rightarrow$ Network : (["rB*1"] "(B[i]'=addBlock(B[i],b[i]))"   
@@ -222,8 +222,7 @@ $\ldots$
  	      			["1"] "(B[i]'=addBlock(B[i],b[i]))
 				&(setMiner[i]'=removeBlock(setMiner[i],b[i]))"@Miner[i];PoW 
  	   		}
-	   		else{PoW}
-		   })} 
+	   		else{PoW}})} 
 \end{lstlisting}
 \begin{comment}
 \begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Peer-To-Peer Protocol.},captionpos=b,label={ex3-gen}]
@@ -269,21 +268,21 @@ endmodule
 
 \end{comment}
 
-\begin{wrapfigure}{r}{0.38\textwidth}
+\begin{wrapfigure}{r}{0.4\textwidth}
 		\vspace{-0.75cm}
 		\centering
 		\includegraphics[scale=0.35]{example.pdf}	
 		\vspace{-0.35cm}
 		\caption{}
 		\label{ex3-res}
-		\vspace{-0.5cm}
+		\vspace{-0.75cm}
 		\end{wrapfigure}
 
 The PRISM model we generated exhibits greater verbosity compared to the one presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}. This difference arises from our approach of consistently generating the \texttt{else} branch for the \texttt{if-then-else} expression, resulting in an increased number of instructions.
-Nevertheless, in the case of this specific test scenario, % we proved that 
-the experimental results remain unaffected, as reported in Figure \ref{ex3-res}.
-
-
+%Nevertheless, in the case of this specific test scenario, % we proved that 
+%the experimental results remain unaffected, as reported in Figure \ref{ex3-res}.
+%Specifically, in Figure \ref{ex3-res}, we present the probability of block creation. Discrepancies between the results of the original model and the generated one arise from the nature of this probability calculation, which involves simulation and may therefore vary with each run.
+Nevertheless, the experimental results obtained for the probability of creating a block, detailed in Figure \ref{ex3-res}, remain unaffected. The discrepancies between the original model and the generated one arise from variations inherent in the simulation-based calculation the probability.
 
 
 \subsection{Hybrid Casper Protocol}
@@ -297,7 +296,6 @@ We now present the Hybrid Casper Protocol \cite{DBLP:journals/distribledger/Gall
 The modeling approach is very similar to the one used for the Proof of Work Bitcoin protocol. Specifically, the Hybrid Casper protocol is represented in PRISM as the parallel composition of $n$ \emph{Validator} modules, along with the modules \emph{Vote\_Manager} and \emph{Network}. Each \emph{Validator} module closely resembles the \emph{Miner} module from the previous protocol. The module \emph{Vote\_Manager} is responsible for storing maps containing votes for each block and computing associated rewards/penalties.
 Part of the choreographic modelization is reported in Listing \ref{ex5-code}, the complete model can be found in \cite{repository}. 
 \begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Choreographic language for the Hybrid Casper Protocol},captionpos=b,label={ex5-code}]
-$\ldots$
 {PoS := Validator[i] -> Validator[i] :
 (+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"; 
 	if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{$\ldots$}
@@ -386,10 +384,10 @@ endmodule
 	\vspace{-0.35cm}
 	\caption{}
 	\label{ex5-res}
-	\vspace{-0.5cm}
+	\vspace{-0.75cm}
 	\end{wrapfigure}
 The code closely resembles the one outlined in \cite{DBLP:journals/distribledger/GallettaLMV23}, with the main distinction being the greater number of lines in our generated model. 
-This difference is due to the fact that certain commands could be combined, but our generation lacks the automatic capability to perform this check. While the results exhibit similarity, running simulations for the generated model takes PRISM 39.016 seconds, compared to the 22.051 seconds required for the original model.
+This difference is due to the fact that certain commands could be combined, but our generation lacks the automatic capability to perform this check. While the results obtained for the probability of creating a block reported in Figure \ref{ex5-res} exhibit similarity, running simulations for the generated model takes PRISM 39.016 seconds, compared to the 22.051 seconds requiredx for the original model.
 
 
 \begin{comment}
