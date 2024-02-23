@@ -165,13 +165,13 @@ with rates:
 
 \smallskip
 
-\mypar{Correctness.} We now show that our projection operations are
-correct with respect to the semantics of choreographies and PRISM. In
-the sequel, $S_+$ is a state $S$ extended with the extra variables
-$s_{\role q}$ (for each module in a choreography) used by the
-projection. In the projection, we utilize alphabetized parallel
-composition $\pp$, wherein modules synchronize solely on labels that
-appear in both modules.
+\mypar{Correctness.} Our projection operations are correct with
+respect to the semantics of choreographies and PRISM. In the sequel,
+$S_+$ is a state $S$ extended with the extra variables $s_{\role q}$
+(for each module in a choreography) used by the projection. In the
+projection, we utilize alphabetized parallel composition $\pp$,
+wherein modules synchronize solely on labels that appear in both
+modules.
 % Moreover, we say that a choreography is {\em well-formed} if the
 % behaviour in each branching for modules who do not participate to
 % the interaction is identical.
@@ -181,8 +181,8 @@ appear in both modules.
   $\pp_{\role q}\ \proj (\role q, C,\iota)\vdash S_{+}
   \red{\lambda} S_{+}'$.
 \end{theorem}
-\begin{proof} The proof must be separated into whether we deal with
-  rates and with probabilities. Let us focus on the projection in
+\begin{proof}[Sketch] The proof must be separated into whether we deal
+  with rates and with probabilities. Let us focus on the projection in
   Definition~\ref{def:projCTMC}. The proof proceeds by induction on
   the term $C$. For $C=\interact{p}{\role p_1,\ldots,\role p_n}$, the
   key case, we clearly have that, for any state $S$ there exists $S'$

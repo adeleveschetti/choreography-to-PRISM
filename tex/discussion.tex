@@ -43,9 +43,9 @@ be then model-checked.
 \mypar{Discussion and Future Work.}
 % In this section, we discuss the choices made in the development of the choreographic language for modeling and analyzing concurrent probabilistic systems as presented in this paper. 
 %
-The general goal of the proposed framework based on the concept of
-choreographic programming is to improve several aspects, including
-usability, correctness, and efficiency in modeling and analyzing such
+The ultimate goal of the proposed framework is to use the concept of
+choreographic programming to improve several aspects, including
+usability, correctness, and efficiency in modeling and analysing such
 systems.
 %
 The decision to introduce a choreographic language for modelling
@@ -97,7 +97,26 @@ encounters limitations:
 These issues could be fixed by extending our choreographic language
 further and are therefore left as future work.
 
-In conclusion, this paper has introduced a unified framework addressing the challenges of modeling and analyzing concurrent probabilistic systems. By presenting a simplified semantics for PRISM, we enhance the platform's usability. Furthermore, the development of a choreographic language with tailored syntax and semantics offers an intuitive modeling approach. We have established the correctness of a projection function that translates choreographic models to PRISM-compatible formats. Additionally, our compiler enables seamless translation of choreographic models to PRISM, facilitating powerful analysis while maintaining expressive clarity. These contributions bridge the gap between high-level modeling and robust analysis in probabilistic systems, paving the way for advancements in the field. Future work could involve directly projecting choreographic models onto a CTMC or a DTMC, enhancing their versatility and applicability in probabilistic system analysis. However, it remains unclear if a choreographic program can impact the performance of the model checker.
+In conclusion, this paper has introduced a framework for addressing
+the challenges of modeling and analyzing concurrent probabilistic
+systems.
+% By presenting a simplified semantics for PRISM, we enhance the
+% platform's usability.
+The development of a choreographic language with tailored syntax and
+semantics offers an intuitive modeling approach. We have established
+the correctness of a projection function that translates choreographic
+models to PRISM-compatible formats. Additionally, our compiler enables
+seamless translation of choreographic models to PRISM, facilitating
+powerful analysis while maintaining expressive clarity. These
+contributions bridge the gap between high-level modeling and robust
+analysis in probabilistic systems, paving the way for advancements in
+the field. Future work could involve directly generating a CTMC or a
+DTMC from a choreography, bypassing the projection into the PRISM
+language. This can be done using our semantics for choreographies
+which immediately constructs the corresponding Markov chain faster
+than it would take to construct the Markov chain of the corresponding
+projection. A formal analysis of its complexity, an implementation,
+and performance benchmarking are left as future work.
 
 %%% Local Variables: 
 %%% mode: latex
