@@ -5,7 +5,7 @@ the Bitcoin Proof of Work protocol and the Hybrid Casper protocol,
 presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/distribledger/GallettaLMV23}.
 For lack of space, we do not report the generated PRISM files, they can be found in the online repository \cite{repository}.
 \subsection{The Dice Program}
- The first test case we focus on the Dice Program \cite{KY76}.
+ The first test case we focus on is the Dice Program \cite{KY76}.
  The following program simulates a die using only unbiased coins. Starting from the initial vertex (state $s_0$), the process involves the iterative flipping of a coin. Upon obtaining heads, the upper branch is chosen, and in the case of tails, the lower branch is taken. This sequential process persists until the final determination of the die's value.
  In particular, the PRISM model uses two variables: 
  \begin{itemize}
@@ -280,7 +280,8 @@ endmodule
 		\end{wrapfigure}
 
 The PRISM model we generated exhibits greater verbosity compared to the one presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}. This difference arises from our approach of consistently generating the \texttt{else} branch for the \texttt{if-then-else} expression, resulting in an increased number of instructions.
-Nevertheless, in the case of this specific test scenario, we proved that the experimental results remain unaffected, as reported in Figure \ref{ex3-res}.
+Nevertheless, in the case of this specific test scenario, % we proved that 
+the experimental results remain unaffected, as reported in Figure \ref{ex3-res}.
 
 
 
