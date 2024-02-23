@@ -12,29 +12,25 @@ presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/dis
 	\item \codeprism{d}: This variable represents the state of the system, ranging from 0 to 7. Initially, it is set to 0.
 	\item \codeprism{STATE}: This variable represents the value of the die, ranging from 0 to 6. Initially, it is set to 0.
  \end{itemize}
-%We briefly explain the overall process without providing the full PRISM code. For instance, the command 
-%\codeprism{[] (STATE=0) -> 0.5 : (STATE'=1) + 0.5 : (STATE'=2);}
-%means that when the system is in state 0 (i.e., the die hasn't been rolled yet), there is a 50\% chance it will transition to state 1 (die rolls a 1) and a 50\% chance it will transition to state 2 (die rolls a 2).
-%Other transition blocks follow similar logic for states 1 to 6.
-%State 7 represents an absorbing state where the die has come to rest after being rolled. Transitions from state 7 always lead back to itself.
-In Listing \ref{ex1-code}, we provide part of the model in our choreographic language. 
-\begin{lstlisting}[style=chor-color,caption={Choreographic language for the Dice Program.},captionpos=b,label={ex1-code}]
-$\ldots$
-{
-DiceProtocol0 $\coloneqq$  Dice $\rightarrow$ Dice : (+["0.5*1"] . DiceProtocol1
-				     +["0.5*1"] .  DiceProtocol2)
-
-DiceProtocol1 $\coloneqq$ Dice $\rightarrow$ Dice : (+["0.5*1"] . Dice $\rightarrow$ Dice : 
-						(+["0.5*1"]  . DiceProtocol1
-					 	 +["0.5*1"]  "(d'=1)" . DiceProtocol7)
-				     +["0.5*1"] .  Dice $\rightarrow$ Dice : 
-						(+["0.5*1"]  "(d'=2)" . DiceProtocol7
-					 	 +["0.5*1"]  "(d'=3)" . DiceProtocol7))
-$\ldots$
-DiceProtocol7 $\coloneqq$ Dice $\rightarrow$ Dice : (["1*1"] . END)
-}
+ \vspace{-0.25cm}
+ \begin{lstlisting}[style=chor-color,caption={Choreographic language for the Dice Program.},captionpos=b,label={ex1-code}]
+	$\ldots$
+	{
+	DiceProtocol0 $\coloneqq$  Dice $\rightarrow$ Dice : (+["0.5*1"] . DiceProtocol1
+						 +["0.5*1"] .  DiceProtocol2)
 	
-\end{lstlisting}
+	DiceProtocol1 $\coloneqq$ Dice $\rightarrow$ Dice : (+["0.5*1"] . Dice $\rightarrow$ Dice : 
+							(+["0.5*1"]  . DiceProtocol1
+							  +["0.5*1"]  "(d'=1)" . DiceProtocol7)
+						 +["0.5*1"] .  Dice $\rightarrow$ Dice : 
+							(+["0.5*1"]  "(d'=2)" . DiceProtocol7
+							  +["0.5*1"]  "(d'=3)" . DiceProtocol7))
+	$\ldots$
+	DiceProtocol7 $\coloneqq$ Dice $\rightarrow$ Dice : (["1*1"] . END)
+	}
+		
+	\end{lstlisting}
+In Listing \ref{ex1-code}, we provide part of the model in our choreographic language. 
 
 \begin{comment}
 \begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Dice Program.},captionpos=b,label={ex1-gen}]
@@ -235,9 +231,9 @@ In \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, the authors extended the 
 
 The Bitcoin system is modeled as a parallel composition of $n$ Miner processes, $n$ \emph{Hasher} processes, and a process denoted as \emph{Network}. Specifically:
 \begin{itemize}
-\item The \emph{Miner} processes replicate blockchain miners responsible for generating new blocks and appending them to their local ledger.
-\item The \emph{Hasher} processes simulate the process of solving the cryptographic puzzle.
-\item The \emph{Network} process models the broadcast communication among miners.
+\item \emph{Miner} processes replicate blockchain miners responsible for generating new blocks and appending them to their local ledger.
+\item \emph{Hasher} processes simulate the process of solving the cryptographic puzzle.
+\item \emph{Network} process models the broadcast communication among miners.
 \end{itemize}
 The choreographic model of the Proof of Work protocol is in Listing \ref{ex3-code}.
 \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreographic language for the Proof of Work Bitcoin Protocol.},captionpos=b,label={ex3-code}]
@@ -305,10 +301,13 @@ endmodule
 \end{comment}
 
 \begin{wrapfigure}{r}{0.41\textwidth}
+	\vspace{-0.75cm}
 	\centering
 	\includegraphics[scale=0.22]{example4-results.jpeg}	
+	\vspace{-0.25cm}
 	\caption{}
 	\label{ex3-res}
+	\vspace{-0.25cm}
 	\end{wrapfigure}
 
 The PRISM model we generated exhibits greater verbosity compared to the one presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}. This difference arises from our approach of consistently generating the \texttt{else} branch for the \texttt{if-then-else} expression, resulting in an increased number of instructions.
@@ -323,7 +322,7 @@ Nevertheless, in the case of this specific test scenario, we proved that the exp
 	\includegraphics[scale=0.45]{ethereum.pdf}	
 \end{wrapfigure} 
 \end{comment}
-We now present the Hybrid Casper Protocol as modeled in PRISM, as detailed in \cite{DBLP:journals/distribledger/GallettaLMV23}. The Hybrid Casper protocol represents a hybrid consensus protocol for blockchains, merging features from both Proof of Work and Proof of Stake protocols. 
+We now present the Hybrid Casper Protocol as modeled in PRISM \cite{DBLP:journals/distribledger/GallettaLMV23}. The Hybrid Casper protocol represents a hybrid consensus protocol for blockchains, merging features from both Proof of Work and Proof of Stake protocols. 
 
 The modeling approach is very similar to the one used for the Proof of Work Bitcoin protocol. Specifically, the Hybrid Casper protocol is represented in PRISM as the parallel composition of $n$ \texttt{Validator} modules, along with the modules \texttt{Vote\_Manager} and \texttt{Network}. The \texttt{Validator} module closely resembles the \texttt{Miner} module from the preceding protocol. The module \texttt{Vote\_Manager} is responsible for storing tables containing votes for each block and computing associated rewards/penalties.
 Part of the choreographic modelization is reported in Listing \ref{ex5-code}, the complete model can be found in \cite{repository}. 
@@ -331,14 +330,12 @@ Part of the choreographic modelization is reported in Listing \ref{ex5-code}, th
 $\ldots$
 {PoS := Validator[i] -> Validator[i] :
 (+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"  .
-	if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{
-		$\ldots$
-	}
+	if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{$\ldots$}
 	else{
 		Validator[i] -> Vote_Manager :(["1*1"]  "(Votes'=addVote(Votes,b[i],stake[i]))".PoS)
 	}
  +["hR*1"]  . if "!isEmpty(set[i])"@Validator[i] then { $\dots$ }
- 												 else{ PoS }
+ 							else{ PoS }
  +["rC*1"] $\ldots$}
 
 \end{lstlisting}
@@ -413,9 +410,11 @@ endmodule
 \end{comment}
 
 \begin{wrapfigure}{r}{0.4\textwidth}
+	\vspace{-0.75cm}
 	\centering
 	\includegraphics[scale=0.27]{example6-results.jpeg}	
 	\caption{}
+	\vspace{-0.25cm}
 	\label{ex5-res}
 	\end{wrapfigure}
 The code closely resembles the one outlined in \cite{DBLP:journals/distribledger/GallettaLMV23}, with the main distinction being the greater number of lines in our generated model. 
