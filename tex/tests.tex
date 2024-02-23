@@ -1,19 +1,20 @@
 In  this section, we report our experimental evaluation of our language. 
 We focus on three benchmarks: the dice program that we compare with the  
 test cases reported in the PRISM repository\footnote{\url{https://www.prismmodelchecker.org/casestudies/}}; 
-the Bitcoin proof of work protocol and the Hybrid Casper protocol, 
+the Bitcoin Proof of Work protocol and the Hybrid Casper protocol, 
 presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/distribledger/GallettaLMV23}.
-
+For lack of space, we do not report the generated PRISM files, they can be found in the online repository \cite{repository}.
 \subsection{The Dice Program}
  The first test case we focus on the Dice Program \cite{KY76}.
  The following program simulates a die using only unbiased coins. Starting from the initial vertex (state $s_0$), the process involves the iterative flipping of a coin. Upon obtaining heads, the upper branch is chosen, and in the case of tails, the lower branch is taken. This sequential process persists until the final determination of the die's value.
  In particular, the PRISM model uses two variables: 
  \begin{itemize}
-	\item \codeprism{d}: This variable represents the state of the system, ranging from 0 to 7. Initially, it is set to 0.
-	\item \codeprism{STATE}: This variable represents the value of the die, ranging from 0 to 6. Initially, it is set to 0.
+	\item \codeprism{d}: This variable represents the value of the dice, ranging from 0 to 6. Initially, it is set to 0.
+	\item \codeprism{STATE}: This variable is the state variable, ranging from 0 to 7. Initially, it is set to 0.
  \end{itemize}
+ 
  \vspace{-0.25cm}
- \begin{lstlisting}[style=chor-color,caption={Choreographic language for the Dice Program.},captionpos=b,label={ex1-code}]
+ \begin{lstlisting}[style=chor-color,caption={Choreographic language for the Dice Program},captionpos=b,label={ex1-code}]
 	$\ldots$
 	{
 	DiceProtocol0 $\coloneqq$  Dice $\rightarrow$ Dice : (+["0.5*1"] . DiceProtocol1
@@ -30,7 +31,7 @@ presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/dis
 	}
 		
 	\end{lstlisting}
-In Listing \ref{ex1-code}, we provide part of the model in our choreographic language. 
+	\vspace{-0.25cm}
 
 \begin{comment}
 \begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Dice Program.},captionpos=b,label={ex1-gen}]
@@ -65,7 +66,7 @@ endmodule
 
 The PRISM model produced by our method closely aligns with the original model with only minimal details that differ between the two.
 Additionally, to ensure the generated program's accuracy, 
-we evaluated whether the probability of reaching a state where the die displays \texttt{d=k} for every possible \texttt{k} from 1 to 6 equals 1/6. Our simulations shown that the probabilities calculated by our generated model fully matched those from the original PRISM model. 
+we evaluated whether the probability of reaching a state where the dice displays \texttt{d=k} for every possible \texttt{k} from 1 to 6 equals 1/6. Our simulations shown that the probabilities calculated by our generated model fully matched those from the original PRISM model. 
 
 \begin{comment}
 \subsection{Simple Peer-To-Peer Protocol}
@@ -227,16 +228,16 @@ However, this does not affect the behaviour of the model, as the reader can noti
 	\includegraphics[scale=0.45]{bitcoin.pdf}	
 \end{wrapfigure} 
 \end{comment}
-In \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, the authors extended the PRISM model checker to incorporate dynamic data types, enhancing its capabilities to model the Proof of Work protocol used in the Bitcoin blockchain \cite{bitcoin}.
+In \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, the authors extended the PRISM model checker syntax to incorporate dynamic data types, enhancing its capabilities to model the Proof of Work protocol used in the Bitcoin blockchain \cite{bitcoin}. 
 
-The Bitcoin system is modeled as a parallel composition of $n$ Miner processes, $n$ \emph{Hasher} processes, and a process denoted as \emph{Network}. Specifically:
+The Bitcoin system is modeled as a parallel composition of $n$ \emph{Miner} processes, $n$ \emph{Hasher} processes, and a process denoted as \emph{Network}. Specifically:
 \begin{itemize}
 \item \emph{Miner} processes replicate blockchain miners responsible for generating new blocks and appending them to their local ledger.
 \item \emph{Hasher} processes simulate the process of solving the cryptographic puzzle.
 \item \emph{Network} process models the broadcast communication among miners.
 \end{itemize}
 The choreographic model of the Proof of Work protocol is in Listing \ref{ex3-code}.
-\begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreographic language for the Proof of Work Bitcoin Protocol.},captionpos=b,label={ex3-code}]
+\begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreographic language for the Proof of Work Bitcoin Protocol},captionpos=b,label={ex3-code}]
 $\ldots$
 {PoW $\coloneqq$ Hasher[i] $\rightarrow$ Miner[i] :
 (+["mR*hR[i]"]  " " "(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" . 
@@ -322,11 +323,11 @@ Nevertheless, in the case of this specific test scenario, we proved that the exp
 	\includegraphics[scale=0.45]{ethereum.pdf}	
 \end{wrapfigure} 
 \end{comment}
-We now present the Hybrid Casper Protocol as modeled in PRISM \cite{DBLP:journals/distribledger/GallettaLMV23}. The Hybrid Casper protocol represents a hybrid consensus protocol for blockchains, merging features from both Proof of Work and Proof of Stake protocols. 
+We now present the Hybrid Casper Protocol \cite{DBLP:journals/distribledger/GallettaLMV23}. The Hybrid Casper protocol represents a hybrid consensus protocol for blockchains, merging features from both Proof of Work and Proof of Stake protocols. 
 
-The modeling approach is very similar to the one used for the Proof of Work Bitcoin protocol. Specifically, the Hybrid Casper protocol is represented in PRISM as the parallel composition of $n$ \texttt{Validator} modules, along with the modules \texttt{Vote\_Manager} and \texttt{Network}. The \texttt{Validator} module closely resembles the \texttt{Miner} module from the preceding protocol. The module \texttt{Vote\_Manager} is responsible for storing tables containing votes for each block and computing associated rewards/penalties.
+The modeling approach is very similar to the one used for the Proof of Work Bitcoin protocol. Specifically, the Hybrid Casper protocol is represented in PRISM as the parallel composition of $n$ \emph{Validator} modules, along with the modules \emph{Vote\_Manager} and \emph{Network}. Each \emph{Validator} module closely resembles the \emph{Miner} module from the previous protocol. The module \emph{Vote\_Manager} is responsible for storing maps containing votes for each block and computing associated rewards/penalties.
 Part of the choreographic modelization is reported in Listing \ref{ex5-code}, the complete model can be found in \cite{repository}. 
-\begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Choreographic language for the Hybrid Casper Protocol.},captionpos=b,label={ex5-code}]
+\begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Choreographic language for the Hybrid Casper Protocol},captionpos=b,label={ex5-code}]
 $\ldots$
 {PoS := Validator[i] -> Validator[i] :
 (+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"  .
@@ -418,7 +419,7 @@ endmodule
 	\label{ex5-res}
 	\end{wrapfigure}
 The code closely resembles the one outlined in \cite{DBLP:journals/distribledger/GallettaLMV23}, with the main distinction being the greater number of lines in our generated model. 
-This difference is due to the fact that certain commands that could be combined, but our generation lacks the automatic capability to perform this check. While the results exhibit similarity, running simulations for the generated model takes PRISM 39.016 seconds, compared to the 22.051 seconds required for the original model.
+This difference is due to the fact that certain commands could be combined, but our generation lacks the automatic capability to perform this check. While the results exhibit similarity, running simulations for the generated model takes PRISM 39.016 seconds, compared to the 22.051 seconds required for the original model.
 
 
 \begin{comment}
