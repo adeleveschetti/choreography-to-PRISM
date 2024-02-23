@@ -16,17 +16,22 @@ behaviour.
 
 PRISM \cite{PRISMdoc} is a probabilistic model checker that offers a
 specialised language for the specification and verification of
-probabilistic systems. PRISM has been used in various fields,
-including multimedia protocols, randomised distributed algorithms,
-security protocols, biological systems.  At its core, PRISM provides a
-declarative language with a rich set of constructs for describing
-probabilistic behaviours, transitions, and properties within a system.
-For example, let us consider a distributed voting system where
-multiple nodes collaborate to reach a consensus. In PRISM, we would
-describe the behavior of each voting node individually, specifying
-states, transitions, and communication protocols between
-nodes. However, this approach can become difficult to manage as the
-number of nodes increases.
+probabilistic concurrent systems. PRISM has been used in various
+fields, including multimedia protocols, randomised distributed
+algorithms, security protocols, biological systems.  At its core,
+PRISM provides a declarative language with a rich set of constructs
+for describing probabilistic behaviours, transitions, and properties
+within a system.  
+%
+Given a distributed system, we can use PRISM to model the behaviour of
+each of its nodes,
+% For example, in a distributed voting system where
+% multiple nodes collaborate to reach a consensus, we could use PRISM to
+% model the behaviour of each voting node individually, % specifying
+% states, transitions, and communications between nodes,
+and then verify desired properties for the entire system. However,
+this approach can become difficult to manage as the number of nodes
+increases.
 
 %
 %Furthermore, the inherent asynchrony of distributed systems
@@ -39,24 +44,25 @@ number of nodes increases.
 %SINCRONO]
 
 Choreographic programming~\cite{M23} is an emerging programming
-paradigm where programs (choreographies) serve as specifications
-providing a global perspective on the communication patterns inherent
-in a distributed system. This approach facilitates the automatic
-generation of decentralised implementations that are inherently
-correct-by-construction.
+paradigm in which programs, referred to as choreographies, serve as
+specifications providing a global perspective on the communication
+patterns inherent in a distributed system. 
 %
 In particular, instead of relying on a central orchestrator or
 controller to dictate the behavior of individual components,
 choreographic languages focus on defining communication patterns and
 protocols that govern the interactions between entities.
 %
-In essence, choreography abstracts away the internal details of
-individual components and emphasises the global behavior of the system
-as a composition of decentralised interactions. % Within the context of
+In essence, choreographies abstract away the internal details of
+individual components and emphasise the global behaviour as a
+composition of decentralised interactions. % Within the context of
 % concurrent and distributed systems, choreographic languages serve as
 % tools for defining interaction protocols that govern the communication
 % between processes. 
 %
+This approach facilitates the automatic generation of decentralised
+implementations that are inherently correct-by-construction.
+
 This paper presents a choreographic language designed for modelling
 concurrent probabilistic systems.
 % with clarity and precision. 
@@ -75,9 +81,10 @@ ultimately increasing their usability in various application domains.
 In particular, by employing choreographies, we gain a clear and
 comprehensive view of the interactions occurring within the system,
 allowing us to discern the flow of processes and detect any potential
-sources of error. This transparency ensures that each step is
-understood and executed accurately, minimizing the likelihood of
-errors and enhancing the reliability of the system.
+sources of error in the modelling phase.
+% This transparency ensures that each step is understood and executed
+% accurately, minimizing the likelihood of errors and enhancing the
+% reliability of the system.
 
 
 \mypar{Contributions and Overview.} Our contributions can be
@@ -89,7 +96,7 @@ categorised as:
   (\S~\ref{sec:chor}). To the best of our knowledge, this is the first
   probabilistic choreography language that is not a type abstraction.
 \item Then, we introduce a semantics for PRISM (\S~\ref{sec:prism}),
-  based on the original semantics for PRISM~\cite{PRISMdoc}
+  based on the original semantics for PRISM~\cite{PRISMdoc}.
   % enhancing its usability and facilitating clearer understanding for
   % users.
 \item Furthermore, we establish a rigorous definition for a

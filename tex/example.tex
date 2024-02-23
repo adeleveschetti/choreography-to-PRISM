@@ -30,24 +30,23 @@ between two states (0 or 1).
 %
 In PRISM, modules are individual processes whose behaviour is
 specified by a collection of commands, in a declarative fashion.
-Processes have a a local state and can interact with other modules as
-well as querying each other's state. Above, the modules
-\codeprism{User} (lines \ref{user-init}-\ref{user-end}) and
-\codeprism{CheckOut} (lines \ref{check-init}-\ref{check-end})
-synchronise on different actions with labels \codeprism{alpha_1},
-\codeprism{alpha_2}, \codeprism{beta}, \codeprism{gamma_1} and
-\codeprism{gamma_2}. On line \ref{first-line},
-\codeprism{(User_STATE=0)} is the condition, indicating that this
+Processes have a local state, can interact with other modules and
+query each other's state. Above, the modules \codeprism{User} (lines
+\ref{user-init}-\ref{user-end}) and \codeprism{CheckOut} (lines
+\ref{check-init}-\ref{check-end}) synchronise on labels
+\codeprism{alpha_1}, \codeprism{alpha_2}, \codeprism{beta},
+\codeprism{gamma_1} and \codeprism{gamma_2}. On line \ref{first-line},
+\codeprism{(User_STATE=0)} is a condition indicating that this
 transition is enabled when \codeprism{User_STATE} has value 0. The
 variable \codeprism{lambda} represents a rate, since the program
-models a Continuous Time Markov Chain (CTMC). Moreover, the command
+models a Continuous Time Markov Chain (CTMC). The command
 \codeprism{(User_STATE'=1)} is an update, indicating that
 \codeprism{User_STATE} changes to 1 when this transition fires.
 
 Understanding the interactions between processes in this example might
 indeed be challenging, especially without additional context or
 explanation.  Alternatively, when formalised using our choreographic
-language, the same model becomes significantly clearer 
+language, the same model becomes significantly clearer.
 % , as shown in Listing \ref{example2}.
 \begin{lstlisting}[style=chor-color,% caption={Example of Listing \ref{example1} in our choreographic language},captionpos=b,
   frame=none, label={example2}]
@@ -60,7 +59,7 @@ In this model, we define three distinct choreographies, namely
 describe the interaction patterns between the modules \texttt{User}
 and \texttt{Check}. The state updates resulting from these
 interactions are not explicitly depicted as they are not relevant for
-the protocol itself, but necessary in the PRISM implementation.
+this particular protocol, but necessary in the PRISM implementation.
 % Similarly, this consideration extends to the labels used within the
 % model.  Just as the state updates are automatically generated,
 % unique labels used to denote various transitions in the model are
