@@ -1,4 +1,8 @@
-We implemented our language in 1246 lines of Java, defining its grammar and utilizing ANTLR \cite{ANTLR} to generate both parser and visitor components. Each syntax node within the abstract syntax tree (AST) was encapsulated in a corresponding {\tt Node} class, with methods within these classes used for PRISM code generation.
+We implemented our language in 1246 lines of Java, by defining its
+grammar and using ANTLR \cite{ANTLR} to generate both parser and
+visitor components. Each syntax node within the abstract syntax tree
+(AST) was encapsulated in a corresponding {\tt Node} class, with
+methods within these classes used for PRISM code generation.
 \begin{lstlisting}[language=Eclipse,caption=The \texttt{generateCode} function,label=genfun1,numbers=none]
 	String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot);	
 \end{lstlisting}
@@ -18,16 +22,26 @@ straightforward, the focal point lies in how new states are
 created. Each module maintains its set of states, and when a new state
 needs to be generated, the function examines the last available state
 for the corresponding module and increments it by one.  Recursion
-follows a similar pattern: every module has as a field a map that
-accumulates recursion protocols, along with the first and last states
-associated with each recursion. This recursive approach ensures a
-systematic and coherent generation of states within the modules,
+follows a similar pattern: every module has as a field % a map
+that accumulates recursion protocols, along with the first and last
+states associated with each recursion. This recursive approach ensures
+a systematic and coherent generation of states within the modules,
 enhancing the efficiency of the projection.
 
-One of the differences between formal syntax and implementation is the presence of module parameterizations in the latter. Specifically, to avoid repeating the same commands for each duplicated module, we utilize the notation "\texttt{[i]}" for each module with the same behaviour.   
-This enables us to perform module renaming, a principle that also extends to variables and their updates. For instance, in Listing \ref{ex-syntax}, the process \texttt{P} performs the same branch for each process \texttt{Q[i]}. %with our notation we are able to write the commands only once. 
-For every module in the system, where the index 
-$i$ ranges from 1 to $n$, there exists a corresponding PRISM module. For instance, for the example in Listing \ref{ex-syntax}, let's suppose that $i$ ranges  from 1 to 2, we will generate the respective PRISM code as depicted in Listing \ref{ex-syntax2}. 
+One of the differences between formal syntax and implementation is the
+presence of module parameterizations in the latter. Specifically, to
+avoid repeating the same commands for each duplicated module, we
+utilize the notation "\texttt{[i]}" for each module with the same
+behaviour.  This enables us to perform module renaming, a principle
+that also extends to variables and their updates. For instance, in
+Listing \ref{ex-syntax}, the process \texttt{P} performs the same
+branch for each process
+\texttt{Q[i]}. %with our notation we are able to write the commands only once.
+For every module in the system, where the index $i$ ranges from 1 to
+$n$, there exists a corresponding PRISM module. For instance, for the
+example in Listing \ref{ex-syntax}, if $i$ ranges from 1 to 2, we will
+generate the respective PRISM code as depicted in Listing
+\ref{ex-syntax2}.
 \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Example of an use of parameterization in the choreographic language},captionpos=b,label={ex-syntax}]
 	C $\coloneqq$ P $\rightarrow$ Q[i] : (+["lambda1*mu[i]"]  "(x'=1)" "(y[i]'=2)" ; C
 			    +["lambda2*mu[i]"]  "(x'=3)" "(y[i]'=1)" ; C )
@@ -62,3 +76,10 @@ This modular approach systematically represents and integrates each system compo
 The other differences are primarily syntactic. Updates of the same process are delineated by quotation marks, such as \texttt{"(x'=1)"}. Additionally, rates and probabilities are represented differently. In our choreographic language the rate/probability of interaction is represented as the product of rates/probabilities of each process. For example, in Listing \ref{ex-syntax}, we use \texttt{lambda1*mu[i]} to indicate that the rate of the first process (\texttt{P}) is \texttt{lambda1}, while the rate of the second process (\texttt{Q[i]}) is represented by \texttt{mu[i]}. If multiple processes are interacting, the rate/probability is the product of all corresponding rates/probabilities (\texttt{lambda\_1$\ldots$*lambda\_n}).
 
 In our implementation, we ensure a single enabled action per state by enforcing label uniqueness and unique state-associated variables. This clarity aids in accurately determining enabled actions and enhances system reliability, facilitating analysis and comprehension of system dynamics.
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

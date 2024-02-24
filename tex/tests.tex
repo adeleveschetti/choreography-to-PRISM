@@ -15,7 +15,7 @@ For lack of space, we do not report the generated PRISM files, they can be found
  \end{itemize}
  
  \vspace{-0.25cm}
- \begin{lstlisting}[style=chor-color,caption={Choreographic language for the Dice Program},captionpos=b,label={ex1-code}]
+ \begin{lstlisting}[style=chor-color,caption={Choreography for the Dice Program},captionpos=b,label={ex1-code}]
 	$\ldots$
 	{
 	DiceProtocol0 $\coloneqq$  Dice $\rightarrow$ Dice : (+["0.5*1"] ; DiceProtocol1
@@ -41,7 +41,7 @@ we evaluated whether the probability of reaching a state where the dice displays
 \subsection{Simple Peer-To-Peer Protocol}
 This case study describes a simple peer-to-peer protocol based on BitTorrent\footnote{\url{https://www.prismmodelchecker.org/casestudies/peer2peer.php}}. The model comprises a set of clients trying to download a file that has been partitioned into $K$ blocks. Initially, there is one client that has already obtained all of the blocks and $N$ additional clients with no blocks. Each client can download a block from any of the others but they can only attempt four concurrent downloads for each block.\\
 The code we analyze with $k=5$ and $N=4$ is reported in Listing \ref{ex2-code}.
-\begin{lstlisting}[style=chor-color,caption={Choreographic language for the Peer-To-Peer Protocol.},captionpos=b,label={ex2-code}]
+\begin{lstlisting}[style=chor-color,caption={Choreography for the Peer-To-Peer Protocol.},captionpos=b,label={ex2-code}]
 preamble
 "ctmc"
 "const double mu=2;"
@@ -121,7 +121,7 @@ Then the algorithm finds nodes that have a path to node 2 by searching for nodes
 The choreographic model is shown in Listing \ref{ex4-code}, while
 in Listing \ref{ex4-gen}, we report only part of the generated PRISM module (the modules $M_2$, $M_3$ and $P_2$, $P_3$ are equivalent to, respectively, $M_1$ and $P_2$ and can be found in the repository\footnote{\url{https://github.com/adeleveschetti/choreography-to-PRISM}}).
 
-\begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreographic language for the Random Graphs
+\begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreography for the Random Graphs
 	Protocol.},captionpos=b,label={ex4-code}]
 preamble
 "mdp"
@@ -206,7 +206,7 @@ The Bitcoin system is modeled as a parallel composition of $n$ \emph{Miner} proc
 \item \emph{Network} process models the broadcast communication among miners.
 \end{itemize}
 The choreographic model of the Proof of Work protocol is in Listing \ref{ex3-code}.
-\begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreographic language for the Proof of Work Bitcoin Protocol},captionpos=b,label={ex3-code}]
+\begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreography for the Proof of Work Bitcoin Protocol},captionpos=b,label={ex3-code}]
 {PoW $\coloneqq$ Hasher[i] $\rightarrow$ Miner[i] :
 (+["mR*hR[i]"]  " " "(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" ; 
 	Miner[i] $\rightarrow$ Network : (["rB*1"] "(B[i]'=addBlock(B[i],b[i]))"   
@@ -282,7 +282,11 @@ The PRISM model we generated exhibits greater verbosity compared to the one pres
 %Nevertheless, in the case of this specific test scenario, % we proved that 
 %the experimental results remain unaffected, as reported in Figure \ref{ex3-res}.
 %Specifically, in Figure \ref{ex3-res}, we present the probability of block creation. Discrepancies between the results of the original model and the generated one arise from the nature of this probability calculation, which involves simulation and may therefore vary with each run.
-Nevertheless, the experimental results obtained for the probability of creating a block, detailed in Figure \ref{ex3-res}, remain unaffected. The discrepancies between the original model and the generated one arise from variations inherent in the simulation-based calculation the probability.
+Nevertheless, the experimental results obtained for the probability of
+creating a block, detailed in Figure \ref{ex3-res}, remain
+unaffected. The discrepancies between the original model and the
+generated one arise from variations inherent in the simulation-based
+calculation of the probability.
 
 
 \subsection{Hybrid Casper Protocol}
@@ -294,8 +298,8 @@ Nevertheless, the experimental results obtained for the probability of creating 
 We now present the Hybrid Casper Protocol \cite{DBLP:journals/distribledger/GallettaLMV23}. The Hybrid Casper protocol represents a hybrid consensus protocol for blockchains, merging features from both Proof of Work and Proof of Stake protocols. 
 
 The modeling approach is very similar to the one used for the Proof of Work Bitcoin protocol. Specifically, the Hybrid Casper protocol is represented in PRISM as the parallel composition of $n$ \emph{Validator} modules, along with the modules \emph{Vote\_Manager} and \emph{Network}. Each \emph{Validator} module closely resembles the \emph{Miner} module from the previous protocol. The module \emph{Vote\_Manager} is responsible for storing maps containing votes for each block and computing associated rewards/penalties.
-Part of the choreographic modelization is reported in Listing \ref{ex5-code}, the complete model can be found in \cite{repository}. 
-\begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Choreographic language for the Hybrid Casper Protocol},captionpos=b,label={ex5-code}]
+Part of the choreographic modelling is reported in Listing \ref{ex5-code}, the complete model can be found in \cite{repository}. 
+\begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Excerpt of the Hybrid Casper Protocol as a choreography},captionpos=b,label={ex5-code}]
 {PoS := Validator[i] -> Validator[i] :
 (+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"; 
 	if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{$\ldots$}
@@ -386,8 +390,17 @@ endmodule
 	\label{ex5-res}
 	\vspace{-0.75cm}
 	\end{wrapfigure}
-The code closely resembles the one outlined in \cite{DBLP:journals/distribledger/GallettaLMV23}, with the main distinction being the greater number of lines in our generated model. 
-This difference is due to the fact that certain commands could be combined, but our generation lacks the automatic capability to perform this check. While the results obtained for the probability of creating a block reported in Figure \ref{ex5-res} exhibit similarity, running simulations for the generated model takes PRISM 39.016 seconds, compared to the 22.051 seconds requiredx for the original model.
+        The code closely resembles the one outlined in
+        \cite{DBLP:journals/distribledger/GallettaLMV23}, with the
+        main distinction being the greater number of lines in our
+        generated model.  This difference is due to the fact that
+        certain commands could be combined, but our generation lacks
+        the automatic capability to perform this check. While the
+        results obtained for the probability of creating a block
+        reported in Figure \ref{ex5-res} exhibit similarity, running
+        simulations for the generated model takes PRISM 39.016
+        seconds, compared to the 22.051 seconds required for the
+        original model.
 
 
 \begin{comment}
@@ -417,3 +430,9 @@ The reasons are various, in this section we try to outline the problems.
 
 \end{itemize}
 \end{comment}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
