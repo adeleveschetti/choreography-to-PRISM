@@ -1,18 +1,34 @@
-In  this section, we report our experimental evaluation of our language. 
-We focus on three benchmarks: the dice program that we compare with the  
-test cases reported in the PRISM repository\footnote{\url{https://www.prismmodelchecker.org/casestudies/}}; 
-the Bitcoin Proof of Work protocol and the Hybrid Casper protocol, 
-presented in \cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/distribledger/GallettaLMV23}.
-For lack of space, we do not report the generated PRISM files, they can be found in the online repository \cite{repository}.
+In this section, we report an experimental evaluation of our language.
+We focus on three benchmarks: the dice program that we compare with
+the test cases reported in the PRISM
+repository\footnote{\url{https://www.prismmodelchecker.org/casestudies/}};
+the Bitcoin Proof of Work protocol and the Hybrid Casper protocol,
+presented in
+\cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/distribledger/GallettaLMV23}.
+For lack of space, we do not report the generated PRISM files, which
+can be found in the online repository \cite{repository}.
 
 \subsection{The Dice Program}
- The first test case we focus on is the Dice Program \cite{KY76}.
- The following program simulates a die using only unbiased coins. Starting from the initial vertex (state $s_0$), the process involves the iterative flipping of a coin. Upon obtaining heads, the upper branch is chosen, and in the case of tails, the lower branch is taken. This sequential process persists until the final determination of the die's value.
- In particular, the PRISM model uses two variables: 
- \begin{itemize}
-	\item \codeprism{d}: This variable represents the value of the dice, ranging from 0 to 6. Initially, it is set to 0.
-	\item \codeprism{STATE}: This variable is the state variable, ranging from 0 to 7. Initially, it is set to 0.
- \end{itemize}
+% The first test case we focus on is the Dice Program \cite{KY76}.  With
+Although choreographies are meant to abstract concurrent interactions,
+they can also be used to model single-process systems~\cite{M23}, such
+as the Dice Program~\cite{KY76}.
+% The Dice Program~\cite{KY76} example shows that choreographies can
+% model single-process systems.
+%
+% The following program 
+This example simulates a die using only unbiased coins. Starting from
+the initial vertex (state $s_0$), the process involves the iterative
+flipping of a coin. Upon obtaining heads, the upper branch is chosen,
+and in the case of tails, the lower branch is taken. This sequential
+process persists until the final determination of the die's value.  In
+particular, the PRISM model uses two variables:
+\begin{itemize}
+\item \codeprism{d} represents the value of the dice, ranging from 0
+  to 6 (initially set to 0).
+\item \codeprism{STATE} is the state variable, ranging from 0 to 7
+  (initially set to 0).
+\end{itemize}
  
  \vspace{-0.25cm}
  \begin{lstlisting}[style=chor-color,caption={Choreography for the Dice Program},captionpos=b,label={ex1-code}]
@@ -32,10 +48,15 @@ For lack of space, we do not report the generated PRISM files, they can be found
 	}
 		
 	\end{lstlisting}
-
-The PRISM model produced by our method closely aligns with the original model with only minimal details that differ between the two.
-Additionally, to ensure the generated program's accuracy, 
-we evaluated whether the probability of reaching a state where the dice displays \texttt{d=k} for every possible \texttt{k} from 1 to 6 equals 1/6. Our simulations shown that the probabilities calculated by our generated model fully matched those from the original PRISM model. 
+%
+        The PRISM model produced by our method closely aligns with the
+        original model with only minimal details that differ between
+        the two.  Additionally, to ensure the generated program's
+        accuracy, we evaluated whether the probability of reaching a
+        state where the dice displays \texttt{d=k} for every possible
+        \texttt{k} from 1 to 6 equals 1/6. Our simulations show that
+        the probabilities calculated by our generated model fully
+        matched those from the original PRISM model.
 
 \begin{comment}
 \subsection{Simple Peer-To-Peer Protocol}
