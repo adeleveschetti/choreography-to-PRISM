@@ -147,7 +147,7 @@ with rates:
             \commandBase {} {s_{q}\!=\! \iota}{\ \sum_{j\in J} \lambda_j: s'_{q}\!=\! \iota+1+j},\\ 
             \{\commandBase {l_j} {s_{q}\!=\! \iota+1+j}
             \ 1: s'_{q}\!=\! \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})\ \&\ \projE
-            {E_j}q\}_{j\in J}
+            {u_j}q\}_{j\in J}
           \end{array}
           \right\}
           \\
@@ -176,7 +176,11 @@ modules.
 % behaviour in each branching for modules who do not participate to
 % the interaction is identical.
 \begin{theorem}[EPP]\label{thm:epp}
-  Given a well-formed annotated choreography $C$, we have that
+  Given 
+  % a well-formed
+  an
+  % 
+  annotated choreography $C$, we have that
   $(S,C) \red{\lambda} (S', C')$ iff
   $\pp_{\role q}\ \proj (\role q, C,\iota)\vdash S_{+}
   \red{\lambda} S_{+}'$.
