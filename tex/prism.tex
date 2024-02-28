@@ -103,13 +103,13 @@ satisfying the rules given in Fig.~\ref{fig:semantics}.
       \infer[\mathsf{(P_2)}]
       {M_1\ppp A M_2\prismred{}
       \commandBase a{g\land g'}
-      {\Sigma_{i,j}\,\lambda_i*\lambda_j}: {u_i\& u_j} 
+      {\Sigma_{i,j}\,\lambda_i*\lambda'_j}: {u_i\& u'_j} 
       }
       {
       M_1\prismred{}\command {a}g\lambda u
       % {a}\lab{g}{\Sigma_{i\in I}\lambda_i}{\!u_i} 
       \quad&\quad 
-        M_2\prismred{}\commandBase {a} {g'} \Sigma_{j\in J}\lambda_j: u'_j
+        M_2\prismred{}\commandBase {a} {g'} \Sigma_{j\in J}\lambda'_j: u'_j
         % {a}\lab{g'}{\Sigma_{j\in J}\lambda'_j}{\!u'_j} 
       \ &\
              a\!\in\! A}
