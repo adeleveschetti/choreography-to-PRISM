@@ -1,0 +1,34 @@
+ctmc
+
+module Qq1
+
+Qq1 : [0..1] init 0;
+y1 : [0..N] init 0;
+
+[RLICV] (Qq1=0) -> mu1 : (y1'=2)&(Qq1'=0);
+[OKAMT] (Qq1=0) -> mu1 : (y1'=1)&(Qq1'=0);
+
+endmodule
+
+module Qq2
+
+Qq2 : [0..1] init 0;
+y2 : [0..N] init 0;
+
+[OMPXG] (Qq2=0) -> mu2 : (y2'=2)&(Qq2'=0);
+[AQNZR] (Qq2=0) -> mu2 : (y2'=1)&(Qq2'=0);
+
+endmodule
+
+module Process
+
+Process : [0..2] init 0;
+x : [0..N] init 0;
+
+[RLICV] (Process=0) -> lambda1 : (x'=1)&(Process'=0);
+[OKAMT] (Process=0) -> lambda2 : (x'=3)&(Process'=0);
+[OMPXG] (Process=0) -> lambda1 : (x'=1)&(Process'=0);
+[AQNZR] (Process=0) -> lambda2 : (x'=3)&(Process'=0);
+
+endmodule
+

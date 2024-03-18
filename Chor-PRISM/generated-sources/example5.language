@@ -1,5 +1,5 @@
 preamble
-
+"ctmc";
 "ctmc"
 
 "const double mu=2;"
@@ -21,9 +21,9 @@ Client[i] : "b[i]1 : [0..1];", "b[i]2 : [0..1];", "b[i]3 : [0..1];", "b[i]4 : [0
 {
 PeerToPeer := 
 	Client[i] -> Client[i]:
-		(+["rate1*1"]  "(b[i]1'=1)"&&" " . PeerToPeer
-		+["rate2*1"]  "(b[i]2'=1)"&&" " . PeerToPeer
-		+["rate3*1"]  "(b[i]3'=1)"&&" " . PeerToPeer
-		+["rate4*1"]  "(b[i]4'=1)"&&" " . PeerToPeer
-		+["rate5*1"]  "(b[i]5'=1)"&&" " . PeerToPeer)
+		(+["rate1*1"]  "(b[i]1'=1)"" " . END
+		+["rate2*1"]  "(b[i]2'=1)"" " . END
+		+["rate3*1"]  "(b[i]3'=1)"" " . END
+		+["rate4*1"]  "(b[i]4'=1)"" " . END
+		+["rate5*1"]  "(b[i]5'=1)"" " . END)
 }

@@ -234,17 +234,19 @@ public class BranchNode implements Node{
 				((ModuleNode) mods.get(iA)).setLastState(-1);
 			}
 			if(isCtmc || sameRole) {
-
+				boolean tbd = false;
 				statementA = statementA + upA + "(" + roleTmp + "'=" ;
 				if(statements.get(k) instanceof EndNode) {
 					statementA = statementA + "TBD" ;
 					allA.add(stateA+1);
+					tbd = true;
 				}
-				if(!(statements.get(k) instanceof RecNode)) {
+				else if(!(statements.get(k) instanceof RecNode)) {
 					stateA = stateA + 1 ;
 				}
-
-				statementA = statementA + stateA;
+				if(!tbd) {
+					statementA = statementA + stateA;
+				}
 				allA.add(stateA);
 
 				statementA = statementA +")";

@@ -1,0 +1,18 @@
+preamble
+"ctmc";
+
+"ctmc"
+
+
+endpreamble
+
+n = 2;
+
+Process -> 
+Process : "x : [0..N] init 0;";
+
+Qq[i] -> i in [1...n] 
+Qq[i] : "y[i] : [0..N] init 0;";
+
+{Chor := Process -> Qq[i] : (+["lambda1*mu[i]"]  "(x'=1)"&&"(y[i]'=2)" . Chor
+			    +["lambda2*mu[i]"]  "(x'=3)"&&"(y[i]'=1)" . Chor )}

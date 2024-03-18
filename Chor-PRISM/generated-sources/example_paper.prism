@@ -1,0 +1,77 @@
+ctmc
+
+module User1
+
+User1 : [0..5] init 0;
+
+[MDATY] (User1=0) -> lambda : (User1'=1);
+[UXNNF] (User1=0) -> lambda : (User1'=3);
+[LBWGA] (User1=2) -> beta : (User1'=0);
+[ZHENE] (User1=4) -> mu : (User1'=1);
+[QEGDT] (User1=4) -> mu : (User1'=3);
+
+endmodule
+
+module User2
+
+User2 : [0..5] init 0;
+
+[PIRRG] (User2=0) -> lambda : (User2'=1);
+[THYCT] (User2=0) -> lambda : (User2'=3);
+[JZLTD] (User2=2) -> beta : (User2'=0);
+[NMIIZ] (User2=4) -> mu : (User2'=1);
+[SSSHU] (User2=4) -> mu : (User2'=3);
+
+endmodule
+
+module User3
+
+User3 : [0..5] init 0;
+
+[ENMFB] (User3=0) -> lambda : (User3'=1);
+[DNGQE] (User3=0) -> lambda : (User3'=3);
+[EEUFU] (User3=2) -> beta : (User3'=0);
+[AIRVY] (User3=4) -> mu : (User3'=1);
+[GQIRI] (User3=4) -> mu : (User3'=3);
+
+endmodule
+
+module User4
+
+User4 : [0..5] init 0;
+
+[EWYJA] (User4=0) -> lambda : (User4'=1);
+[SFBTF] (User4=0) -> lambda : (User4'=3);
+[SNZPE] (User4=2) -> beta : (User4'=0);
+[QVZUF] (User4=4) -> mu : (User4'=1);
+[KTXVB] (User4=4) -> mu : (User4'=3);
+
+endmodule
+
+module Check
+
+Check : [0..2] init 0;
+
+[MDATY] (Check=0) -> 1 : (Check'=0);
+[UXNNF] (Check=0) -> 1 : (Check'=1);
+[PIRRG] (Check=0) -> 1 : (Check'=0);
+[THYCT] (Check=0) -> 1 : (Check'=1);
+[ENMFB] (Check=1) -> 1 : (Check'=0);
+[DNGQE] (Check=1) -> 1 : (Check'=1);
+[EWYJA] (Check=1) -> 1 : (Check'=0);
+[SFBTF] (Check=1) -> 1 : (Check'=1);
+[LBWGA] (Check=0) -> 1 : (Check'=0);
+[JZLTD] (Check=0) -> 1 : (Check'=0);
+[EEUFU] (Check=0) -> 1 : (Check'=0);
+[SNZPE] (Check=0) -> 1 : (Check'=0);
+[ZHENE] (Check=1) -> 1 : (Check'=0);
+[QEGDT] (Check=1) -> 1 : (Check'=1);
+[NMIIZ] (Check=1) -> 1 : (Check'=0);
+[SSSHU] (Check=1) -> 1 : (Check'=1);
+[AIRVY] (Check=1) -> 1 : (Check'=0);
+[GQIRI] (Check=1) -> 1 : (Check'=1);
+[QVZUF] (Check=1) -> 1 : (Check'=0);
+[KTXVB] (Check=1) -> 1 : (Check'=1);
+
+endmodule
+
