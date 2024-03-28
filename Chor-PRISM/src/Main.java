@@ -60,7 +60,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        String fileName = "Chor-PRISM/markov-chain-gen/example-mc-ifthenelse";
+        String fileName = "Chor-PRISM/markov-chain-gen/leader-election";
         FileInputStream is = new FileInputStream(fileName + ".language");
         @SuppressWarnings("deprecation")
         ANTLRInputStream input = new ANTLRInputStream(is);

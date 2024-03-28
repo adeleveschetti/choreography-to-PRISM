@@ -69,7 +69,7 @@ public class IfThenElseNode implements Node {
                             index = i;
                         }
                     }
-                    if (condRoles.get(index).getSecond() != pair.getSecond()) {
+                    if (index==-1 || condRoles.get(index).getSecond() != pair.getSecond()) {
                         verifiesState = false;
                     }
                 } else {
@@ -144,11 +144,51 @@ public class IfThenElseNode implements Node {
                             states = toRet.getSecond();
                             recValues = toRet.getFirst();
                         }
-                    } else {
+                    }
+                    else if(thenStat instanceof InternalActionNode){
+                        ArrayList<Pair<String, ArrayList<Pair<String, Integer>>>> tmpRec = recValues;
+                        ListPair tmpStates = states;
+                        for(int ii=0; ii<lastUpdate.size(); ii++){
+                            boolean found = false;
+                            for(Pair pair : newState){
+                                if(pair.getFirst().equals(lastUpdate.get(ii).getFirst())){
+                                    found = true;
+                                }
+                            }
+                            if(!found){
+                                newState.add(ii,lastUpdate.get(ii));
+                            }
+                        }
+                        toRet = thenStat.generateStates(mods, states, recValues, moduleNames, stms, newState, consts);
+                        String rate = toRet.getSecond().get(0).getFirst();
+                        ArrayList<Pair<String,Integer>> newRet = toRet.getSecond().get(0).getThird();
+
+                        Triplet<String, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> toAdd = new Triplet(rate, lastUpdate, newRet);
+                        if (!states.contains(toAdd)) {
+                            states.add(toAdd);
+                        }
+                        states = tmpStates;
+                        recValues = tmpRec;
+                    }
+                    else {
+                        if(newState.size()!=lastUpdate.size()){
+                            for(int ii=0; ii<lastUpdate.size(); ii++){
+                                boolean found = false;
+                                for(Pair pair : newState){
+                                    if(pair.getFirst().equals(lastUpdate.get(ii).getFirst())){
+                                        found = true;
+                                    }
+                                }
+                                if(!found){
+                                    newState.add(ii,lastUpdate.get(ii));
+                                }
+                            }
+                        }
                         toRet = thenStat.generateStates(mods, states, recValues, moduleNames, stms, newState, consts);
                         states = toRet.getSecond();
                         recValues = toRet.getFirst();
                     }
+
                 } else {
                     if (elseStat instanceof EndNode) {
                         for (int ii = 0; ii < el.getThird().size(); ii++) {
@@ -241,6 +281,19 @@ public class IfThenElseNode implements Node {
 						recValues = tmpRec;
 					}
 					else {
+                        if(newState.size()!=lastUpdate.size()){
+                            for(int ii=0; ii<lastUpdate.size(); ii++){
+                                boolean found = false;
+                                for(Pair pair : newState){
+                                    if(pair.getFirst().equals(lastUpdate.get(ii).getFirst())){
+                                        found = true;
+                                    }
+                                }
+                                if(!found){
+                                    newState.add(ii,lastUpdate.get(ii));
+                                }
+                            }
+                        }
                         toRet = elseStat.generateStates(mods, states, recValues, moduleNames, stms, newState, consts);
                         states = toRet.getSecond();
                         recValues = toRet.getFirst();
