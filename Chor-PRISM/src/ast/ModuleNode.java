@@ -2,7 +2,10 @@ package ast;
 
 import java.util.ArrayList;
 
+import lib.ListPair;
+import lib.Matrix;
 import lib.Pair;
+import lib.Triplet;
 
 public class ModuleNode implements Node{
 
@@ -13,11 +16,36 @@ public class ModuleNode implements Node{
 	private ArrayList<Pair<String,ArrayList<Integer>>> recursions = new ArrayList<Pair<String,ArrayList<Integer>>>();
 	private ArrayList<Pair<String,ArrayList<Integer>>> notUsedRecursions = new ArrayList<Pair<String,ArrayList<Integer>>>();
 	private int lastState = -1;
-	
-	
+	private ArrayList<Pair<String,Integer>> varsValues = new ArrayList<Pair<String,Integer>>();
+	private ArrayList<String> varsNames = new ArrayList<String>();
+
+
 	public ModuleNode(String _name, ArrayList<String> _vars) {
 		name = _name;
 		vars = _vars;
+		String str = "init";
+		for(String el : vars){ // TODO: here we can add the check for unbounded variables
+			String[] split = el.split(" ");
+			String varName = split[0];
+			int index = el.indexOf(str)+str.length()+1;
+			char init = el.charAt(index);
+
+			if(Character.isLetter(init)){
+				if(String.valueOf(init).equals("t")){
+					init = '1';
+				}
+				else{
+					init = '0';
+				}
+			}
+			if(Character.isDigit(el.charAt(index+1)) ){
+				String newStr = new StringBuilder().append(init).append(el.charAt(index+1)).toString();
+				varsValues.add(new Pair (varName,Integer.parseInt(String.valueOf(newStr))));
+			}
+			else {
+				varsValues.add(new Pair(varName,Integer.parseInt(String.valueOf(init))));
+			}
+		}
 	}
 
 
@@ -271,6 +299,24 @@ public class ModuleNode implements Node{
 	@Override
 	public ArrayList<String> getRoles() {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+    @Override
+	public Pair<ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>>,ListPair> generateStates(ArrayList<Node> mods, ListPair states, ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>> recValues, ArrayList<String> moduleNames, ArrayList<Pair<String,ArrayList<Node>>> stms, ArrayList<Pair<String,Integer>> lastUpdate, ArrayList<Pair<String,String>> consts){
+
+		ArrayList<Pair<String, Integer>> firstArrayInit = states.get(0).getSecond();
+		ArrayList<Pair<String, Integer>> firstArray = states.get(0).getThird();
+		for(Pair el : varsValues){
+			firstArray.add(el);
+		}
+		states.set(0,new Triplet("0",firstArrayInit,firstArray));
+
+		return new Pair(recValues,states);
+    }
+
+    @Override
+	public Matrix generateMarkovChain(ArrayList<Node> mods) {
 		return null;
 	}
 

@@ -1,5 +1,9 @@
 package ast;
 
+import lib.ListPair;
+import lib.Matrix;
+import lib.Pair;
+
 import java.util.ArrayList;
 
 public class ProtocolNode implements Node{
@@ -28,9 +32,40 @@ public class ProtocolNode implements Node{
 		return null;
 	}
 
+	public ArrayList<Node> getStatements(){
+		return statements;
+	}
+
 	@Override
 	public ArrayList<String> getRoles() {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Pair<ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>>,ListPair> generateStates(ArrayList<Node> mods, ListPair states, ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>> recValues, ArrayList<String> moduleNames, ArrayList<Pair<String,ArrayList<Node>>> stms, ArrayList<Pair<String,Integer>> lastUpdate, ArrayList<Pair<String,String>> consts){
+		if(recValues==null){
+			recValues = new ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>>();
+		}
+		ArrayList<Pair<String,Integer>> tmp = new ArrayList<>();
+		ArrayList<Pair<String,Integer>> values = states.get(0).getThird();
+		for(String name : moduleNames){
+			for(Pair el : values){
+				if(name.equals(el.getFirst())){
+					tmp.add(el);
+				}
+			}
+		}
+		recValues.add(new Pair(id,tmp));
+		Pair<ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>>,ListPair> toRet = null;
+		for(Node el : statements) {
+			toRet = el.generateStates(mods, states,recValues,moduleNames,stms,lastUpdate,consts);
+		}
+		return toRet;
+	}
+
+	@Override
+	public Matrix generateMarkovChain(ArrayList<Node> mods) {
 		return null;
 	}
 

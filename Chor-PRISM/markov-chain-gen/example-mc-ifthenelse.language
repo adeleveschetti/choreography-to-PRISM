@@ -1,0 +1,30 @@
+preamble
+"ctmc";
+"ctmc"
+"const int N = 20;"
+"const double mu1 = 0.10;"
+"const double mu2 = 0.20;"
+
+"const double lambda1 = 0.5;"
+"const double lambda2 = 0.25;"
+endpreamble
+
+n = 1;
+
+Queue ->
+Queue : "q : [0..10] init 0;", "t : [0..15] init 0;" ;
+
+Server ->
+Server : "s : [0..15] init 0;";
+
+{
+Protocol := Queue -> Server : (+["lambda1*lambda1"] "(q'=5)" "(s'=1)" . Protocol1
+							   +["lambda2*lambda2"] "(t'=5)" "(s'=2)" . Protocol1 )
+Protocol1 :=  if "(s=1)"@Server,"(q>0)"@Queue then{
+                    Protocol2
+              }
+              else{
+                    ["1"] "(s'=5)"@Server . END
+              }
+Protocol2 := Queue -> Server : (["1*1"] "(t'=11)" "(s'=13)" . END)
+}
