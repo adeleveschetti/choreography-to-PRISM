@@ -56,7 +56,6 @@ public class InternalActionNode implements Node {
 		}
 		for (Pair<String, Integer> el : lastUpdate) { // TODO: add parametrization of roles
 			Pair<String, Integer> toAdd = null;
-			System.out.println("QUA " + statement.toPrint() + " " + el.getFirst() + " " + role);
 
 			if (el.getFirst().equals(role)) {
 
