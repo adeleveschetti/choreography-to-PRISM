@@ -1,0 +1,171 @@
+
+
+
+X = p1 -> p2. p2 -> p3 { X
+			 p4->p5. X
+			 } 
+
+		    
+
+
+
+	if E@p2 then p -> {p1} { lambda1: (x  = 4). C1   +   lambda2: (x  = 4123). C2 } 
+	   	else p2 -> {p3} l;'dasás;ld
+
+
+
+
+proj (p1,  p -> {p1} [ lambda1: (x  = 4). C1   +_l   lambda2: (x  = 4123). C2 ], s) = 
+       { 
+       	 [l] s_p1 == s { lambda1: x = 4, s_p1++},  
+       	 [l] s_p1 == s { lambda2: x = 4123, s_p1++}
+       }    
+
+       \union
+
+       proj (p1, C1, s+1) 
+
+       \union
+
+       proj (p1, C2, s+1) 
+       
+
+
+proj (p2, p -> {p1} [ lambda1: (x  = 4). C1   +_l   lambda2: (x  = 4123). C2 ], s) = 
+     proj (p2, C1, s+1)
+     \union
+     proj (p2, C2, s+1)
+
+
+
+
+proj (p, if E@p then C1 else C2, s) = 
+     {
+      [] s_p = s & E s_p = s_p+1, 
+      [] s_p = s & E s_p = s_p+length(C1)
+      }   
+
+
+
+
+
+network = {
+	p  : { } + sfddfsfd
+
+	p1 : { } + aasdsdsd
+
+	p2 : 
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public String projection (String role) {
+
+       if this.role = role then "if 
+
+} 
+
+
+f : ( c, res ) |--> res {
+
+  examine c, go by cases:
+
+
+  if c = 0 then res
+  else f(c',   update(res) ) ; 
+
+
+  
+res
+
+
+
+
+
+f (
+	[
+	 C_1,
+	 p1 −→{pi}i∈I ⊕{[λj]xj =Ej :Cj}j∈J, 
+	 ...
+	 C_n
+	],
+
+
+	[
+	  p_1: PrismCode_1
+	  ...
+	  p_n: PrismCode_n
+	]
+
+   )
+
+{
+
+	for p  \in roles (C_i) {
+
+
+	} 
+
+} 
+	
+
+
+
+
+
+A -> B {
+
+  l1: C -> D <SOMETHING> 
+
+  l2: C -> E <SOMETHING'> 
+
+}
+
+
+A: send choice to B....
+
+B: receive choice from A. {l1: scrivi a C <SOMETHING@B> 
+   	   	       	   l2: scrivi a C <SOMETHING'@B>
+			  }
+
+
+C: .. ..... .. . . .    | SOMETHING@C == SOMETHING C'

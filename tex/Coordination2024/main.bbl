@@ -1,0 +1,127 @@
+\begin{thebibliography}{10}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{ANTLR}
+{ANTLR} - another tool for language recognition. \url{https://www.antlr.org/}
+
+\bibitem{PRISMdoc}
+Prism documentation. \url{https://www.prismmodelchecker.org/}, accessed:
+  2023-09-05
+
+\bibitem{repository}
+Repository. \url{https://github.com/adeleveschetti/ChoreoPRISM}, accessed:
+  2024-01-31
+
+\bibitem{AC19}
+Aman, B., Ciobanu, G.: Probabilities in session types. In: Marin, M., Craciun,
+  A. (eds.) Proceedings Third Symposium on Working Formal Methods, {FROM} 2019,
+  Timi{\c{s}}oara, Romania, 3-5 September 2019. {EPTCS}, vol.~303, pp. 92--106
+  (2019). \doi{10.4204/EPTCS.303.7}, \url{https://doi.org/10.4204/EPTCS.303.7}
+
+\bibitem{AC22}
+Aman, B., Ciobanu, G.: Interval probability for sessions types. In: Ciabattoni,
+  A., Pimentel, E., de~Queiroz, R.J.G.B. (eds.) Logic, Language, Information,
+  and Computation - 28th International Workshop, WoLLIC 2022, Ia{\c{s}}i,
+  Romania, September 20-23, 2022, Proceedings. Lecture Notes in Computer
+  Science, vol. 13468, pp. 123--140. Springer (2022).
+  \doi{10.1007/978-3-031-15298-6\_8},
+  \url{https://doi.org/10.1007/978-3-031-15298-6\_8}
+
+\bibitem{DBLP:journals/concurrency/BistarelliNGLMV23}
+Bistarelli, S., Nicola, R.D., Galletta, L., Laneve, C., Mercanti, I.,
+  Veschetti, A.: Stochastic modeling and analysis of the bitcoin protocol in
+  the presence of block communication delays. Concurr. Comput. Pract. Exp.
+  \textbf{35}(16) (2023). \doi{10.1002/cpe.6749},
+  \url{https://doi.org/10.1002/cpe.6749}
+
+\bibitem{CGHL10}
+Carbone, M., Grohmann, D., Hildebrandt, T.T., L{\'{o}}pez, H.A.: A logic for
+  choreographies. In: Honda, K., Mycroft, A. (eds.) Proceedings Third Workshop
+  on Programming Language Approaches to Concurrency and communication-cEntric
+  Software, {PLACES} 2010, Paphos, Cyprus, 21st March 2010. {EPTCS}, vol.~69,
+  pp. 29--43 (2010). \doi{10.4204/EPTCS.69.3},
+  \url{https://doi.org/10.4204/EPTCS.69.3}
+
+\bibitem{CHY12}
+Carbone, M., Honda, K., Yoshida, N.: Structured communication-centered
+  programming for web services. {ACM} Trans. Program. Lang. Syst.
+  \textbf{34}(2),  8:1--8:78 (2012). \doi{10.1145/2220365.2220367},
+  \url{https://doi.org/10.1145/2220365.2220367}
+
+\bibitem{CM13}
+Carbone, M., Montesi, F.: Deadlock-freedom-by-design: multiparty asynchronous
+  global programming. In: Giacobazzi, R., Cousot, R. (eds.) The 40th Annual
+  {ACM} {SIGPLAN-SIGACT} Symposium on Principles of Programming Languages,
+  {POPL} '13, Rome, Italy - January 23 - 25, 2013. pp. 263--274. {ACM} (2013).
+  \doi{10.1145/2429069.2429101}, \url{https://doi.org/10.1145/2429069.2429101}
+
+\bibitem{bio1}
+Dannenberg, F., Kwiatkowska, M., Thachuk, C., Turberfield, A.: {DNA} walker
+  circuits: computational potential, design, and verification. In: Soloveichik,
+  D., Yurke, B. (eds.) {Proc. 19th International Conference on DNA Computing
+  and Molecular Programming (DNA 19)}. LNCS, vol.~8141, pp. 31--45. Springer
+  (2013)
+
+\bibitem{DBLP:journals/distribledger/GallettaLMV23}
+Galletta, L., Laneve, C., Mercanti, I., Veschetti, A.: Resilience of hybrid
+  casper under varying values of parameters. Distributed Ledger Technol. Res.
+  Pract.  \textbf{2}(1),  5:1--5:25 (2023). \doi{10.1145/3571587},
+  \url{https://doi.org/10.1145/3571587}
+
+\bibitem{GMP24}
+Giallorenzo, S., Montesi, F., Peressotti, M.: Choral: Object-oriented
+  choreographic programming. {ACM} Trans. Program. Lang. Syst.  \textbf{46}(1),
+   1:1--1:59 (2024). \doi{10.1145/3632398},
+  \url{https://dl.acm.org/doi/10.1145/3632398}
+
+\bibitem{bio2}
+Heath, J., Kwiatkowska, M., Norman, G., Parker, D., Tymchyshyn, O.:
+  Probabilistic model checking of complex biological pathways. In: Priami, C.
+  (ed.) Proc. Computational Methods in Systems Biology (CMSB'06). Lecture Notes
+  in Bioinformatics, vol.~4210, pp. 32--47. Springer Verlag (2006)
+
+\bibitem{HYC07b}
+Honda, K., Yoshida, N., Carbone, M.: Web services, mobile processes and types.
+  Bull. {EATCS}  \textbf{91},  160--185 (2007)
+
+\bibitem{KY76}
+Knuth, D., Yao, A.: Algorithms and Complexity: New Directions and Recent
+  Results, chap. The complexity of nonuniform random number generation.
+  Academic Press (1976)
+
+\bibitem{distr1}
+Kwiatkowska, M., Norman, G., Parker, D.: Probabilistic verification of
+  hermanâ€™s self-stabilisation algorithm. Formal Aspects of Computing
+  \textbf{24}(4),  661--670 (2012)
+
+\bibitem{security2}
+Kwiatkowska, M., Norman, G., Parker, D., Vigliotti, M.: Probabilistic mobile
+  ambients. Theoretical Computer Science  \textbf{410}(12--13),  1272--1303
+  (2009)
+
+\bibitem{distr2}
+Kwiatkowska, M., Norman, G., Segala, R.: Automated verification of a randomized
+  distributed consensus protocol using {Cadence SMV} and {PRISM}. In: Berry,
+  G., Comon, H., Finkel, A. (eds.) Proc. 13th International Conference on
+  Computer Aided Verification (CAV'01). LNCS, vol.~2102, pp. 194--206. Springer
+  (2001)
+
+\bibitem{multimedia}
+Kwiatkowska, M., Norman, G., Sproston, J.: Probabilistic model checking of
+  deadline properties in the {IEEE 1394 FireWire} root contention protocol.
+  Formal Aspects of Computing  \textbf{14}(3),  295--318 (2003)
+
+\bibitem{M23}
+Montesi, F.: Introduction to Choreographies. Cambridge University Press (2023)
+
+\bibitem{bitcoin}
+Nakamoto, S.: Bitcoin: A peer-to-peer electronic cash system.
+  \url{https://bitcoin.org/bitcoin.pdf} (2008)
+
+\bibitem{security1}
+Norman, G., Shmatikov, V.: Analysis of probabilistic contract signing. Journal
+  of Computer Security  \textbf{14}(6),  561--589 (2006)
+
+\end{thebibliography}
