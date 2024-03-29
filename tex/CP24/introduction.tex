@@ -1,4 +1,4 @@
-Understanding and programming distributed systems pose formidable
+Understanding and programming distributed systems pose difficult
 challenges due to their inherent complexity and the potential for
 elusive edge cases
 % to lurk
@@ -64,7 +64,7 @@ composition of decentralised interactions. % Within the context of
 This approach facilitates the automatic generation of decentralised
 implementations that are inherently correct-by-construction.
 
-This paper presents a choreographic language designed for modelling
+This work presents a choreographic language designed for modelling
 concurrent probabilistic systems.
 % with clarity and precision. 
 Additionally, we introduce a compiler capable of translating protocols
@@ -88,24 +88,20 @@ sources of error in the modelling phase.
 % reliability of the system.
 
 
-\mypar{Contributions and Overview.} Our contributions can be
-categorised as:
+\mypar{Contributions.} Our contributions can be categorised as:
 \begin{itemize} 
-\item Firstly, we propose a choreographic language equipped with
-  well-defined syntax and semantics, tailored specifically for
-  describing concurrent systems with probabilistic behaviours
-  (\S~\ref{sec:chor}). To the best of our knowledge, this is the first
-  probabilistic choreography language that is not a type abstraction.
-\item Then, we introduce a semantics for PRISM (\S~\ref{sec:prism}),
-  based on the original semantics for PRISM~\cite{PRISMdoc}.
-  % enhancing its usability and facilitating clearer understanding for
-  % users.
+\item We propose a choreographic language equipped with well-defined
+  syntax and semantics, tailored specifically for describing
+  concurrent systems with probabilistic behaviours. To the best of our
+  knowledge, this is the first probabilistic choreography language
+  that is not a type abstraction.
+\item Then, we introduce a semantics for PRISM, based on its original
+  semantics~\cite{PRISMdoc}.
 \item Furthermore, we establish a rigorous definition for a
-  translation function from choreographies to PRISM
-  (\S~\ref{sec:proj}), and address its correctness. This translation
-  (projection) serves as a crucial intermediary step in transforming
-  (compiling) models described in our choreographic language into
-  PRISM-compatible representations.
+  translation function from choreographies to PRISM, and address its
+  correctness. This translation (projection) serves as a crucial
+  intermediary step in transforming (compiling) models described in
+  our choreographic language into PRISM-compatible representations.
 \item Lastly, we implement a compiler that translates choreographies
   into PRISM, allowing users to use PRISM's robust analysis features
   while benefiting from the expressiveness of our choreographic
