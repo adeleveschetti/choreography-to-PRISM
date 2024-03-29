@@ -1,0 +1,85 @@
+We implemented our language in 1246 lines of Java, by defining its
+grammar and using ANTLR \cite{ANTLR} to generate both parser and
+visitor components. Each syntax node within the abstract syntax tree
+(AST) was encapsulated in a corresponding {\tt Node} class, with
+methods within these classes used for PRISM code generation.
+\begin{lstlisting}[language=Eclipse,caption=The \texttt{generateCode} function,label=genfun1,numbers=none]
+	String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot);	
+\end{lstlisting}
+The {\tt generateCode} function generates the projection from our language to PRISM.
+The input parameters for the projection function include:
+\begin{itemize}
+\item \texttt{mods}: a list of the modules.  New commands are appended to the set of commands for each respective module as they are generated.
+\item \texttt{index} and \texttt{maxIndex}: indices for tracking the current module being analyzed.
+\item \texttt{isCtmc}: a boolean flag indicating if a CTMC is being generated, crucial for projection generation logic.
+\item \texttt{labels}: existing labels; essential for checking label uniqueness.
+\item \texttt{prot}: the name of the protocol currently under analysis.
+\end{itemize}
+The projection function operates recursively on each command in the
+choreographic language, systematically generating PRISM code based on
+the type of command being analyzed. While most code generations are
+straightforward, the focal point lies in how new states are
+created. Each module maintains its set of states, and when a new state
+needs to be generated, the function examines the last available state
+for the corresponding module and increments it by one.  Recursion
+follows a similar pattern: every module has as a field % a map
+that accumulates recursion protocols, along with the first and last
+states associated with each recursion. This recursive approach ensures
+a systematic and coherent generation of states within the modules,
+enhancing the efficiency of the projection.
+
+One of the differences between formal syntax and implementation is the
+presence of module parameterizations in the latter. Specifically, to
+avoid repeating the same commands for each duplicated module, we
+utilize the notation "\texttt{[i]}" for each module with the same
+behaviour.  This enables us to perform module renaming, a principle
+that also extends to variables and their updates. For instance, in
+Listing \ref{ex-syntax}, the process \texttt{P} performs the same
+branch for each process
+\texttt{Q[i]}. %with our notation we are able to write the commands only once.
+For every module in the system, where the index $i$ ranges from 1 to
+$n$, there exists a corresponding PRISM module. For instance, for the
+example in Listing \ref{ex-syntax}, if $i$ ranges from 1 to 2, we will
+generate the respective PRISM code as depicted in Listing
+\ref{ex-syntax2}.
+\begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Example of an use of parameterization in the choreographic language},captionpos=b,label={ex-syntax}]
+	C $\coloneqq$ P $\rightarrow$ Q[i] : (+["lambda1*mu[i]"]  "(x'=1)" "(y[i]'=2)" ; C
+			    +["lambda2*mu[i]"]  "(x'=3)" "(y[i]'=1)" ; C )
+\end{lstlisting}
+\begin{lstlisting}[style=prism-color,caption={PRISM code generated for the choreography in Listing \ref{ex-syntax}},captionpos=b,label={ex-syntax2}]
+ctmc
+module Q1
+   Q1_STATE : [0..1] init 0;
+   y1 : [0..N] init 0;
+   [RLICV] (Q1_STATE=0) $\rightarrow$ mu1 : (y1'=2)&(Q1_STATE'=0);
+   [OKAMT] (Q1_STATE=0) $\rightarrow$ mu1 : (y1'=1)&(Q1_STATE'=0);
+endmodule
+
+module Q2
+   Q2_STATE : [0..1] init 0;
+   y2 : [0..N] init 0;
+   [OMPXG] (Q2_STATE=0) $\rightarrow$ mu2 : (y2'=2)&(Q2_STATE'=0);
+   [AQNZR] (Q2_STATE=0) $\rightarrow$ mu2 : (y2'=1)&(Q2_STATE'=0);
+endmodule
+
+module P
+   P_STATE : [0..2] init 0;
+   x : [0..N] init 0;
+   [RLICV] (P_STATE=0) $\rightarrow$ lambda1 : (x'=1)&(P_STATE'=0);
+   [OKAMT] (P_STATE=0) $\rightarrow$ lambda2 : (x'=3)&(P_STATE'=0);
+   [OMPXG] (P_STATE=0) $\rightarrow$ lambda1 : (x'=1)&(P_STATE'=0);
+   [AQNZR] (P_STATE=0) $\rightarrow$ lambda2 : (x'=3)&(P_STATE'=0);
+endmodule
+\end{lstlisting}
+This modular approach systematically represents and integrates each system component within the PRISM framework, enabling comprehensive analysis and synthesis of the system's behavior. Importantly, these internal optimizations do not impact the projection process, as they focus on efficiency and code management rather than altering the overall structure or behavior of the projection. %Therefore, while beneficial for efficiency, these optimizations do not affect the projection outcomes.
+
+The other differences are primarily syntactic. Updates of the same process are delineated by quotation marks, such as \texttt{"(x'=1)"}. Additionally, rates and probabilities are represented differently. In our choreographic language the rate/probability of interaction is represented as the product of rates/probabilities of each process. For example, in Listing \ref{ex-syntax}, we use \texttt{lambda1*mu[i]} to indicate that the rate of the first process (\texttt{P}) is \texttt{lambda1}, while the rate of the second process (\texttt{Q[i]}) is represented by \texttt{mu[i]}. If multiple processes are interacting, the rate/probability is the product of all corresponding rates/probabilities (\texttt{lambda\_1$\ldots$*lambda\_n}).
+
+In our implementation, we ensure a single enabled action per state by enforcing label uniqueness and unique state-associated variables. This clarity aids in accurately determining enabled actions and enhances system reliability, facilitating analysis and comprehension of system dynamics.
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
