@@ -27,7 +27,11 @@ public class IfThenElseNode implements Node {
 
     @Override
     public Pair<ArrayList<Pair<String, ArrayList<Pair<String, Integer>>>>, ListPair> generateStates(ArrayList<Node> mods, ListPair states, ArrayList<Pair<String, ArrayList<Pair<String, Integer>>>> recValues, ArrayList<String> moduleNames, ArrayList<Pair<String, ArrayList<Node>>> stms, ArrayList<Pair<String, Integer>> lastUpdate, ArrayList<Pair<String, String>> consts) {
-        String cond = "";
+        for(Pair<String,Integer> el : lastUpdate){
+            if(el.getSecond()==100){
+                return new Pair(recValues,states);
+            }
+        }        String cond = "";
         ArrayList<Pair<String, Integer>> condRoles = new ArrayList<>();
         for (Pair<String, Integer> pair : lastUpdate) {
             for (String role : roles) {
@@ -169,6 +173,9 @@ public class IfThenElseNode implements Node {
                         }
                         states = tmpStates;
                         recValues = tmpRec;
+                        if(((InternalActionNode)thenStat).getStatement() instanceof EndNode){
+                            return new Pair(recValues, states);
+                        }
                     }
                     else {
                         if(newState.size()!=lastUpdate.size()){
@@ -184,9 +191,12 @@ public class IfThenElseNode implements Node {
                                 }
                             }
                         }
-                        toRet = thenStat.generateStates(mods, states, recValues, moduleNames, stms, newState, consts);
-                        states = toRet.getSecond();
-                        recValues = toRet.getFirst();
+                        if(!(thenStat instanceof EndNode)) {
+                            toRet = thenStat.generateStates(mods, states, recValues, moduleNames, stms, newState, consts);
+                            states = toRet.getSecond();
+                            recValues = toRet.getFirst();
+                        }
+
                     }
 
                 } else {
@@ -279,8 +289,12 @@ public class IfThenElseNode implements Node {
 						}
 						states = tmpStates;
 						recValues = tmpRec;
+                        if(((InternalActionNode)elseStat).getStatement() instanceof EndNode){
+                            return new Pair(recValues, states);
+                        }
 					}
 					else {
+
                         if(newState.size()!=lastUpdate.size()){
                             for(int ii=0; ii<lastUpdate.size(); ii++){
                                 boolean found = false;
@@ -294,15 +308,17 @@ public class IfThenElseNode implements Node {
                                 }
                             }
                         }
-                        toRet = elseStat.generateStates(mods, states, recValues, moduleNames, stms, newState, consts);
-                        states = toRet.getSecond();
-                        recValues = toRet.getFirst();
+                        if(!(elseStat instanceof EndNode)) {
+                            toRet = elseStat.generateStates(mods, states, recValues, moduleNames, stms, newState, consts);
+                            states = toRet.getSecond();
+                            recValues = toRet.getFirst();
+                        }
+
                     }
                 }
             }
 
         }
-
         return new Pair(recValues, states);
     }
 
