@@ -467,6 +467,12 @@ public class BranchNode implements Node {
 
     @Override
     public Pair<ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>>,ListPair> generateStates(ArrayList<Node> mods, ListPair states, ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>> recValues, ArrayList<String> moduleNames, ArrayList<Pair<String,ArrayList<Node>>> stms, ArrayList<Pair<String,Integer>> lastUpdate, ArrayList<Pair<String,String>> consts){
+        for(Pair<String,Integer> el : lastUpdate){
+            if(el.getSecond()==100){
+                return new Pair(recValues,states);
+            }
+        }
+
         ArrayList<Pair<String, Integer>> initState = lastUpdate;
         int size = states.getSize();
         Pair<ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>>,ListPair> toRet = null;
@@ -656,7 +662,6 @@ public class BranchNode implements Node {
                     return new Pair(recValues,states);
                 }
             } else if (statements.get(i) instanceof EndNode) {
-
                 return new Pair(recValues,states);
             } else {
                 for (int k = 0; k < statements.size(); k++) {

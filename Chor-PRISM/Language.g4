@@ -28,7 +28,7 @@ rec : protocolID ;
 
 end : END (AT CLPAR roles+=role (COMMA roles+=role)* CRPAR)?;
 
-internalAction : SLPAR rate SRPAR message AT role DOT statement;
+internalAction : (SLPAR rate SRPAR message AT role SEMICOLON?)* DOT statement;
 
 updates : (SQLPAR (prec=actions) SQRPAR)? upds=message ;
 

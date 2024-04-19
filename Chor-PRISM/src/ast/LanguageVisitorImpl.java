@@ -142,11 +142,20 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 
 	@Override 
 	public Node visitInternalAction(InternalActionContext ctx) {
-		String role = visitRole(ctx.role()).toPrint();
-		String rate = ctx.rate().DOUBLE_STRING().getText().substring(1,ctx.rate().DOUBLE_STRING().getText().length()-1);
-		Node upds = visitMessage(ctx.message());
+		ArrayList<Node> updates = new ArrayList<>();
+		ArrayList<String> rates = new ArrayList<>();
+		ArrayList<String> roles = new ArrayList<>();
+
+		for(int i=0; i<ctx.role().size(); i++){
+			String role = visitRole(ctx.role().get(i)).toPrint();
+			String rate = ctx.rate().get(i).DOUBLE_STRING().getText().substring(1,ctx.rate().get(i).DOUBLE_STRING().getText().length()-1);
+			Node upds = visitMessage(ctx.message().get(i));
+			updates.add(upds);
+			roles.add(role);
+			rates.add(rate);
+		}
 		Node stats = visitStatement(ctx.statement());
-		return new InternalActionNode(rate,role,upds,stats);
+		return new InternalActionNode(rates,roles,updates,stats);
 	}
 	
 	@Override

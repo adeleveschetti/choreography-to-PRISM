@@ -63,9 +63,14 @@ composition of decentralised interactions. % Within the context of
 %
 This approach facilitates the automatic generation of decentralised
 implementations that are inherently correct-by-construction.
+\textcolor{red}{Choreographies excel in environments characterized by deterministic communication patterns and clear sequencing of actions. However, they may not be well-suited for managing highly unpredictable or dynamically changing interactions. In scenarios where processes exhibit significant variability or intricate coordination logic, choreographies may lack the flexibility or adaptability required for effective orchestration.}
 
 This paper presents a choreographic language designed for modelling
 concurrent probabilistic systems.
+%\textcolor{red}{Our language enhances the modeling of concurrent probabilistic systems, providing clarity often absent in 
+%traditional languages. However, it may lack expressivity in certain scenarios. For instance, in cases  where intricate behaviors rely 
+%on features such as conditional statements or probabilistic branching, our language's limitations become 
+%apparent, limiting accurate representation of these complex dynamics.}
 % with clarity and precision. 
 Additionally, we introduce a compiler capable of translating protocols
 described in this language into PRISM code. This choreographic
@@ -106,10 +111,7 @@ categorised as:
   (projection) serves as a crucial intermediary step in transforming
   (compiling) models described in our choreographic language into
   PRISM-compatible representations.
-\item Lastly, we implement a compiler that translates choreographies
-  into PRISM, allowing users to use PRISM's robust analysis features
-  while benefiting from the expressiveness of our choreographic
-  language.
+\item \textcolor{red}{Lastly, our implementation involves a compiler that executes the defined translation process. This compiler transforms choreographies into PRISM models, enabling users to utilize PRISM's robust analysis features while benefiting from the expressiveness of our choreographic language.}
 \end{itemize}
 
 

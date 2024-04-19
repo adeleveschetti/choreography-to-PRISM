@@ -21,10 +21,9 @@ Server : "s : [0..15] init 0;";
 Protocol := Queue -> Server : (+["lambda1*lambda1"] "(q'=5)" "(s'=1)" . Protocol1
 							   +["lambda2*lambda2"] "(t'=5)" "(s'=2)" . Protocol1 )
 Protocol1 :=  if "(s=1)"@Server,"(q>0)"@Queue then{
-                    Protocol2
+                    Queue -> Server : (["1*1"] "(t'=11)" "(s'=13)" . END)
               }
               else{
-                    ["1"] "(s'=5)"@Server . END
+                    ["1"] "(s'=5)"@Server; ["1"] "(t'=10)"@Queue .  END
               }
-Protocol2 := Queue -> Server : (["1*1"] "(t'=11)" "(s'=13)" . END)
 }

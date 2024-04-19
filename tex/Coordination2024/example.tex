@@ -1,9 +1,12 @@
 As an example, consider the following simplified version of a system
 presented in the PRISM
-documentation\footnote{\url{https://www.prismmodelchecker.org/casestudies/thinkteam.php}},
-where a user moves between different states (0, 1, or 2) based on
-certain events $(\alpha, \beta, \gamma)$ with corresponding rates
-$(\lambda, \mu, \theta)$, and where a checkout process transitions
+documentation\footnote{\url{https://www.prismmodelchecker.org/casestudies/thinkteam.php}}.
+\textcolor{red}{The example is about \textbf{thinkteam}: a three-tier data management system \cite{DBLP:journals/entcs/BeekMLGFS05}.
+The protocol aims to manage exclusive access to a single file, controlled by the \codeprism{CheckOut} process. Users can request access, which can be granted or dbased on the file's current status. The goal is to ensure that only one user possesses the file at any 
+given time while allowing for efficient access requests and retries in case of denial.}
+Users moves between different states (0, 1, or 2) based on
+the granted or denied access to the file with corresponding rates
+$(\lambda, \mu, \theta)$; the checkout process transitions
 between two states (0 or 1).
 %
 \begin{lstlisting}[style=prism-color,% caption={A PRISM example},captionpos=b,
