@@ -40,21 +40,6 @@ ranging from 0 to 7.  Initially, both variables are set to 0.
 	\end{lstlisting}
    \vspace{-0.15cm}
 
-   \begin{lstlisting}[style=chor-color,caption={Choreography for the Dice Program},captionpos=b,label={ex1-code}]
-      Server -> 
-      Server : "s : [1..5];", "a : [0..1];" ;
-
-      Station[i] -> i in [1...n]
-      Station[i] : 	"s[i] : [0..1];"; 
-
-   { 
-   C $\coloneqq$ Server $\rightarrow$ Station[i] :
-         (+["gamma*1"] "(s=[i])&(a=0)""(s[i]=0)"$\rightarrow$"(s'=s+1)""(s[i]'=0)" ; C 
-          +["gamma*lambda"] "(s=[i])&(a=0)" "(s[i]=0)" $\rightarrow$ "(a'=1)" "(s[i]'=1)" ;
-               Server $\rightarrow$ Station[i] : 
-                  (["mu*1"] "(s=[i])&(a=1)" "(s[i]=1)" $\rightarrow$ "(s'=s+1)&(a'=0)" "(s[i]'=0)";C ))
-   }
-      \end{lstlisting}
 
 As expected, since there is no concurrency, there are no significant improvements to the code in using choreographies.
 The PRISM model produced by our method closely aligns with the original model with only minimal details that differ between the two.
