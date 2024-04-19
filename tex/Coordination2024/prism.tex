@@ -177,6 +177,28 @@ obtained from our translation from choreography to PRISM.
 % % not the case if we have a CTMC with rates.
 
 \begin{example}
+The choreography presented in Example \ref{example2} can be described by the following PRISM network $M$:
+\begin{displaymath}
+  \begin{array}{llll}
+    \role{p}: \{ & \quad \commandBase {a}{s_p=0} {\mu_1:(x'=1)}\\
+                 & \quad \commandBase {b}{s_p=0} {\mu_2:(x'=3)}\quad \}\\[2mm]
+    \role{q}: \{ & \quad \commandBase {a}{s_q=0} {\gamma_1:(y'=2)}\\
+                 & \quad \commandBase {b}{s_q=0} {\gamma_2:(y'=1)}\quad \}\\
+  \end{array}
+\end{displaymath}
+The two modules $\role p$ and $\role q$ synchornize on the labels $a$ and $b$. 
+Applying the semantics, the network $M$ can evolve in $F_1$ and $F_2$, defined as follows:
+\begin{displaymath}\small
+  \begin{array}{rlll}
+    F_1=\commandBase {a}{s_p=0\ \&\ s_q=0} {\quad} \mu_1*\gamma_1 : (x'=1) \& (y'=2) \\
+    F_2=\commandBase {a}{s_p=0\ \&\ s_q=0} {\quad} \mu_2*\gamma_2 : (x'=3) \& (y'=1) \\
+
+  \end{array}
+\end{displaymath} 
+
+\end{example}
+\todo[inline]{Added same example reported in section 2 and in section 5 (kept it short because of space)}
+\begin{example}
   Consider the following network $M$:
   \begin{displaymath}
     \begin{array}{llll}

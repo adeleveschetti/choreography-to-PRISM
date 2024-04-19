@@ -33,8 +33,7 @@ presence of module parameterizations in the latter. Specifically, to
 avoid repeating the same commands for each duplicated module, we
 utilize the notation "\texttt{[i]}" for each module with the same
 behaviour.  This enables us to perform module renaming, a principle
-that also extends to variables and their updates. For instance, in
-Listing \ref{ex-syntax}, the process \texttt{P} performs the same
+that also extends to variables and their updates. We report in Listing \ref{ex-syntax} the choreography presented in Example \ref{example2}, but we suppose that the process \texttt{P} performs the same
 branch for each process
 \texttt{Q[i]}. %with our notation we are able to write the commands only once.
 For every module in the system, where the index $i$ ranges from 1 to
@@ -43,37 +42,37 @@ example in Listing \ref{ex-syntax}, if $i$ ranges from 1 to 2, we will
 generate the respective PRISM code as depicted in Listing
 \ref{ex-syntax2}.
 \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Example of an use of parameterization in the choreographic language},captionpos=b,label={ex-syntax}]
-	C $\coloneqq$ P $\rightarrow$ Q[i] : (+["lambda1*mu[i]"]  "(x'=1)" "(y[i]'=2)" ; C
-			    +["lambda2*mu[i]"]  "(x'=3)" "(y[i]'=1)" ; C )
+	C $\coloneqq$ P $\rightarrow$ Q[i] : (+["mu1*gamma[i]"]  "(x'=1)" "(y[i]'=2)" ; C
+			     +["mu2*gamma[i]"]  "(x'=3)" "(y[i]'=1)" ; C )
 \end{lstlisting}
 \begin{lstlisting}[style=prism-color,caption={PRISM code generated for the choreography in Listing \ref{ex-syntax}},captionpos=b,label={ex-syntax2}]
 ctmc
 module Q1
    Q1_STATE : [0..1] init 0;
    y1 : [0..N] init 0;
-   [RLICV] (Q1_STATE=0) $\rightarrow$ mu1 : (y1'=2)&(Q1_STATE'=0);
-   [OKAMT] (Q1_STATE=0) $\rightarrow$ mu1 : (y1'=1)&(Q1_STATE'=0);
+   [RLICV] (Q1_STATE=0) $\rightarrow$ gamma1 : (y1'=2)&(Q1_STATE'=0);
+   [OKAMT] (Q1_STATE=0) $\rightarrow$ gamma1 : (y1'=1)&(Q1_STATE'=0);
 endmodule
 
 module Q2
    Q2_STATE : [0..1] init 0;
    y2 : [0..N] init 0;
-   [OMPXG] (Q2_STATE=0) $\rightarrow$ mu2 : (y2'=2)&(Q2_STATE'=0);
-   [AQNZR] (Q2_STATE=0) $\rightarrow$ mu2 : (y2'=1)&(Q2_STATE'=0);
+   [OMPXG] (Q2_STATE=0) $\rightarrow$ gamma2 : (y2'=2)&(Q2_STATE'=0);
+   [AQNZR] (Q2_STATE=0) $\rightarrow$ gamma2 : (y2'=1)&(Q2_STATE'=0);
 endmodule
 
 module P
    P_STATE : [0..2] init 0;
    x : [0..N] init 0;
-   [RLICV] (P_STATE=0) $\rightarrow$ lambda1 : (x'=1)&(P_STATE'=0);
-   [OKAMT] (P_STATE=0) $\rightarrow$ lambda2 : (x'=3)&(P_STATE'=0);
-   [OMPXG] (P_STATE=0) $\rightarrow$ lambda1 : (x'=1)&(P_STATE'=0);
-   [AQNZR] (P_STATE=0) $\rightarrow$ lambda2 : (x'=3)&(P_STATE'=0);
+   [RLICV] (P_STATE=0) $\rightarrow$ mu1 : (x'=1)&(P_STATE'=0);
+   [OKAMT] (P_STATE=0) $\rightarrow$ mu2 : (x'=3)&(P_STATE'=0);
+   [OMPXG] (P_STATE=0) $\rightarrow$ mu1 : (x'=1)&(P_STATE'=0);
+   [AQNZR] (P_STATE=0) $\rightarrow$ mu2 : (x'=3)&(P_STATE'=0);
 endmodule
 \end{lstlisting}
 This modular approach systematically represents and integrates each system component within the PRISM framework, enabling comprehensive analysis and synthesis of the system's behavior. Importantly, these internal optimizations do not impact the projection process, as they focus on efficiency and code management rather than altering the overall structure or behavior of the projection. %Therefore, while beneficial for efficiency, these optimizations do not affect the projection outcomes.
 
-The other differences are primarily syntactic. Updates of the same process are delineated by quotation marks, such as \texttt{"(x'=1)"}. Additionally, rates and probabilities are represented differently. In our choreographic language the rate/probability of interaction is represented as the product of rates/probabilities of each process. For example, in Listing \ref{ex-syntax}, we use \texttt{lambda1*mu[i]} to indicate that the rate of the first process (\texttt{P}) is \texttt{lambda1}, while the rate of the second process (\texttt{Q[i]}) is represented by \texttt{mu[i]}. If multiple processes are interacting, the rate/probability is the product of all corresponding rates/probabilities (\texttt{lambda\_1$\ldots$*lambda\_n}).
+The other differences are primarily syntactic. Updates of the same process are delineated by quotation marks, such as \texttt{"(x'=1)"}. Additionally, rates and probabilities are represented differently. In our choreographic language the rate/probability of interaction is represented as the product of rates/probabilities of each process. For example, in Listing \ref{ex-syntax}, we use \texttt{mu1*gamma[i]} to indicate that the rate of the first process (\texttt{P}) is \texttt{mu1}, while the rate of the second process (\texttt{Q[i]}) is represented by \texttt{gamma[i]}. If multiple processes are interacting, the rate/probability is the product of all corresponding rates/probabilities (\texttt{lambda\_1$\ldots$*lambda\_n}).
 
 In our implementation, we ensure a single enabled action per state by enforcing label uniqueness and unique state-associated variables. This clarity aids in accurately determining enabled actions and enhances system reliability, facilitating analysis and comprehension of system dynamics.
 
