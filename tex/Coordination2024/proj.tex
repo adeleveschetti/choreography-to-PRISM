@@ -163,11 +163,28 @@ with rates:
     of an interaction when we are projecting one of the modules
     $\{\role p_1,\ldots,\role p_n\}$. Similarly to the previous case,
     we define a command for each branch of the interaction. However,
-    the rate of each command is going to be $1$. The if-then-else
-    construct is only interesting for module $\role p$: in this case,
-    the module makes an internal choice based on the evaluation of the
-    guard $E$. The other modules will be projected according to
-    choreographies $C_1$ and $C_2$.
+    the rate of each command is going to be $1$. 
+
+    \marco{COMMENT THE THIRD CASE AND RESTRICTION ON BRANCHES:
+      % 
+      The projection operation assumes all non-participants in an
+      interaction behave the same in all branches. I wonder if this
+      restriction is due to technical simplifications, intrinsic
+      problems when combining probabilities with lack of knowledge of
+      choices. Further analysis would be beneficial }
+
+    \marco{BEST TO COMMENT ON SELF-INTERACTION HERE and RELATED TO
+      PROJECTION: The paper does nor require the usual condition of
+      non-self-interaction (as evident in Listing 1.4). Additionally,
+      clarification is needed on how projection works in cases where
+      non-self-interaction is not enforced. Are the projection rules
+      ordered? }
+
+
+    The if-then-else construct is only interesting for module
+    $\role p$: in this case, the module makes an internal choice based
+    on the evaluation of the guard $E$. The other modules will be
+    projected according to choreographies $C_1$ and $C_2$.
 
     As hinted above, the projection in Definition~\ref{def:projCTMC}
     would be incorrect if instead of using rates we used
