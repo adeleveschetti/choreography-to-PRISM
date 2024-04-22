@@ -1,18 +1,18 @@
 In this section, we report an experimental evaluation of our language.
-In order to show that using choreographies is beneficial in the
-presence of concurrency, we included an example modelling a single
-process.
+The examples reported in the section highlight the benefits of utilizing choreographies in concurrent settings, improving analysis capabilities while ensuring clarity and expressiveness.
+%In order to show that using choreographies is beneficial in the
+%presence of concurrency, we included an example modelling a single
+%process.
  % We have decided to provide two examples with concurrency and one
 % without .  
-In particular, we focus on three benchmarks: the dice program that we
-compare with the test cases reported in the PRISM
-repository\footnote{\url{https://www.prismmodelchecker.org/casestudies/}};
+In particular, we focus on three benchmarks: a modified version of the example reported in Section \ref{sec:intro};
 the Bitcoin Proof of Work protocol and the Hybrid Casper protocol,
 presented in
 \cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/distribledger/GallettaLMV23}.
 For lack of space, we do not report the generated PRISM files, they
 can be found in the online repository \cite{repository}.
 
+\begin{comment}
 \subsection{The Dice Program}
 The first test case is the Dice Program \cite{KY76}, a model involving
 only a single process.  The following program simulates a die using
@@ -45,7 +45,7 @@ As expected, since there is no concurrency, there are no significant improvement
 The PRISM model produced by our method closely aligns with the original model with only minimal details that differ between the two.
 Additionally, to ensure the generated program's accuracy, 
 we evaluated whether the probability of reaching a state where the dice displays \texttt{d=k} for every possible \texttt{k} from 1 to 6 equals 1/6. Our simulations shown that the probabilities calculated by our generated model fully matched those from the original PRISM model. 
-
+\end{comment}
 \begin{comment}
 \subsection{Simple Peer-To-Peer Protocol}
 This case study describes a simple peer-to-peer protocol based on BitTorrent\footnote{\url{https://www.prismmodelchecker.org/casestudies/peer2peer.php}}. The model comprises a set of clients trying to download a file that has been partitioned into $K$ blocks. Initially, there is one client that has already obtained all of the blocks and $N$ additional clients with no blocks. Each client can download a block from any of the others but they can only attempt four concurrent downloads for each block.\\
@@ -200,7 +200,53 @@ However, this does not affect the behaviour of the model, as the reader can noti
 \label{ex4-res}
 \end{figure}
 \end{comment}
-\subsection{Proof of Work Bitcoin Protocol}
+
+
+\mypar{A Modified Thinkteam Protocol.}
+In this modified version of the thinkTeam protocol introduced in the earlier sections, we extend the protocol to involve generalised interactions with possible many receivers. Specifically, the \texttt{CheckOut} process now communicates with two users simultaneously, \texttt{User1} and \texttt{User2} each tasked with performing distinct actions upon access to the file. 
+
+ In the first branch, \texttt{User1} increments the variable \texttt{x} by 1, while \texttt{User2} decrements the variable \texttt{y} by 1. Conversely, in the second branch, the roles are reversed, with \texttt{User1} decrementing \texttt{x} and \texttt{User2} incrementing \texttt{y}.
+
+ \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreography for the Modified Thinkteam Protocol},captionpos=b,label={ex1-chor}]
+   C0 := CheckOut $\rightarrow$ User1, User2 : (+["1*lambda"] " " "(x=x+1)"  "(y=y-1)"; C1
+                                       	+["1*lambda"]  " " "(x=x-1)"  "(y=y+1)";  C2)
+   C1 :=  CheckOut $\rightarrow$ User1, User2 : (+["1*beta"] ; C0)  
+   C2 :=  CheckOut $\rightarrow$ User1, User2 : (+["1*mu "] ; C1   +["1*mu "] ;  C2)
+ \end{lstlisting}
+
+ Part of the generated PRISM model is reported in Listing \ref{ex1-gen}. 
+
+ \begin{lstlisting}[style=prism-color,caption={Generated PRISM program},captionpos=b,label={ex1-gen}]
+   module CheckOut
+      CheckOut : [0..2] init 0;
+      [MMHOL]  (CheckOut=0) -> 1 :  (CheckOut'=1);
+      [FFSFW]  (CheckOut=0) -> 1 :  (CheckOut'=2);
+      [ULCFN]  (CheckOut=1) -> 1 : (CheckOut'=0);
+      [YHHWG]  (CheckOut=2) -> 1 : (CheckOut'=1);
+      [XWSAO]  (CheckOut=2) -> 1 : (CheckOut'=2);
+   endmodule
+$\ldots$
+   module User2
+      User2 : [0..2] init 0;
+      [MMHOL]  (User2=0) -> lambda : (y'=y-1)&(User2'=1);
+      [FFSFW]  (User2=0) -> lambda : (y'=y+1)&(User2'=2);
+      [ULCFN]  (User2=1) -> mu : (User2'=0);
+      [YHHWG]  (User2=2) -> theta : (User2'=1);
+      [XWSAO]  (User2=2) -> theta : (User2'=2);
+endmodule
+\end{lstlisting}
+The generated PRISM model appears less clear compared to the choreographic language of the same model, primarily due to its lack of sequential structure and lower readability. 
+In the PRISM model, the absence of a clear sequential structure makes it harder to follow the flow 
+of interactions between components. Unlike the choreographic language, which explicitly defines 
+sequential steps (e.g., \texttt{C0}, \texttt{C1}, \texttt{C2}), the PRISM model's modular approach 
+may confuse the order of operations and dependencies between different parts of the system.
+Additionally, the PRISM model's syntax, with its module definitions and transition labels, can be 
+more challenging to read and comprehend compared to the concise and structured nature of the 
+choreographic language. The descriptive actions used in the choreographic language (e.g., 
+\texttt{+["1*lambda"]}, \texttt{+["1*mu"]}) provide clearer insights into the actions performed at each step.
+
+
+\mypar{Proof of Work Bitcoin Protocol.}
 \begin{comment}
 \begin{wrapfigure}[11]{r}{4cm}
 	\includegraphics[scale=0.45]{bitcoin.pdf}	
@@ -284,13 +330,14 @@ endmodule
    \label{ex3-res}
    \vspace{-0.75cm}
 \end{wrapfigure}
-In summary, the code depicts miners engaging in solving PoW, updating their ledgers, and communicating with the network. 
-When synchronizing with the hasher, a miner tries to solve a cryptographic puzzle. Successful attempts result in adding a new block to its ledger and updating other miners' block sets via the network. Unsuccessful attempts involve extracting a block from its set, updating its ledger and block sets, and continuing the PoW process.
+\textcolor{red}{In summary, the code depicts miners engaging in solving PoW, updating their ledgers, and communicating with the network. 
+The indices $i$ represent the module renaming feature of the choreographic language. Thus, each interaction will be repeated for each miner and hasher of the protocol that we are considering. The protocol works as follows.
+When synchronizing with the hasher, a miner tries to solve a cryptographic puzzle. Successful attempts result in adding a new block to its ledger and updating other miners' block sets via the network. Unsuccessful attempts involve extracting a block from its set, updating its ledger and block sets, and continuing the PoW process.}
 
-The PRISM model we created is more verbose than the one in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, mainly because we consistently generate the else branch for if-then-else expressions, resulting in a higher number of instructions. Despite this, the experimental results for block creation probability (Figure \ref{ex3-res}) remain unaffected. Any discrepancies between the original and generated models are due to inherent variations in the simulation-based calculation of probability.
+The PRISM model we created is more verbose than the one in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, mainly because we consistently generate the else branch for if-then-else expressions, resulting in a higher number of instructions. Despite this, the experimental results for block creation probability within a bound time $T$ (Figure \ref{ex3-res}) remain unaffected. Any discrepancies between the original and generated models are due to inherent variations in the simulation-based calculation of probability.
 
 
-\subsection{Hybrid Casper Protocol}
+\mypar{Hybrid Casper Protocol.}
 \begin{comment}
 \begin{wrapfigure}[12]{l}{4.5cm}
 	\includegraphics[scale=0.45]{ethereum.pdf}	
@@ -399,7 +446,7 @@ endmodule
         generated model.  This difference is due to the fact that
         certain commands could be combined, but our generation lacks
         the automatic capability to perform this check. While the
-        results obtained for the probability of creating a block
+        results obtained for the probability of creating a block within the time $T$
         reported in Figure \ref{ex5-res} exhibit similarity, running
         simulations for the generated model takes PRISM 39.016
         seconds, compared to the 22.051 seconds required for the
