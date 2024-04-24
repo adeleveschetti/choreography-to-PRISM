@@ -1,11 +1,13 @@
-Understanding and programming distributed systems pose formidable
-challenges due to their inherent complexity and the potential for
-elusive edge cases
-% to lurk
-within their intricate interactions. Unlike monolithic systems,
-distributed programs involve multiple nodes operating concurrently and
-communicating over networks, introducing a multitude of potential
-failure scenarios and nondeterministic behaviours.
+Understanding and programming distributed systems 
+%
+present significant challenges due to their inherent complexity, and
+the possibility of obscure edge cases arising from their complex
+interactions.
+%
+Unlike monolithic systems, distributed programs involve multiple nodes
+operating concurrently and communicating over networks, introducing a
+multitude of potential failure scenarios and nondeterministic
+behaviours.
 %
 One of the primary challenges in understanding distributed systems
 lies in the fact that the interactions between multiple components can
@@ -61,9 +63,19 @@ composition of decentralised interactions. % Within the context of
 % tools for defining interaction protocols that govern the communication
 % between processes. 
 %
-This approach facilitates the automatic generation of decentralised
+%
+Although, this approach can be used for a proper subset of distributed
+systems, choreographies have proven to be very useful in many use
+cases since they facilitate the automatic generation of decentralised
 implementations that are inherently correct-by-construction.
-\textcolor{red}{Choreographies excel in environments characterized by deterministic communication patterns and clear sequencing of actions. However, they may not be well-suited for managing highly unpredictable or dynamically changing interactions. In scenarios where processes exhibit significant variability or intricate coordination logic, choreographies may lack the flexibility or adaptability required for effective orchestration.}
+%
+% \marco{Choreographies particularly excel in environments characterised
+%   by deterministic communication patterns and clear sequencing of
+%   actions. However, they may not be well-suited for managing highly
+%   unpredictable or dynamically changing interactions. In scenarios
+%   where processes exhibit significant variability or intricate
+%   coordination logic, choreographies may lack the flexibility or
+%   adaptability required for effective orchestration.}
 
 This paper presents a choreographic language designed for modelling
 concurrent probabilistic systems.
@@ -93,32 +105,35 @@ sources of error in the modelling phase.
 % reliability of the system.
 
 
-\mypar{Contributions and Overview.} Our contributions can be
-categorised as:
+\mypar{Contributions and Overview.} We summarise our contributions as
+follows:
 \begin{itemize} 
-\item Firstly, we propose a choreographic language equipped with
-  well-defined syntax and semantics, tailored specifically for
-  describing concurrent systems with probabilistic behaviours
+\item we propose a choreographic language equipped with well-defined
+  syntax and semantics, tailored specifically for describing
+  concurrent systems with probabilistic behaviours
   (\S~\ref{sec:chor}). To the best of our knowledge, this is the first
-  probabilistic choreography language that is not a type abstraction.
-\item Then, we introduce a semantics for PRISM (\S~\ref{sec:prism}),
-  based on the original semantics for PRISM~\cite{PRISMdoc}.
+  probabilistic choreography language that is not a type abstraction;
+
+\item we introduce a semantics for the minimal fragment of PRISM
+  needed for code generation from choreographies (\S~\ref{sec:prism}),
+  which follows PRISM's original semantics~\cite{PRISMdoc};
   % enhancing its usability and facilitating clearer understanding for
   % users.
 
-  \marco{COMMENT ON THIS: . In item (2), I would clearly state that/if
-    the formal semantics of PRISM is faithul to the original one (I
-    assume so) and that the purpose is to present the minimal fragment
-    of PRISM that is needed for PRISM code generation from
-    choreographies.}
+\item we establish a rigorous definition for a translation function
+  from choreographies to PRISM (\S~\ref{sec:proj}), and address its
+  correctness. This translation serves as a crucial intermediary step
+  in transforming models described in our choreographic language into
+  PRISM-compatible representations;
 
-\item Furthermore, we establish a rigorous definition for a
-  translation function from choreographies to PRISM
-  (\S~\ref{sec:proj}), and address its correctness. This translation
-  (projection) serves as a crucial intermediary step in transforming
-  (compiling) models described in our choreographic language into
-  PRISM-compatible representations.
-\item \textcolor{red}{Lastly, our implementation involves a compiler that executes the defined translation process. This compiler transforms choreographies into PRISM models, enabling users to utilize PRISM's robust analysis features while benefiting from the expressiveness of our choreographic language.}
+\item we give a compiler implementation that executes the defined
+  translation function (\S~\ref{sec:impl}),
+  % This compiler transforms choreographies into PRISM models,
+  enabling users to utilise PRISM's robust analysis features while
+  benefiting from the expressiveness of choreographies;
+
+\item we show some use cases in order to demonstrate the applicability
+  of our language (\S~\ref{sec:bench}).
 \end{itemize}
 
 
