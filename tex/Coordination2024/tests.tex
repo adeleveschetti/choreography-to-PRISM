@@ -202,12 +202,12 @@ However, this does not affect the behaviour of the model, as the reader can noti
 \end{comment}
 
 
-\mypar{A Modified Thinkteam Protocol.}
-In this modified version of the thinkTeam protocol introduced in the earlier sections, we extend the protocol to involve generalised interactions with possible many receivers. Specifically, the \texttt{CheckOut} process now communicates with two users simultaneously, \texttt{User1} and \texttt{User2} each tasked with performing distinct actions upon access to the file. 
+\mypar{A Modified thinkteam Protocol.}
+In this modified version of the thinkteam protocol introduced in the earlier sections, we extend the protocol to involve generalised interactions with possible many receivers. Specifically, the \texttt{CheckOut} process now communicates with two users simultaneously, \texttt{User1} and \texttt{User2} each tasked with performing distinct actions upon access to the file. 
 
  In the first branch, \texttt{User1} increments the variable \texttt{x} by 1, while \texttt{User2} decrements the variable \texttt{y} by 1. Conversely, in the second branch, the roles are reversed, with \texttt{User1} decrementing \texttt{x} and \texttt{User2} incrementing \texttt{y}.
 
- \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreography for the Modified Thinkteam Protocol},captionpos=b,label={ex1-chor}]
+ \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreography for the Modified thinkteam Protocol},captionpos=b,label={ex1-chor}]
    C0 := CheckOut $\rightarrow$ User1, User2 : (+["1*lambda"] " " "(x=x+1)"  "(y=y-1)"; C1
                                        	+["1*lambda"]  " " "(x=x-1)"  "(y=y+1)";  C2)
    C1 :=  CheckOut $\rightarrow$ User1, User2 : (+["1*beta"] ; C0)  
@@ -218,21 +218,21 @@ In this modified version of the thinkTeam protocol introduced in the earlier sec
 
  \begin{lstlisting}[style=prism-color,caption={Generated PRISM program},captionpos=b,label={ex1-gen}]
    module CheckOut
-      CheckOut : [0..2] init 0;
-      [MMHOL]  (CheckOut=0) -> 1 :  (CheckOut'=1);
-      [FFSFW]  (CheckOut=0) -> 1 :  (CheckOut'=2);
-      [ULCFN]  (CheckOut=1) -> 1 : (CheckOut'=0);
-      [YHHWG]  (CheckOut=2) -> 1 : (CheckOut'=1);
-      [XWSAO]  (CheckOut=2) -> 1 : (CheckOut'=2);
+      CheckOut_STATE : [0..2] init 0;
+      [MMHOL]  (CheckOut_STATE=0) -> 1 :  (CheckOut_STATE'=1);
+      [FFSFW]  (CheckOut_STATE=0) -> 1 :  (CheckOut_STATE'=2);
+      [ULCFN]  (CheckOut_STATE=1) -> 1 : (CheckOut_STATE'=0);
+      [YHHWG]  (CheckOut_STATE=2) -> 1 : (CheckOut_STATE'=1);
+      [XWSAO]  (CheckOut_STATE=2) -> 1 : (CheckOut_STATE'=2);
    endmodule
 $\ldots$
    module User2
-      User2 : [0..2] init 0;
-      [MMHOL]  (User2=0) -> lambda : (y'=y-1)&(User2'=1);
-      [FFSFW]  (User2=0) -> lambda : (y'=y+1)&(User2'=2);
-      [ULCFN]  (User2=1) -> mu : (User2'=0);
-      [YHHWG]  (User2=2) -> theta : (User2'=1);
-      [XWSAO]  (User2=2) -> theta : (User2'=2);
+      User2_STATE : [0..2] init 0;
+      [MMHOL]  (User2_STATE=0) -> lambda : (y'=y-1)&(User2_STATE'=1);
+      [FFSFW]  (User2_STATE=0) -> lambda : (y'=y+1)&(User2_STATE'=2);
+      [ULCFN]  (User2_STATE=1) -> mu : (User2_STATE'=0);
+      [YHHWG]  (User2_STATE=2) -> theta : (User2_STATE'=1);
+      [XWSAO]  (User2_STATE=2) -> theta : (User2_STATE'=2);
 endmodule
 \end{lstlisting}
 The generated PRISM model appears less clear compared to the choreographic language of the same model, primarily due to its lack of sequential structure and lower readability. 
@@ -347,10 +347,10 @@ We now present the Hybrid Casper Protocol \cite{DBLP:journals/distribledger/Gall
 
 The modeling approach is very similar to the one used for the Proof of Work Bitcoin protocol. Specifically, the Hybrid Casper protocol is represented in PRISM as the parallel composition of $n$ \emph{Validator} modules, along with the modules \emph{Vote\_Manager} and \emph{Network}. Each \emph{Validator} module closely resembles the \emph{Miner} module from the previous protocol. The module \emph{Vote\_Manager} is responsible for storing maps containing votes for each block and computing associated rewards/penalties.
 The choreographic model for this example is reported in Listing \ref{ex5-code}. 
-The code resembles that of the Proof of Work protocol, but with two key distinctions: \emph{(i)} validators do not need to synchronize with hasher processes to solve the cryptopuzzle, and \emph{(ii)} each validator can either create a new block, receive blocks from the network module, or determine if it's eligible to vote for specific blocks.
+The code resembles that of the Proof of Work protocol, but each validator can either create a new block, receive blocks from the network module, or determine if it's eligible to vote for specific blocks.
 For lack of space, we detailed only part of the code, the complete model can be found in \cite{repository}.
 \begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Excerpt of the Hybrid Casper Protocol as a choreography},captionpos=b,label={ex5-code}]
-{PoS := Validator[i] -> Validator[i] :
+{PoS := Hasher[i] -> Validator[i] :
 (+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"; 
 	if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{$\ldots$}
 	else{

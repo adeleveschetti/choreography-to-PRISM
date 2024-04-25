@@ -56,9 +56,9 @@ language, the same model becomes significantly clearer.
 % , as shown in Listing \ref{example2}.
 \begin{lstlisting}[style=chor-color,% caption={Example of Listing \ref{example1} in our choreographic language},captionpos=b,
   frame=none, label={example2}]
-  C0 := User $\rightarrow$ Check : (+["lambda*1"] ; C1	 +["lambda*1"]  ;  C2)
-  C1 := User $\rightarrow$ Check : (+["beta*1"] ; C0)  
-  C2 := User $\rightarrow$ Check : (+["mu*1"] ; C1   +["mu*1"] ;  C2)
+  C0 := CheckOut $\rightarrow$ User : (+["1*lambda"] ; C1	 +["1*lambda"]  ;  C2)
+  C1 := CheckOut $\rightarrow$ User : (+["1*beta"] ; C0)  
+  C2 := CheckOut $\rightarrow$ User : (+["1*mu"] ; C1   +["1*mu"] ;  C2)
 \end{lstlisting}
 In this model, we define three distinct choreographies, namely
 \texttt{C0}, \texttt{C1}, and \texttt{C2}. These choreographies
