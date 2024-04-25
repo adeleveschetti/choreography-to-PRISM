@@ -1,8 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.10.11)  25 APR 2024 10:44
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021) (preloaded format=pdflatex 2021.10.11)  25 APR 2024 10:55
 entering extended mode
  restricted \write18 enabled.
+ file:line:error style messages enabled.
  %&-line parsing enabled.
-**main
+**main.tex
 (./main.tex
 LaTeX2e <2020-10-01> patch level 4
 L3 programming layer <2021-02-18> (./llncs.cls
@@ -781,9 +782,6 @@ File: l3backend-pdftex.def 2021-03-18 L3 backend support: PDF output (pdfTeX)
 
 LaTeX Warning: Label `example2' multiply defined.
 
-
-LaTeX Warning: Label `thm:epp' multiply defined.
-
 )
 \openout1 = `main.aux'.
 
@@ -877,17 +875,20 @@ Overfull \hbox (0.65274pt too wide) detected at line 164
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [8]
+
+LaTeX Warning: Reference `example3' on page 9 undefined on input line 214.
+
 [9]
 
-LaTeX Font Warning: Command \small invalid in math mode on input line 224.
+LaTeX Font Warning: Command \small invalid in math mode on input line 226.
 
 
-Overfull \hbox (3.61354pt too wide) detected at line 243
+Overfull \hbox (3.61354pt too wide) detected at line 245
 []
  []
 
 
-LaTeX Font Warning: Command \small invalid in math mode on input line 273.
+LaTeX Font Warning: Command \small invalid in math mode on input line 275.
 
 [10]) (./implementation.tex
 (/usr/local/texlive/2021/texmf-dist/tex/latex/listings/lstlang1.sty
@@ -901,7 +902,7 @@ Overfull \hbox (7.06775pt too wide) in paragraph at lines 9--11
 -ates the pro-jec-tion from our lan-guage to PRISM.
  []
 
-[11]) [12] (./tests.tex Excluding 'comment' comment.
+[11] [12]) (./tests.tex Excluding 'comment' comment.
 Excluding 'comment' comment.
 LaTeX Font Info:    Trying to load font information for TS1+cmss on input line 
 222.
@@ -918,22 +919,21 @@ File: Figures//example.pdf Graphic file (type pdf)
 <use Figures//example.pdf>
 Package pdftex.def Info: Figures//example.pdf  used on input line 327.
 (pdftex.def)             Requested size: 126.12308pt x 91.3426pt.
-
-Excluding 'comment' comment.
+ [14 <./Figures//example.pdf>] Excluding 'comment' comment.
 Overfull \hbox (8.95618pt too wide) in paragraph at lines 340--347
 \T1/cmr/m/n/10 The Hy-brid Casper pro-to-col rep-re-sents a hy-brid con-sen-sus
  pro-to-col for blockchains,
  []
 
-[14 <./Figures//example.pdf>] Excluding 'comment' comment.
+Excluding 'comment' comment.
 <Figures//example2.pdf, id=131, 355.3275pt x 266.9975pt>
 File: Figures//example2.pdf Graphic file (type pdf)
 <use Figures//example2.pdf>
 Package pdftex.def Info: Figures//example2.pdf  used on input line 437.
 (pdftex.def)             Requested size: 124.36647pt x 93.45052pt.
-
-Excluding 'comment' comment.) (./discussion.tex [15 <./Figures//example2.pdf>]
-Underfull \vbox (badness 5105) has occurred while \output is active []
+ Excluding 'comment' comment.) (./discussion.tex
+[15 <./Figures//example2.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [16])
 [17] (./main.bbl
@@ -968,17 +968,20 @@ n/9 https : / / doi . org / 10 .
 
 [18]) [19] (./main.aux)
 
+LaTeX Warning: There were undefined references.
+
+
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 18579 strings out of 478994
- 360400 string characters out of 5858183
- 1055413 words of memory out of 5000000
- 35641 multiletter control sequences out of 15000+600000
+ 18580 strings out of 478994
+ 360410 string characters out of 5858183
+ 1055586 words of memory out of 5000000
+ 35642 multiletter control sequences out of 15000+600000
  432375 words of font info for 92 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 102i,15n,102p,1063b,1457s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 102i,15n,102p,1067b,1457s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc
 }{/usr/local/texlive/2021/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}<
 /usr/local/texlive/2021/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></
@@ -1026,7 +1029,7 @@ super/sfti1000.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/cm-su
 per/sftt0800.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/cm-supe
 r/sftt0900.pfb></usr/local/texlive/2021/texmf-dist/fonts/type1/public/cm-super/
 sftt1000.pfb>
-Output written on main.pdf (19 pages, 675597 bytes).
+Output written on main.pdf (19 pages, 675917 bytes).
 PDF statistics:
  303 PDF objects out of 1000 (max. 8388607)
  210 compressed objects within 3 object streams
