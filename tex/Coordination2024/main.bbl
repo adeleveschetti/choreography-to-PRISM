@@ -92,6 +92,11 @@ Heath, J., Kwiatkowska, M., Norman, G., Parker, D., Tymchyshyn, O.:
 Honda, K., Yoshida, N., Carbone, M.: Web services, mobile processes and types.
   Bull. {EATCS}  \textbf{91},  160--185 (2007)
 
+\bibitem{HYC16}
+Honda, K., Yoshida, N., Carbone, M.: Multiparty asynchronous session types. J.
+  {ACM}  \textbf{63}(1),  9:1--9:67 (2016). \doi{10.1145/2827695},
+  \url{https://doi.org/10.1145/2827695}
+
 \bibitem{distr1}
 Kwiatkowska, M., Norman, G., Parker, D.: Probabilistic verification of
   hermanâ€™s self-stabilisation algorithm. Formal Aspects of Computing

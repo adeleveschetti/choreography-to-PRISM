@@ -31,19 +31,19 @@ The syntactic category $C$ denotes choreographic programs. The
 interaction term
 $\role p\rightarrow \{\role p_1,\ldots,\role
 p_n\}:\,\Sigma\{\lambda_j: x_j=E_j.\ C_j\}_{j\in J}$ denotes an
-interaction initiated by module $\role p$ with modules $\role
-p_i$'s. A choreography specifies what interaction must be executed
-next, shifting the focus from what can happen to what must
-happen. When the interaction happens, one of the $j$ branches is
-selected as a continuation. Branching is a random move: the number
-$\lambda_j\in\mathbb R$ denotes either a probability or a rate. This
-will depend on the language we wish to use. In the case of
-probabilities, it must be the case that $0\leq\lambda_j\leq 1$ and
-$\Sigma_j\lambda_j=1$. Once a branch $j$ is taken, the choreography
-will execute some assignments $u_j$. A single assignment has the
-syntax $(x' = E)$ meaning that the value obtained by evaluating
-expression $E$ is assigned to variable $x$; assignments can be
-concatenated with the operator $\&$.  Note that $x'$ is used for an
+interaction initiated by module $\role p$ with modules $\role p_i$'s
+(for $\role p$ and all $\role p_i$ distinct). A choreography specifies
+what interaction must be executed next, shifting the focus from what
+can happen to what must happen. When the interaction happens, one of
+the $j$ branches is selected as a continuation. Branching is a random
+move: the number $\lambda_j\in\mathbb R$ denotes either a probability
+or a rate. This will depend on the language we wish to use. In the
+case of probabilities, it must be the case that $0\leq\lambda_j\leq 1$
+and $\Sigma_j\lambda_j=1$. Once a branch $j$ is taken, the
+choreography will execute some assignments $u_j$. A single assignment
+has the syntax $(x' = E)$ meaning that the value obtained by
+evaluating expression $E$ is assigned to variable $x$; assignments can
+be concatenated with the operator $\&$.  Note that $x'$ is used for an
 assignment to $x$: here, we follow the syntax adopted in PRISM
 (see~\S~\ref{sec:prism}). Expressions are obtained by applying some
 unspecified functions to other expressions or, as base terms, i.e.,
