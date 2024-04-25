@@ -1,16 +1,21 @@
-\textcolor{red}{In this section, we present an experimental evaluation of our language.
-The examples provided highlight two main points: firstly, the representation using choreographic language is significantly more concise; secondly, we demonstrate that PRISM behaves similarly on both the projection and the original model in PRISM. }
+{In this section, we present an experimental evaluation of our
+  language.  The examples provided highlight two main points: firstly,
+  the representation using choreographic language is significantly
+  more concise; secondly, we demonstrate that PRISM behaves similarly
+  on both the projection and the original model in PRISM also in our
+  implementation. }
 %In order to show that using choreographies is beneficial in the
 %presence of concurrency, we included an example modelling a single
 %process.
  % We have decided to provide two examples with concurrency and one
 % without .  
-In particular, we focus on three benchmarks: a modified version of the example reported in Section \ref{sec:intro};
-the Bitcoin Proof of Work protocol and the Hybrid Casper protocol,
-presented in
-\cite{DBLP:journals/concurrency/BistarelliNGLMV23,DBLP:journals/distribledger/GallettaLMV23}.
-For lack of space, we do not report the generated PRISM files, they
-can be found in the online repository \cite{repository}.
+In particular, we focus on three benchmarks: a modified version of the
+example reported in Section \ref{sec:intro}; the Bitcoin Proof of Work
+protocol~\cite{DBLP:journals/concurrency/BistarelliNGLMV23} and the
+Hybrid Casper
+protocol~\cite{DBLP:journals/distribledger/GallettaLMV23}.  The
+generated PRISM files can be found in our online repository
+\cite{repository}.
 
 \begin{comment}
 \subsection{The Dice Program}
@@ -235,15 +240,22 @@ $\ldots$
       [XWSAO]  (User2_STATE=2) -> theta : (User2_STATE'=2);
 endmodule
 \end{lstlisting}
-The generated PRISM model appears less clear compared to the choreographic language of the same model, primarily due to its lack of sequential structure and lower readability. 
-In the PRISM model, the absence of a clear sequential structure makes it harder to follow the flow 
-of interactions between components. Unlike the choreographic language, which explicitly defines 
-sequential steps (e.g., \texttt{C0}, \texttt{C1}, \texttt{C2}), the PRISM model's modular approach 
-may confuse the order of operations and dependencies between different parts of the system.
-Additionally, the PRISM model's syntax, with its module definitions and transition labels, can be 
-more challenging to read and comprehend compared to the concise and structured nature of the 
-choreographic language. The descriptive actions used in the choreographic language (e.g., 
-\texttt{+["1*lambda"]}, \texttt{+["1*mu"]}) provide clearer insights into the actions performed at each step.
+The generated PRISM model appears less clear compared to its
+choreographic representation, primarily due to its lack of sequential
+structure and lower readability.  In the PRISM model, the absence of a
+clear sequential structure makes it harder to follow the flow of
+interactions between components, % Unlike the choreographic language,
+% which explicitly defines sequential steps (e.g., \texttt{C0},
+% \texttt{C1}, \texttt{C2}), the PRISM model's modular approach may
+% confuse the order of operations and dependencies between different
+% parts of the system.  Additionally,
+% The PRISM model's syntax, with its
+since module definitions and transition labels can be more challenging
+to read and comprehend compared to the concise and structured nature
+of the choreographic language. % The descriptive actions used in the
+% choreographic language (e.g., \texttt{+["1*lambda"]},
+% \texttt{+["1*mu"]}) provide clearer insights into the actions
+% performed at each step.
 
 
 \mypar{Proof of Work Bitcoin Protocol.}
@@ -330,9 +342,18 @@ endmodule
    \label{ex3-res}
    \vspace{-0.75cm}
 \end{wrapfigure}
-\textcolor{red}{In summary, the code depicts miners engaging in solving PoW, updating their ledgers, and communicating with the network. 
-The indices $i$ represent the module renaming feature of the choreographic language. Thus, each interaction will be repeated for each miner and hasher of the protocol that we are considering. The protocol works as follows.
-When synchronizing with the hasher, a miner tries to solve a cryptographic puzzle. Successful attempts result in adding a new block to its ledger and updating other miners' block sets via the network. Unsuccessful attempts involve extracting a block from its set, updating its ledger and block sets, and continuing the PoW process.}
+\textcolor{red}{} {In summary, the code depicts miners engaging in
+  solving PoW, updating their ledgers, and communicating with the
+  network.  The indices $i$ represent the module renaming feature of
+  the choreographic language. Thus, each interaction will be repeated
+  for each miner and hasher of the protocol that we are
+  considering. The protocol works as follows.  When synchronizing with
+  the hasher, a miner tries to solve a cryptographic
+  puzzle. Successful attempts result in adding a new block to its
+  ledger and updating other miners' block sets via the
+  network. Unsuccessful attempts involve extracting a block from its
+  set, updating its ledger and block sets, and continuing the PoW
+  process.}
 
 The PRISM model we created is more verbose than the one in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, mainly because we consistently generate the else branch for if-then-else expressions, resulting in a higher number of instructions. Despite this, the experimental results for block creation probability within a bound time $T$ (Figure \ref{ex3-res}) remain unaffected. Any discrepancies between the original and generated models are due to inherent variations in the simulation-based calculation of probability.
 
