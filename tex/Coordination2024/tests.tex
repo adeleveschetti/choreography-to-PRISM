@@ -266,74 +266,34 @@ of the choreographic language. % The descriptive actions used in the
 \end{comment}
 In \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, the authors extended the PRISM model checker syntax to incorporate dynamic data types, enhancing its capabilities to model the Proof of Work protocol used in the Bitcoin blockchain \cite{bitcoin}. 
 
-\begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreography for the Proof of Work Bitcoin Protocol},captionpos=b,label={ex3-code}]
+\textcolor{red}{} {In summary, the code depicts miners engaging in
+  solving PoW, updating their ledgers, and communicating with the
+  network.  The indices $i$ represent the module renaming feature of
+  the choreographic language. Thus, each interaction will be repeated
+  for each miner and hasher of the protocol that we are
+  considering. The protocol works as follows. 
+  \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreography for the Proof of Work Bitcoin Protocol},captionpos=b,label={ex3-code}]
    {PoW $\coloneqq$ Hasher[i] $\rightarrow$ Miner[i] :
    (+["mR*hR[i]"]  " " "(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" ; 
-      Miner[i] $\rightarrow$ Network : (["rB*1"] "(B[i]'=addBlock(B[i],b[i]))"   
-         foreach(k!=i) "(set[k]'=addBlockSet(set[k],b[i]))"@Network;PoW)
-    +["lR*hR[i]"] ; if "!isEmpty(set[i])"@Miner[i] then { 
-                 ["r"] "(b[i]'=extractBlock(set[i]))"@Miner[i] ;  
-               Miner[i] $\rightarrow$ Network : 
-                  (["1*1"] "(setMiner[i]'=addBlockSet(setMiner[i],b[i]))"
-                   "(set[i]' = removeBlock(set[i],b[i]))";PoW) 
-             }
-             else{
-                if "canBeInserted(B[i],b[i])"@Miner[i] then { 
-                      ["1"] "(B[i]'=addBlock(B[i],b[i]))
-               &(setMiner[i]'=removeBlock(setMiner[i],b[i]))"@Miner[i];PoW 
-                }
+      Miner[i] $\rightarrow$ Network : (["rB*1"] "(B[i]'=addBlock(B[i],b[i]))" foreach(k!=i) "(set[k]'=addBlockSet(set[k],b[i]))"@Network;PoW)
+    +["lR*hR[i]"] ; 
+            if "!isEmpty(set[i])"@Miner[i] then { 
+               ["r"] "(b[i]'=extractBlock(set[i]))"@Miner[i] ;  
+                  Miner[i] $\rightarrow$ Network : 
+                     (["1*1"] "(setMiner[i]'=addBlockSet(setMiner[i],b[i]))" "(set[i]' = removeBlock(set[i],b[i]))";PoW) 
+            }
+            else{
+               if "canBeInserted(B[i],b[i])"@Miner[i] then { 
+                  ["1"] "(B[i]'=addBlock(B[i],b[i]))&(setMiner[i]'=removeBlock(setMiner[i],b[i]))"@Miner[i];PoW 
+               }
                else{PoW}})} 
    \end{lstlisting}
    \vspace{-0.15cm}
 
-   \begin{comment}
-The Bitcoin system is modeled as a parallel composition of $n$ \emph{Miner} processes, $n$ \emph{Hasher} processes, and a process denoted as \emph{Network}. Specifically,
-the \emph{Miner} processes replicate blockchain miners responsible for generating new blocks and appending them to their local ledger; the \emph{Hasher} processes simulate the process of solving the cryptographic puzzle and \emph{Network} process models the broadcast communication among miners.
-The choreographic model of the Proof of Work protocol is in Listing \ref{ex3-code}.
-
-\begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Peer-To-Peer Protocol.},captionpos=b,label={ex3-gen}]
-$\ldots$
-
-module Miner1
-   Miner1 : [0..7] init 0;
-   b1 : block {m1,0;genesis,0} ; 
-   B1 : blockchain [{genesis,0;genesis,0}]; 
-   c1 : [0..N] init 0; 
-   setMiner1 : list []; 
-
-   [PZKYT] (Miner1=0)   $\rightarrow$  hR1 : (b1'=createB(b1,B1,c1))$\&$(c1'=c1+1)$\&$(Miner1'=1); 
-   [EUBVP] (Miner1=0)   $\rightarrow$  hR1 :  (Miner1'=2); 
-   [HXYKO] (Miner1=1)   $\rightarrow$  1 : (B1'=addBlock(B1,b1))$\&$(Miner1'=0); 
-   [] (Miner1=2)$\&$!isEmpty(set1)  $\rightarrow$  r : (b1'=extractBlock(set1))$\&$(Miner1'=4); 
-   [SRKSV] (Miner1=4)   $\rightarrow$  1 : (setMiner1' = addBlockSet(setMiner1 , b1))$\&$(Miner1'=0); 
-   [] (Miner1=2)$\&$!(!isEmpty(set1))  $\rightarrow$  1 : (Miner1'=5); 
-   [] (Miner1=5)$\&$canBeInserted(B1,b1)  $\rightarrow$  1 : (B1'=addBlock(B1,b1))$\&$(setMiner1'=removeBlock(setMiner1,b1))$\&$(Miner1'=0); 
-   [] (Miner1=5)$\&$!(canBeInserted(B1,b1))  $\rightarrow$  1 : (Miner1'=0);
-
-endmodule
-$\ldots$
-module Network
-Network : [0..1] init 0;
-   set1 : list []; 
-   $\ldots$
-
-   [HXYKO] (Network=0)  $\rightarrow$  1 : (set2'=addBlockSet(set2,b2))$\&$(set3'=addBlockSet(set3,b3))$\&$(set4'=addBlockSet(set4,b4))$\&$(Network'=0); 
-   [SRKSV] (Network=0)  $\rightarrow$  1 : (set1' = removeBlock(set1,b1))$\&$(Network'=0); 
-   $\ldots$
-
-endmodule
-
-module Hasher1
-Hasher1 : [0..1] init 0;
-
-[PZKYT] (Hasher1=0)  $\rightarrow$  mR :  (Hasher1'=0); 
-[EUBVP] (Hasher1=0)  $\rightarrow$  lR :  (Hasher1'=0); 
-
-endmodule
-\end{lstlisting}
-
-\end{comment}
-\begin{wrapfigure}{r}{0.38\textwidth}
+  When synchronising with
+  the hasher, a miner tries to solve a cryptographic
+  puzzle. Successful attempts add a new block to its ledger and update other miners' block sets. Unsuccessful attempts involve extracting a block, updating its ledger and block sets, and continuing the PoW process.}
+  \begin{wrapfigure}{r}{0.38\textwidth}
    \vspace{-0.75cm}
    \centering
    \includegraphics[scale=0.35]{example.pdf}	
@@ -342,19 +302,6 @@ endmodule
    \label{ex3-res}
    \vspace{-0.75cm}
 \end{wrapfigure}
-\textcolor{red}{} {In summary, the code depicts miners engaging in
-  solving PoW, updating their ledgers, and communicating with the
-  network.  The indices $i$ represent the module renaming feature of
-  the choreographic language. Thus, each interaction will be repeated
-  for each miner and hasher of the protocol that we are
-  considering. The protocol works as follows.  When synchronizing with
-  the hasher, a miner tries to solve a cryptographic
-  puzzle. Successful attempts result in adding a new block to its
-  ledger and updating other miners' block sets via the
-  network. Unsuccessful attempts involve extracting a block from its
-  set, updating its ledger and block sets, and continuing the PoW
-  process.}
-
 The PRISM model we created is more verbose than the one in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, mainly because we consistently generate the else branch for if-then-else expressions, resulting in a higher number of instructions. Despite this, the experimental results for block creation probability within a bound time $T$ (Figure \ref{ex3-res}) remain unaffected. Any discrepancies between the original and generated models are due to inherent variations in the simulation-based calculation of probability.
 
 
@@ -365,11 +312,6 @@ The PRISM model we created is more verbose than the one in \cite{DBLP:journals/c
 \end{wrapfigure} 
 \end{comment}
 We now present the Hybrid Casper Protocol \cite{DBLP:journals/distribledger/GallettaLMV23}. The Hybrid Casper protocol represents a hybrid consensus protocol for blockchains, merging features from both Proof of Work and Proof of Stake protocols. 
-
-The modeling approach is very similar to the one used for the Proof of Work Bitcoin protocol. Specifically, the Hybrid Casper protocol is represented in PRISM as the parallel composition of $n$ \emph{Validator} modules, along with the modules \emph{Vote\_Manager} and \emph{Network}. Each \emph{Validator} module closely resembles the \emph{Miner} module from the previous protocol. The module \emph{Vote\_Manager} is responsible for storing maps containing votes for each block and computing associated rewards/penalties.
-The choreographic model for this example is reported in Listing \ref{ex5-code}. 
-The code resembles that of the Proof of Work protocol, but each validator can either create a new block, receive blocks from the network module, or determine if it's eligible to vote for specific blocks.
-For lack of space, we detailed only part of the code, the complete model can be found in \cite{repository}.
 \begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Excerpt of the Hybrid Casper Protocol as a choreography},captionpos=b,label={ex5-code}]
 {PoS := Hasher[i] -> Validator[i] :
 (+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"; 
@@ -382,6 +324,11 @@ For lack of space, we detailed only part of the code, the complete model can be 
  +["rC*1"] "(lastCheck[i]'=extractCheckpoint(listCheckpoints[i],lastCheck[i]))"$\ldots$}
 
 \end{lstlisting}
+The modeling approach is very similar to the one used for the Proof of Work Bitcoin protocol. Specifically, the Hybrid Casper protocol is represented in PRISM as the parallel composition of $n$ \emph{Validator} modules, along with the modules \emph{Vote\_Manager} and \emph{Network}. Each \emph{Validator} module closely resembles the \emph{Miner} module from the previous protocol. The module \emph{Vote\_Manager} is responsible for storing maps containing votes for each block and computing associated rewards/penalties.
+The choreographic model for this example is reported in Listing \ref{ex5-code}. 
+The code resembles that of the Proof of Work protocol, but each validator can either create a new block, receive blocks from the network module, or determine if it's eligible to vote for specific blocks.
+For lack of space, we detailed only part of the code, the complete model can be found in \cite{repository}.
+
 \begin{comment}
 \begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Hybrid Casper	Protocol.},captionpos=b,label={ex5-gen}]
 module Validator1
