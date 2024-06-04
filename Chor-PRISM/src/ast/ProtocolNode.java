@@ -3,6 +3,7 @@ package ast;
 import lib.ListPair;
 import lib.Matrix;
 import lib.Pair;
+import lib.State;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,14 @@ public class ProtocolNode implements Node{
 			}
 		}
 		return null;
+	}
+
+	public void setCtmc(boolean _isCtmc){
+		for(Node el : statements){
+			if(el instanceof BranchNode){
+				((BranchNode) el).setCtmc(_isCtmc);
+			}
+		}
 	}
 
 	public ArrayList<Node> getStatements(){
@@ -62,6 +71,17 @@ public class ProtocolNode implements Node{
 			toRet = el.generateStates(mods, states,recValues,moduleNames,stms,lastUpdate,consts);
 		}
 		return toRet;
+	}
+
+	@Override
+	public ArrayList<Pair<String,ArrayList<String>>> generatePrismCode(ArrayList<Pair<String,ArrayList<String>>> code, int index, int maxIndex, String prot, ArrayList<Node> mods, ArrayList<Pair<String,ArrayList<State>>> states, ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>> recValues, ArrayList<String> moduleNames, ArrayList<Pair<String,ArrayList<Node>>> stms, Pair<String,State> lastUpdate, ArrayList<Pair<String,String>> consts){
+		ArrayList<Pair<String,ArrayList<String>>> toRet = new ArrayList<>();
+
+		for(Node el : statements) {
+			toRet = el.generatePrismCode(code,index,maxIndex,prot,mods, states,recValues,moduleNames,stms,lastUpdate,consts);
+		}
+
+		return code;
 	}
 
 	@Override

@@ -88,6 +88,9 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 			}
 			protocols.add(new ProtocolNode(name,blockStat));
 		}
+		for(Node el : protocols){
+			((ProtocolNode)el).setCtmc(((PreambleNode)preamble).isCtmc());
+		}
 		return new ProgramNode(preamble,modules,protocols,valueVar);
 	}
 
@@ -118,6 +121,9 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 		}
 		else if(ctx.end()!=null) {
 			return visitEnd(ctx.end());
+		}
+		else if(ctx.allSynch()!=null){
+			return visitAllSynch(ctx.allSynch());
 		}
 		return visitInternalAction(ctx.internalAction());
 	}
@@ -160,16 +166,48 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 	
 	@Override
 	public Node visitActions(ActionsContext ctx) {
-
 		String actionA = ctx.action.get(0).getText().substring(1,ctx.action.get(0).getText().length()-1);
 		String actionB = null;
-		if(ctx.action.size()>1) {
+		if(ctx.action.size()==2) {
 			actionB = ctx.action.get(1).getText().substring(1,ctx.action.get(1).getText().length()-1);
+		}
+		else if(ctx.action.size()>2){
+			ArrayList<String> actions = new ArrayList<>();
+			actions.add(actionA);
+			for(int i=1; i<ctx.action.size(); i++){
+				actions.add(ctx.action.get(i).getText().substring(1,ctx.action.get(i).getText().length()-1));
+			}
+			return new ActionNode(actions);
+
 		}
 		return new ActionNode(actionA,actionB);
 	}
 
 
+	@Override
+	public Node visitAllSynch(AllSynchContext ctx){
+		ArrayList<String> roles = new ArrayList<>();
+		ArrayList<Node> commands = new ArrayList<>();
+		for(CommandsContext el : ctx.commList){
+			roles.add(el.role().getText());
+			commands.add(visitCommands(el));
+		}
+		Node statement = visitStatement(ctx.statement());
+		return new AllSynchNode(roles,commands,statement);
+	}
+
+	@Override
+	public Node visitCommands(CommandsContext ctx){
+		String role = ctx.role().getText();
+		ArrayList<String> rates = new ArrayList<>();
+		ArrayList<String> updates = new ArrayList<>();
+		for(int i=0; i<ctx.ups.size(); i++){
+			rates.add(ctx.rateValues.get(i).DOUBLE_STRING().getText().substring(1,ctx.rateValues.get(i).DOUBLE_STRING().getText().length()-1));
+			updates.add(ctx.ups.get(i).getText().substring(1,ctx.ups.get(i).getText().length()-1));
+		}
+
+		return new CommandNode(role,rates,updates);
+	}
 
 	@Override 
 	public Node visitBranch(BranchContext ctx) {

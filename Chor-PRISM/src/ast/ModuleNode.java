@@ -2,10 +2,7 @@ package ast;
 
 import java.util.ArrayList;
 
-import lib.ListPair;
-import lib.Matrix;
-import lib.Pair;
-import lib.Triplet;
+import lib.*;
 
 public class ModuleNode implements Node{
 
@@ -24,26 +21,26 @@ public class ModuleNode implements Node{
 		name = _name;
 		vars = _vars;
 		String str = "init";
-		for(String el : vars){ // TODO: here we can add the check for unbounded variables
-			String[] split = el.split(" ");
-			String varName = split[0];
-			int index = el.indexOf(str)+str.length()+1;
-			char init = el.charAt(index);
+		if(vars!=null) {
+			for (String el : vars) { // TODO: here we can add the check for unbounded variables
+				String[] split = el.split(" ");
+				String varName = split[0];
+				int index = el.indexOf(str) + str.length() + 1;
+				char init = el.charAt(index);
 
-			if(Character.isLetter(init)){
-				if(String.valueOf(init).equals("t")){
-					init = '1';
+				if (Character.isLetter(init)) {
+					if (String.valueOf(init).equals("t")) {
+						init = '1';
+					} else {
+						init = '0';
+					}
 				}
-				else{
-					init = '0';
+				if (Character.isDigit(el.charAt(index + 1))) {
+					String newStr = new StringBuilder().append(init).append(el.charAt(index + 1)).toString();
+					varsValues.add(new Pair(varName, Integer.parseInt(String.valueOf(newStr))));
+				} else {
+					varsValues.add(new Pair(varName, Integer.parseInt(String.valueOf(init))));
 				}
-			}
-			if(Character.isDigit(el.charAt(index+1)) ){
-				String newStr = new StringBuilder().append(init).append(el.charAt(index+1)).toString();
-				varsValues.add(new Pair (varName,Integer.parseInt(String.valueOf(newStr))));
-			}
-			else {
-				varsValues.add(new Pair(varName,Integer.parseInt(String.valueOf(init))));
 			}
 		}
 	}
@@ -320,5 +317,9 @@ public class ModuleNode implements Node{
 		return null;
 	}
 
+	@Override
+	public ArrayList<Pair<String,ArrayList<String>>> generatePrismCode(ArrayList<Pair<String,ArrayList<String>>> code, int index, int maxIndex, String prot, ArrayList<Node> mods, ArrayList<Pair<String,ArrayList<State>>> states, ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>> recValues, ArrayList<String> moduleNames, ArrayList<Pair<String,ArrayList<Node>>> stms, Pair<String,State> lastUpdate, ArrayList<Pair<String,String>> consts){
+		return code;
+	}
 
 }

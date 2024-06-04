@@ -43,7 +43,7 @@ public class ListPair {
         if(cond.contains("&")){
             conds = cond.split("&");
         }
-        else if(cond.contains("|")){
+        if(cond.contains("|")){
             conds = cond.split("\\|");
         }
         else{
@@ -51,7 +51,6 @@ public class ListPair {
             conds[0] = cond;
         }
         for(String el : conds) {
-
             if(!el.isEmpty()){
 
                 if(el.matches("^[a-zA-Z0-9_.-]*$")){

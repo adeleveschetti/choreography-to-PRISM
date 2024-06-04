@@ -30,7 +30,7 @@ Network ->
 Network : "set1 : list [];", "set2 : list [];", "set3 : list [];" , "set4 : list [];"; 
 	
 {
-PoW := Miner[i] -> Hasher[i], Network :
+PoW := Miner[i] -> Hasher[i] :
 (+["hR[i]*mR"]  "(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" " " . 
 		Miner[i] -> Network : (["rB*1"] "(B[i]'=addBlock(B[i],b[i]))"   foreach(k != i) "(set[k]'=addBlockSet(set[k],b[i]))" @Network .PoW)
  +["hR[i]*lR"] " "   " " .

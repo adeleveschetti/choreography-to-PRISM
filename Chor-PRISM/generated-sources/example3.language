@@ -10,24 +10,22 @@ preamble
 
 endpreamble
 
-n = 5;
+n = 3;
 
 Server -> 
 Server : "a : [0..1];" ;
 
-Station[i] -> i in [1...n]
-Station[i] : 	"s[i] : [0..1];"; 
+Station1 ->
+Station1 : 	"s1 : [0..1];";
+
+Station2 -> i in [1...n]
+Station2 : 	"s2 : [0..1];";
 
 {
 ServerPolling := 
-		if "(a=0)"@Server then{
-			Server -> Station[i] :
-			(+["gamma*1"]  " " "(s[i]'=0)" . ServerPolling 
-			+["gamma*lambda"]  "(a'=1)" "(s[i]'=1)" .  Server -> Station[i] : (["mu*1"] "(a'=0)" "(s[i]'=0)".ServerPolling ))
-		}
-		else{
-			Server -> Station[i] :
-			(+["mu*1"]  " " "(s[i]'=0)" . ServerPolling) 
-		}
-		
+		Server -> User, Station2 :
+			(+["gamma*1"] <<"(a=0)">> " " "(s1'=0)" . ServerPolling
+			+["gamma*lambda"] <<"(a=0)">> "(a'=1)" "(s[i]'=1)" .  ServerPolling
+		    +["mu*1"] <<"(a=1)">> "(a'=0)" "(s[i]'=0)" . ServerPolling)
+
 }

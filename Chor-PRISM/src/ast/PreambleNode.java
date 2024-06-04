@@ -1,9 +1,6 @@
 package ast;
 
-import lib.ListPair;
-import lib.Matrix;
-import lib.Pair;
-import lib.Triplet;
+import lib.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -105,6 +102,16 @@ public class PreambleNode implements Node {
 		}
 
 		return new Pair(recValues,states);
+	}
+
+	@Override
+	public ArrayList<Pair<String,ArrayList<String>>> generatePrismCode(ArrayList<Pair<String,ArrayList<String>>> code, int index, int maxIndex, String prot, ArrayList<Node> mods, ArrayList<Pair<String,ArrayList<State>>> states, ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>> recValues, ArrayList<String> moduleNames, ArrayList<Pair<String,ArrayList<Node>>> stms, Pair<String,State> lastUpdate, ArrayList<Pair<String,String>> consts){
+		ArrayList<String> toAdd = new ArrayList<>();
+		for(String el : vars) {
+			toAdd.add(el.substring(1,el.length()-1));
+		}
+		code.add(new Pair("",toAdd));
+		return code;
 	}
 
 	@Override

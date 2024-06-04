@@ -31,7 +31,8 @@ public class IfThenElseNode implements Node {
             if(el.getSecond()==100){
                 return new Pair(recValues,states);
             }
-        }        String cond = "";
+        }
+        String cond = "";
         ArrayList<Pair<String, Integer>> condRoles = new ArrayList<>();
         for (Pair<String, Integer> pair : lastUpdate) {
             for (String role : roles) {
@@ -55,35 +56,48 @@ public class IfThenElseNode implements Node {
                         cond = cond + "&" + (el2.substring(1, el2.length() - 1));
                     }
                 }
-            } else {
-                cond = cond + el;
+            }
+            else if (el.contains("|")) {
+                tmp = el.split("\\|");
+                for (String el2 : tmp) { // TODO: add other operators
+                    cond = cond + "|" + (el2.substring(1, el2.length() - 1));
+                }
+            }
+            else {
+                cond = cond + (el.substring(1, el.length() - 1));
             }
             cond = cond + "&";
         }
         ListPair newList = new ListPair();
-
         for (Triplet<String, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> el : new ArrayList<Triplet<String, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>>>(states.getList())) {
             boolean verifiesState = true;
             ArrayList<Pair<String, Integer>> newState = new ArrayList<>();
+
             for (Pair<String, Integer> pair : el.getThird()) {
                 if (roles.contains(pair.getFirst())) {
+
                     int index = -1;
                     for (int i = 0; i < condRoles.size(); i++) {
+
                         if (condRoles.get(i).getFirst().equals(pair.getFirst())) {
                             index = i;
                         }
                     }
+
                     if (index==-1 || condRoles.get(index).getSecond() != pair.getSecond()) {
                         verifiesState = false;
                     }
+
                 } else {
                     newState.add(pair);
                 }
+
             }
 
             if (verifiesState) {
                 Pair<ArrayList<Pair<String, ArrayList<Pair<String, Integer>>>>, ListPair> toRet = null;
                 if (states.stateVerifies(el.getThird(), cond, consts)) {
+
                     if (thenStat instanceof EndNode) {
                         for (int ii = 0; ii < el.getThird().size(); ii++) {
                             if (roles.contains(el.getThird().get(ii).getFirst())) {
@@ -196,9 +210,7 @@ public class IfThenElseNode implements Node {
                             states = toRet.getSecond();
                             recValues = toRet.getFirst();
                         }
-
                     }
-
                 } else {
                     if (elseStat instanceof EndNode) {
                         for (int ii = 0; ii < el.getThird().size(); ii++) {
@@ -308,6 +320,9 @@ public class IfThenElseNode implements Node {
                                 }
                             }
                         }
+                        toRet = thenStat.generateStates(mods, states, recValues, moduleNames, stms, newState, consts);
+                        states = toRet.getSecond();
+                        recValues = toRet.getFirst();
                         if(!(elseStat instanceof EndNode)) {
                             toRet = elseStat.generateStates(mods, states, recValues, moduleNames, stms, newState, consts);
                             states = toRet.getSecond();
@@ -538,6 +553,74 @@ public class IfThenElseNode implements Node {
         }
 
         return null;
+    }
+
+    @Override
+    public ArrayList<Pair<String,ArrayList<String>>> generatePrismCode(ArrayList<Pair<String,ArrayList<String>>> code, int index, int maxIndex, String prot, ArrayList<Node> mods, ArrayList<Pair<String,ArrayList<State>>> states, ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>> recValues, ArrayList<String> moduleNames, ArrayList<Pair<String,ArrayList<Node>>> stms, Pair<String,State> lastUpdate, ArrayList<Pair<String,String>> consts){
+        boolean found = false;
+        String newState = "";
+        State newStates = new State();
+        ArrayList<Pair<String,String>> codesIf = new ArrayList<>();
+        ArrayList<Pair<String,String>> codesElse = new ArrayList<>();
+
+        for(int i=0; i<conds.size(); i++) {
+
+            int max = -1;
+            for(Pair<String,ArrayList<State>> state : states){
+                if(state.getFirst().equals(prot)){
+                    found = true;
+                    for(int j=0;j<state.getSecond().size();j++){
+                        if(state.getSecond().get(j).getModuleState(roles.get(i))>max) {
+                            max = state.getSecond().get(j).getModuleState(roles.get(i));
+                        }
+                    }
+                }
+            }
+            newStates.addState(new Pair(roles.get(i),max));
+            String toAdd = "[] (" + roles.get(i) + "=" + max + ")";
+            String toAdd2 = "[] (" + roles.get(i) + "=" + max + ")";
+
+            for(Pair<String,ArrayList<String>> _code : code){
+                if(_code.getFirst().equals(roles.get(i))){
+                    for(int ii=0; ii<_code.getSecond().size(); ii++){
+                        if(_code.getSecond().get(ii).contains("IFTE")){
+                            toAdd = _code.getSecond().get(ii).substring(0,_code.getSecond().get(ii).indexOf(" -> IFTE")) ;
+                            toAdd2 = _code.getSecond().get(ii).substring(0,_code.getSecond().get(ii).indexOf(" -> IFTE")) ;
+                        }
+                    }
+                }
+            }
+            if(!conds.get(i).equals(" ")){
+                toAdd = toAdd + "&" + conds.get(i) + " -> IFTE";
+                toAdd2 = toAdd2 + "&!(" + conds.get(i) + ") -> IFTE";
+            }
+
+            codesIf.add(new Pair(roles.get(i),toAdd));
+            codesElse.add(new Pair(roles.get(i),toAdd2));
+
+        }
+        for(Pair<String,String> el : codesIf) {
+            for (Pair<String, ArrayList<String>> pair : code) {
+                if (pair.getFirst().equals(el.getFirst())){
+                    pair.getSecond().add(el.getSecond());
+                }
+            }
+        }
+        if(!(thenStat instanceof EndNode)){
+            code = thenStat.generatePrismCode(code,index,maxIndex,prot,mods,states,recValues,moduleNames, stms, new Pair(prot,newStates), consts);
+        }
+        for(Pair<String,String> el : codesElse) {
+            for (Pair<String, ArrayList<String>> pair : code) {
+                if (pair.getFirst().equals(el.getFirst())){
+                    pair.getSecond().add(el.getSecond());
+                }
+            }
+        }
+        if(!(elseStat instanceof EndNode)){
+            code = elseStat.generatePrismCode(code,index,maxIndex,prot,mods,states,recValues,moduleNames, stms, new Pair(prot,newStates), consts);
+        }
+
+        return code;
     }
 
 }

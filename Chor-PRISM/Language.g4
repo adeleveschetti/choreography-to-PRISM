@@ -14,13 +14,17 @@ protocolID : ID ;
 
 blockStatement : (statement)+;
 
-statement : branch | ifThenElse | end | internalAction | rec;
+statement : branch | allSynch | ifThenElse | end | internalAction | rec;
 
 branch : inputRole=role FROM outputRole+=role (COMMA outputRole+=role)* COLON LPAR (branchStat* | commStat )RPAR ;
 
 branchStat : (BRANCH SLPAR rateValues+=rate SRPAR updates DOT statement) ;
 
 commStat : (SLPAR rateValues+=rate SRPAR updates DOT statement) ;
+
+allSynch : ALLSYNCH LPAR role RPAR MID indexSpec CLPAR (commList+=commands)* CRPAR DOT statement;
+
+commands : role COLON CLPAR (BRANCH? SLPAR rateValues+=rate SRPAR ups+=DOUBLE_STRING)* CRPAR ;
 
 ifThenElse : IF cond AT role (COMMA cond AT role)* THEN CLPAR thenStat=statement CRPAR ELSE CLPAR elseStat=statement CRPAR;
 
@@ -91,6 +95,7 @@ CRPAR  		: '}' ;
 SQLPAR		: '<<' ;
 SQRPAR		: '>>' ;
 AT 			: '@' ;
+MID         : '|';
 IF 			: 'if';
 THEN		: 'then';
 ELSE		: 'else';
@@ -103,6 +108,7 @@ ENDPREAMBLE : 'endpreamble';
 CONST 		: 'const';
 FOREACH		: 'foreach';
 IN			: 'in' ;
+ALLSYNCH    : 'allSynch';
 WS  		: [ \t\r\n\u00a0]+ -> skip ;
 DOUBLE_STRING
     : '"' ~('"')+ '"'

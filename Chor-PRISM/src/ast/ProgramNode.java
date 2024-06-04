@@ -1,9 +1,6 @@
 package ast;
 
-import lib.ListPair;
-import lib.Matrix;
-import lib.Pair;
-import lib.Triplet;
+import lib.*;
 
 import java.util.ArrayList;
 
@@ -59,6 +56,65 @@ public class ProgramNode implements Node{
 	public ArrayList<String> getRoles() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public ArrayList<Pair<String,ArrayList<String>>> generatePrismCode(ArrayList<Pair<String,ArrayList<String>>> code, int index, int maxIndex, String prot, ArrayList<Node> mods, ArrayList<Pair<String,ArrayList<State>>> states, ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>> recValues, ArrayList<String> moduleNames, ArrayList<Pair<String,ArrayList<Node>>> stms, Pair<String,State> lastUpdate, ArrayList<Pair<String,String>> consts){
+		states = new ArrayList<Pair<String,ArrayList<State>>>();
+		// isCtmc = ((PreambleNode) preamble).isCtmc();
+		if(code == null){
+			code = new ArrayList<>();
+		}
+		code =  preamble.generatePrismCode(code,1,n,prot,modules,states,recValues,moduleNames,stms,lastUpdate,consts);
+
+		State initState = new State();
+
+		for(Node el : modules) {
+			ArrayList<String> toAdd = new ArrayList<>();
+			toAdd.add("module " + el.toPrint() );
+			toAdd.add(el.toPrint() + " : [0..TBD] init 0;");
+			if(((ModuleNode) el).getVars()!=null) {
+				for(String el2 : ((ModuleNode) el).getVars()) {
+					toAdd.add(el2);
+				}
+			}
+
+			code.add(new Pair(el.toPrint(),toAdd));
+			initState.addState(new Pair(el.toPrint(),0));
+		}
+
+		for(Node el : protocols) {
+			lastUpdate = new Pair(el.toPrint(),initState);
+			ArrayList<State> newStates = new ArrayList<>();
+			newStates.add(initState);
+			states.add(new Pair(el.toPrint(),newStates));
+			code = el.generatePrismCode(code,1,n,el.toPrint(),modules,states,recValues,moduleNames,stms,lastUpdate,consts);
+		}
+		for(Node el : modules) {
+			for(Pair<String,ArrayList<String>> pair : code){
+				if(pair.getFirst().equals(el.toPrint())){
+					pair.getSecond().add("endmodule");
+				}
+			}
+		}
+		for(Pair<String,ArrayList<String>> pair : code){
+			int endState = -1;
+			for(Pair<String,ArrayList<State>> tmp : states){
+				for(State el : tmp.getSecond()){
+					if(el.getModuleState(pair.getFirst())>endState){
+						endState = el.getModuleState(pair.getFirst());
+					}
+				}
+			}
+			for(int i=0; i<pair.getSecond().size(); i++){
+				if(pair.getSecond().get(i).contains("TBD")){
+					String newStr = pair.getSecond().get(i).replaceAll("TBD",String.valueOf(endState));
+					pair.getSecond().set(i,newStr);
+				}
+			}
+		}
+		return code;
+
 	}
 
 	@Override

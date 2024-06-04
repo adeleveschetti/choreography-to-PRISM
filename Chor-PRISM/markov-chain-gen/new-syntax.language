@@ -1,0 +1,20 @@
+preamble
+"ctmc";
+"ctmc"
+
+endpreamble
+
+
+n = 2;
+
+Process[i] -> i in [1...n]
+Process[i] : "var[i] : [0..N] init 0;";
+
+{
+Protocol := allSynch(Process[j]) | j in [1...n] {
+                Process1 : {["lambda"]  "(var1'=var1+1)&(x'=2)" + ["mu"] "(var1'=var1-1)"}
+                Process2 : {["lambda"]  "(var2'=var2+1)" + ["mu"] "(var2'=var2-1)"}
+            } . Process1 -> Process2: (+["1*1"] "(q'=5)" "(s'=1)" . Protocol
+                                       +["1*1"] "(q'=4)" "(s'=2)" . Protocol)
+
+}
