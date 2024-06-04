@@ -1,0 +1,32 @@
+ctmc
+const int N = 10;
+const double mu1 = 0.10;
+const double mu2 = 0.20;
+const double lambda1 = 0.5;
+const double lambda2 = 0.25;
+
+module Server
+
+Server : [0..2] init 0;
+s : [0..3] init 0;
+
+[NFLIG] (Server=0) -> lambda1 : (s'=1)&(Server'=1);
+[XPHWB] (Server=0) -> lambda2 : (s'=2)&(Server'=0);
+[WCJPP] (Server=1) -> mu1 : (s'=5)&(Server'=0);
+[AFFZN] (Server=1) -> mu2 : (s'=4)&(Server'=0);
+
+endmodule
+
+module Queue
+
+Queue : [0..3] init 0;
+q : [0..N] init 0;
+t : [0..N] init 0;
+
+[NFLIG] (Queue=0) -> lambda1 : (q'=5)&(Queue'=2);
+[XPHWB] (Queue=0) -> lambda2 : (t'=5)&(Queue'=0);
+[WCJPP] (Queue=1) -> mu1 : (q'=7)&(Queue'=0);
+[AFFZN] (Queue=1) -> mu2 : (t'=3)&(Queue'=0);
+
+endmodule
+
