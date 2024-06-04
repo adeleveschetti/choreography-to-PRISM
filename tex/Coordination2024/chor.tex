@@ -31,21 +31,22 @@ The syntactic category $C$ denotes choreographic programs. The
 interaction term
 $\role p\rightarrow \{\role p_1,\ldots,\role
 p_n\}:\,\Sigma\{\lambda_j: x_j=E_j.\ C_j\}_{j\in J}$ denotes an
-interaction initiated by module $\role p$ with modules $\role
-p_i$'s. A choreography specifies what interaction must be executed
-next, shifting the focus from what can happen to what must
-happen. When the interaction happens, one of the $i$ branches is
-selected as a continuation. Branching is a random move: the number
-$\lambda_i\in\mathbb R$ denotes either a probability or a rate. This
-will depend on the language we wish to use. In the case of
-probabilities, it must be the case that $0\leq\lambda_i\leq 1$ and
-$\Sigma_i\lambda_i=1$. Once a branch $i$ is taken, the choreography
-will execute some assignments $u_i$. A single assignment has the
-syntax $(x' = E)$ meaning that the value obtained by evaluating
-expression $E$ is assigned to variable $x$. Note that $x'$ is used for
-an assignment to $x$: here, we follow the syntax adopted in PRISM
+interaction initiated by module $\role p$ with modules $\role p_i$'s
+(for $\role p$ and all $\role p_i$ distinct). A choreography specifies
+what interaction must be executed next, shifting the focus from what
+can happen to what must happen. When the interaction happens, one of
+the $j$ branches is selected as a continuation. Branching is a random
+move: the number $\lambda_j\in\mathbb R$ denotes either a probability
+or a rate. This will depend on the language we wish to use. In the
+case of probabilities, it must be the case that $0\leq\lambda_j\leq 1$
+and $\Sigma_j\lambda_j=1$. Once a branch $j$ is taken, the
+choreography will execute some assignments $u_j$. A single assignment
+has the syntax $(x' = E)$ meaning that the value obtained by
+evaluating expression $E$ is assigned to variable $x$; assignments can
+be concatenated with the operator $\&$.  Note that $x'$ is used for an
+assignment to $x$: here, we follow the syntax adopted in PRISM
 (see~\S~\ref{sec:prism}). Expressions are obtained by applying some
-unspecified functions to other expressions. Their base terms are
+unspecified functions to other expressions or, as base terms, i.e.,
 variables and values (denoted by $v$).
 %
 
@@ -77,11 +78,12 @@ where $\eval ES$ is an unspecified (decidable) evaluation of the
 expression $E$ in the state $S$.
 
 Given the set of all possible states $\mathcal S$ and a set of
-definitions $\Sigma$ of the form $X\stackrel{\mathsf{def}}{=} C$, we
+definitions $\defin$ of the form $X\stackrel{\mathsf{def}}{=} C$, we
 can define the operational semantics of choreographies as the minimal
-relation 
-$\red{}\!\!\!\!^\Sigma\subseteq \mathcal S\times C\times \mathbb
-R\times \mathcal S\times C$ such that (we omit $\Sigma$):
+relation
+$\red{}\!\!\!\!^\defin\subseteq \mathcal S\times C\times \mathbb
+R\times \mathcal S\times C$ such that (we omit $\defin$ if not
+relevant):
 \begin{displaymath}\small
   \begin{array}{l@{\quad}llll}
     \textsf{(Interact)} &
@@ -104,7 +106,7 @@ R\times \mathcal S\times C$ such that (we omit $\Sigma$):
     (S, C_2)
     \\[1mm]
     \textsf{(Call)} &
-    X\stackrel{\mathsf{def}}{=} C\in\Sigma \quad\Rightarrow\quad (S, X) \red{1}(S,C)
+    X\stackrel{\mathsf{def}}{=} C\in\defin \quad\Rightarrow\quad (S, X) \red{1}(S,C)
   \end{array}
 \end{displaymath}
 The transition relation is a Discrete Time Markov Chain (DTMC) or a
@@ -191,7 +193,7 @@ given by the relation $\red{}$.
 \end{example}
 
 
-\begin{example}
+\begin{example}\label{example2}
   Consider the following definition:
   \begin{displaymath}
     \begin{array}{lll}

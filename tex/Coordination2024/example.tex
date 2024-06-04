@@ -1,10 +1,16 @@
-As an example, consider the following simplified version of a system
-presented in the PRISM
-documentation\footnote{\url{https://www.prismmodelchecker.org/casestudies/thinkteam.php}},
-where a user moves between different states (0, 1, or 2) based on
-certain events $(\alpha, \beta, \gamma)$ with corresponding rates
-$(\lambda, \mu, \theta)$, and where a checkout process transitions
-between two states (0 or 1).
+As an example, we consider a simplified version of the
+\text{thinkteam} example, a three-tier data management system
+\cite{DBLP:journals/entcs/BeekMLGFS05}, presented in the PRISM
+documentation\footnote{\url{https://www.prismmodelchecker.org/casestudies/thinkteam.php}}.
+{The protocol aims to manage exclusive access to a single file,
+  controlled by the \codeprism{CheckOut} process. Users can request
+  access, which can be granted based on the file's current status. The
+  goal is to ensure that only one user possesses the file at any given
+  time while allowing for efficient access requests and retries in
+  case of denial.}  Users move between different states (0, 1, or 2)
+based on the granted or denied access to the file with corresponding
+rates $(\lambda, \mu, \theta)$; the \codeprism{CheckOut} process
+transitions between two states (0 or 1):
 %
 \begin{lstlisting}[style=prism-color,% caption={A PRISM example},captionpos=b,
   frame=none,label={example1},escapechar=|]
@@ -33,13 +39,13 @@ specified by a collection of commands, in a declarative fashion.
 Processes have a local state, can interact with other modules and
 query each other's state. Above, the modules \codeprism{User} (lines
 \ref{user-init}-\ref{user-end}) and \codeprism{CheckOut} (lines
-\ref{check-init}-\ref{check-end}) synchronise on labels
-\codeprism{alpha_1}, \codeprism{alpha_2}, \codeprism{beta},
-\codeprism{gamma_1} and \codeprism{gamma_2}. On line \ref{first-line},
-\codeprism{(User_STATE=0)} is a condition indicating that this
-transition is enabled when \codeprism{User_STATE} has value 0. The
-variable \codeprism{lambda} represents a rate, since the program
-models a Continuous Time Markov Chain (CTMC). The command
+\ref{check-init}-\ref{check-end}) can synchronise on different labels, e.g., 
+\codeprism{alpha_1}. %, \codeprism{alpha_2}, \codeprism{beta},
+% \codeprism{gamma_1} and \codeprism{gamma_2}.
+On line \ref{first-line}, \codeprism{(User_STATE=0)} is a condition
+indicating that this transition is enabled when \codeprism{User_STATE}
+has value 0. The variable \codeprism{lambda} is a rate, since the
+program models a Continuous Time Markov Chain (CTMC). The command
 \codeprism{(User_STATE'=1)} is an update, indicating that
 \codeprism{User_STATE} changes to 1 when this transition fires.
 
@@ -50,14 +56,14 @@ language, the same model becomes significantly clearer.
 % , as shown in Listing \ref{example2}.
 \begin{lstlisting}[style=chor-color,% caption={Example of Listing \ref{example1} in our choreographic language},captionpos=b,
   frame=none, label={example2}]
-  C0 := User $\rightarrow$ Check : (+["lambda*1"] ; C1	 +["lambda*1"]  ;  C2)
-  C1 := User $\rightarrow$ Check : (+["beta*1"] ; C0)  
-  C2 := User $\rightarrow$ Check : (+["mu*1"] ; C1   +["mu*1"] ;  C2)
+  C0 := CheckOut $\rightarrow$ User : (+["1*lambda"] ; C1	 +["1*lambda"]  ;  C2)
+  C1 := CheckOut $\rightarrow$ User : (+["1*theta"] ; C0)  
+  C2 := CheckOut $\rightarrow$ User : (+["1*mu"] ; C1   +["1*mu"] ;  C2)
 \end{lstlisting}
 In this model, we define three distinct choreographies, namely
 \texttt{C0}, \texttt{C1}, and \texttt{C2}. These choreographies
-describe the interaction patterns between the modules \texttt{User}
-and \texttt{Check}. The state updates resulting from these
+describe the interaction patterns between the modules \texttt{CheckOut}
+and \texttt{User}. The state updates resulting from these
 interactions are not explicitly depicted as they are not relevant for
 this particular protocol, but necessary in the PRISM implementation.
 % Similarly, this consideration extends to the labels used within the
@@ -65,9 +71,16 @@ this particular protocol, but necessary in the PRISM implementation.
 % unique labels used to denote various transitions in the model are
 % also automatically assigned.
 %
+% \marco{ADD THIS COMMENT HERE: Second, is the choreography not just the
+%   product of both modules (seen as finite state machines)? Would that
+%   be the general idea, i.e. to model the state space as one
+%   finite-state machine directly?}
+%
 As evident from this example, the choreographic language facilitates a
 straightforward understanding of the interactions between processes,
-minimizing the likelihood of errors.
+minimizing the likelihood of errors. In fact, we can think of the
+choreography representation of this example as the product of the two
+PRISM modules seen above.
 
 
 
