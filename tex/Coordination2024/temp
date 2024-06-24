@@ -1,5 +1,18 @@
 
 
+p1 -> {p2,p3} {  lambda1: u1; C1, ... , lambdaN: uN; CN } 
+
+
+allsych(p1,p2,p3)
+   p1: {  lambda11: u11, ..., lambdaN1: uN1} 
+   p2: {  lambda12: u12, ..., lambdaN2: uN2} 
+   p3: {  lambda13: u13, ..., lambdaN3: uN3}; C
+
+
+
+
+
+
 
 X = p1 -> p2. p2 -> p3 { X
 			 p4->p5. X
