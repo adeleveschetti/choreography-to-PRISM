@@ -6,12 +6,35 @@
 %% read in additional TeX-packages or personal macros here:
 %% e.g. \usepackage{tikz}
 \usepackage{hyperref}
-%%\input{myMacros.tex}
+\usepackage{wrapfig}
+ \usepackage{mathtools}
+\usepackage{sml-highlight}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{epstopdf}
+\usepackage{inputenc}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{graphicx} 
+\graphicspath{{Figures/}}
+\usepackage{proof}
+\usepackage{todonotes}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{amsthm}
+\usetikzlibrary{automata, positioning, arrows}
+\tikzset{every picture/.style={line width=0.5pt}} %set default line width to 0.75pt        
+
+\input{macros}
 %% define non-standard environments BEYOND the ones already supplied
 %% here, for example
 \theoremstyle{plain}\newtheorem{satz}[thm]{Satz} %\crefname{satz}{Satz}{S\"atze}
 %% Do NOT replace the proclamation environments lready provided by
 %% your own.
+
+\newtheorem{example}{Example}
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
 
 \def\eg{{\em e.g.}}
 \def\cf{{\em cf.}}
@@ -22,7 +45,8 @@
 \begin{document}
 
 % If the title is longer than 55 characters, then specify a shorter running title as the optional argument to \title. The running title should be roughyl at most 55 characters:
-\title[Instructions]{A Probabilistic Choreography Language for PRISM}
+\title[A Probabilistic Choreography Language for PRISM]
+{A Probabilistic Choreography Language for PRISM}
 % \titlecomment{{\lsuper*}OPTIONAL comment concerning the title, \eg, if
 %   a variant or an extended abstract of the paper has appeared
 %   elsewhere.}  \thanks{thanks, optional.} %optional
@@ -34,13 +58,13 @@
 \author[A.~Veschetti]{Adele Veschetti\lmcsorcid{0000-0002-0403-1889}}[b]
 
 % affiliation 1 (automatically numbered a)
-\address{University 1, address1}	%optional
+\address{Computer Science Department, IT University of Copenhagen, Rued Langgaards Vej 7, 2300 Copenhagen S, Denmark}	%optional
 % write emails for all authors having that affiliation
-\email{name1@email1, name2@email1, name3@email1}  %optional
+\email{carbonem@itu.dk, maca@itu.dk}  %optional
 
 % affiliation 2 (automatically numbered b)
-\address{University 2, address2}	%optional
-\email{name2@email2}  %optional
+\address{ADELE FALLO TU PERCHE NON CONOSCO THE MOST RECENT INFO} %optional
+\email{adele.veschetti@tu-darmstadt.de}  %optional
 
 %% etc.
 
