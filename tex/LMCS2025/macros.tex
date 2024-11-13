@@ -1,0 +1,90 @@
+%%% Random Macros
+
+\newcommand{\defin}{\mathcal D}
+
+\newcommand{\sem}[1]{\{\![#1]\!\}}
+\newcommand{\eval}[2]{#1\!\!\downarrow_{#2}}
+
+\newcommand{\mypar}[1]{\noindent{\bf #1}}
+
+\newcommand{\state}{\mathsf{state}}
+
+\newcommand{\proj}{\mathsf{proj}}
+\newcommand{\projE}[2]{#1\downarrow_#2}
+
+\newcommand{\marco}[1]{\textcolor{cyan}{{\footnotesize Marco: #1}}}
+\definecolor{code_indent}{HTML}{CCCCCC}
+
+\newcommand{\indentrule}{\color{code_indent}\vrule\hspace{2pt}}
+
+% Syntax
+\newcommand{\interactBase}[2]{\role{#1}\rightarrow \{\role{#2}\}}
+\newcommand{\interactBasel}[3]{\role{#1}\rightarrow^{#2} \{\role{#3}\}}
+\newcommand{\interact}[2]{\interactBase{#1}{#2}:\,\Sigma_{j\in J}\lambda_j: u_j;\ C_j}
+\newcommand{\interactl}[3]{\interactBasel{#1}{#2}{#3}:\,\Sigma_{j\in J}\lambda_j: u_j;\ C_j}
+\newcommand{\doubleand}{\text{\&\&}}
+
+\newcommand{\command}[4] {\commandBase {#1} {#2} \Sigma_{i\in I}#3_i: #4_i}
+\newcommand{\commandBase}[3] {[#1]\ #2\ \rightarrow #3}
+\newcommand{\ifTE}[4]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@\role {#2}\ \textcolor{sh_keyword}{\mathtt{then}}\ {#3} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#4}}
+\newcommand{\ifTEl}[5]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@^{#2}\role {#3} \ \textcolor{sh_keyword}{\mathtt{then}}\ {#4} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#5}}
+\newcommand{\codeprism}[1]{\lstinline[style=prism-color,basicstyle=\normalsize\sffamily]{#1}}
+
+\newcommand{\role}[1]{\mathtt{#1}}
+\newcommand{\Var}{\mathsf{Var}}
+\newcommand{\Val}{\mathsf{Val}}
+
+
+\newcommand{\CEnd}{\mathbf{0}}
+\newcommand{\pp}{|\!|}
+\newcommand{\ppp}[1]{|[#1]|}
+\newcommand{\cmd}[6]{[#1] #2 \rightarrow \{#3: #4 = #5\}_{#6}}
+
+
+
+  
+% Semantics
+\newcommand{\red}[1]{\ \longrightarrow_{#1}\ } 
+\newcommand{\prismred}[1]{\ \stackrel{#1}{\rightsquigarrow}\ } 
+\newcommand{\lab}[3]{\ [#1][#2:\;#3]\ } 
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+\definecolor{keywordColor}{rgb}{0.50,0.00,0.33}
+\definecolor{stringColor}{rgb}{0.16,0.00,1.00}
+\definecolor{lineNumberColor}{rgb}{0.47,0.47,0.47}
+
+\lstdefinelanguage{Eclipse}{
+language=Java,
+tabsize=3,
+showspaces=false,
+captionpos=b,
+breaklines=true,
+extendedchars=true,
+numbers=none,
+postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}},
+  basicstyle=\ttfamily\tiny,
+  emphstyle=\bfseries,
+  keywordstyle=\color{keywordColor}\bfseries,
+  commentstyle=\markupComments,
+  stringstyle=\color{stringColor},
+  numberstyle=\color{lineNumberColor}\tiny,
+  morecomment=[s][\markupJavadocs]{/**}{*/}, % For Javadoc comments
+  showstringspaces=false,
+  morekeywords={and},
+  numbers=left,
+  mathescape=true
+%  ,frame=lines%shadowbox%trBL
+}
+
+\definecolor{carminepink}{rgb}{0.92, 0.3, 0.26}
+\definecolor{jesuscolour}{rgb}{0.3, 0.92, 0.26}
+\newcommand{\AV}[1]{\todo[inline, color=carminepink]{\textbf{AV}:~#1}}
+\newcommand{\MC}[1]{\todo[inline, color=jesuscolour]{\textbf{MC}:~#1}}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
