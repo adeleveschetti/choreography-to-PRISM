@@ -14,28 +14,35 @@ following syntax:
 %
 \begin{displaymath}\small
   \begin{array}{llllllllllll}
-    C \ & ::= & \
-      \interact{p}{\role p_1,\ldots,\role p_n}
-      \ \mid\
-      \ifTE {E}{p}{C_1}{C_2}
-      \ \mid\ X \ \mid\  \CEnd
+    C & ::= &      & \interact{p}{\role p_1,\ldots,\role p_n} & \text{(interaction)}\\
+      &     & \mid & \ifTE {E}{p}{C_1}{C_2} & \text{(conditional)}\\
+      &     & \mid & X     & \text{(recursive call)}\\
+      &     & \mid & \CEnd & \text{(inact)}
+    \\
+      &     & \mid & \textsf{foreach } E\ u@{\role p}[i];\, C & \text{(foreach)}
     \\[1mm]
-    u     & ::=  & (x' = E)\ \&\ u \quad\mid\quad    (x' = E)
-    \qquad\qquad\qquad
-    E, g     ::=        f(\tilde E)\quad\mid\quad x\quad\mid\quad v
-
+    \defin \ & ::= & & X\stackrel{\mathsf{def}}{=} C,\ \defin 
+                     \quad \mid \quad \emptyset & \text{(definitions)}
+    \\[1mm]
+    u     & ::=  && (x' = E)\ \&\ u \quad\mid\quad    (x' = E) & \text{(assignments)}\\[1mm]
+    E, g  & ::=  && f(\tilde E)\quad\mid\quad x\quad\mid\quad v & \text{(expressions)}
   \end{array}
 \end{displaymath}
 
 -----------
 
-Aggiungere: 
+To be discussed: 
+\begin{itemize}
 
-\[
-  \textsf{foreach } e(i)\ u@A[i];\, C
-\]
+\item $\textsf{foreach } e(i)\ u@A[i];\, C$
 
-ruoli possono essere parametrizzati (indicizzati) $\role p[i]$
+\item roles can be parameterised (indexed) $\role p[i]$
+
+\item add recursive definition as part of the syntax
+
+\end{itemize}
+
+
 
 ----------
 \bigbreak
