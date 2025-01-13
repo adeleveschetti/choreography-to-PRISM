@@ -1,7 +1,8 @@
 In the introduction, we showed our choreography language via an
 example. We now formalise our language by giving its syntax and
 semantics. For the sake of clarity, we slightly change the syntax with
-respect to the syntax of our tool.
+respect to the syntax of our tool, adopting a more process-algebra
+format.
 
 \mypar{Syntax.} 
 %
@@ -18,8 +19,8 @@ following syntax:
       &     & \mid & \ifTE {E}{p}{C_1}{C_2} & \text{(conditional)}\\
       &     & \mid & X     & \text{(recursive call)}\\
       &     & \mid & \CEnd & \text{(inact)}
-    \\
-      &     & \mid & \textsf{foreach } E\ u@{\role p}[i];\, C & \text{(foreach)}
+    % \\
+    %   &     & \mid & \textsf{foreach } E\ u@{\role p}[i];\, C & \text{(foreach)}
     \\[1mm]
     \defin \ & ::= & & X\stackrel{\mathsf{def}}{=} C,\ \defin 
                      \quad \mid \quad \emptyset & \text{(definitions)}
@@ -28,35 +29,6 @@ following syntax:
     E, g  & ::=  && f(\tilde E)\quad\mid\quad x\quad\mid\quad v & \text{(expressions)}
   \end{array}
 \end{displaymath}
-
------------
-
-To be discussed: 
-\begin{itemize}
-
-\item $\textsf{foreach } e(i)\ u@A[i];\, C$
-
-\item roles can be parameterised (indexed) $\role p[i]$
-
-\item add recursive definition as part of the syntax
-
-\item we put it as part of a note saying this stuff is syntactic sugar
-
-p[i] -> q[i]; q[i] -> t. 0
-
-
-p[i] -> q[i]; q[i+1] -> p[i]
-
-
-p1 -> q1;       q2 -> p1
-p2 -> q2;       q3 -> p2
-p3 -> q3;       q1 -> p3
-\end{itemize}
-
-
-
-----------
-\bigbreak
 
 % We comment the various constructs.
 The syntactic category $C$ denotes choreographic programs. The
@@ -92,12 +64,57 @@ The term $\ifTE {E}{p}{C_1}{C_2}$ denotes a system where module
 
 \bigskip
 
+\begin{remark}[Missing Constructs] The attentive reader may have
+  noticed that the syntax used in our introductory example uses also
+  other language constructs that are not part of the formal syntax
+  given above. Given the nature of our language, such constructs are
+  all syntactic sugar and can be easily encoded. Below, we discuss
+  each of them:
+  
+  \begin{itemize}
+    
+  \item $\textsf{foreach } e(i)\ u@A[i];\, C$. This construct allows
+    to...
 
-\mypar{Semantics.} In the sequel, we define a state, denoted by $S$,
-as a mapping from variables to values, i.e.,
-$S: \Var \rightarrow\Val$. Given a value $v$ and a variable $x$, a
-substitution $[v/x]$ is an update on a state, i.e.,
-$\small S[v/x] (y)= \left\{
+  \item Parametric modules. Modules can be parameterised (indexed),
+    denoted by $\role p[i]$...
+
+  \item we put it as part of a note saying this stuff is syntactic
+    sugar
+
+\begin{verbatim}
+p[i] -> q[i]; q[i] -> t. 0
+
+p[i] -> q[i]; q[i+1] -> p[i]
+
+p1 -> q1;       q2 -> p1
+p2 -> q2;       q3 -> p2
+p3 -> q3;       q1 -> p3
+\end{verbatim}
+
+\end{itemize}
+
+  
+\end{remark}
+
+
+
+\mypar{Semantics.} The semantics of a choreography is a relation that
+captures how the values assigned to variables are modified when the
+various modules synchronise with each other. Similar to the
+operational semantics of imperative languages, we define a state,
+denoted by $S$, as a mapping from variables to values, i.e.,
+$S: \Var \rightarrow\Val$.
+%
+
+[GOT THIS FAR]
+
+Given a state, the notion of substitution allows to makes changes to
+it: 
+%
+\begin{definition}
+  Given a value $v$ and a variable $x$, a substitution $[v/x]$ is an
+  update on a state, i.e., $\small S[v/x] (y)= \left\{
   \begin{array}{ll} 
     v    & \text{ if } y=x\\ 
     S(y) & \text{ otherwise}
@@ -108,6 +125,7 @@ Then, the update $S[u]$ is such that
 $S[x'=E\ \&\ u] = S[\eval ES/x][u]$ and $S[x'=E] = S[\eval ES/x]$,
 where $\eval ES$ is an unspecified (decidable) evaluation of the
 expression $E$ in the state $S$.
+\end{definition}
 
 Given the set of all possible states $\mathcal S$ and a set of
 definitions $\defin$ of the form $X\stackrel{\mathsf{def}}{=} C$, we
