@@ -51,27 +51,10 @@ The PRISM model produced by our method closely aligns with the original model wi
 Additionally, to ensure the generated program's accuracy, 
 we evaluated whether the probability of reaching a state where the dice displays \texttt{d=k} for every possible \texttt{k} from 1 to 6 equals 1/6. Our simulations shown that the probabilities calculated by our generated model fully matched those from the original PRISM model. 
 \end{comment}
-\begin{comment}
-\subsection{Simple Peer-To-Peer Protocol}
+\mypar{Simple Peer-To-Peer Protocol}
 This case study describes a simple peer-to-peer protocol based on BitTorrent\footnote{\url{https://www.prismmodelchecker.org/casestudies/peer2peer.php}}. The model comprises a set of clients trying to download a file that has been partitioned into $K$ blocks. Initially, there is one client that has already obtained all of the blocks and $N$ additional clients with no blocks. Each client can download a block from any of the others but they can only attempt four concurrent downloads for each block.\\
 The code we analyze with $k=5$ and $N=4$ is reported in Listing \ref{ex2-code}.
 \begin{lstlisting}[style=chor-color,caption={Choreography for the Peer-To-Peer Protocol.},captionpos=b,label={ex2-code}]
-preamble
-"ctmc"
-"const double mu=2;"
-"formula rate1=mu*(1+min(3,b11+b21+b31+b41));"
-"formula rate2=mu*(1+min(3,b12+b22+b32+b42));"
-"formula rate3=mu*(1+min(3,b13+b23+b33+b43));"
-"formula rate4=mu*(1+min(3,b14+b24+b34+b44));"
-"formula rate5=mu*(1+min(3,b15+b25+b35+b45));"
-endpreamble
-
-n = 4;
-n = 4;
-
-Client[i] $\rightarrow$ i in [1...n]
-Client[i] : "b[i]1 : [0..1];", "b[i]2 : [0..1];", "b[i]3 : [0..1];", "b[i]4 : [0..1];", "b[i]5 : [0..1];" ;
-
 {
 PeerToPeer := Client[i] $\rightarrow$ Client[i]: 
 			(+["rate1*1"]  "(b[i]1'=1)"$\&\&$" " . PeerToPeer
@@ -80,19 +63,10 @@ PeerToPeer := Client[i] $\rightarrow$ Client[i]:
 			 +["rate4*1"]  "(b[i]4'=1)"$\&\&$" " . PeerToPeer
 			 +["rate5*1"]  "(b[i]5'=1)"$\&\&$" " . PeerToPeer)
 }
-	
-\end{lstlisting}
+\end{lstlisting} 
 
-Part of the generated PRISM code is shown in Listing \ref{ex2-gen} and it is faithful with what reported in the PRISM documentation. 
+Part of the generated PRISM code is shown in Listing \ref{ex2-gen} and it is faithful with what is reported in the PRISM documentation. Additionally, we generate the model for four clients (\emph{Client$_1$},$\ldots$, \emph{Client$_4$}).
 \begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Peer-To-Peer Protocol.},captionpos=b,label={ex2-gen}]
-ctmc
-const double mu=2;
-formula rate1=mu*(1+min(3,b11+b21+b31+b41));
-formula rate2=mu*(1+min(3,b12+b22+b32+b42));
-formula rate3=mu*(1+min(3,b13+b23+b33+b43));
-formula rate4=mu*(1+min(3,b14+b24+b34+b44));
-formula rate5=mu*(1+min(3,b15+b25+b35+b45));
-
 module Client1
 	Client1 : [0..1] init 0;
 	b11 : [0..1]; 
@@ -106,19 +80,19 @@ module Client1
 	[] (Client1=0)  $\rightarrow$ rate3 : (b13'=1)$\&$(Client1'=0); 
 	[] (Client1=0)  $\rightarrow$ rate4 : (b14'=1)$\&$(Client1'=0); 
 	[] (Client1=0)  $\rightarrow$ rate5 : (b15'=1)$\&$(Client1'=0); 
-	
 endmodule
-	
 \end{lstlisting}
 
 
 In Figure \ref{ex2-res}, we compare the values obtained for the probability that all clients have received all blocks by time $0\leq T\leq 1.5$ both for our generated model and the model reported in the documentation.
 \begin{figure}[h]
 \centering
-\includegraphics[scale=0.6]{example3-results.jpeg}	
-\caption{Probability that clients received all the block before $T$, with $0\leq T \leq 1.5$.}
+\includegraphics[scale=0.35]{peertopeer.pdf}	
+\caption{Probability that clients received all the block before $T$, with $0\leq T \leq 1.5$}
 \label{ex2-res}
 \end{figure}
+\begin{comment}
+
 \subsection{Random Graphs Protocol}
 \begin{wrapfigure}[8]{l}{4cm}
 	\includegraphics[scale=0.7]{network.pdf}	
@@ -266,7 +240,7 @@ of the choreographic language. % The descriptive actions used in the
 \end{comment}
 In \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, the authors extended the PRISM model checker syntax to incorporate dynamic data types, enhancing its capabilities to model the Proof of Work protocol used in the Bitcoin blockchain \cite{bitcoin}. 
 
-\textcolor{red}{} {In summary, the code depicts miners engaging in
+In summary, the code depicts miners engaging in
   solving PoW, updating their ledgers, and communicating with the
   network.  The indices $i$ represent the module renaming feature of
   the choreographic language. Thus, each interaction will be repeated
@@ -289,10 +263,9 @@ In \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, the authors extended the 
                else{PoW}})} 
    \end{lstlisting}
    \vspace{-0.15cm}
-
   When synchronising with
   the hasher, a miner tries to solve a cryptographic
-  puzzle. Successful attempts add a new block to its ledger and update other miners' block sets. Unsuccessful attempts involve extracting a block, updating its ledger and block sets, and continuing the PoW process.}
+  puzzle. Successful attempts add a new block to its ledger and update other miners' block sets. Unsuccessful attempts involve extracting a block, updating its ledger and block sets, and continuing the PoW process.
   \begin{wrapfigure}{r}{0.38\textwidth}
    \vspace{-0.75cm}
    \centering
