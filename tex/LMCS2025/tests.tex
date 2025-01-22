@@ -394,6 +394,90 @@ endmodule
         original model.
 
 
+
+\mypar{Synchronous Leader Election.}
+This case study examines the synchronous leader election protocol proposed by Itai $\&$ Rodeh~\cite{IR90}, designed to elect a leader in a ring of $N$ processors by exchanging messages. The protocol operates in rounds, where each processor selects a random ID from $\{1, \ldots, K\}$, circulates it around the ring, and determines if a unique maximum ID exists. If so, the processor with this ID becomes the leader; otherwise, the process repeats in the next round.
+
+For illustration, we considered the case where $ N=4 $ and $ K=8 $, following the PRISM model\footnote{\url{https://www.prismmodelchecker.org/casestudies/synchronous_leader.php}} . We modeled this example in our choreographic language, as shown in Listing~\ref{leader-code}, capturing the protocol's behavior and dynamics.
+
+\begin{lstlisting}[style=chor-color,caption={Choreography for the Synchronous Leader Election Protocol.},captionpos=b,label={leader-code}]
+   {
+   PeerToPeer := allSynch{ j in [1...4]
+      Process[j] : (true -> "1/K" : "(p[i]'=0)&(v[i]'=0)&(u[i]'=true)" + $\ldots$ + "1/K" : "(p[i]'=0)&(v[i]'=7)&(u[i]'=true)") }.
+      allSynch{
+         Counter : ("(c<N-1)" -> "1" : "(c'=c+1)")
+         Counter : ("(c=N-1)" -> "1" : "(c'=c)")
+         Process1 : ("u1&!(p1=2)&(c<N-1)" -> "1" : "(u1'=true)&(v1'=v2)")
+         Process1 : ("u1&(p1=2)&(c<N-1)" -> "1" : "(u1'=false)&(v1'=v2)&(p1'=0)")
+         Process1 : ("!u1&(c<N-1)" -> "1" : "(u1'=false)&(v1'=v2)")
+         Process1 : ("u1&!(p1=v2)&(c=N-1)" -> "1" : "(u1'=true)&(v1'=0)&(p1'=0)")
+         Process1 : ("u1&(p1=v2)&(c=N-1)" -> "1" : "(u1'=false)&(v1'=0)&(p1'=0)")
+         Process1 : ("!u1&(c=N-1)" -> "1" : "(u1'=false)&(v1'=0)")
+         $\ldots$
+      }.
+      if "u1 | u2 | u3 | u4"@Counter then {
+         Counter -> Process[i] : (["1*1"] "(c'=c)" "(u[i]'=false)&(v[i]'=0)&(p[i]'=0)"
+         . allSynch {
+            Counter : (true -> "1" : "(c'=c)")
+            Process1 : (true -> "1" : " ")
+            $\ldots$               
+         } . END)
+      }
+      else{
+         Counter -> Process[i] : (["1*1"] "(c'=1)" "(u[i]'=false)&(v[i]'=0)&(p[i]'=0)"  . Election)
+      }      
+   }
+   \end{lstlisting} 
+   While the generated model (Listing \ref{leader-prism} successfully replicates the functionality of 
+   the PRISM repository model, a key difference lies in the modular 
+   structure of the two representations. 
+   Specifically, the generated model adopts a simplified modular design by 
+   grouping transitions more compactly in certain modules, such as the Counter module. 
+   This simplification reduces redundancy and may improve readability without altering the correctness or outcomes of the protocol. Importantly, this structural refinement does not impact the behavior of the system, as the generated model remains functionally equivalent to the original PRISM repository model, as displayed in Figure \ref{leader-res}.
+
+   \begin{lstlisting}[style=prism-color,caption={Generated PRISM program},captionpos=b,label={leader-prism}]
+   module Counter
+      Counter : [0..4] init 0;
+      c : [0..N-1] init 0;
+      [YQBDX] (Counter = 0)&(c<N-1) -> 1 : (c'=c+1)&(Counter'=1);
+      [YQBDX] (Counter = 0)&(c=N-1) -> 1 : (c'=c)&(Counter'=1);
+      [ELTMI] (Counter=1)&(u1 | u2 | u3 | u4) -> 1 : (c'=c)&(Counter'=2);
+      [LJTIP] (Counter=1)&!(u1 | u2 | u3 | u4) -> 1 : (c'=1)&(Counter'=0);
+      [AWUQP] (Counter = 2)-> 1 : (c'=c)&(Counter'=2);
+   endmodule
+   module Process1
+   Process1 : [0..4] init 0;
+      p1 : [0..K-1] init 0;
+      v1 : [0..K-1] init 0;
+      u1 : bool;
+      [BKKXT](Process1 = 0) ->  1/K:(p1'=0)&(v1'=0)&(u1'=true)&(Process1'=1) 
+                                 + 1/K:(p1'=1)&(v1'=1)&(u1'=true)&(Process1'=1) 
+                                 + 1/K:(p1'=2)&(v1'=2)&(u1'=true)&(Process1'=1) 
+                                 + 1/K:(p1'=2)&(v1'=3)&(u1'=true)&(Process1'=1) 
+                                 + 1/K:(p1'=2)&(v1'=4)&(u1'=true)&(Process1'=1) 
+                                 + 1/K:(p1'=2)&(v1'=5)&(u1'=true)&(Process1'=1) 
+                                 + 1/K:(p1'=2)&(v1'=6)&(u1'=true)&(Process1'=1) 
+                                 + 1/K:(p1'=2)&(v1'=7)&(u1'=true)&(Process1'=1);
+      [YQBDX] (Process1 = 1)&u1&!(p1=2)&(c<N-1) -> 1 : (u1'=true)&(v1'=v2)&(Process1'=2);
+      [YQBDX] (Process1 = 1)&u1&(p1=2)&(c<N-1) -> 1 : (u1'=false)&(v1'=v2)&(p1'=0)&(Process1'=2);
+      [YQBDX] (Process1 = 1)&!u1&(c<N-1) -> 1 : (u1'=false)&(v1'=v2)&(Process1'=2);
+      [YQBDX] (Process1 = 1)&u1&!(p1=v2)&(c=N-1) -> 1 : (u1'=true)&(v1'=0)&(p1'=0)&(Process1'=2);
+      [YQBDX] (Process1 = 1)&u1&(p1=v2)&(c=N-1) -> 1 : (u1'=false)&(v1'=0)&(p1'=0)&(Process1'=2);
+      [YQBDX] (Process1 = 1)&!u1&(c=N-1) -> 1 : (u1'=false)&(v1'=0)&(Process1'=2);
+      [ELTMI] (Process1=2) -> 1 : (u1'=false)&(v1'=0)&(p1'=0)&(Process1'=3);
+      [LJTIP] (Process1=2) -> 1 : (u1'=false)&(v1'=0)&(p1'=0)&(Process1'=0);
+      [AWUQP] (Process1 = 3) -> 1 :  (Process1'=4);
+   endmodule
+   $\ldots$
+   \end{lstlisting}
+
+
+   \begin{figure}[h]
+      \centering
+      \includegraphics[scale=0.35]{leader.pdf}	
+      \caption{The probability of electing a leader within $L$ rounds, with $\leq L \leq 10$}
+      \label{leader-res}
+      \end{figure}
 \begin{comment}
 \subsection{Problems}
 \label{sec:problems}
