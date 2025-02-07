@@ -16,11 +16,14 @@ following syntax:
 \begin{displaymath}\small
   \begin{array}{llllllllllll}
     C & ::= &      & \interact{p}{\role p_1,\ldots,\role p_n} & \text{(interaction)}\\
+      &     & \mid & \allsynch pGiI & \text{(non-deterministic sync)}\\
       &     & \mid & \ifTE {E}{p}{C_1}{C_2} & \text{(conditional)}\\
       &     & \mid & X     & \text{(recursive call)}\\
       &     & \mid & \CEnd & \text{(inact)}
     % \\
     %   &     & \mid & \textsf{foreach } E\ u@{\role p}[i];\, C & \text{(foreach)}
+    \\[1mm]
+    G & ::= &      & \chorcommand g\lambda u & \text{(choreographic command)}
     \\[1mm]
     \defin \ & ::= & & X\stackrel{\mathsf{def}}{=} C,\ \defin 
                      \quad \mid \quad \emptyset & \text{(definitions)}
@@ -29,7 +32,7 @@ following syntax:
     E, g  & ::=  && f(\tilde E)\quad\mid\quad x\quad\mid\quad v & \text{(expressions)}
   \end{array}
 \end{displaymath}
-
+%
 % We comment the various constructs.
 The syntactic category $C$ denotes choreographic programs. The
 interaction term

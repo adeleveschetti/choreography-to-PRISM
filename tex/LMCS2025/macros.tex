@@ -23,9 +23,13 @@
 \newcommand{\interact}[2]{\interactBase{#1}{#2}:\,\Sigma_{j\in J}\lambda_j: u_j;\ C_j}
 \newcommand{\interactl}[3]{\interactBasel{#1}{#2}{#3}:\,\Sigma_{j\in J}\lambda_j: u_j;\ C_j}
 \newcommand{\doubleand}{\text{\&\&}}
+\newcommand{\allsynchName}{\mathtt{allsynch}}
+\newcommand{\allsynch}[4]{\allsynchName\, \{ {\role{#1}}_{#3}:#2_{#3}\}_{#3\in #4}}
 
 \newcommand{\command}[4] {\commandBase {#1} {#2} \Sigma_{i\in I}#3_i: #4_i}
 \newcommand{\commandBase}[3] {[#1]\ #2\ \rightarrow #3}
+\newcommand{\chorcommandBase}[2] {#1\ \rightarrow #2}
+\newcommand{\chorcommand}[3] {\chorcommandBase {#1} \Sigma_{i\in I}#2_i: #3_i}
 \newcommand{\ifTE}[4]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@\role {#2}\ \textcolor{sh_keyword}{\mathtt{then}}\ {#3} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#4}}
 \newcommand{\ifTEl}[5]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@^{#2}\role {#3} \ \textcolor{sh_keyword}{\mathtt{then}}\ {#4} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#5}}
 \newcommand{\codeprism}[1]{\lstinline[style=prism-color,basicstyle=\normalsize\sffamily]{#1}}
