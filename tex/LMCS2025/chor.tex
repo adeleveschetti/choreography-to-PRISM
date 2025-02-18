@@ -358,6 +358,38 @@ be depicted as follows:
   \end{figure}
 \end{example}
 
+
+
+\begin{example}\label{example3}
+  The following definition describes a synchronized interaction between roles $p$ and $q$:
+  \begin{displaymath}
+    \begin{array}{lll}
+      C \stackrel{\mathsf{def}}{=} \allsynchName\left\{
+      \begin{array}{lll}
+        \role{p} : (x=1) \rightarrow \lambda : (x'=100)
+        \\
+        \role{q} : (y=1) \rightarrow \mu : (y'=0)
+      \end{array}
+      \right\} ; \CEnd
+    \end{array}
+  \end{displaymath}
+  This construct provides a compact and structured way to define synchronized interactions. However, it can be rewritten without using the $\allsynchName$ syntax by explicitly handling conditions using the $\mathtt{if-then-else}$ construct:
+
+
+\begin{displaymath}
+  \begin{array}{ll}
+C \stackrel{\mathsf{def}}{=}& \textcolor{sh_keyword}{\mathtt{if}}\ (x=1)@\role {p}\ \textcolor{sh_keyword}{\mathtt{then}}\\ 
+& \quad \textcolor{sh_keyword}{\mathtt{if}}\ (y=1)@\role {q}\ \textcolor{sh_keyword}{\mathtt{then}}\\
+& \quad \quad \interactBase{p}{q}\ \lambda*\mu: (x'=100)\&(y'=0);\CEnd \\
+& \quad \textcolor{sh_keyword}{\mathtt{else}}\ \CEnd \\
+& \textcolor{sh_keyword}{\mathtt{else}}\ \CEnd
+  \end{array}
+\end{displaymath}
+The two formulations are semantically equivalent, with the $\allsynchName$ syntax acting as syntactic sugar for a structured and readable representation of synchronization. The expanded version using $\mathtt{if-then-else}$ makes explicit the conditional execution of interactions but retains the same behavior.
+\end{example}
+
+
+
 %%% Local Variables: 
 %%% mode: latex
 %%% TeX-master: "main"
