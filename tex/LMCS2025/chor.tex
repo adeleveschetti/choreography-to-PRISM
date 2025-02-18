@@ -366,9 +366,9 @@ be depicted as follows:
     \begin{array}{lll}
       C \stackrel{\mathsf{def}}{=} \allsynchName\left\{
       \begin{array}{lll}
-        \role{p} : (x=1) \rightarrow \lambda : (x'=100)
+        \role{p} : (x=1) \rightarrow 1 : (x'=100)
         \\
-        \role{q} : (y=1) \rightarrow \mu : (y'=0)
+        \role{q} : (y=1) \rightarrow 1 : (y'=0)
       \end{array}
       \right\} ; \CEnd
     \end{array}
@@ -380,7 +380,7 @@ be depicted as follows:
   \begin{array}{ll}
 C \stackrel{\mathsf{def}}{=}& \textcolor{sh_keyword}{\mathtt{if}}\ (x=1)@\role {p}\ \textcolor{sh_keyword}{\mathtt{then}}\\ 
 & \quad \textcolor{sh_keyword}{\mathtt{if}}\ (y=1)@\role {q}\ \textcolor{sh_keyword}{\mathtt{then}}\\
-& \quad \quad \interactBase{p}{q}\ \lambda*\mu: (x'=100)\&(y'=0);\CEnd \\
+& \quad \quad \interactBase{p}{q}\ 1 : (x'=100)\&(y'=0);\CEnd \\
 & \quad \textcolor{sh_keyword}{\mathtt{else}}\ \CEnd \\
 & \textcolor{sh_keyword}{\mathtt{else}}\ \CEnd
   \end{array}
