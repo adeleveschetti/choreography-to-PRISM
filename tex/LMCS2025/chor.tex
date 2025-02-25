@@ -4,7 +4,7 @@ semantics. For the sake of clarity, we slightly change the syntax with
 respect to the syntax of our tool, adopting a more process-algebra
 format.
 
-\mypar{Syntax.} 
+\subsection{Syntax} 
 %
 Let $\role p$ range over a (possibly infinite) set of module names
 $\mathcal R$, $x$ over a (possibly infinite) set of variables $\Var$,
@@ -16,7 +16,7 @@ following syntax:
 \begin{displaymath}\small
   \begin{array}{llllllllllll}
     C & ::= &      & \interact{p}{\role p_1,\ldots,\role p_n} & \text{(interaction)}\\
-      &     & \mid & \allsynch pGiI & \text{(non-deterministic sync)}\\
+      % &     & \mid & \allsynch pGiI & \text{(non-deterministic sync)}\\
       &     & \mid & \ifTE {E}{p}{C_1}{C_2} & \text{(conditional)}\\
       &     & \mid & X     & \text{(recursive call)}\\
       &     & \mid & \CEnd & \text{(inact)}
@@ -67,53 +67,16 @@ The term $\ifTE {E}{p}{C_1}{C_2}$ denotes a system where module
 
 \bigskip
 
-\begin{remark}[Missing Constructs] The attentive reader may have
-  noticed that the syntax used in our introductory example uses also
-  other language constructs that are not part of the formal syntax
-  given above. Given the nature of our language, such constructs are
-  all syntactic sugar and can be easily encoded. Below, we discuss
-  each of them:
-  
-  \begin{itemize}
-    
-  \item $\textsf{foreach } e(i)\ u@A[i];\, C$. This construct allows
-    to...
 
-  \item Parametric modules. Modules can be parameterised (indexed),
-    denoted by $\role p[i]$...
-
-  \item we put it as part of a note saying this stuff is syntactic
-    sugar
-
-\begin{verbatim}
-p[i] -> q[i]; q[i] -> t. 0
-
-p[i] -> q[i]; q[i+1] -> p[i]
-
-p1 -> q1;       q2 -> p1
-p2 -> q2;       q3 -> p2
-p3 -> q3;       q1 -> p3
-\end{verbatim}
-
-\end{itemize}
-
-  
-\end{remark}
-
-
-
-\mypar{Semantics.} The semantics of a choreography is a relation that
-captures how the values assigned to variables are modified when the
-various modules synchronise with each other. Similar to the
+\subsection{Semantics.} The semantics of a choreography is a relation
+that captures how the values assigned to variables are modified when
+the various modules synchronise with each other. Similar to the
 operational semantics of imperative languages, we define a state,
 denoted by $S$, as a mapping from variables to values, i.e.,
 $S: \Var \rightarrow\Val$.
 %
 
-[GOT THIS FAR]
-
-Given a state, the notion of substitution allows to makes changes to
-it: 
+Given a state, substitution allows to modify some of its values:
 %
 \begin{definition}
   Given a value $v$ and a variable $x$, a substitution $[v/x]$ is an
@@ -359,9 +322,41 @@ be depicted as follows:
 \end{example}
 
 
+\subsection{Other language constructs} The attentive reader may have
+noticed that the syntax used in our introductory example uses also
+other language constructs that are not part of the formal syntax given
+above. Given the nature of our language, such constructs are all
+syntactic sugar and can be easily encoded. Below, we discuss each of
+them:
+  
+  \begin{itemize}
+    
+  \item $\textsf{foreach } e(i)\ u@A[i];\, C$. This construct allows
+    to...
+
+  \item Parametric modules. Modules can be parameterised (indexed),
+    denoted by $\role p[i]$... we put it as part of a note saying this
+    stuff is syntactic sugar
+
+\begin{verbatim}
+p[i] -> q[i]; q[i] -> t. 0
+
+p[i] -> q[i]; q[i+1] -> p[i]
+
+p1 -> q1;       q2 -> p1
+p2 -> q2;       q3 -> p2
+p3 -> q3;       q1 -> p3
+\end{verbatim}
+
+
+  \item $\allsynch pGiI$.
+\end{itemize}
+
+  
 
 \begin{example}\label{example3}
-  The following definition describes a synchronized interaction between roles $p$ and $q$:
+  The following definition describes a synchronized interaction
+  between roles $\role p$ and $q$:
   \begin{displaymath}
     \begin{array}{lll}
       C \stackrel{\mathsf{def}}{=} \allsynchName\left\{
