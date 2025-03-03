@@ -44,6 +44,11 @@ Marco Carbone and Fabrizio Montesi.
 \newblock Deadlock-freedom-by-design: multiparty asynchronous global programming.
 \newblock In Roberto Giacobazzi and Radhia Cousot, editors, {\em The 40th Annual {ACM} {SIGPLAN-SIGACT} Symposium on Principles of Programming Languages, {POPL} '13, Rome, Italy - January 23 - 25, 2013}, pages 263--274. {ACM}, 2013.
 
+\bibitem{CV24}
+Marco Carbone and Adele Veschetti.
+\newblock A probabilistic choreography language for {PRISM}.
+\newblock In Ilaria Castellani and Francesco Tiezzi, editors, {\em Coordination Models and Languages - 26th {IFIP} {WG} 6.1 International Conference, {COORDINATION} 2024, Held as Part of the 19th International Federated Conference on Distributed Computing Techniques, DisCoTec 2024, Groningen, The Netherlands, June 17-21, 2024, Proceedings}, volume 14676 of {\em Lecture Notes in Computer Science}, pages 20--37. Springer, 2024.
+
 \bibitem{Cha88}
 D.~Chaum.
 \newblock The dining cryptographers problem: Unconditional sender and recipient untraceability.

@@ -89,6 +89,36 @@ described in this language into PRISM code. This choreographic
 approach not only simplifies the modelling process but also ensures
 integration with PRISM's powerful analysis capabilities. 
 
+To illustrate the idea with concrete commands, consider the following example. We have a choreographic language specification: 
+
+\[
+\begin{array}{lll}
+C \stackrel{\mathsf{def}}{=} \interactBase{p}{q}
+\left\{
+\begin{array}{lll}
+\lambda_1: \ (x'=1)\ \&\ (y'=2);\ C\\[1mm]
+\lambda_2: \ (x'=3)\ \&\ (y'=1);\ C
+\end{array}
+\right.
+\end{array}
+\]
+
+This specification recursively defines an interaction where process \(\role{p}\) communicates with process \(\role{q}\), choosing either branch \(\lambda_1\) (setting \(x\) to 1 and \(y\) to 2) or branch \(\lambda_2\) (setting \(x\) to 3 and \(y\) to 1). 
+The projection mechanism translates this global choreography into local PRISM modules by annotating each interaction with a unique label (e.g., \(a\) for \(\lambda_1\) and \(b\) for \(\lambda_2\)) and using a state counter (e.g., \(s_{\role p}\) and \(s_{\role q}\)) to uniquely identify each step. 
+The corresponding PRISM translation is:
+
+\[
+\begin{array}{llll}
+\role{p}: \{ & \quad \commandBase {a}{s_{\role p}=0} {\mu_1:(x'=1)\ \&\ (s_{\role p}'=1)} \quad\qquad \commandBase {}{s_{\role p}=1} {1:(s_{\role p}'=0)}\\[2mm]
+              & \quad \commandBase {b}{s_{\role p}=0} {\mu_2:(x'=3)\ \&\ (s_{\role p}'=2)} \quad\qquad \commandBase {}{s_{\role p}=2} {1:(s_{\role p}'=0)} \quad \}\\[2mm]
+\role{q}: \{ & \quad \commandBase {a}{s_{\role q}=0} {\gamma_1:(y'=2)\ \&\ (s_{\role q}'=1)} \qquad\quad \commandBase {}{s_{\role q}=1} {1:(s_{\role q}'=0)}\\[2mm]
+              & \quad \commandBase {b}{s_{\role q}=0} {\gamma_2:(y'=1)\ \&\ (s_{\role q}'=2)} \qquad\quad \commandBase {}{s_{\role q}=2} {1:(s_{\role q}'=0)} \quad \}\\
+\end{array}
+\]
+
+In this translation, the command labeled \(a\) in \(\role{p}\)’s module corresponds to branch \(\lambda_1\) (with rate \(\mu_1\)), and the matching command in \(\role{q}\)’s module (with rate \(\gamma_1\)) sets \(y\) to 2; similarly, label \(b\) corresponds to branch \(\lambda_2\) (with rates \(\mu_2\) for \(\role{p}\) and \(\gamma_2\) for \(\role{q}\)), setting \(x\) and \(y\) appropriately. In each module, after executing an interaction command, a subsequent reset command (with rate 1) restores the state counter to 0, preparing the process for the next recursive interaction. This projection ensures that the local behaviors of the endpoints synchronize correctly according to the global choreography while uniquely tracking the progress of interactions via the state counters.
+
+
 Through our contributions, we aim to provide a smooth workflow for
 modeling, analyzing, and verifying concurrent probabilistic systems,
 ultimately increasing their usability in various application domains.

@@ -6,45 +6,45 @@ Database file #1: biblio.bib
 Warning--to sort, need author or key in PRISMdoc
 Warning--to sort, need author or key in ANTLR
 Warning--to sort, need author or key in repository
-You've used 24 entries,
+You've used 25 entries,
             2118 wiz_defined-function locations,
-            670 strings with 8627 characters,
-and the built_in function-call counts, 9152 in all, are:
-= -- 895
-> -- 441
-< -- 15
-+ -- 169
-- -- 143
-* -- 680
-:= -- 1446
-add.period$ -- 77
-call.type$ -- 24
-change.case$ -- 135
+            678 strings with 9039 characters,
+and the built_in function-call counts, 9641 in all, are:
+= -- 944
+> -- 462
+< -- 17
++ -- 177
+- -- 149
+* -- 715
+:= -- 1518
+add.period$ -- 81
+call.type$ -- 25
+change.case$ -- 140
 chr.to.int$ -- 0
-cite$ -- 27
-duplicate$ -- 342
-empty$ -- 725
-format.name$ -- 143
-if$ -- 1961
+cite$ -- 28
+duplicate$ -- 364
+empty$ -- 765
+format.name$ -- 149
+if$ -- 2072
 int.to.chr$ -- 0
-int.to.str$ -- 24
-missing$ -- 21
-newline$ -- 122
-num.names$ -- 56
-pop$ -- 152
+int.to.str$ -- 25
+missing$ -- 22
+newline$ -- 127
+num.names$ -- 60
+pop$ -- 158
 preamble$ -- 1
-purify$ -- 112
+purify$ -- 116
 quote$ -- 0
-skip$ -- 260
+skip$ -- 278
 stack$ -- 0
-substring$ -- 575
-swap$ -- 110
-text.length$ -- 15
+substring$ -- 605
+swap$ -- 121
+text.length$ -- 17
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 94
+type$ -- 98
 warning$ -- 3
-while$ -- 89
-width$ -- 26
-write$ -- 269
+while$ -- 95
+width$ -- 27
+write$ -- 282
 (There were 3 warnings)
