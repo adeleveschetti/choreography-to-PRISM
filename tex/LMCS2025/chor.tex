@@ -372,7 +372,6 @@ encoded. Below, we discuss each of them:
   redundant as far as the theory is concerned.\marco{We need to
     discuss this, I'm not really sure the semantics is equivalent}
 
-  
 \item {\em The {\sf foreach} construct.} The use of parametric modules
   can be further facilitated by introducing syntactic sugar that
   allows iteration over the set of indices that parameterise these
@@ -386,46 +385,76 @@ encoded. Below, we discuss each of them:
   provided that the indices are known at compile time rather than
   determined dynamically at runtime.
 
+
+\item {\em Non-deterministic Synchronisation.}  Our implementation
+  supports the non-deterministic synchronisation language construct
+  $\allsynch pGiI$, where $G$ has the form $\chorcommand g\lambda
+  u$. The core idea behind this construct is to enable a set of roles,
+  denoted by $\role{p_i}$, to synchronise while allowing each role to
+  non-deterministically select from a range of possible local
+  actions. This provides a structured mechanism for defining
+  interactions where multiple roles must coordinate, but their precise
+  behaviour may vary dynamically (with a certain probability
+  distribution/rate).
+
+  A key advantage of this construct is its compactness and readability
+  in specifying synchronised interactions. For instance, in a scenario
+  where two roles, $\role{p}$ and $\role{q}$, participate in a
+  synchronised exchange, the $\allsynchName$ syntax allows for a
+  concise definition of conditions under which each role updates its
+  state. This avoids the need for manually encoding synchronisation
+  through nested conditional constructs.
+  % 
+  Despite its expressiveness, the $\allsynchName$ construct does not
+  introduce new semantics but serves as syntactic sugar for an
+  equivalent formulation.  In fact, $\allsynchName$ can be rewritten
+  using a series of nested $\mathtt{if\text{-}then\text{-}else}$
+  constructs, ensuring that the synchronisation conditions are met
+  before proceeding with the interaction. For example, consider the
+  non-deterministic synchronisation between roles $\role p$ and
+  $\role q$: \marco{update with Adele with more commands for each
+    role}
+  %
+  \begin{displaymath}
+    % C \stackrel{\mathsf{def}}{=} 
+    %
+    \allsynchName\left\{
+      \begin{array}{lll}
+        \role{p} : (x=1) \rightarrow 1 : (x'=100) \\
+        \role{q} : (y=1) \rightarrow 1 : (y'=0)
+      \end{array}
+    \right\} ; \CEnd
+  \end{displaymath}
+  %
+  This construct provides a compact and structured way to define
+  synchronized interactions. However, it can be rewritten without
+  using the $\allsynchName$ syntax by explicitly handling conditions
+  using the $\mathtt{if\text{-}then\text{-}else}$ construct:
   
-\item {\em Non-deterministic Synchronisation.} Our implementation uses
-  the language construct $\allsynch pGiI$ where $G$ has the form
-  $\chorcommand g\lambda u$. The intuition behind this operation is
-  that the set of roles $\role p_i$ synchronises but each of them can
-  non-deterministically pick from a set of different local actions. In
-  order to clarify this further, consider the following synchronised
-  interactions between roles $\role p$ and $\role q$:
+  \begin{displaymath}
+    \begin{array}{ll}
+      % C' \stackrel{\mathsf{def}}{=}
+      & \mathtt{if}\ (x=1)@\role {p}\ \mathtt{then}\\
+      & \quad \mathtt{if}\ (y=1)@\role {q}\ \mathtt{then}\\
+      & \quad \quad \interactBase{p}{q}\ 1 : (x'=100)\&(y'=0);\CEnd \\
+      & \quad \mathtt{else}\ \CEnd \\
+      & \mathtt{else}\ \CEnd
+    \end{array}
+  \end{displaymath}
+  %
+  The two formulations are equivalent, with the $\allsynchName$ syntax
+  acting as syntactic sugar for a structured and readable
+  representation of synchronization. The expanded version using
+  $\mathtt{if\text{-}then\text{-}else}$ makes explicit the conditional
+  execution of interactions but retains the same behaviour.
+
+  By incorporating $\allsynchName$, our implementation streamlines the
+  specification of non-deterministic synchronisation while preserving
+  its precise operational semantics, ultimately enhancing both clarity
+  and usability in defining distributed interactions.
 \end{itemize}
 
   
-
-\begin{example}\label{example3}
-  The following definition describes a synchronized interaction
-  between roles $\role p$ and $q$:
-  \begin{displaymath}
-    \begin{array}{lll}
-      C \stackrel{\mathsf{def}}{=} \allsynchName\left\{
-      \begin{array}{lll}
-        \role{p} : (x=1) \rightarrow 1 : (x'=100)
-        \\
-        \role{q} : (y=1) \rightarrow 1 : (y'=0)
-      \end{array}
-      \right\} ; \CEnd
-    \end{array}
-  \end{displaymath}
-  This construct provides a compact and structured way to define synchronized interactions. However, it can be rewritten without using the $\allsynchName$ syntax by explicitly handling conditions using the $\mathtt{if-then-else}$ construct:
-
-
-\begin{displaymath}
-  \begin{array}{ll}
-C \stackrel{\mathsf{def}}{=}& \textcolor{sh_keyword}{\mathtt{if}}\ (x=1)@\role {p}\ \textcolor{sh_keyword}{\mathtt{then}}\\ 
-& \quad \textcolor{sh_keyword}{\mathtt{if}}\ (y=1)@\role {q}\ \textcolor{sh_keyword}{\mathtt{then}}\\
-& \quad \quad \interactBase{p}{q}\ 1 : (x'=100)\&(y'=0);\CEnd \\
-& \quad \textcolor{sh_keyword}{\mathtt{else}}\ \CEnd \\
-& \textcolor{sh_keyword}{\mathtt{else}}\ \CEnd
-  \end{array}
-\end{displaymath}
-The two formulations are semantically equivalent, with the $\allsynchName$ syntax acting as syntactic sugar for a structured and readable representation of synchronization. The expanded version using $\mathtt{if-then-else}$ makes explicit the conditional execution of interactions but retains the same behavior.
-\end{example}
 
 
 
