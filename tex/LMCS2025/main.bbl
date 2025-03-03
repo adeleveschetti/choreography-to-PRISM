@@ -17,33 +17,22 @@ Repository.
 \bibitem{AC19}
 Bogdan Aman and Gabriel Ciobanu.
 \newblock Probabilities in session types.
-\newblock In Mircea Marin and Adrian Craciun, editors, {\em Proceedings Third
-  Symposium on Working Formal Methods, {FROM} 2019, Timi{\c{s}}oara, Romania,
-  3-5 September 2019}, volume 303 of {\em {EPTCS}}, pages 92--106, 2019.
+\newblock In Mircea Marin and Adrian Craciun, editors, {\em Proceedings Third Symposium on Working Formal Methods, {FROM} 2019, Timi{\c{s}}oara, Romania, 3-5 September 2019}, volume 303 of {\em {EPTCS}}, pages 92--106, 2019.
 
 \bibitem{AC22}
 Bogdan Aman and Gabriel Ciobanu.
 \newblock Interval probability for sessions types.
-\newblock In Agata Ciabattoni, Elaine Pimentel, and Ruy J. G.~B. de~Queiroz,
-  editors, {\em Logic, Language, Information, and Computation - 28th
-  International Workshop, WoLLIC 2022, Ia{\c{s}}i, Romania, September 20-23,
-  2022, Proceedings}, volume 13468 of {\em Lecture Notes in Computer Science},
-  pages 123--140. Springer, 2022.
+\newblock In Agata Ciabattoni, Elaine Pimentel, and Ruy J. G.~B. de~Queiroz, editors, {\em Logic, Language, Information, and Computation - 28th International Workshop, WoLLIC 2022, Ia{\c{s}}i, Romania, September 20-23, 2022, Proceedings}, volume 13468 of {\em Lecture Notes in Computer Science}, pages 123--140. Springer, 2022.
 
 \bibitem{DBLP:journals/concurrency/BistarelliNGLMV23}
-Stefano Bistarelli, Rocco~De Nicola, Letterio Galletta, Cosimo Laneve, Ivan
-  Mercanti, and Adele Veschetti.
-\newblock Stochastic modeling and analysis of the bitcoin protocol in the
-  presence of block communication delays.
+Stefano Bistarelli, Rocco~De Nicola, Letterio Galletta, Cosimo Laneve, Ivan Mercanti, and Adele Veschetti.
+\newblock Stochastic modeling and analysis of the bitcoin protocol in the presence of block communication delays.
 \newblock {\em Concurr. Comput. Pract. Exp.}, 35(16), 2023.
 
 \bibitem{CGHL10}
 Marco Carbone, Davide Grohmann, Thomas~T. Hildebrandt, and Hugo~A. L{\'{o}}pez.
 \newblock A logic for choreographies.
-\newblock In Kohei Honda and Alan Mycroft, editors, {\em Proceedings Third
-  Workshop on Programming Language Approaches to Concurrency and
-  communication-cEntric Software, {PLACES} 2010, Paphos, Cyprus, 21st March
-  2010}, volume~69 of {\em {EPTCS}}, pages 29--43, 2010.
+\newblock In Kohei Honda and Alan Mycroft, editors, {\em Proceedings Third Workshop on Programming Language Approaches to Concurrency and communication-cEntric Software, {PLACES} 2010, Paphos, Cyprus, 21st March 2010}, volume~69 of {\em {EPTCS}}, pages 29--43, 2010.
 
 \bibitem{CHY12}
 Marco Carbone, Kohei Honda, and Nobuko Yoshida.
@@ -52,36 +41,23 @@ Marco Carbone, Kohei Honda, and Nobuko Yoshida.
 
 \bibitem{CM13}
 Marco Carbone and Fabrizio Montesi.
-\newblock Deadlock-freedom-by-design: multiparty asynchronous global
-  programming.
-\newblock In Roberto Giacobazzi and Radhia Cousot, editors, {\em The 40th
-  Annual {ACM} {SIGPLAN-SIGACT} Symposium on Principles of Programming
-  Languages, {POPL} '13, Rome, Italy - January 23 - 25, 2013}, pages 263--274.
-  {ACM}, 2013.
+\newblock Deadlock-freedom-by-design: multiparty asynchronous global programming.
+\newblock In Roberto Giacobazzi and Radhia Cousot, editors, {\em The 40th Annual {ACM} {SIGPLAN-SIGACT} Symposium on Principles of Programming Languages, {POPL} '13, Rome, Italy - January 23 - 25, 2013}, pages 263--274. {ACM}, 2013.
 
 \bibitem{CV24}
 Marco Carbone and Adele Veschetti.
 \newblock A probabilistic choreography language for {PRISM}.
-\newblock In Ilaria Castellani and Francesco Tiezzi, editors, {\em Coordination
-  Models and Languages - 26th {IFIP} {WG} 6.1 International Conference,
-  {COORDINATION} 2024, Held as Part of the 19th International Federated
-  Conference on Distributed Computing Techniques, DisCoTec 2024, Groningen, The
-  Netherlands, June 17-21, 2024, Proceedings}, volume 14676 of {\em Lecture
-  Notes in Computer Science}, pages 20--37. Springer, 2024.
+\newblock In Ilaria Castellani and Francesco Tiezzi, editors, {\em Coordination Models and Languages - 26th {IFIP} {WG} 6.1 International Conference, {COORDINATION} 2024, Held as Part of the 19th International Federated Conference on Distributed Computing Techniques, DisCoTec 2024, Groningen, The Netherlands, June 17-21, 2024, Proceedings}, volume 14676 of {\em Lecture Notes in Computer Science}, pages 20--37. Springer, 2024.
 
 \bibitem{Cha88}
 D.~Chaum.
-\newblock The dining cryptographers problem: Unconditional sender and recipient
-  untraceability.
+\newblock The dining cryptographers problem: Unconditional sender and recipient untraceability.
 \newblock {\em Journal of Cryptology}, 1:65--75, 1988.
 
 \bibitem{bio1}
 Frits Dannenberg, Marta Kwiatkowska, Chris Thachuk, and Andrew Turberfield.
-\newblock {DNA} walker circuits: computational potential, design, and
-  verification.
-\newblock In D.~Soloveichik and B.~Yurke, editors, {\em {Proc. 19th
-  International Conference on DNA Computing and Molecular Programming (DNA
-  19)}}, volume 8141 of {\em LNCS}, pages 31--45. Springer, 2013.
+\newblock {DNA} walker circuits: computational potential, design, and verification.
+\newblock In D.~Soloveichik and B.~Yurke, editors, {\em {Proc. 19th International Conference on DNA Computing and Molecular Programming (DNA 19)}}, volume 8141 of {\em LNCS}, pages 31--45. Springer, 2013.
 
 \bibitem{DBLP:journals/distribledger/GallettaLMV23}
 Letterio Galletta, Cosimo Laneve, Ivan Mercanti, and Adele Veschetti.
@@ -96,9 +72,7 @@ Saverio Giallorenzo, Fabrizio Montesi, and Marco Peressotti.
 \bibitem{bio2}
 J.~Heath, M.~Kwiatkowska, G.~Norman, D.~Parker, and O.~Tymchyshyn.
 \newblock Probabilistic model checking of complex biological pathways.
-\newblock In C.~Priami, editor, {\em Proc. Computational Methods in Systems
-  Biology (CMSB'06)}, volume 4210 of {\em Lecture Notes in Bioinformatics},
-  pages 32--47. Springer Verlag, 2006.
+\newblock In C.~Priami, editor, {\em Proc. Computational Methods in Systems Biology (CMSB'06)}, volume 4210 of {\em Lecture Notes in Bioinformatics}, pages 32--47. Springer Verlag, 2006.
 
 \bibitem{HYC07b}
 Kohei Honda, Nobuko Yoshida, and Marco Carbone.
@@ -112,8 +86,7 @@ A.~Itai and M.~Rodeh.
 
 \bibitem{distr1}
 M.~Kwiatkowska, G.~Norman, and D.~Parker.
-\newblock Probabilistic verification of hermanâ€™s self-stabilisation
-  algorithm.
+\newblock Probabilistic verification of hermanâ€™s self-stabilisation algorithm.
 \newblock {\em Formal Aspects of Computing}, 24(4):661--670, 2012.
 
 \bibitem{security2}
@@ -123,16 +96,12 @@ M.~Kwiatkowska, G.~Norman, D.~Parker, and M.G. Vigliotti.
 
 \bibitem{distr2}
 M.~Kwiatkowska, G.~Norman, and R.~Segala.
-\newblock Automated verification of a randomized distributed consensus protocol
-  using {Cadence SMV} and {PRISM}.
-\newblock In G.~Berry, H.~Comon, and A.~Finkel, editors, {\em Proc. 13th
-  International Conference on Computer Aided Verification (CAV'01)}, volume
-  2102 of {\em LNCS}, pages 194--206. Springer, 2001.
+\newblock Automated verification of a randomized distributed consensus protocol using {Cadence SMV} and {PRISM}.
+\newblock In G.~Berry, H.~Comon, and A.~Finkel, editors, {\em Proc. 13th International Conference on Computer Aided Verification (CAV'01)}, volume 2102 of {\em LNCS}, pages 194--206. Springer, 2001.
 
 \bibitem{multimedia}
 M.~Kwiatkowska, G.~Norman, and J.~Sproston.
-\newblock Probabilistic model checking of deadline properties in the {IEEE 1394
-  FireWire} root contention protocol.
+\newblock Probabilistic model checking of deadline properties in the {IEEE 1394 FireWire} root contention protocol.
 \newblock {\em Formal Aspects of Computing}, 14(3):295--318, 2003.
 
 \bibitem{M23}
@@ -151,11 +120,8 @@ G.~Norman and V.~Shmatikov.
 \newblock {\em Journal of Computer Security}, 14(6):561--589, 2006.
 
 \bibitem{DBLP:journals/entcs/BeekMLGFS05}
-Maurice~H. ter Beek, Mieke Massink, Diego Latella, Stefania Gnesi, Alessandro
-  Forghieri, and Maurizio Sebastianis.
-\newblock Model checking publish/subscribe notification for
-  thinkteam\({}^{\mbox{{\textregistered}}}\).
-\newblock In {\em {FMICS}}, volume 133 of {\em Electronic Notes in Theoretical
-  Computer Science}, pages 275--294. Elsevier, 2004.
+Maurice~H. ter Beek, Mieke Massink, Diego Latella, Stefania Gnesi, Alessandro Forghieri, and Maurizio Sebastianis.
+\newblock Model checking publish/subscribe notification for thinkteam\({}^{\mbox{{\textregistered}}}\).
+\newblock In {\em {FMICS}}, volume 133 of {\em Electronic Notes in Theoretical Computer Science}, pages 275--294. Elsevier, 2004.
 
 \end{thebibliography}
