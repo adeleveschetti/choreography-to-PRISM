@@ -15,20 +15,18 @@ following syntax:
 %
 \begin{displaymath}\small
   \begin{array}{llllllllllll}
-    C & ::= &      & \interact{p}{\role p_1,\ldots,\role p_n} & \text{(interaction)}\\
+    C & ::= &      & \interact{p}{\role p_1,\ldots,\role p_n} & \text{(interaction)}\\[1mm]
       % &     & \mid & \allsynch pGiI & \text{(non-deterministic sync)}\\
-      &     & \mid & \ifTE {E}{p}{C_1}{C_2} & \text{(conditional)}\\
-      &     & \mid & X     & \text{(recursive call)}\\
+      &     & \mid & \ifTE {E}{p}{C_1}{C_2} & \text{(conditional)}\\[1mm]
+      &     & \mid & X     & \text{(recursive call)}\\[1mm]
       &     & \mid & \CEnd & \text{(inact)}
     % \\
     %   &     & \mid & \textsf{foreach } E\ u@{\role p}[i];\, C & \text{(foreach)}
-    \\[1mm]
-    G & ::= &      & \chorcommand g\lambda u & \text{(choreographic command)}
-    \\[1mm]
+    \\[2mm]
     \defin \ & ::= & & X\stackrel{\mathsf{def}}{=} C,\ \defin 
                      \quad \mid \quad \emptyset & \text{(definitions)}
-    \\[1mm]
-    u     & ::=  && (x' = E)\ \&\ u \quad\mid\quad    (x' = E) & \text{(assignments)}\\[1mm]
+    \\[2mm]
+    u     & ::=  && (x' = E)\ \&\ u \quad\mid\quad    (x' = E) & \text{(assignments)}\\[2mm]
     E, g  & ::=  && f(\tilde E)\quad\mid\quad x\quad\mid\quad v & \text{(expressions)}
   \end{array}
 \end{displaymath}
@@ -322,34 +320,69 @@ be depicted as follows:
 \end{example}
 
 
-\subsection{Other language constructs} The attentive reader may have
-noticed that the syntax used in our introductory example uses also
-other language constructs that are not part of the formal syntax given
-above. Given the nature of our language, such constructs are all
-syntactic sugar and can be easily encoded. Below, we discuss each of
-them:
+\subsection{Other language constructs}
+%
+The attentive reader may have noticed that the syntax used in our
+introductory example includes language constructs that are not part of
+the formal syntax given above. Given the nature of our language, these
+constructs are purely syntactic sugar and can be easily
+encoded. Below, we discuss each of them:
+% 
+\begin{itemize}
+
+\item {\em Parametric modules.} In our implemented language, modules
+  can be parameterised (indexed) as done in PRISM. We denote
+  parameterised roles as $\role p[n]$ for $n$ ranging some finite set
+  $N$.
+  %
+  As an example, the choreography
+  \[\interactBase {p[i]}{q[i]}:\lambda:U;\quad 
+    \interactBase r{q[i]}:\lambda:U;\quad \CEnd
+  \]
+  can be easily encoded as:
+  \[
+    \begin{array}{llll}
+      \interactBase {p1}{q1}:\lambda:U;\quad \\
+      \interactBase {p2}{q2}:\lambda:U;\quad \\
+      \interactBase {p3}{q3}:\lambda:U;\quad \\
+      \interactBase r{q1,q2,q3}:\lambda:U;\quad \CEnd
+    \end{array}
+  \]
+  Note that if the second parametric interaction were
+  $\interactBase {q[i]}r:\lambda:U;\quad \CEnd$, then we would have to
+  turn around the synchronisation. \marco{ADELE, COSA SUCCEDE
+    NELL'IMPLEMENTAZIONE?}
+  %
+  Additionally, the choreography
+  \[\interactBase {p[i]}{q[i]}:\lambda:U;\quad 
+    \interactBase {q[i+1]}{p[i]}:\lambda:U;\quad \CEnd
+  \]
+  can be encoded in our model language as
+  \[
+    \begin{array}{llll}
+      \interactBase {p1}{q1}:\lambda:U;\quad \\
+      \interactBase {q2}{p1}:\lambda:U;\quad \\
+      \interactBase {p2}{q2}:\lambda:U;\quad \\
+      \interactBase {q3}{p2}:\lambda:U;\quad \\
+      \interactBase {p3}{q3}:\lambda:U;\quad \\
+      \interactBase {q1}{p3}:\lambda:U;\quad  \CEnd
+    \end{array}
+  \]
+  Given that parameters range over a finite set, this operation is
+  redundant as far as the theory is concerned.\marco{We need to
+    discuss this, I'm not really sure the semantics is equivalent}
+
   
-  \begin{itemize}
-    
-  \item $\textsf{foreach } e(i)\ u@A[i];\, C$. This construct allows
-    to...
-
-  \item Parametric modules. Modules can be parameterised (indexed),
-    denoted by $\role p[i]$... we put it as part of a note saying this
-    stuff is syntactic sugar
-
-\begin{verbatim}
-p[i] -> q[i]; q[i] -> t. 0
-
-p[i] -> q[i]; q[i+1] -> p[i]
-
-p1 -> q1;       q2 -> p1
-p2 -> q2;       q3 -> p2
-p3 -> q3;       q1 -> p3
-\end{verbatim}
-
-
-  \item $\allsynch pGiI$.
+\item {\em For each construct.} $\textsf{foreach } e(i)\ u@A[i];\,
+  C$. This construct allows to...
+  
+\item {\em Non-deterministic Synchronisation.} Our implementation uses
+  the language construct $\allsynch pGiI$ where $G$ has the form
+  $\chorcommand g\lambda u$. The intuition behind this operation is
+  that the set of roles $\role p_i$ synchronises but each of them can
+  non-deterministically pick from a set of different local actions. In
+  order to clarify this further, consider the following synchronised
+  interactions between roles $\role p$ and $\role q$:
 \end{itemize}
 
   
