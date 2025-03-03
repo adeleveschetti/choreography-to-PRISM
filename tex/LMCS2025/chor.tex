@@ -345,13 +345,11 @@ encoded. Below, we discuss each of them:
       \interactBase {p1}{q1}:\lambda:U;\quad \\
       \interactBase {p2}{q2}:\lambda:U;\quad \\
       \interactBase {p3}{q3}:\lambda:U;\quad \\
-      \interactBase r{q1,q2,q3}:\lambda:U;\quad \CEnd
+      \interactBase r{q1}:\lambda:U;\quad \\
+      \interactBase r{q2}:\lambda:U;\quad \\
+      \interactBase r{q3}:\lambda:U;\quad \CEnd
     \end{array}
   \]
-  Note that if the second parametric interaction were
-  $\interactBase {q[i]}r:\lambda:U;\quad \CEnd$, then we would have to
-  turn around the synchronisation. \marco{ADELE, COSA SUCCEDE
-    NELL'IMPLEMENTAZIONE?}
   %
   Additionally, the choreography
   \[\interactBase {p[i]}{q[i]}:\lambda:U;\quad 
@@ -361,30 +359,28 @@ encoded. Below, we discuss each of them:
   \[
     \begin{array}{llll}
       \interactBase {p1}{q1}:\lambda:U;\quad \\
-      \interactBase {q2}{p1}:\lambda:U;\quad \\
       \interactBase {p2}{q2}:\lambda:U;\quad \\
-      \interactBase {q3}{p2}:\lambda:U;\quad \\
       \interactBase {p3}{q3}:\lambda:U;\quad \\
+      \interactBase {q2}{p1}:\lambda:U;\quad \\
+      \interactBase {q3}{p2}:\lambda:U;\quad \\
       \interactBase {q1}{p3}:\lambda:U;\quad  \CEnd
     \end{array}
   \]
   Given that parameters range over a finite set, this operation is
-  redundant as far as the theory is concerned.\marco{We need to
-    discuss this, I'm not really sure the semantics is equivalent}
+  redundant as far as the theory is concerned.
 
 \item {\em The {\sf foreach} construct.} The use of parametric modules
   can be further facilitated by introducing syntactic sugar that
   allows iteration over the set of indices that parameterise these
   modules. To this end, our language implementation includes the
-  construct $\textsf{foreach } E(i)\ u@A[i];, C$. \marco{Adele, check
-    syntax?}  This construct enables the expression $E(i)$ to range
-  over a set of indices, which can then be used in $u@A[i]$. In
-  essence, it provides a more concise and readable way to express
-  operations over multiple indexed modules. Notably, this construct
-  can be encoded explicitly by numbering the modules manually,
-  provided that the indices are known at compile time rather than
-  determined dynamically at runtime.
-
+  construct $\textsf{foreach } i:E(i)\ u@A[i]; C$. \marco{Explain
+    syntax and put a very small example. Marco will do this} This
+  construct enables the expression $E(i)$ to range over a set of
+  indices, which can then be used in $u@A[i]$. In essence, it provides
+  a more concise and readable way to express operations over multiple
+  indexed modules. Notably, this construct can be encoded explicitly
+  by numbering the modules manually, provided that the indices are
+  known at compile time rather than determined dynamically at runtime.
 
 \item {\em Non-deterministic Synchronisation.}  Our implementation
   supports the non-deterministic synchronisation language construct
@@ -412,15 +408,15 @@ encoded. Below, we discuss each of them:
   constructs, ensuring that the synchronisation conditions are met
   before proceeding with the interaction. For example, consider the
   non-deterministic synchronisation between roles $\role p$ and
-  $\role q$: \marco{update with Adele with more commands for each
-    role}
+  $\role q$: 
   %
   \begin{displaymath}
     % C \stackrel{\mathsf{def}}{=} 
     %
     \allsynchName\left\{
       \begin{array}{lll}
-        \role{p} : (x=1) \rightarrow 1 : (x'=100) \\
+        \role{p} : (x=5) \rightarrow 10 : (x'=0) \\
+        \role{p} : (x=1) \rightarrow 5 : (x'=100) \\
         \role{q} : (y=1) \rightarrow 1 : (y'=0)
       \end{array}
     \right\} ; \CEnd
@@ -434,11 +430,15 @@ encoded. Below, we discuss each of them:
   \begin{displaymath}
     \begin{array}{ll}
       % C' \stackrel{\mathsf{def}}{=}
-      & \mathtt{if}\ (x=1)@\role {p}\ \mathtt{then}\\
+      & \mathtt{if}\ (x=5)@\role {p}\ \mathtt{then}\\
       & \quad \mathtt{if}\ (y=1)@\role {q}\ \mathtt{then}\\
-      & \quad \quad \interactBase{p}{q}\ 1 : (x'=100)\&(y'=0);\CEnd \\
+      & \quad \quad \interactBase{p}{q}\ 10 : (x'=0)\&(y'=0);\CEnd \\
       & \quad \mathtt{else}\ \CEnd \\
-      & \mathtt{else}\ \CEnd
+      & \mathtt{else}\ \mathtt{if}\ (x=1)@\role {p}\ \mathtt{then}\\
+      & \qquad\quad \mathtt{if}\ (y=1)@\role {q}\ \mathtt{then}\\
+      & \qquad\quad \quad \interactBase{p}{q}\ 5 : (x'=100)\&(y'=0);\CEnd \\
+      & \qquad\quad \mathtt{else}\ \CEnd \\
+      & \qquad\ \mathtt{else}\ \CEnd \\
     \end{array}
   \end{displaymath}
   %
@@ -452,6 +452,9 @@ encoded. Below, we discuss each of them:
   specification of non-deterministic synchronisation while preserving
   its precise operational semantics, ultimately enhancing both clarity
   and usability in defining distributed interactions.
+
+  \marco{add final comment on how allsync is ``more effcient'' since
+    the number of nested if -then-else explodes}
 \end{itemize}
 
   
