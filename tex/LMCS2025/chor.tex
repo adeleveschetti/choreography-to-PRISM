@@ -373,8 +373,19 @@ encoded. Below, we discuss each of them:
     discuss this, I'm not really sure the semantics is equivalent}
 
   
-\item {\em For each construct.} $\textsf{foreach } e(i)\ u@A[i];\,
-  C$. This construct allows to...
+\item {\em The {\sf foreach} construct.} The use of parametric modules
+  can be further facilitated by introducing syntactic sugar that
+  allows iteration over the set of indices that parameterise these
+  modules. To this end, our language implementation includes the
+  construct $\textsf{foreach } E(i)\ u@A[i];, C$. \marco{Adele, check
+    syntax?}  This construct enables the expression $E(i)$ to range
+  over a set of indices, which can then be used in $u@A[i]$. In
+  essence, it provides a more concise and readable way to express
+  operations over multiple indexed modules. Notably, this construct
+  can be encoded explicitly by numbering the modules manually,
+  provided that the indices are known at compile time rather than
+  determined dynamically at runtime.
+
   
 \item {\em Non-deterministic Synchronisation.} Our implementation uses
   the language construct $\allsynch pGiI$ where $G$ has the form
