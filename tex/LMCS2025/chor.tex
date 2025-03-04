@@ -373,14 +373,18 @@ encoded. Below, we discuss each of them:
   can be further facilitated by introducing syntactic sugar that
   allows iteration over the set of indices that parameterise these
   modules. To this end, our language implementation includes the
-  construct $\textsf{foreach } i:E(i)\ u@A[i]; C$. \marco{Explain
-    syntax and put a very small example. Marco will do this} This
-  construct enables the expression $E(i)$ to range over a set of
-  indices, which can then be used in $u@A[i]$. In essence, it provides
-  a more concise and readable way to express operations over multiple
-  indexed modules. Notably, this construct can be encoded explicitly
-  by numbering the modules manually, provided that the indices are
-  known at compile time rather than determined dynamically at runtime.
+  construct $\textsf{foreach } (k\ \textit{op}\ i)\ u@A[i]; C$.
+  %
+  This construct can be used in front of an assignment $u$
+
+  \marco{awaiting for Adele to get back to me}
+
+  to enables the expression $E(i)$ to range over a set of indices,
+  which can then be used in $u@A[i]$. In essence, it provides a more
+  concise and readable way to express operations over multiple indexed
+  modules. Notably, this construct can be encoded explicitly by
+  numbering the modules manually, provided that the indices are known
+  at compile time rather than determined dynamically at runtime.
 
 \item {\em Non-deterministic Synchronisation.}  Our implementation
   supports the non-deterministic synchronisation language construct
