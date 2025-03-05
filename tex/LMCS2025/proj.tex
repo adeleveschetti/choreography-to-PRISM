@@ -1,41 +1,55 @@
-Our next task is to provide a mapping that can translate
-choreographies into the PRISM language. This section addresses
-projection formally.
+In this section, we provide a rigorous treatment of projection, which
+constitutes the mapping from choreographies to the PRISM language.
+%
 
-\mypar{Mapping Choreographies to PRISM.}  The operation of generating
-endpoint code from a choreography is known as {\em
-  projection}. 
-% Normally, projection is defined separately for each module appearing
-% in the choreography program.
-We observe that to simulate a choreography interaction in
-PRISM, we need to use labels on which each involved module can
-synchronise. Therefore, without loss of generality, we make a slight
-abuse of notation and assume that each interaction in a choreography
-is annotated with a unique label (which will be used by the
-projection). We call such a choreography an {\em annotated
-  choreography}. 
+\subsection{Mapping Choreographies to PRISM} 
+%
+The process of generating endpoint code from a choreography is
+commonly referred to as {\em projection} in the literature.
+Typically, projection is defined separately for each module appearing
+in the choreography program, i.e., given a module (often called a
+role) and a choreography, it generates the code for that particular
+role.  However, this is not the case in our approach, as PRISM relies
+solely on label synchronisation and a notion of state, which can be
+modified through standard imperative assignments enabled by conditions
+on the state.
+%
+Thus, our approach simulates a choreography interaction in PRISM by
+using labels on which each involved module can synchronise and
+leveraging the state to enable the correct commands at the appropriate
+times.
 
-  \begin{definition}[Annotated Choreography]
-    An \emph{annotated choreography} is a choreography where each interaction is explicitly labeled with a unique identifier. Formally, an annotated choreography extends the standard choreography syntax by associating each interaction with a label that will be used during projection.
-  
-    Given a choreography \( C \), its annotated version \( C' \) is obtained by systematically assigning a unique label to each interaction. This ensures that every interaction can be distinctly referenced in the corresponding endpoint projection.
-  \end{definition}  
+Before formalising this idea, we make a slight abuse of notation by
+assuming that each interaction in a choreography is annotated with a
+unique label, which will be used by the projection. We refer to such a
+choreography as an {\em annotated choreography}:
+%
+\begin{definition}[Annotated Choreography]
+  An \emph{annotated choreography} is obtained from the choreography
+  syntax by adding a label to each interaction:
+  \[C ::= \interactl{p}a{\role p_1,\ldots,\role p_n} \mid\dots\]
 
+  Given a choreography \( C \), its annotated counterpart \( C' \) is
+  obtained by systematically assigning a unique label to each
+  interaction. 
+\end{definition}
+This labelling above ensures that every interaction can be uniquely
+identified and referenced in the corresponding endpoint projection.
 For example, the choreography
-$\interactBase{p}{q} +\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTE
-  {E}{p}{\CEnd}{\CEnd}$ is going to be annotated as
-  $\interactBasel{p}{a}{q} +\ \lambda_1: \CEnd \ +\ \lambda_2: \ifTEl
-    {E}{}{p}{\CEnd}{\CEnd}$.
-% %
-% \MC{We need to say that we must run some standard static checks
-% because, since there is branching, some terms may not be
-% projectable.}
-% %
-We now separate the definition of projection based on whether we
-are dealing with rates or probabilities.  We start with choreographies 
-with rates: 
-% can then define the projection of a choreography with rates into the
-% PRISM language.
+% 
+$\interactBase{p}{q} +\ \lambda_1: \CEnd \ +\ \lambda_2: 
+% 
+\ifTE 
+%
+{E}{p}{\CEnd}{\CEnd}$
+% 
+is going to be annotated as
+$\interactBasel{p}{a}{q}+\ \lambda_1:\CEnd\ +\ \lambda_2:
+%
+\ifTEl {E}{}{p}{\CEnd}{\CEnd}$.
+
+%
+We now define projection. Since there are key differences between using probabilities and using rates, we proceed separately. We begin with choreographies that involve rates:
 % 
 \begin{definition}[Projection, CTMC]\label{def:projCTMC} Given an
   annotated choreography with rates $C$, a module $\role p$, and a
@@ -52,7 +66,14 @@ with rates:
           {u_j}q\Big\}_{j\in J}
           \\
           \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
-          \\\\
+          %\\\\
+        \end{array}
+      \end{displaymath}
+
+
+  \begin{displaymath}\small
+        \begin{array}{lr}
+
 
           \proj (\role q,\interactl{p}{a}{\role p_1,\ldots,\role p_n}, \iota)= 
           &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
@@ -63,6 +84,7 @@ with rates:
           {u_j}q\Big\}_{j\in J}
           \\
           \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+
           \\\\
 
           \proj (\role q,\interactl{p}a{\role p_1,\ldots,\role p_n}, \iota)=
@@ -73,16 +95,7 @@ with rates:
 
           \qquad\bigcup_{j} \proj (\role q, C_j, \iota+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
 
-          % \\[2mm]
-          % \qquad\text{such that } \forall i,j.\ \proj (\role{q}, C_i, \iota)= \proj (\role{q}, C_j, \iota)
-        %  \\\\
-
-        \end{array}
-      \end{displaymath}
-
-
-  \begin{displaymath}\small
-        \begin{array}{lr}
+          \\\\
 
           \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
           &  \boxed{\text{if }\role q=\role p}\\[2mm]
@@ -133,31 +146,50 @@ with rates:
         \end{array}
       \end{displaymath}
     \end{definition}
-    We go through the various cases of the definition above. The first
-    three cases handle the projection of an interaction. If we project
-    the first module $\role p$, then we create one command per branch,
-    assigning the corresponding rate. Note that this is possible since
-    we are dealing with rates. The additional variable $s_{\role q}$
-    is the counter for this module and we identify uniquely this
-    interaction. In order to do it consistently for follow up
-    statements of the subterm choreographies, we use the function
-    $\mathsf{nodes}(C)$ which returns the number of nodes of $C$,
-    i.e., the number of steps of the projection function. Obviously,
-    when projecting the next branch we need to consider all other
-    possible branches that may have been already
-    projected. Intuitively, a label and an integer (ranged by $\iota$)
-    identify a node in the abstract syntax tree of a
-    choreography. Also, note that we assume that from a label $a$ we
-    can generate distinct sublabels $a_j$ just by adding some index
-    $j$. For the sake of space, we do not define the function
-    precisely, but we observe that this could also be easily defined
-    via the label annotations. The second case defines the projection
-    of an interaction for one of the modules
-    $\{\role p_1,\ldots,\role p_n\}$. Similarly to the previous case,
-    we define a command for each branch of the interaction. However,
-    the rate of each command is going to be $1$, making sure that each
-    branch synchronises with probability $\lambda_j*1$ (see rule
-    $\mathsf{(P_2)}$ in Figure~\ref{fig:semantics}).
+    We now examine the various cases in the definition above. The
+    first three cases deal with the projection of an interaction. When
+    projecting the first module \( \role p \), we create one command
+    for each branch, assigning the corresponding rate. Note that this
+    is possible because we are dealing with rates: in the case of
+    probabilities this is not possible because we must always ensure
+    that probabilities in a branching sum to 1. The reserved variable
+    \( s_{\role q} \) is the counter for this module, indicating how
+    far we are in the computation. To ensure consistency for
+    subsequent statements of the subterm choreographies, we use the
+    function \( \mathsf{nodes}(C) \), which returns the number of
+    nodes in \( C \), i.e., the number of steps in the projection
+    function. Formally, it can be defined as: 
+    \begin{displaymath}
+      \begin{array}{llll}
+        \mathsf{nodes}(\interact{p}{\role p_1,\ldots,\role p_n})\ =\ 1+\sum_{j\in J}\mathsf{nodes}(C_j)\\
+        \mathsf{nodes}(\ifTE {E}{p}{C_1}{C_2})\ =\ 1+\mathsf{nodes}(C_1)+\mathsf{nodes}(C_2)\\
+        \mathsf{nodes}(X)\ =\ 
+        \mathsf{nodes}(\CEnd)\ =\ 1
+      \end{array}
+    \end{displaymath}
+    % Specifically, it counts the steps (or interaction points) within
+    % each branch of the choreography. In the context of recursive
+    % choreographies, it also counts the recursive steps, helping to
+    % compute how far into the choreography a particular interaction
+    % or branch has progressed.
+
+    Obviously, when projecting the next branch, we need to consider
+    all other possible branches that may have already been
+    projected. Intuitively, a label and an integer (denoted by
+    \( \iota \)) identify a node in the abstract syntax tree of a
+    choreography. Also, from a label \( a \), we generate distinct
+    sublabels \( a_j \) by simply adding an index \( j \).
+    % For the sake of space, we do not define the function precisely,
+    % but we observe that it could also be easily defined via the
+    % label annotations.
+
+    The second case defines the projection of an interaction for one
+    of the modules \( \{\role p_1, \ldots, \role p_n\} \). Similarly
+    to the previous case, we define a command for each branch of the
+    interaction. However, the rate of each command is set to 1,
+    ensuring that each branch synchronises with probability
+    \( \lambda_j \times 1 \) (see rule \( \mathsf{(P_2)} \) in
+    Figure~\ref{fig:semantics}).
     %
     The third case is the one when we are projecting a module that is
     not in the set $\{\role p, \role p_1,\ldots,\role p_n\}$. % Our
@@ -185,51 +217,105 @@ with rates:
     %from Example~\ref{example3}.
 
 \begin{example}\label{example-proj}
-  In order to show how our projection works, consider the following example in which we apply the projection to Example~\ref{example2} and obtain the PRISM modules
-  from Example~\ref{example3}.
+  In order to show how our projection works, consider the following
+  example in which we apply the projection to Example~\ref{example2}
+  and obtain the PRISM modules from Example~\ref{example3}.
   
-  In Example \ref{example2} we defined a recursive choreography in which role \(\role{p}\) interacts with role \(\role{q}\) through two branches. Recall that each branch of the choreography is annotated with a unique label (e.g. \(a\) for the first branch and \(b\) for the second) and that the state of each module is tracked by a counter (e.g. \(s_{\role p}\) and \(s_{\role q}\)). 
-  When applying our projection rules, the following steps occur:\\
- \textbf{Computing the States:} 
- Starting from an initial counter value of \( s_{\role{p}} = 0 \) and \( s_{\role{q}} = 0 \), we apply our projection function to determine the new state values for each interaction. The auxiliary function \(\mathsf{nodes}(C)\) counts the steps within each branch of the choreography. Since each branch in Example \ref{example2} consists of a single interaction followed by a recursive call to \(C\), we can compute the state updates as follows:
+  In Example \ref{example2}, we defined a recursive choreography in
+  which role \(\role{p}\) interacts with role \(\role{q}\) through two
+  branches. Its annotated form can be written as:
+  \begin{displaymath}
+    \begin{array}{lll}
+      C \stackrel{\mathsf{def}}{=} \interactBasel{p}a{q}
+      \left\{
+      \begin{array}{lll}
+        \lambda_1: (x'=1)\&(y'=2);\ C
+        \\
+        \lambda_2: (x'=3)\&(y'=1);\ C
+      \end{array}
+      \right.
+    \end{array}
+  \end{displaymath}
+  % 
+  From label $a$, each branch of the choreography can be referred with
+  a unique label, say \(a_1\) for the first branch and \(a_2\) for the
+  second). Then, the state of each module can be tracked by a counter,
+  say \(s_{\role p}\) and \(s_{\role q}\).
+  %
+  Then, the various steps of projection can be summarised as follows:
+  \begin{enumerate}
+  \item \textbf{Computing the States.} Starting from an initial
+    counter value of \( s_{\role{p}} = 0 \) and
+    \( s_{\role{q}} = 0 \), we apply our projection function to
+    determine the new state values for each interaction. The auxiliary
+    function \(\mathsf{nodes}(C)\) counts the steps within each branch
+    of the choreography. Since each branch in Example \ref{example2}
+    consists of a single interaction followed by a recursive call to
+    \(C\), we can compute the state updates as follows.
  
- For the \(j^{\text{th}}\) branch, the new state is given by:
- \[
- \iota + 1 + \sum_{k=1}^{j-1} \mathsf{nodes}(C_k)
- \]
+    For the \(j^{\text{th}}\) branch, the new state is given by:
+    \[
+      \iota + 1 + \sum_{k=1}^{j-1} \mathsf{nodes}(C_k)
+    \]
  
- Applying this formula to our example:
- \begin{enumerate}
-\item Branch \(\lambda_1\) (label \(a\)):  
-\begin{itemize}
-\item The initial state is \( s_{\role{p}} = 0 \) and \( s_{\role{q}} = 0 \).
-\item Since \(\mathsf{nodes}(C_1) = 1\) (one interaction before the recursive call), we compute:
-      \[
-      s'_{\role{p}} = 0 + 1 = 1, \quad s'_{\role{q}} = 0 + 1 = 1
-      \]
-\item The update rule for this branch is:  
-      \[
-      s_{\role{p}}' = 1, \quad s_{\role{q}}' = 1
-      \]
-\end{itemize}
- \item Branch \(\lambda_2\) (label \(b\)):  
- \begin{itemize}
-\item Again, starting from \( s_{\role{p}} = 0 \) and \( s_{\role{q}} = 0 \).
-\item Since \(\mathsf{nodes}(C_2) = 1\), we compute:
-      \[
-      s'_{\role{p}} = 0 + 2 = 2, \quad s'_{\role{q}} = 0 + 2 = 2
-      \]
-\item The update rule for this branch is:  
-      \[
-      s_{\role{p}}' = 2, \quad s_{\role{q}}' = 2
-      \]
- \end{itemize}
- \end{enumerate}
- Thus, each branch gets a unique state assigned to ensure that only one transition can be taken at a time in the PRISM model. The recursive nature of the choreography ensures that the state counters return to 0 after completing each interaction, allowing the process to repeat.\\ 
-\textbf{Assigning Unique Labels:}
-     For each branch, a unique label is generated from the interaction’s base label. For example, the first branch is assigned label \(a\) and the second \(b\). These labels serve as synchronization points between the interacting modules. In our projection, role \(\role{p}\) (the initiator) uses the corresponding rates (e.g. \(\mu_1\) and \(\mu_2\) for branches 1 and 2) while role \(\role{q}\) uses a fixed rate (1) for synchronization.\\
-\textbf{From Choreography to PRISM:} 
-     As detailed in Example \ref{example3}, the projected PRISM network is obtained by creating commands for each branch in both roles. Each command is guarded by a condition on the state counter (for instance, \(s_{\role p}=0\) for the first branch) and includes the update that sets the counter to the new state computed above. The modules for \(\role{p}\) and \(\role{q}\) synchronize on the unique labels \(a\) and \(b\), and the overall system’s global transitions (e.g. \(F_1\) and \(F_2\)) are derived by the composition of these synchronized commands. The rates of these transitions are computed as the product of the individual rates (i.e., \(\lambda_i = \mu_i * \gamma_i\)).
+    Applying this formula to our example:
+    \begin{enumerate}
+    \item Branch \(\lambda_1\) (label \(a\)):
+      \begin{itemize}
+      \item The initial state is \( s_{\role{p}} = 0 \) and
+        \( s_{\role{q}} = 0 \).
+      \item Since \(\mathsf{nodes}(C_1) = 1\) (one interaction before
+        the recursive call), we compute:
+        \[
+          s'_{\role{p}} = 0 + 1 = 1, \quad s'_{\role{q}} = 0 + 1 = 1
+        \]
+      \item The update rule for this branch is:
+        \[
+          s_{\role{p}}' = 1, \quad s_{\role{q}}' = 1
+        \]
+      \end{itemize}
+    \item Branch \(\lambda_2\) (label \(b\)):
+      \begin{itemize}
+      \item Again, starting from \( s_{\role{p}} = 0 \) and
+        \( s_{\role{q}} = 0 \).
+      \item Since \(\mathsf{nodes}(C_2) = 1\), we compute:
+        \[
+          s'_{\role{p}} = 0 + 2 = 2, \quad s'_{\role{q}} = 0 + 2 = 2
+        \]
+      \item The update rule for this branch is:
+        \[
+          s_{\role{p}}' = 2, \quad s_{\role{q}}' = 2
+        \]
+      \end{itemize}
+    \end{enumerate}
+    Thus, each branch gets a unique state assigned to ensure that only
+    one transition can be taken at a time in the PRISM model. The
+    recursive nature of the choreography ensures that the state
+    counters return to 0 after completing each interaction, allowing
+    the process to repeat.
+
+  \item \textbf{Assigning Unique Labels.}  For each branch, a unique
+    label is generated from the interaction’s base label. For example,
+    the first branch is assigned label \(a\) and the second
+    \(b\). These labels serve as synchronization points between the
+    interacting modules. In our projection, role \(\role{p}\) (the
+    initiator) uses the corresponding rates (e.g. \(\mu_1\) and
+    \(\mu_2\) for branches 1 and 2) while role \(\role{q}\) uses a
+    fixed rate (1) for synchronization.
+
+  \item \textbf{From Choreography to PRISM.} As detailed in
+    Example \ref{example3}, the projected PRISM network is obtained by
+    creating commands for each branch in both roles. Each command is
+    guarded by a condition on the state counter (for instance,
+    \(s_{\role p}=0\) for the first branch) and includes the update
+    that sets the counter to the new state computed above. The modules
+    for \(\role{p}\) and \(\role{q}\) synchronize on the unique labels
+    \(a\) and \(b\), and the overall system’s global transitions
+    (e.g. \(F_1\) and \(F_2\)) are derived by the composition of these
+    synchronized commands. The rates of these transitions are computed
+    as the product of the individual rates (i.e.,
+    \(\lambda_i = \mu_i * \gamma_i\)).
+  \end{enumerate}
 
 \end{example}
 
@@ -272,7 +358,7 @@ with rates:
 
 \smallskip
 
-\mypar{Correctness.} Our projection operations are correct with
+\subsection{Correctness.} Our projection operations are correct with
 respect to the semantics of choreographies and PRISM. In the sequel,
 $S_+$ is a state $S$ extended with the extra variables $s_{\role q}$
 (for each module in a choreography) used by the projection. In the
