@@ -28,32 +28,57 @@ choreography as an {\em annotated choreography}:
   An \emph{annotated choreography} is obtained from the choreography
   syntax by adding a label to each interaction:
   \[C ::= \interactl{p}a{\role p_1,\ldots,\role p_n} \mid\dots\]
-
-  Given a choreography \( C \), its annotated counterpart \( C' \) is
-  obtained by systematically assigning a unique label to each
-  interaction. 
 \end{definition}
-This labelling above ensures that every interaction can be uniquely
-identified and referenced in the corresponding endpoint projection.
-For example, the choreography
-% 
-$\interactBase{p}{q} +\ \lambda_1: \CEnd \ +\ \lambda_2: 
-% 
-\ifTE 
 %
-{E}{p}{\CEnd}{\CEnd}$
-% 
-is going to be annotated as
-$\interactBasel{p}{a}{q}+\ \lambda_1:\CEnd\ +\ \lambda_2:
-%
-\ifTEl {E}{}{p}{\CEnd}{\CEnd}$.
+The following assumption is key for our results: 
+\begin{assumption}
+  Each annotation in an annotated choreography occurs exactly once.
+\end{assumption}
+This assumption above ensures that every interaction can be uniquely
+identified and referenced in the corresponding endpoint projection. In
+the remainder of this paper, we assume that annotations are present
+when relevant.
+
+% As an example, the choreography
+% % 
+% $\interactBase{p}{q} +\ \lambda_1: \CEnd \ +\ \lambda_2: 
+% % 
+% \ifTE 
+% %
+% {E}{p}{\CEnd}{\CEnd}$
+% % 
+% is going to be annotated as
+% $\interactBasel{p}{a}{q}+\ \lambda_1:\CEnd\ +\ \lambda_2:
+% %
+% \ifTEl {E}{}{p}{\CEnd}{\CEnd}$.
 
 %
-We now define projection. Since there are key differences between using probabilities and using rates, we proceed separately. We begin with choreographies that involve rates:
+In order to ensure consistency for subsequent statements of the
+subterm choreographies, our definition of projection uses the function
+\( \mathsf{nodes}(C) \), which returns the number of nodes in \( C
+\). Formally, it is defined as:
+    \begin{displaymath}
+      \begin{array}{llll}
+        \mathsf{nodes}(\interact{p}{\role p_1,\ldots,\role p_n})\ =\ 1+\sum_{j\in J}\mathsf{nodes}(C_j)\\
+        \mathsf{nodes}(\ifTE {E}{p}{C_1}{C_2})\ =\ 1+\mathsf{nodes}(C_1)+\mathsf{nodes}(C_2)\\
+        \mathsf{nodes}(X)\ =\ 
+        \mathsf{nodes}(\CEnd)\ =\ 1
+      \end{array}
+    \end{displaymath}
+    % Specifically, it counts the steps (or interaction points) within
+    % each branch of the choreography. In the context of recursive
+    % choreographies, it also counts the recursive steps, helping to
+    % compute how far into the choreography a particular interaction
+    % or branch has progressed.
+
+We now define projection. Since there are key differences between
+using probabilities and using rates, we proceed separately. We begin
+with choreographies that involve rates:
 % 
 \begin{definition}[Projection, CTMC]\label{def:projCTMC} Given an
-  annotated choreography with rates $C$, a module $\role p$, and a
-  natural number $\iota$, we define the function $\proj$ as:
+  annotated choreography with rates $C$, a module $\role p$, a natural
+  number $\iota$, and $J=\{1,\dots,m\}$, we define the function
+  $\proj$ as:
   \begin{displaymath}\small
         \begin{array}{lr}
 
@@ -66,15 +91,14 @@ We now define projection. Since there are key differences between using probabil
           {u_j}q\Big\}_{j\in J}
           \\
           \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
-          %\\\\
-        \end{array}
-      \end{displaymath}
-
-
-  \begin{displaymath}\small
-        \begin{array}{lr}
-
-
+          
+          \\\\
+          % \end{array}
+          % \end{displaymath}
+          
+          % \begin{displaymath}\small
+          %   \begin{array}{lr}
+          
           \proj (\role q,\interactl{p}{a}{\role p_1,\ldots,\role p_n}, \iota)= 
           &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
           \qquad
@@ -146,42 +170,44 @@ We now define projection. Since there are key differences between using probabil
         \end{array}
       \end{displaymath}
     \end{definition}
-    We now examine the various cases in the definition above. The
-    first three cases deal with the projection of an interaction. When
+    We examine the various cases in the definition above. The first
+    three cases deal with the projection of an interaction. When
     projecting the first module \( \role p \), we create one command
-    for each branch, assigning the corresponding rate. Note that this
-    is possible because we are dealing with rates: in the case of
-    probabilities this is not possible because we must always ensure
-    that probabilities in a branching sum to 1. The reserved variable
-    \( s_{\role q} \) is the counter for this module, indicating how
-    far we are in the computation. To ensure consistency for
-    subsequent statements of the subterm choreographies, we use the
-    function \( \mathsf{nodes}(C) \), which returns the number of
-    nodes in \( C \), i.e., the number of steps in the projection
-    function. Formally, it can be defined as: 
-    \begin{displaymath}
-      \begin{array}{llll}
-        \mathsf{nodes}(\interact{p}{\role p_1,\ldots,\role p_n})\ =\ 1+\sum_{j\in J}\mathsf{nodes}(C_j)\\
-        \mathsf{nodes}(\ifTE {E}{p}{C_1}{C_2})\ =\ 1+\mathsf{nodes}(C_1)+\mathsf{nodes}(C_2)\\
-        \mathsf{nodes}(X)\ =\ 
-        \mathsf{nodes}(\CEnd)\ =\ 1
-      \end{array}
-    \end{displaymath}
-    % Specifically, it counts the steps (or interaction points) within
-    % each branch of the choreography. In the context of recursive
-    % choreographies, it also counts the recursive steps, helping to
-    % compute how far into the choreography a particular interaction
-    % or branch has progressed.
-
-    Obviously, when projecting the next branch, we need to consider
-    all other possible branches that may have already been
-    projected. Intuitively, a label and an integer (denoted by
-    \( \iota \)) identify a node in the abstract syntax tree of a
-    choreography. Also, from a label \( a \), we generate distinct
-    sublabels \( a_j \) by simply adding an index \( j \).
-    % For the sake of space, we do not define the function precisely,
-    % but we observe that it could also be easily defined via the
-    % label annotations.
+    $\commandBase {a_j} {s_{\role q}\!=\! \iota} {\lambda_j:\ s_{\role
+        q}\!=\!  s_{\role q}
+      +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
+    {u_j}{\role q}$ for each branch, assigning the corresponding rate:
+    % 
+    \begin{itemize}
+    \item the label $a_j$ and its uniqueness ensure that all modules
+      take the same branch;
+    \item the guard $s_{\role q}\!=\! \iota$ ensures that these
+      commands are only executable when the system has reached this
+      particular state, identified by the reserved variable
+      $s_{\role q}$;
+    \item the successor state is determined by incrementing
+      $s_{\role q}$, depending on which branch was selected—the
+      function $\mathsf{nodes}$ ensures that every interaction in all
+      branches is assigned to a different counter value, thereby also
+      discarding all branches that are not selected;
+    \item the projected update $\projE {u_j}{\role q}$ acts as a
+      filter on the list of updates in $u_j$, ensuring that only those
+      variables local to $\role q$ are updated.
+    \end{itemize}
+    %
+    %
+    Note that the translation works only when dealing with rates. In
+    the case of probabilities this is not possible because we must
+    always ensure that probabilities in a branching sum to 1.
+    % Obviously, when projecting the next branch, we need to consider
+    % all other possible branches that may have already been
+    % projected. Intuitively, a label and an integer (denoted by
+    % \( \iota \)) identify a node in the abstract syntax tree of a
+    % choreography. Also, from a label \( a \), we generate distinct
+    % sublabels \( a_j \) by simply adding an index \( j \).
+    % % For the sake of space, we do not define the function precisely,
+    % % but we observe that it could also be easily defined via the
+    % % label annotations.
 
     The second case defines the projection of an interaction for one
     of the modules \( \{\role p_1, \ldots, \role p_n\} \). Similarly
@@ -362,21 +388,16 @@ We now define projection. Since there are key differences between using probabil
 \smallskip
 
 \subsection{Correctness.} Our projection operations are correct with
-respect to the semantics of choreographies and PRISM. In the sequel,
-$S_+$ is a state $S$ extended with the extra variables $s_{\role q}$
-(for each module in a choreography) used by the projection. In the
-projection, we utilize alphabetized parallel composition $\pp$,
-wherein modules synchronise solely on labels that appear in both
-modules.
-% Moreover, we say that a choreography is {\em well-formed} if the
-% behaviour in each branching for modules who do not participate to
-% the interaction is identical.
-Additionally, we use the notion of {\em strongly connected} choreography, defined as follows:
-
+respect to the semantics of choreographies and PRISM.
+%
+In order to state our main result, we need to use the notion of {\em
+  strongly connected} choreography, defined as follows:
+%
 \begin{definition}[Strongly Connected Choreography]
   A choreography is said to be \emph{strongly connected} if it satisfies the following conditions:
   \begin{enumerate}
-      \item Each interaction shares at least one module with the subsequent interaction~\cite{CHY12}.
+  \item Each interaction shares at least one module with the
+    subsequent interaction~\cite{CHY12}.
       \item In every branch of a probabilistic choice or an if-then-else involving modules $\role p_1, \ldots, \role p_n$, the first action (if any) of every other module $\role q$ must be an interaction with one of $\role p_1, \ldots, \role p_n$, possibly after unfolding recursive calls.
   \end{enumerate}
 \end{definition}
@@ -415,13 +436,21 @@ $%  X\stackrel{\mathsf{def}}{=}
 \right) $ is not.
 % 
 
-
-
+Then, we can state the following Lemma which identifies some
+uniqueness properties of projections. 
 \begin{lemma}
   The state of a projected choreography is uniquely identified by the
   counter $\iota$.
 \end{lemma}
 
+We are now ready for our main theorem. In the sequel, $S_+$ is
+obtained from state $S$ by extending its domain with the extra
+variables $s_{\role q}$ (one for each module in a choreography) used
+by the projection. Also, in the theorem statement, we assume that such
+variables are initialised to $0$. In the projection, we utilize
+alphabetized parallel composition $\pp$, wherein modules synchronise
+solely on labels that appear in both modules.
+%
 \begin{theorem}[Projection]\label{thm:epp}
   Given an annotated strongly connected choreography $C$, we have that
   $(S,C) \red{\lambda} (S', C')$ iff
@@ -429,7 +458,7 @@ $%  X\stackrel{\mathsf{def}}{=}
   S_{+}'$.
 \end{theorem}
 \begin{proof}
-  The proof proceeds by induction on the syntax of $C$.
+  The proof proceeds by cases on the syntax of $C$.
   \begin{itemize}
   \item $C=\interact{p}{\role p_1,\ldots,\role p_n}$.  By (the only
     applicable) rule \textsf{(Interact)}, we have that
@@ -465,15 +494,15 @@ $%  X\stackrel{\mathsf{def}}{=}
     above.
     %
     Observe that the state of a generated CTMC is uniquely identified
-    by the counter $\iota$.  The uniqueness of the label $a$ makes
-    sure that all and only those modules involved in this interaction
-    synchronise with this action (this shows from the rules in
-    Figure~\ref{fig:semantics}).  As a consequence of this and since
-    choreographies are strongly connected, the commands generated by
-    this step of the translation are such that any state $S_+$ is
-    exclusively going to enable these commands (because of the guard
-    $s_{\role q}=\iota$) which obviously implies that it must be done
-    with rate $\lambda_j$ applying the rules in
+    by the counter $\iota$.  The uniqueness of the label $a$
+    (Assumption~1) makes sure that all and only those modules involved
+    in this interaction synchronise with this action (this shows from
+    the rules in Figure~\ref{fig:semantics}).  As a consequence of
+    this and since choreographies are strongly connected, the commands
+    generated by this step of the translation are such that any state
+    $S_+$ is exclusively going to enable these commands (because of
+    the guard $s_{\role q}=\iota$) which obviously implies that it
+    must be done with rate $\lambda_j$ applying the rules in
     Figure~\ref{fig:semantics}. This argument is key for proving both
     directions of the if and only if.
 
@@ -547,7 +576,6 @@ $%  X\stackrel{\mathsf{def}}{=}
   %   will also be labelled with $\lambda_j$.
 
   % \end{itemize}
-\qed
 \end{proof}
 
 %%% Local Variables: 
