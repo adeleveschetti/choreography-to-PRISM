@@ -1,4 +1,4 @@
-In the introduction, we showed our choreography language via an
+In the previous section, we showed our choreography language via an
 example. We now formalise our language by giving its syntax and
 semantics. For the sake of clarity, we slightly change the syntax with
 respect to the syntax of our tool, adopting a more process-algebra
@@ -322,11 +322,9 @@ be depicted as follows:
 
 \subsection{Other language constructs}
 %
-The attentive reader may have noticed that the syntax used in our
-introductory example includes language constructs that are not part of
-the formal syntax given above. Given the nature of our language, these
-constructs are purely syntactic sugar and can be easily
-encoded. Below, we discuss each of them:
+Our language includes constructs that are not part of the formal syntax defined above. 
+These constructs are purely syntactic sugar and can be easily encoded. 
+Below, we discuss each of them:
 % 
 \begin{itemize}
 
@@ -438,11 +436,12 @@ encoded. Below, we discuss each of them:
       & \quad \mathtt{if}\ (y=1)@\role {q}\ \mathtt{then}\\
       & \quad \quad \interactBase{p}{q}\ 10 : (x'=0)\&(y'=0);\CEnd \\
       & \quad \mathtt{else}\ \CEnd \\
-      & \mathtt{else}\ \mathtt{if}\ (x=1)@\role {p}\ \mathtt{then}\\
-      & \qquad\quad \mathtt{if}\ (y=1)@\role {q}\ \mathtt{then}\\
-      & \qquad\quad \quad \interactBase{p}{q}\ 5 : (x'=100)\&(y'=0);\CEnd \\
-      & \qquad\quad \mathtt{else}\ \CEnd \\
-      & \qquad\ \mathtt{else}\ \CEnd \\
+      & \mathtt{else}\\
+      & \quad \mathtt{if}\ (x=1)@\role {p}\ \mathtt{then}\\
+      & \quad\quad \mathtt{if}\ (y=1)@\role {q}\ \mathtt{then}\\
+      & \quad\quad \quad \interactBase{p}{q}\ 5 : (x'=100)\&(y'=0);\CEnd \\
+      & \quad\quad \mathtt{else}\ \CEnd \\
+      & \quad\ \mathtt{else}\ \CEnd \\
     \end{array}
   \end{displaymath}
   %
@@ -454,9 +453,15 @@ encoded. Below, we discuss each of them:
 
   By incorporating $\allsynchName$, our implementation streamlines the
   specification of non-deterministic synchronisation while preserving
-  its precise operational semantics, ultimately enhancing both clarity
+  its precise operational semantics, ultimately improving both clarity
   and usability in defining distributed interactions.
-
+  Here’s a final comment you can add:  
+Additionally, using the $\allsynchName$ construct is more efficient than manually encoding synchronisation with nested $\mathtt{if\text{-}then\text{-}else}$ statements. 
+As the number of synchronising roles and conditions increases, 
+the depth and complexity of the nested conditionals grow exponentially, 
+making the explicit formulation harder to read, write, and process. 
+In contrast, $\allsynchName$ provides a compact and structured way to express the same logic without the combinatorial explosion of nested conditionals.
+\adele{added the comment on how allsynch is more efficient}
   \marco{add final comment on how allsync is ``more effcient'' since
     the number of nested if -then-else explodes}
 \end{itemize}
