@@ -288,62 +288,61 @@ begin with choreographies that involve rates:
     \end{array}
   \end{displaymath}
   % 
-  From label $a$, each branch of the choreography can be referred with
-  a unique label, say \(a_1\) for the first branch and \(a_2\) for the
-  second). Then, the state of each module can be tracked by a counter,
-  say \(s_{\role p}\) and \(s_{\role q}\).
-  %
-  Then, the various steps of projection can be summarised as follows:
+  From label $a$, each branch of the choreography is identified by a
+  unique label, say \(a_1\) for the first branch and \(a_2\) for the
+  second. Then, the state of each module can be tracked by counters
+  \(s_{\role p}\) and \(s_{\role q}\).
+  % 
+  The various steps of the projection can then be summarised as
+  follows:
   \begin{enumerate}
-  \item \textbf{Computing the States.} Starting from an initial
-    counter value of \( s_{\role{p}} = 0 \) and
-    \( s_{\role{q}} = 0 \), we apply our projection function to
-    determine the new state values for each interaction. The auxiliary
-    function \(\mathsf{nodes}(C)\) counts the steps within each branch
-    of the choreography. Since each branch in Example \ref{example2}
-    consists of a single interaction followed by a recursive call to
-    \(C\), we can compute the state updates as follows.
- 
-    For the \(j^{\text{th}}\) branch, the new state is given by:
-    \[
-      \iota + 1 + \sum_{k=1}^{j-1} \mathsf{nodes}(C_k)
-    \]
- 
+  \item \textbf{Computing the States.} Starting from the initial
+    counter values \( s_{\role{p}} = 0 \) and \( s_{\role{q}} = 0 \),
+    we apply our projection function to determine the new state values
+    for each interaction. The auxiliary function \(\mathsf{nodes}(C)\)
+    counts the steps within each branch of the choreography. Since
+    each branch in Example \ref{example2} consists of a single
+    interaction followed by a recursive call to \(C\), we can compute
+    the state updates as follows.
+    %
+    In particular, for the \(j^{\text{th}}\) branch, the new state is
+    given by $ \iota + 1 + \sum_{k=1}^{j-1} \mathsf{nodes}(C_k) $.
+    %
     Applying this formula to our example:
     \begin{enumerate}
-    \item Branch \(\lambda_1\) (label \(a\)):
+    \item Branch \(\lambda_1\) (label \(a_1\)):
       \begin{itemize}
       \item The initial state is \( s_{\role{p}} = 0 \) and
         \( s_{\role{q}} = 0 \).
-      \item Since \(\mathsf{nodes}(C_1) = 1\) (one interaction before
-        the recursive call), we compute:
+      \item in the first branch ($j=1$), the sum
+        $\sum_{k=1}^{j-1} \mathsf{nodes}(C_k)$ is equal to $0$,
+        therefore
         \[
           s'_{\role{p}} = 0 + 1 = 1, \quad s'_{\role{q}} = 0 + 1 = 1
         \]
-      \item The update rule for this branch is:
-        \[
-          s_{\role{p}}' = 1, \quad s_{\role{q}}' = 1
-        \]
+      \item The update rule for this branch is
+        $s_{\role{p}}' = 1 \quad \& \quad s_{\role{q}}' = 1$
       \end{itemize}
-    \item Branch \(\lambda_2\) (label \(b\)):
+    \item Branch \(\lambda_2\) (label \(a_2\)):
       \begin{itemize}
       \item Again, starting from \( s_{\role{p}} = 0 \) and
         \( s_{\role{q}} = 0 \).
-      \item Since \(\mathsf{nodes}(C_2) = 1\), we compute:
+      \item in the second branch ($j=2$), the sum
+        $\sum_{k=1}^{j-1} \mathsf{nodes}(C_k)$ is equal to $1$ because
+        the first branch contains only the recursive call to
+        $C$. Hence,
         \[
           s'_{\role{p}} = 0 + 2 = 2, \quad s'_{\role{q}} = 0 + 2 = 2
         \]
-      \item The update rule for this branch is:
-        \[
-          s_{\role{p}}' = 2, \quad s_{\role{q}}' = 2
-        \]
+      \item The update rule for this branch is
+        $s_{\role{p}}' = 2\quad\& \quad s_{\role{q}}' = 2$
       \end{itemize}
     \end{enumerate}
-    Thus, each branch gets a unique state assigned to ensure that only
+    Thus, each branch is assigned a unique state to ensure that only
     one transition can be taken at a time in the PRISM model. The
     recursive nature of the choreography ensures that the state
-    counters return to 0 after completing each interaction, allowing
-    the process to repeat.
+    counters return to 0 after each interaction, allowing the process
+    to repeat.
 
   \item \textbf{Assigning Unique Labels.}  For each branch, a unique
     label is generated from the interaction’s base label. In this
