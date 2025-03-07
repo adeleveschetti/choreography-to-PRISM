@@ -26,21 +26,12 @@ follows a similar pattern: every module has as a field % a map
 that accumulates recursion protocols, along with the first and last
 states associated with each recursion. This recursive approach ensures
 a systematic and coherent generation of states within the modules,
-enhancing the efficiency of the projection.
+improving the efficiency of the projection.
 
-One of the differences between formal syntax and implementation is the
-presence of module parameterizations in the latter. Specifically, to
-avoid repeating the same commands for each duplicated module, we
-utilize the notation "\texttt{[i]}" for each module with the same
-behaviour.  This enables us to perform module renaming, a principle
-that also extends to variables and their updates. We report in Listing \ref{ex-syntax} the choreography presented in Example \ref{example2}, but we suppose that the process \texttt{P} performs the same
-branch for each process
-\texttt{Q[i]}. %with our notation we are able to write the commands only once.
-For every module in the system, where the index $i$ ranges from 1 to
-$n$, there exists a corresponding PRISM module. For instance, for the
-example in Listing \ref{ex-syntax}, if $i$ ranges from 1 to 2, we will
-generate the respective PRISM code as depicted in Listing
-\ref{ex-syntax2}.
+\adele{should we keep this part or not since now we already explain the other constructs in Section \ref{sec:chor}?}
+One key difference between the formal syntax and the implementation is the handling of module parameterization. As introduced in Section \ref{sec:chor}, we use parametric modules to avoid redundant command definitions for replicated processes. Specifically, we employ the notation "\texttt{[i]}" to represent multiple instances of a module with the same behavior. This approach allows for module renaming, a principle that also applies to variables and their updates.  
+
+In Listing \ref{ex-syntax}, we revisit the choreography from Example \ref{example2}, assuming that process \texttt{P} executes the same branch for each process \texttt{Q[i]}. Using our notation, we express the commands concisely without repetition. For every module in the system, where the index $i$ ranges from 1 to $n$, a corresponding PRISM module is generated. For instance, in the case where $i$ ranges from 1 to 2, the resulting PRISM code is shown in Listing \ref{ex-syntax2}.
 \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Example of an use of parameterization in the choreographic language},captionpos=b,label={ex-syntax}]
 	C $\coloneqq$ P $\rightarrow$ Q[i] : (+["mu1*gamma[i]"]  "(x'=1)" "(y[i]'=2)" ; C
 			     +["mu2*gamma[i]"]  "(x'=3)" "(y[i]'=1)" ; C )
@@ -74,7 +65,7 @@ This modular approach systematically represents and integrates each system compo
 
 The other differences are primarily syntactic. Updates of the same process are delineated by quotation marks, such as \texttt{"(x'=1)"}. Additionally, rates and probabilities are represented differently. In our choreographic language the rate/probability of interaction is represented as the product of rates/probabilities of each process. For example, in Listing \ref{ex-syntax}, we use \texttt{mu1*gamma[i]} to indicate that the rate of the first process (\texttt{P}) is \texttt{mu1}, while the rate of the second process (\texttt{Q[i]}) is represented by \texttt{gamma[i]}. If multiple processes are interacting, the rate/probability is the product of all corresponding rates/probabilities (\texttt{lambda\_1$\ldots$*lambda\_n}).
 
-In our implementation, we ensure a single enabled action per state by enforcing label uniqueness and unique state-associated variables. This clarity aids in accurately determining enabled actions and enhances system reliability, facilitating analysis and comprehension of system dynamics.
+In our implementation, we ensure a single enabled action per state by enforcing label uniqueness and unique state-associated variables. This clarity aids in accurately determining enabled actions and improves system reliability, facilitating analysis and comprehension of system dynamics.
 
 
 
