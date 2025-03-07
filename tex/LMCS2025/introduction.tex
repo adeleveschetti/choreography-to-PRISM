@@ -116,7 +116,8 @@ The corresponding PRISM translation is:
 \end{array}
 \]
 
-In this translation, the command labeled \(a\) in \(\role{p}\)’s module corresponds to branch \(\lambda_1\) (with rate \(\mu_1\)), and the matching command in \(\role{q}\)’s module (with rate \(\gamma_1\)) sets \(y\) to 2; similarly, label \(b\) corresponds to branch \(\lambda_2\) (with rates \(\mu_2\) for \(\role{p}\) and \(\gamma_2\) for \(\role{q}\)), setting \(x\) and \(y\) appropriately. In each module, after executing an interaction command, a subsequent reset command (with rate 1) restores the state counter to 0, preparing the process for the next recursive interaction. This projection ensures that the local behaviors of the endpoints synchronize correctly according to the global choreography while uniquely tracking the progress of interactions via the state counters.
+In this translation, the command labeled \(a\) in \(\role{p}\)’s module corresponds to branch \(\lambda_1\) (with rate \(\mu_1\)), and the matching command in \(\role{q}\)’s module (with rate \(\gamma_1\)) sets \(y\) to 2; similarly, label \(b\) corresponds to branch \(\lambda_2\) (with rates \(\mu_2\) for \(\role{p}\) and \(\gamma_2\) for \(\role{q}\)), setting \(x\) and \(y\) appropriately. 
+After executing an interaction command in each module, a subsequent reset command (with rate 1) sets the state counters \( s_{\role p} \) and \( s_{\role q} \) to 0 due to the recursive call following the branching. This mechanism ensures that these commands are only executable when the system has reached this particular state.
 
 
 Through our contributions, we aim to provide a smooth workflow for
