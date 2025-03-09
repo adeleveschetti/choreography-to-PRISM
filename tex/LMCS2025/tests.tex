@@ -66,17 +66,23 @@ of the choreographic language.
 This case study describes a simple peer-to-peer protocol based on BitTorrent\footnote{\url{https://www.prismmodelchecker.org/casestudies/peer2peer.php}}. The model comprises a set of clients trying to download a file that has been partitioned into $K$ blocks. Initially, there is one client that has already obtained all of the blocks and $N$ additional clients with no blocks. Each client can download a block from any of the others but they can only attempt four concurrent downloads for each block.\\
 The code we analyze with $K=5$ and $N=4$ is reported in Listing \ref{ex2-code}.
 \begin{lstlisting}[style=chor-color,caption={Choreography for the Peer-To-Peer Protocol},captionpos=b,label={ex2-code}]
-{
 PeerToPeer := Client[i] $\rightarrow$ Client[i]: 
 			(+["rate1*1"]  "(b[i]1'=1)"$\&\&$" " . PeerToPeer
 			 +["rate2*1"]  "(b[i]2'=1)"$\&\&$" " . PeerToPeer
 			 +["rate3*1"]  "(b[i]3'=1)"$\&\&$" " . PeerToPeer
 			 +["rate4*1"]  "(b[i]4'=1)"$\&\&$" " . PeerToPeer
 			 +["rate5*1"]  "(b[i]5'=1)"$\&\&$" " . PeerToPeer)
-}
 \end{lstlisting} 
 
 Part of the generated PRISM code is shown in Listing \ref{ex2-gen} and it is faithful with what is reported in the PRISM documentation. 
+
+In Figure \ref{ex2-res}, we compare the probabilities that all clients (in a model with 4 
+clients: \codeprism{Client1}, $\ldots$, \codeprism{Client4}) have received all blocks 
+within the time interval $0 \leq T \leq 1.5$, as obtained from both our generated model 
+and the model reported in the documentation. This property serves as a benchmark to 
+evaluate whether the generated model preserves the expected behavior of the original 
+specification. In this case, there are no differences in the results or the time required 
+to compute the property.
 \begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Peer-To-Peer Protocol},captionpos=b,label={ex2-gen}]
 module Client1
 	Client1 : [0..1] init 0;
@@ -95,30 +101,17 @@ endmodule
 \end{lstlisting}
 \begin{figure}[h]
    \centering
-   \includegraphics[scale=0.35]{peertopeer.pdf}	
+   \includegraphics[scale=0.3]{peertopeer.pdf}	
    \caption{Probability that clients received all the block before $T$, with $0\leq T \leq 1.5$}
    \label{ex2-res}
    \end{figure}
    
-   In Figure \ref{ex2-res}, we compare the probabilities that all clients (in a model with 4 
-   clients: \codeprism{Client1}, $\ldots$, \codeprism{Client4}) have received all blocks 
-   within the time interval $0 \leq T \leq 1.5$, as obtained from both our generated model 
-   and the model reported in the documentation. This property serves as a benchmark to 
-   evaluate whether the generated model preserves the expected behavior of the original 
-   specification. In this case, there are no differences in the results or the time required 
-   to compute the property.
+  
 
 \mypar{Proof of Work Bitcoin Protocol.}
 In \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, the authors extended the PRISM model checker syntax to incorporate dynamic data types, enhancing its capabilities to model the Proof of Work protocol used in the Bitcoin blockchain \cite{bitcoin}. 
 
-In summary, the code depicts miners engaging in
-  solving PoW, updating their ledgers, and communicating with the
-  network.  The indices $i$ represent the module renaming feature of
-  the choreographic language. Thus, each interaction will be repeated
-  for each miner and hasher of the protocol that we are
-  considering. The protocol works as follows. 
   \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreography for the Proof of Work Bitcoin Protocol},captionpos=b,label={ex3-code}]
-   {
    PoW $\coloneqq$ Hasher[i] $\rightarrow$ Miner[i] :
    (+["mR*hR[i]"]  " " "(b[i]'=createB(b[i],B[i],c[i]))&(c[i]'=c[i]+1)" ; 
       Miner[i] $\rightarrow$ Network : (["rB*1"] "(B[i]'=addBlock(B[i],b[i]))" 
@@ -135,13 +128,19 @@ In summary, the code depicts miners engaging in
             PoW 
          }
          else{PoW}
-      }
-   )
-   } 
+      })
    \end{lstlisting}
-  When synchronising with
-  the hasher, a miner tries to solve a cryptographic
-  puzzle. Successful attempts add a new block to its ledger and update other miners' block sets. Unsuccessful attempts involve extracting a block, updating its ledger and block sets, and continuing the PoW process.
+
+   In summary, the code depicts miners engaging in
+   solving PoW, updating their ledgers, and communicating with the
+   network.  The indices $i$ represent the module renaming feature of
+   the choreographic language. Thus, each interaction will be repeated
+   for each miner and hasher of the protocol that we are
+   considering. The protocol works as follows. 
+   When synchronising with
+   the hasher, a miner tries to solve a cryptographic
+   puzzle. Successful attempts add a new block to its ledger and update other miners' block sets. Unsuccessful attempts involve extracting a block, updating its ledger and block sets, and continuing the PoW process.
+
   \begin{figure}[h]
    \centering
    \includegraphics[scale=0.35]{example.pdf}	
@@ -159,17 +158,14 @@ The PRISM model we created is more verbose than the one in \cite{DBLP:journals/c
 \end{comment}
 We now present the Hybrid Casper Protocol \cite{DBLP:journals/distribledger/GallettaLMV23}. The Hybrid Casper protocol represents a hybrid consensus protocol for blockchains, merging features from both Proof of Work and Proof of Stake protocols. 
 \begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Excerpt of the Hybrid Casper Protocol as a choreography},captionpos=b,label={ex5-code}]
-{
 PoS := Hasher[i] -> Validator[i] :
-(+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"; 
-	if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{$\ldots$}
-	else{
-		Validator[i] -> Vote_Manager :(["1*1"]  "(Votes'=addVote(Votes,b[i],stake[i]))"; PoS)
-	}
- +["hR*1"]  ; if "!isEmpty(set[i])"@Validator[i] then { $\dots$ }
- 							else{ PoS }
- +["rC*1"] "(lastCheck[i]'=extractCheckpoint(listCheckpoints[i],lastCheck[i]))"$\ldots$
-}
+$\quad\qquad$(+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"; 
+$\quad\qquad\quad$if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{$\ldots$}
+$\quad\qquad\quad$else{
+   $\quad\qquad\quad\quad$Validator[i] -> Vote_Manager :(["1*1"]  "(Votes'=addVote(Votes,b[i],stake[i]))"; PoS)}
+$\quad\qquad$+["hR*1"]  ; if "!isEmpty(set[i])"@Validator[i] then { $\dots$ }
+ 							      else{ PoS }
+$\quad\qquad$+["rC*1"] "(lastCheck[i]'=extractCheckpoint(listCheckpoints[i],lastCheck[i]))"$\ldots$
 \end{lstlisting}
 The modeling approach is very similar to the one used for the Proof of Work Bitcoin protocol. Specifically, the Hybrid Casper protocol is represented in PRISM as the parallel composition of $n$ \texttt{Validator} modules, along with the modules \texttt{Vote\_Manager} and \texttt{Network}. Each \texttt{Validator} module closely resembles the \texttt{Miner} module from the previous protocol. The module \texttt{Vote\_Manager} is responsible for storing maps containing votes for each block and computing associated rewards/penalties.
 
@@ -204,11 +200,9 @@ This case study examines the synchronous leader election protocol proposed by It
 For illustration, we considered the case where $ N=4 $ and $ K=8 $, following the PRISM model\footnote{\url{https://www.prismmodelchecker.org/casestudies/synchronous_leader.php}}. We modeled this example in our choreographic language, as shown in Listing~\ref{leader-code}, capturing the protocol's behavior and dynamics.
 
 \begin{lstlisting}[style=chor-color,caption={Choreography for the Synchronous Leader Election Protocol.},captionpos=b,label={leader-code}]
-   {
-   Election := 
-      allSynch{ j in [1...4]
-         Process[j] : (true -> "1/K" : "(p[i]'=0)&(v[i]'=0)&(u[i]'=true)" 
-                                 + $\ldots$ + "1/K" : "(p[i]'=0)&(v[i]'=7)&(u[i]'=true)") }.
+   Election := allSynch{ j in [1...4]
+                     Process[j] : (true -> "1/K" : "(p[i]'=0)&(v[i]'=0)&(u[i]'=true)"+ 
+                                 $\ldots$ + "1/K" : "(p[i]'=0)&(v[i]'=7)&(u[i]'=true)") }.
       allSynch{
          Counter : ("(c<N-1)" -> "1" : "(c'=c+1)")
          Counter : ("(c=N-1)" -> "1" : "(c'=c)")
@@ -228,10 +222,7 @@ For illustration, we considered the case where $ N=4 $ and $ K=8 $, following th
             $\ldots$               
          } . END)
       }
-      else{
-         Counter -> Process[i] : (["1*1"] "(c'=1)" "(u[i]'=false)&(v[i]'=0)&(p[i]'=0)"  . Election)
-      }      
-   }
+      else{ Counter -> Process[i] : (["1*1"] "(c'=1)" "(u[i]'=false)&(v[i]'=0)&(p[i]'=0)"  . Election)}      
    \end{lstlisting} 
    While the generated model (Listing \ref{leader-prism}) successfully replicates the functionality of 
    the PRISM repository model, a key difference lies in the modular 
@@ -239,7 +230,12 @@ For illustration, we considered the case where $ N=4 $ and $ K=8 $, following th
    Specifically, the generated model adopts a simplified modular design by 
    grouping transitions more compactly in certain modules, such as the \codeprism{Counter} module. 
    This simplification reduces redundancy and may improve readability without altering the correctness or outcomes of the protocol. Importantly, this structural refinement does not impact the behavior of the system, as the generated model remains functionally equivalent to the original PRISM repository model, as displayed in Figure \ref{leader-res}.
-
+   \begin{figure}[h]
+      \centering
+      \includegraphics[scale=0.3]{leader.pdf}	
+      \caption{The probability of electing a leader within $L$ rounds, with $1 \leq L \leq 10$}
+      \label{leader-res}
+      \end{figure}
    \begin{lstlisting}[style=prism-color,caption={Generated PRISM program},captionpos=b,label={leader-prism}]
    module Counter
       Counter : [0..4] init 0;
@@ -275,14 +271,7 @@ For illustration, we considered the case where $ N=4 $ and $ K=8 $, following th
    endmodule
    $\ldots$
    \end{lstlisting}
-
-
-   \begin{figure}[h]
-      \centering
-      \includegraphics[scale=0.35]{leader.pdf}	
-      \caption{The probability of electing a leader within $L$ rounds, with $1 \leq L \leq 10$}
-      \label{leader-res}
-      \end{figure}
+  
 \begin{comment}
 \subsection{Problems}
 \label{sec:problems}
@@ -324,7 +313,6 @@ This case study explores the dining cryptographers protocol introduced by Chaum~
 
 To illustrate the protocol, we examined the case where $N=3$, using the PRISM model\footnote{\url{https://www.prismmodelchecker.org/casestudies/dining_cryptographers.php}} reported in the official repository. We expressed this scenario in our choreographic language, as shown in Listing~\ref{dc-code}.
 \begin{lstlisting}[style=chor-color,caption={Choreography for the Dining Cryptographers Protocol.},captionpos=b,label={dc-code}]
-{
    Crypto := if "(coin[i]=0)"@crypt[i] then {
                   crypt[i] -> crypt[i] : (+["0.5*1"] "(coin[i]'=1)" . Crypto2
                                              +["0.5*1"] "(coin[i]'=2)" . Crypto2) 
@@ -346,7 +334,6 @@ To illustrate the protocol, we examined the case where $N=3$, using the PRISM mo
    Crypto3 := allSynch{ j in [1...3]
                   crypt[j] : (true -> "1" : "true;" )
                }.END
-}
 \end{lstlisting}
 This code defines a choreography model using three distinct choreographies (\texttt{Crypto}, \texttt{Crypto2}, and \texttt{Crypto3}) to avoid redundancy and optimize the code structure. By using separate choreographies, we can reuse common logic without rewriting the entire code.
 The initial probabilistic branching demonstrates the use of recursion, where both branches of the probabilistic transition ultimately lead to the same state. 
