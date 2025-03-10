@@ -1,6 +1,6 @@
-Understanding and programming distributed systems 
+Programming distributed systems
 %
-present significant challenges due to their inherent complexity, and
+presents significant challenges due to their inherent complexity, and
 the possibility of obscure edge cases arising from their complex
 interactions.
 %
@@ -13,8 +13,7 @@ One of the primary challenges in understanding distributed systems
 lies in the fact that the interactions between multiple components can
 diverge from the sum of their individual behaviours. This emergent
 behaviour often results from subtle interactions between nodes, making
-it difficult to predict and reason about the system's overall
-behaviour.
+it difficult to predict and reason about a system's overall behaviour.
 
 PRISM \cite{PRISMdoc} is a probabilistic model checker that offers a
 specialised language for the specification and verification of
@@ -52,7 +51,7 @@ specifications providing a global perspective on the communication
 patterns inherent in a distributed system. 
 %
 In particular, instead of relying on a central orchestrator or
-controller to dictate the behavior of individual components,
+controller to dictate the behaviour of individual components,
 choreographic languages focus on defining communication patterns and
 protocols that govern the interactions between entities.
 %
@@ -67,7 +66,8 @@ composition of decentralised interactions. % Within the context of
 Although, this approach can be used for a proper subset of distributed
 systems, choreographies have proven to be very useful in many use
 cases since they facilitate the automatic generation of decentralised
-implementations that are inherently correct-by-construction.
+implementations that are inherently
+correct-by-construction~\cite{CM13}.
 %
 % \marco{Choreographies particularly excel in environments characterised
 %   by deterministic communication patterns and clear sequencing of
@@ -84,28 +84,35 @@ concurrent probabilistic systems.
 %on features such as conditional statements or probabilistic branching, our language's limitations become 
 %apparent, limiting accurate representation of these complex dynamics.}
 % with clarity and precision. 
-Additionally, we introduce a compiler capable of translating protocols
+Additionally, we introduce a compiler for translating protocols
 described in this language into PRISM code. This choreographic
 approach not only simplifies the modelling process but also ensures
-integration with PRISM's powerful analysis capabilities. 
+integration with PRISM's powerful analysis capabilities.
 
-To illustrate the idea with concrete commands, consider the following example. We have a choreographic language specification: 
-
+To illustrate the idea with concrete commands, consider the following
+example. We have a choreographic language specification:
+%
 \[
-\begin{array}{lll}
-C \stackrel{\mathsf{def}}{=} \interactBase{p}{q}
-\left\{
-\begin{array}{lll}
-\lambda_1: \ (x'=1)\ \&\ (y'=2);\ C\\[1mm]
-\lambda_2: \ (x'=3)\ \&\ (y'=1);\ C
-\end{array}
-\right.
-\end{array}
+  \begin{array}{lll}
+    C \stackrel{\mathsf{def}}{=} \interactBase{p}{q}
+    \left\{
+    \begin{array}{lll}
+      \lambda_1: \ (x'=1)\ \&\ (y'=2);\ C\\[1mm]
+      \lambda_2: \ (x'=3)\ \&\ (y'=1);\ C
+    \end{array}
+    \right.
+  \end{array}
 \]
-
-This specification recursively defines an interaction where process \(\role{p}\) communicates with process \(\role{q}\), choosing either branch \(\lambda_1\) (setting \(x\) to 1 and \(y\) to 2) or branch \(\lambda_2\) (setting \(x\) to 3 and \(y\) to 1). 
-The projection mechanism translates this global choreography into local PRISM modules by annotating each interaction with a unique label (e.g., \(a\) for \(\lambda_1\) and \(b\) for \(\lambda_2\)) and using a state counter (e.g., \(s_{\role p}\) and \(s_{\role q}\)) to uniquely identify each step. 
-The corresponding PRISM translation is:
+%
+This specification recursively defines an interaction where process
+\(\role{p}\) communicates with process \(\role{q}\), choosing either
+branch \(\lambda_1\) (setting \(x\) to 1 and \(y\) to 2) or branch
+\(\lambda_2\) (setting \(x\) to 3 and \(y\) to 1).  The projection
+mechanism translates this global choreography into local PRISM modules
+by annotating each interaction with a unique label (e.g., \(a\) for
+\(\lambda_1\) and \(b\) for \(\lambda_2\)) and using a state counter
+(e.g., \(s_{\role p}\) and \(s_{\role q}\)) to uniquely identify each
+step.  The corresponding PRISM translation is:
 
 \[
 \begin{array}{llll}
