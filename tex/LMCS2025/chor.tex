@@ -75,8 +75,7 @@ $S: \Var \rightarrow\Val$.
 %
 
 Given a state, substitution allows to modify some of its values:
-%
-\begin{definition}
+  \begin{definition}
   Given a value $v$ and a variable $x$, a substitution $[v/x]$ is an
   update on a state, i.e., $\small S[v/x] (y)= \left\{
   \begin{array}{ll} 
@@ -84,12 +83,12 @@ Given a state, substitution allows to modify some of its values:
     S(y) & \text{ otherwise}
   \end{array} \right.
 $
-%
 Then, the update $S[u]$ is such that
 $S[x'=E\ \&\ u] = S[\eval ES/x][u]$ and $S[x'=E] = S[\eval ES/x]$,
 where $\eval ES$ is an unspecified (decidable) evaluation of the
 expression $E$ in the state $S$.
 \end{definition}
+
 
 Given the set of all possible states $\mathcal S$ and a set of
 definitions $\defin$ of the form $X\stackrel{\mathsf{def}}{=} C$, we
@@ -164,7 +163,7 @@ given by the relation $\red{}$.
 \end{comment}
 \begin{figure}[!h]
   \centering
-\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1,scale=0.6, every node/.style={scale=0.6}]
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1,scale=0.8, every node/.style={scale=0.8}]
   %uncomment if require: \path (0,300); %set diagram left start at 0, and has height of 300
   %Shape: Circle [id:dp1991798631163264] 
   \draw   (219,126) .. controls (219,112.19) and (230.19,101) .. (244,101) .. controls (257.81,101) and (269,112.19) .. (269,126) .. controls (269,139.81) and (257.81,151) .. (244,151) .. controls (230.19,151) and (219,139.81) .. (219,126) -- cycle ;
@@ -248,7 +247,7 @@ be depicted as follows:
 \end{comment}
 \begin{figure}[h]
   \centering
-  \begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1,scale=0.6, every node/.style={scale=0.6}]
+  \begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1,scale=0.8, every node/.style={scale=0.8}]
     %uncomment if require: \path (0,448); %set diagram left start at 0, and has height of 448
     %Shape: Circle [id:dp07054898935668796] 
     \draw   (235,148) .. controls (235,131.98) and (247.98,119) .. (264,119) .. controls (280.02,119) and (293,131.98) .. (293,148) .. controls (293,164.02) and (280.02,177) .. (264,177) .. controls (247.98,177) and (235,164.02) .. (235,148) -- cycle ;

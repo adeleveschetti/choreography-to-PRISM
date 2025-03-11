@@ -18,10 +18,10 @@ generated PRISM files can be found in our online repository
 \cite{repository}.
 
 
-\mypar{A Modified thinkteam Protocol.}
-In this modified version of the thinkteam protocol introduced in the earlier sections, we extend the protocol to involve generalised interactions with possible many receivers. Specifically, the \texttt{CheckOut} process now communicates with two users simultaneously, \texttt{User1} and \texttt{User2} each tasked with performing distinct actions upon access to the file. 
+\paragraph{A Modified thinkteam Protocol.}
+In this modified version of the thinkteam protocol introduced in the earlier sections, we extend the protocol to involve generalised interactions with possible many receivers. Specifically, the \codechor{CheckOut} process now communicates with two users simultaneously, \codechor{User1} and \codechor{User2} each tasked with performing distinct actions upon access to the file. 
 
- In the first branch, \texttt{User1} increments the variable \texttt{x} by 1, while \texttt{User2} decrements the variable \texttt{y} by 1. Conversely, in the second branch, the roles are reversed, with \texttt{User1} decrementing \texttt{x} and \texttt{User2} incrementing \texttt{y}.
+ In the first branch, \codechor{User1} increments the variable \codechor{x} by 1, while \codechor{User2} decrements the variable \codechor{y} by 1. Conversely, in the second branch, the roles are reversed, with \codechor{User1} decrementing \codechor{x} and \codechor{User2} incrementing \codechor{y}.
 
  \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreography for the Modified thinkteam Protocol},captionpos=b,label={ex1-chor}]
    C0 := CheckOut $\rightarrow$ User1, User2 : (+["1*lambda"] " " "(x=x+1)"  "(y=y-1)"; C1
@@ -31,8 +31,15 @@ In this modified version of the thinkteam protocol introduced in the earlier sec
  \end{lstlisting}
 
  Part of the generated PRISM model is reported in Listing \ref{ex1-gen}. 
-
- \begin{lstlisting}[style=prism-color,caption={Generated PRISM program},captionpos=b,label={ex1-gen}]
+The model less clear compared to its
+choreographic representation, primarily due to its lack of sequential
+structure and lower readability.  In the PRISM model, the absence of a
+clear sequential structure makes it harder to follow the flow of
+interactions between components, 
+since module definitions and transition labels can be more challenging
+to read and comprehend compared to the concise and structured nature
+of the choreographic language.\newpage
+\begin{lstlisting}[style=prism-color,caption={Part of the generated PRISM model for the Modified thinkteam Protocol},captionpos=b,label={ex1-gen}]
    module CheckOut
       CheckOut_STATE : [0..2] init 0;
       [MMHOL]  (CheckOut_STATE=0) -> 1 :  (CheckOut_STATE'=1);
@@ -51,31 +58,35 @@ $\ldots$
       [XWSAO]  (User2_STATE=2) -> theta : (User2_STATE'=2);
 endmodule
 \end{lstlisting}
-The generated PRISM model appears less clear compared to its
-choreographic representation, primarily due to its lack of sequential
-structure and lower readability.  In the PRISM model, the absence of a
-clear sequential structure makes it harder to follow the flow of
-interactions between components, 
-since module definitions and transition labels can be more challenging
-to read and comprehend compared to the concise and structured nature
-of the choreographic language.
 
 
-
-\mypar{Simple Peer-To-Peer Protocol}
-This case study describes a simple peer-to-peer protocol based on BitTorrent\footnote{\url{https://www.prismmodelchecker.org/casestudies/peer2peer.php}}. The model comprises a set of clients trying to download a file that has been partitioned into $K$ blocks. Initially, there is one client that has already obtained all of the blocks and $N$ additional clients with no blocks. Each client can download a block from any of the others but they can only attempt four concurrent downloads for each block.\\
-The code we analyze with $K=5$ and $N=4$ is reported in Listing \ref{ex2-code}.
+\paragraph{Simple Peer-To-Peer Protocol}
+This case study describes a simple peer-to-peer protocol based on BitTorrent\footnote{\url{https://www.prismmodelchecker.org/casestudies/peer2peer.php}}. The model comprises a set of clients trying to download a file that has been partitioned into $K$ blocks. Initially, there is one client that has already obtained all of the blocks and $N$ additional clients with no blocks. Each client can download a block from any of the others but they can only attempt four concurrent downloads for each block. The code we analyze with $K=5$ and $N=4$ is reported in Listing \ref{ex2-code}.
 \begin{lstlisting}[style=chor-color,caption={Choreography for the Peer-To-Peer Protocol},captionpos=b,label={ex2-code}]
-PeerToPeer := Client[i] $\rightarrow$ Client[i]: 
-			(+["rate1*1"]  "(b[i]1'=1)"$\&\&$" " . PeerToPeer
-			 +["rate2*1"]  "(b[i]2'=1)"$\&\&$" " . PeerToPeer
-			 +["rate3*1"]  "(b[i]3'=1)"$\&\&$" " . PeerToPeer
-			 +["rate4*1"]  "(b[i]4'=1)"$\&\&$" " . PeerToPeer
-			 +["rate5*1"]  "(b[i]5'=1)"$\&\&$" " . PeerToPeer)
+PeerToPeer := Client[i] $\rightarrow$ Client[i]: (+["rate1*1"]  "(b[i]1'=1)"$\&\&$" " . PeerToPeer
+			                   +["rate2*1"]  "(b[i]2'=1)"$\&\&$" " . PeerToPeer
+			                   +["rate3*1"]  "(b[i]3'=1)"$\&\&$" " . PeerToPeer
+			                   +["rate4*1"]  "(b[i]4'=1)"$\&\&$" " . PeerToPeer
+			                   +["rate5*1"]  "(b[i]5'=1)"$\&\&$" " . PeerToPeer)
 \end{lstlisting} 
 
+\begin{lstlisting}[style=prism-color,caption={Part of the generated PRISM program for the Peer-To-Peer Protocol},captionpos=b,label={ex2-gen}]
+   module Client1
+      Client1 : [0..1] init 0;
+      b11 : [0..1]; 
+      b12 : [0..1]; 
+      b13 : [0..1]; 
+      b14 : [0..1]; 
+      b15 : [0..1]; 
+   
+      [] (Client1=0)  $\rightarrow$ rate1 : (b11'=1)$\&$(Client1'=0); 
+      [] (Client1=0)  $\rightarrow$ rate2 : (b12'=1)$\&$(Client1'=0); 
+      [] (Client1=0)  $\rightarrow$ rate3 : (b13'=1)$\&$(Client1'=0); 
+      [] (Client1=0)  $\rightarrow$ rate4 : (b14'=1)$\&$(Client1'=0); 
+      [] (Client1=0)  $\rightarrow$ rate5 : (b15'=1)$\&$(Client1'=0); 
+   endmodule
+   \end{lstlisting}
 Part of the generated PRISM code is shown in Listing \ref{ex2-gen} and it is faithful with what is reported in the PRISM documentation. 
-
 In Figure \ref{ex2-res}, we compare the probabilities that all clients (in a model with 4 
 clients: \codeprism{Client1}, $\ldots$, \codeprism{Client4}) have received all blocks 
 within the time interval $0 \leq T \leq 1.5$, as obtained from both our generated model 
@@ -83,32 +94,17 @@ and the model reported in the documentation. This property serves as a benchmark
 evaluate whether the generated model preserves the expected behavior of the original 
 specification. In this case, there are no differences in the results or the time required 
 to compute the property.
-\begin{lstlisting}[style=prism-color,caption={Generated PRISM program for the Peer-To-Peer Protocol},captionpos=b,label={ex2-gen}]
-module Client1
-	Client1 : [0..1] init 0;
-	b11 : [0..1]; 
-	b12 : [0..1]; 
-	b13 : [0..1]; 
-	b14 : [0..1]; 
-	b15 : [0..1]; 
 
-	[] (Client1=0)  $\rightarrow$ rate1 : (b11'=1)$\&$(Client1'=0); 
-	[] (Client1=0)  $\rightarrow$ rate2 : (b12'=1)$\&$(Client1'=0); 
-	[] (Client1=0)  $\rightarrow$ rate3 : (b13'=1)$\&$(Client1'=0); 
-	[] (Client1=0)  $\rightarrow$ rate4 : (b14'=1)$\&$(Client1'=0); 
-	[] (Client1=0)  $\rightarrow$ rate5 : (b15'=1)$\&$(Client1'=0); 
-endmodule
-\end{lstlisting}
 \begin{figure}[h]
    \centering
    \includegraphics[scale=0.3]{peertopeer.pdf}	
-   \caption{Probability that clients received all the block before $T$, with $0\leq T \leq 1.5$}
+   \caption{Probability that clients received all the blocks before $T$, with $0\leq T \leq 1.5$}
    \label{ex2-res}
    \end{figure}
-   
-  
 
-\mypar{Proof of Work Bitcoin Protocol.}
+ 
+
+\paragraph{Proof of Work Bitcoin Protocol.}
 In \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, the authors extended the PRISM model checker syntax to incorporate dynamic data types, enhancing its capabilities to model the Proof of Work protocol used in the Bitcoin blockchain \cite{bitcoin}. 
 
   \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreography for the Proof of Work Bitcoin Protocol},captionpos=b,label={ex3-code}]
@@ -150,14 +146,14 @@ In \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, the authors extended the 
 The PRISM model we created is more verbose than the one in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, mainly because we consistently generate the else branch for if-then-else expressions, resulting in a higher number of instructions. Despite this, the experimental results for block creation probability within a bound time $T$ (Figure \ref{ex3-res}) remain unaffected. Any discrepancies between the original and generated models are due to inherent variations in the simulation-based calculation of probability.
 
 
-\mypar{Hybrid Casper Protocol.}
+\paragraph{Hybrid Casper Protocol.}
 \begin{comment}
 \begin{wrapfigure}[12]{l}{4.5cm}
 	\includegraphics[scale=0.45]{ethereum.pdf}	
 \end{wrapfigure} 
 \end{comment}
 We now present the Hybrid Casper Protocol \cite{DBLP:journals/distribledger/GallettaLMV23}. The Hybrid Casper protocol represents a hybrid consensus protocol for blockchains, merging features from both Proof of Work and Proof of Stake protocols. 
-\begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Excerpt of the Hybrid Casper Protocol as a choreography},captionpos=b,label={ex5-code}]
+\begin{lstlisting}[style=chor-color,tabsize=2,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},	caption={Excerpt of choreography for the Hybrid Casper Protocol},captionpos=b,label={ex5-code}]
 PoS := Hasher[i] -> Validator[i] :
 $\quad\qquad$(+["mR*1"]  "(b[i]'=createB(b[i],L[i],c[i]))&(c[i]'=c[i]+1)"; 
 $\quad\qquad\quad$if "!(mod(getHeight(b[i]),EpochSize)=0)"@Validator[i] then{$\ldots$}
@@ -167,7 +163,7 @@ $\quad\qquad$+["hR*1"]  ; if "!isEmpty(set[i])"@Validator[i] then { $\dots$ }
  							      else{ PoS }
 $\quad\qquad$+["rC*1"] "(lastCheck[i]'=extractCheckpoint(listCheckpoints[i],lastCheck[i]))"$\ldots$
 \end{lstlisting}
-The modeling approach is very similar to the one used for the Proof of Work Bitcoin protocol. Specifically, the Hybrid Casper protocol is represented in PRISM as the parallel composition of $n$ \texttt{Validator} modules, along with the modules \texttt{Vote\_Manager} and \texttt{Network}. Each \texttt{Validator} module closely resembles the \texttt{Miner} module from the previous protocol. The module \texttt{Vote\_Manager} is responsible for storing maps containing votes for each block and computing associated rewards/penalties.
+The modeling approach is very similar to the one used for the Proof of Work Bitcoin protocol. Specifically, the Hybrid Casper protocol is represented in PRISM as the parallel composition of $n$ \codechor{Validator} modules, along with the modules \codechor{Vote\_Manager} and \codechor{Network}. Each \codechor{Validator} module closely resembles the \codechor{Miner} module from the previous protocol. The module \codechor{Vote\_Manager} is responsible for storing maps containing votes for each block and computing associated rewards/penalties.
 
 The choreographic model for this example is reported in Listing \ref{ex5-code}. 
 The code resembles that of the Proof of Work protocol, but each validator can either create a new block, receive blocks from the network module, or determine if it's eligible to vote for specific blocks.
@@ -194,12 +190,12 @@ For lack of space, we detailed only part of the code, the complete model can be 
 
 
 
-\mypar{Synchronous Leader Election.}
+\paragraph{Synchronous Leader Election.}
 This case study examines the synchronous leader election protocol proposed by Itai $\&$ Rodeh~\cite{IR90}, designed to elect a leader in a ring of $N$ processors by exchanging messages. The protocol operates in rounds, where each processor selects a random ID from $\{1, \ldots, K\}$, circulates it around the ring, and determines if a unique maximum ID exists. If so, the processor with this ID becomes the leader; otherwise, the process repeats in the next round.
 
 For illustration, we considered the case where $ N=4 $ and $ K=8 $, following the PRISM model\footnote{\url{https://www.prismmodelchecker.org/casestudies/synchronous_leader.php}}. We modeled this example in our choreographic language, as shown in Listing~\ref{leader-code}, capturing the protocol's behavior and dynamics.
 
-\begin{lstlisting}[style=chor-color,caption={Choreography for the Synchronous Leader Election Protocol.},captionpos=b,label={leader-code}]
+\begin{lstlisting}[style=chor-color,caption={Choreography for the Synchronous Leader Election Protocol},captionpos=b,label={leader-code}]
    Election := allSynch{ j in [1...4]
                      Process[j] : (true -> "1/K" : "(p[i]'=0)&(v[i]'=0)&(u[i]'=true)"+ 
                                  $\ldots$ + "1/K" : "(p[i]'=0)&(v[i]'=7)&(u[i]'=true)") }.
@@ -236,7 +232,7 @@ For illustration, we considered the case where $ N=4 $ and $ K=8 $, following th
       \caption{The probability of electing a leader within $L$ rounds, with $1 \leq L \leq 10$}
       \label{leader-res}
       \end{figure}
-   \begin{lstlisting}[style=prism-color,caption={Generated PRISM program},captionpos=b,label={leader-prism}]
+   \begin{lstlisting}[style=prism-color,caption={Part of the generated PRISM model for the Synchronous Leader Election Protocol},captionpos=b,label={leader-prism}]
    module Counter
       Counter : [0..4] init 0;
       c : [0..N-1] init 0;
@@ -282,17 +278,17 @@ The reasons are various, in this section we try to outline the problems.
 \begin{itemize}
 \item \textbf{Asynchronous Leader Election}\footnote{\url{https://www.prismmodelchecker.org/casestudies/asynchronous_leader.php}}:
  processes synchronize with the same label but the conditions are different.
- We include in our language the \texttt{it-then-else} statement but we do not allow 
- the \texttt{if-then} (without the \texttt{else}). This is done because in this way, we do not 
+ We include in our language the \codechor{it-then-else} statement but we do not allow 
+ the \codechor{if-then} (without the \codechor{else}). This is done because in this way, we do not 
  incur in deadlock states.
 \item  \textbf{Probabilistic Broadcast Protocols}\footnote{\url{https://www.prismmodelchecker.org/casestudies/prob_broadcast.php}}:
  also in this case, the problem are the labels of the synchronizations.
  In fact, all the processes synchornize with the same label on every actions.
  This is not possible in our language, since a label is unique for every synchronization between two (or more) processes.
 \item \textbf{Cyclic Server Polling System}\footnote{\url{https://www.prismmodelchecker.org/casestudies/polling.php}}:
- in this model, the processes \texttt{station$_i$} do two different things in the same state.
- More precicely, at the state 0 (\texttt{s$_i$=0}), the processes may synchornize with the process
- \texttt{server} or may change their state without any synchronization.
+ in this model, the processes \codechor{station$_i$} do two different things in the same state.
+ More precicely, at the state 0 (\codechor{s$_i$=0}), the processes may synchornize with the process
+ \codechor{server} or may change their state without any synchronization.
  In out language, this cannot be formalized since the synchronization is a branch action,
  so there should be another option with a synchronization.
 
@@ -303,7 +299,7 @@ The reasons are various, in this section we try to outline the problems.
 
 
 
-\mypar{Dining Cryptographers}
+\paragraph{Dining Cryptographers}
 The generated model for this example does not faithfully model the original one. We chose 
 to include it in the paper to demonstrate the limitations of our approach, 
 specifically in cases where the abstraction may not fully capture the behavior of the original protocol. 
@@ -312,7 +308,7 @@ highlighting areas for improvement in the model generation process.
 This case study explores the dining cryptographers protocol introduced by Chaum~\cite{Cha88}, which allows a group of $N$ cryptographers to determine whether their master has anonymously paid for dinner without revealing the identity of the payer. The protocol functions by having each cryptographer flip a fair coin and share the outcome with their right-hand neighbor. Each cryptographer then publicly declares whether the two coins they observe—one they flipped and one received from the left—match or differ. If a cryptographer is the payer, they deliberately alter their response. The final count of "agree" statements follows a predictable pattern: for an odd number of cryptographers, an odd count indicates that one of them paid, while an even count means the master paid. This pattern reverses for an even number of participants.
 
 To illustrate the protocol, we examined the case where $N=3$, using the PRISM model\footnote{\url{https://www.prismmodelchecker.org/casestudies/dining_cryptographers.php}} reported in the official repository. We expressed this scenario in our choreographic language, as shown in Listing~\ref{dc-code}.
-\begin{lstlisting}[style=chor-color,caption={Choreography for the Dining Cryptographers Protocol.},captionpos=b,label={dc-code}]
+\begin{lstlisting}[style=chor-color,caption={Choreography for the Dining Cryptographers Protocol},captionpos=b,label={dc-code}]
    Crypto := if "(coin[i]=0)"@crypt[i] then {
                   crypt[i] -> crypt[i] : (+["0.5*1"] "(coin[i]'=1)" . Crypto2
                                              +["0.5*1"] "(coin[i]'=2)" . Crypto2) 
@@ -335,12 +331,12 @@ To illustrate the protocol, we examined the case where $N=3$, using the PRISM mo
                   crypt[j] : (true -> "1" : "true;" )
                }.END
 \end{lstlisting}
-This code defines a choreography model using three distinct choreographies (\texttt{Crypto}, \texttt{Crypto2}, and \texttt{Crypto3}) to avoid redundancy and optimize the code structure. By using separate choreographies, we can reuse common logic without rewriting the entire code.
+This code defines a choreography model using three distinct choreographies (\codechor{Crypto}, \codechor{Crypto2}, and \codechor{Crypto3}) to avoid redundancy and optimize the code structure. By using separate choreographies, we can reuse common logic without rewriting the entire code.
 The initial probabilistic branching demonstrates the use of recursion, where both branches of the probabilistic transition ultimately lead to the same state. 
 
 In fact, in the generated PRISM model in Listing~\ref{dc-code-prism}, we can observe that from the initial state \codeprism{crypt1 = 0}, we transition to two possible branches where \codeprism{crypt1 = 1} regardless of whether coin1 takes the value 1 or 2. This is a result of the recursion in the choreography, where both branches follow the same recursive path that leads to \codeprism{crypt1 = 1}. The transitions in the model are shown in the following PRISM code, where both transitions have a 50$\%$ probability of either setting \codeprism{coin1 = 1} or \codeprism{coin1 = 2}, and both lead to the same updated state \codeprism{crypt1 = 1}. Note that the code provided here only shows a part of the generated PRISM model. The code for \codeprism{crypt2} and \codeprism{crypt3} follows the same structure.
 
-\begin{lstlisting}[style=prism-color,caption={Generated PRISM program},captionpos=b,label={dc-code-prism},escapechar=|]
+\begin{lstlisting}[style=prism-color,caption={Part of the generated PRISM model for the Dining Cryptographers Protocol},captionpos=b,label={dc-code-prism},escapechar=|]
    $\ldots$
    module crypt1
    crypt1 : [0..2] init 0;
