@@ -371,18 +371,18 @@ Below, we discuss each of them:
   can be further facilitated by introducing syntactic sugar that
   allows iteration over the set of indices that parameterise these
   modules. To this end, our language implementation includes the
-  construct $\textsf{foreach } (k\ \textit{op}\ i)\ u@A[i]; C$.
+  construct $\textsf{foreach } (k\ \textit{op}\ i)\ u@A[i]$, which can
+  be used in front of and update $u$ to parameterise with respect to
+  multiple instances of the same type of variable over different
+  modules.
   %
-  This construct can be used in front of an assignment $u$
-
-  \marco{awaiting for Adele to get back to me}
-
-  to enables the expression $E(i)$ to range over a set of indices,
-  which can then be used in $u@A[i]$. In essence, it provides a more
-  concise and readable way to express operations over multiple indexed
-  modules. Notably, this construct can be encoded explicitly by
-  numbering the modules manually, provided that the indices are known
-  at compile time rather than determined dynamically at runtime.
+  The construct enables the expression $(k\ \textit{op}\ i)$ to range
+  over a set of indices, which can then be used in $u@A[i]$. In
+  essence, it provides a more concise and readable way to express
+  operations over multiple indexed modules. Notably, this construct
+  can be encoded explicitly by numbering the modules manually,
+  provided that the indices are known at compile time rather than
+  determined dynamically at runtime.
 
 \item {\em Non-deterministic Synchronisation.}  Our implementation
   supports the non-deterministic synchronisation language construct
@@ -396,7 +396,7 @@ Below, we discuss each of them:
   distribution/rate).
 
   A key advantage of this construct is its compactness and readability
-  in specifying synchronised interactions. For instance, in a scenario
+  in specifying this type of interactions. For instance, in a scenario
   where two roles, $\role{p}$ and $\role{q}$, participate in a
   synchronised exchange, the $\allsynchName$ syntax allows for a
   concise definition of conditions under which each role updates its
@@ -404,13 +404,13 @@ Below, we discuss each of them:
   through nested conditional constructs.
   % 
   Despite its expressiveness, the $\allsynchName$ construct does not
-  introduce new semantics but serves as syntactic sugar for an
+  introduce a new semantics but serves as syntactic sugar for an
   equivalent formulation.  In fact, $\allsynchName$ can be rewritten
   using a series of nested $\mathtt{if\text{-}then\text{-}else}$
   constructs, ensuring that the synchronisation conditions are met
   before proceeding with the interaction. For example, consider the
   non-deterministic synchronisation between roles $\role p$ and
-  $\role q$: 
+  $\role q$:
   %
   \begin{displaymath}
     % C \stackrel{\mathsf{def}}{=} 
@@ -451,19 +451,15 @@ Below, we discuss each of them:
   $\mathtt{if\text{-}then\text{-}else}$ makes explicit the conditional
   execution of interactions but retains the same behaviour.
 
-  By incorporating $\allsynchName$, our implementation streamlines the
-  specification of non-deterministic synchronisation while preserving
-  its precise operational semantics, ultimately improving both clarity
-  and usability in defining distributed interactions.
-  Here’s a final comment you can add:  
-Additionally, using the $\allsynchName$ construct is more efficient than manually encoding synchronisation with nested $\mathtt{if\text{-}then\text{-}else}$ statements. 
-As the number of synchronising roles and conditions increases, 
-the depth and complexity of the nested conditionals grow exponentially, 
-making the explicit formulation harder to read, write, and process. 
-In contrast, $\allsynchName$ provides a compact and structured way to express the same logic without the combinatorial explosion of nested conditionals.
-\adele{added the comment on how allsynch is more efficient}
-  \marco{add final comment on how allsync is ``more effcient'' since
-    the number of nested if -then-else explodes}
+  The $\allsynchName$ construct is more efficient (in terms of code)
+  than manually encoding synchronisation with nested
+  $\mathtt{if\text{-}then\text{-}else}$ statements.  As the number of
+  synchronising roles and conditions increases, the depth and
+  complexity of the nested conditionals grow exponentially, making the
+  explicit formulation harder to read, write, and process.  In
+  contrast, $\allsynchName$ provides a compact and structured way to
+  express the same logic without the combinatorial explosion of nested
+  conditionals.
 \end{itemize}
 
   

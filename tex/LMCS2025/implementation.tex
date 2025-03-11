@@ -28,8 +28,8 @@ states associated with each recursion. This recursive approach ensures
 a systematic and coherent generation of states within the modules,
 improving the efficiency of the projection.
 
-\adele{should we keep this part or not since now we already explain the other constructs in Section \ref{sec:chor}?}
-One key difference between the formal syntax and the implementation is the handling of module parameterization. As introduced in Section \ref{sec:chor}, we use parametric modules to avoid redundant command definitions for replicated processes. Specifically, we employ the notation "\texttt{[i]}" to represent multiple instances of a module with the same behavior. This approach allows for module renaming, a principle that also applies to variables and their updates.  
+% \adele{should we keep this part or not since now we already explain the other constructs in Section \ref{sec:chor}?}
+% One key difference between the formal syntax and the implementation is the handling of module parameterization. As introduced in Section \ref{sec:chor}, we use parametric modules to avoid redundant command definitions for replicated processes. Specifically, we employ the notation "\texttt{[i]}" to represent multiple instances of a module with the same behavior. This approach allows for module renaming, a principle that also applies to variables and their updates.  
 
 In Listing \ref{ex-syntax}, we revisit the choreography from Example \ref{example2}, assuming that process \texttt{P} executes the same branch for each process \texttt{Q[i]}. Using our notation, we express the commands concisely without repetition. For every module in the system, where the index $i$ ranges from 1 to $n$, a corresponding PRISM module is generated. For instance, in the case where $i$ ranges from 1 to 2, the resulting PRISM code is shown in Listing \ref{ex-syntax2}.
 \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Example of an use of parameterization in the choreographic language},captionpos=b,label={ex-syntax}]
