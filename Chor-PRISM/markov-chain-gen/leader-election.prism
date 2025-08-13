@@ -1,61 +1,77 @@
 dtmc
-const N = 3;
+const N = 4;
 const K = 3;
-module Process2
-Process2 : [0..4] init 0;
-p2 : [0..2] init 0;
-v2 : [0..2] init 0;
-u2 : boolean init true;
-[QKKXY]  (Process2=0) -> 0.333 : (p2'=1)&(v2'=1)&(u2'=true)&(Process2'=1)+0.333 : (p2'=0)&(v2'=0)&(u2'=true)&(Process2'=1)+0.333 : (p2'=2)&(v2'=2)&(u2'=true)&(Process2'=1)
-[URRKM] (Process2=1)&(u2)&(p2=v1)&(c<1) -> 1 : (u2'=false)&(v2'=v1)&(p2'=0)&(Process2'=0);
-[YIPOU] (Process2=1)&!((u2)&(p2=v1)&(c<1))&(u2)&(p2!=v1)&(c<1) -> 1 : (u2'=true)&(v2'=v1)&(Process2'=0);
-[WWXHW] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&(!u2)&(c<1) -> 1 : (u2'=false)&(v2'=v1)&(Process2'=0);
-[ZOMFK] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((!u2)&(c<1))&(!u2)&(c<1) -> 1 : (u2'=false)&(v2'=v1)&(Process2'=0);
-[FKICU] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((!u2)&(c<1))&!((!u2)&(c<1))&(u2)&(p2!=v1)&(c<1) -> 1 : (u2'=true)&(v2'=v1)&(Process2'=0);
-[JLCMW] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((!u2)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2!=v1)&(c<1))&(u2)&(p2=v1)&(c<1) -> 1 : (u2'=false)&(v2'=v1)&(p2'=0)&(Process2'=0);
-[DCOGT] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((!u2)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((u2)&(p2=v1)&(c<1))&(!u2)&(c<1) -> 1 : (u2'=false)&(v2'=v1)&(Process2'=0);
-[AQFHB] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((!u2)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((u2)&(p2=v1)&(c<1))&!((!u2)&(c<1))&(u2)&(p2=v1)&(c=1) -> 1 : (u2'=false)&(v2'=0)&(p2'=0)&(Process2'=2);
-[LYTRQ] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((!u2)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((u2)&(p2=v1)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2=v1)&(c=1))&(u2)&(p2!=v1)&(c=1) -> 1 : (u2'=true)&(v2'=0)&(p2'=0)&(Process2'=2);
-[BFKOM] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((!u2)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((u2)&(p2=v1)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2=v1)&(c=1))&!((u2)&(p2!=v1)&(c=1))&(!u2)&(c=1) -> 1 : (u2'=true)&(v2'=0)&(p2'=0)&(Process2'=2);
-[IWIIL] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((!u2)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((u2)&(p2=v1)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2=v1)&(c=1))&!((u2)&(p2!=v1)&(c=1))&!((!u2)&(c=1))&(!u2)&(c=1) -> 1 : (u2'=false)&(v2'=0)&(Process2'=2);
-[BUCBO] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((!u2)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((u2)&(p2=v1)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2=v1)&(c=1))&!((u2)&(p2!=v1)&(c=1))&!((!u2)&(c=1))&!((!u2)&(c=1))&(u2)&(p2!=v1)&(c=1) -> 1 : (u2'=true)&(v2'=0)&(p2'=0)&(Process2'=2);
-[NKQIY] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((!u2)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((u2)&(p2=v1)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2=v1)&(c=1))&!((u2)&(p2!=v1)&(c=1))&!((!u2)&(c=1))&!((!u2)&(c=1))&!((u2)&(p2!=v1)&(c=1))&(u2)&(p2=v1)&(c=1) -> 1 : (u2'=false)&(v2'=0)&(p2'=0)&(Process2'=2);
-[VHVUB] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((!u2)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((u2)&(p2=v1)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2=v1)&(c=1))&!((u2)&(p2!=v1)&(c=1))&!((!u2)&(c=1))&!((!u2)&(c=1))&!((u2)&(p2!=v1)&(c=1))&!((u2)&(p2=v1)&(c=1)) -> 1 : (u2'=false)&(v2'=0)&(Process2'=2);
-[WXGWR] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((!u2)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((u2)&(p2=v1)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2=v1)&(c=1))&!((u2)&(p2!=v1)&(c=1))&!((!u2)&(c=1))&!((!u2)&(c=1))&!((u2)&(p2!=v1)&(c=1))&true -> 1 : (u2'=false)&(v2'=0)&(p2'=0)&(Process2'=3);
-[MMDEY] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((!u2)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((u2)&(p2=v1)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2=v1)&(c=1))&!((u2)&(p2!=v1)&(c=1))&!((!u2)&(c=1))&!((!u2)&(c=1))&!((u2)&(p2!=v1)&(c=1)) -> 1 :  (Process2'=4);
-[QRZOQ] (Process2=1)&!((u2)&(p2=v1)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((!u2)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2!=v1)&(c<1))&!((u2)&(p2=v1)&(c<1))&!((!u2)&(c<1))&!((u2)&(p2=v1)&(c=1))&!((u2)&(p2!=v1)&(c=1))&!((!u2)&(c=1))&!((!u2)&(c=1))&!((u2)&(p2!=v1)&(c=1))&!(true) -> 1 : (u2'=false)&(v2'=0)&(p2'=0)&(Process2'=0);
+const L;
+module Counter
+Counter : [0..4] init 0;
+c : [0..N-1] init 0;
+[YQBDX] (Counter = 0)&(c<N-1) -> 1 : (c'=c+1)&(Counter'=1);
+[YQBDX] (Counter = 0)&(c=N-1) -> 1 : (c'=c)&(Counter'=1);
+[ELTMI] (Counter=2)&u1 | u2 | u3 | u4 -> 1 : (c'=c)&(Counter'=3);
+[AWUQP] (Counter = 3)&null -> 1 : (c'=c)&(Counter'=4);
+[LJTIP] (Counter=2)&!(u1 | u2 | u3 | u4) -> 1 : (c'=1)&(Counter'=0);
 endmodule
 module Process1
 Process1 : [0..4] init 0;
-p1 : [0..2] init 0;
-v1 : [0..2] init 0;
-u1 : boolean init true;
-[QKKXY]  (Process1=0) -> 0.333 : (p1'=0)&(v1'=0)&(u1'=true)&(Process1'=1)+0.333 : (p1'=1)&(v1'=1)&(u1'=true)&(Process1'=-1)+0.333 : (p1'=2)&(v1'=2)&(u1'=true)&(Process1'=-1)
-[URRKM] (Process1=1)&(u1)&(p1=v2)&(c<1) -> 1 : (u1'=false)&(v1'=v2)&(p1'=0)&(Process1'=0);
-[YIPOU] (Process1=1)&!((u1)&(p1=v2)&(c<1))&(u1)&(p1!=v2)&(c<1) -> 1 : (u1'=true)&(v1'=v2)&(Process1'=0);
-[WWXHW] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&(u1)&(p1=v2)&(c<1) -> 1 : (u1'=false)&(v1'=v2)&(p1'=0)&(Process1'=0);
-[ZOMFK] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((u1)&(p1=v2)&(c<1))&(u1)&(p1!=v2)&(c<1) -> 1 : (u1'=true)&(v1'=v2)&(Process1'=0);
-[FKICU] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&(!u1)&(c<1) -> 1 : (u1'=false)&(v1'=v2)&(Process1'=0);
-[JLCMW] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((!u1)&(c<1))&(!u1)&(c<1) -> 1 : (u1'=false)&(v1'=v2)&(Process1'=0);
-[DCOGT] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&(!u1)&(c<1) -> 1 : (u1'=false)&(v1'=v2)&(Process1'=0);
-[AQFHB] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&(u1)&(p1=v2)&(c=1) -> 1 : (u1'=false)&(v1'=0)&(p1'=0)&(Process1'=2);
-[LYTRQ] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((u1)&(p1=v2)&(c=1))&(u1)&(p1!=v2)&(c=1) -> 1 : (u1'=true)&(v1'=0)&(p1'=0)&(Process1'=2);
-[BFKOM] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((u1)&(p1=v2)&(c=1))&!((u1)&(p1!=v2)&(c=1))&(u1)&(p1=v2)&(c=1) -> 1 : (u1'=false)&(v1'=0)&(p1'=0)&(Process1'=2);
-[IWIIL] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((u1)&(p1=v2)&(c=1))&!((u1)&(p1!=v2)&(c=1))&!((u1)&(p1=v2)&(c=1))&(u1)&(p1!=v2)&(c=1) -> 1 : (u1'=true)&(v1'=0)&(p1'=0)&(Process1'=2);
-[BUCBO] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((u1)&(p1=v2)&(c=1))&!((u1)&(p1!=v2)&(c=1))&!((u1)&(p1=v2)&(c=1))&!((u1)&(p1!=v2)&(c=1))&(!u1)&(c=1) -> 1 : (u1'=false)&(v1'=0)&(Process1'=2);
-[NKQIY] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((u1)&(p1=v2)&(c=1))&!((u1)&(p1!=v2)&(c=1))&!((u1)&(p1=v2)&(c=1))&!((u1)&(p1!=v2)&(c=1))&!((!u1)&(c=1))&(!u1)&(c=1) -> 1 : (u1'=false)&(v1'=0)&(Process1'=2);
-[VHVUB] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((u1)&(p1=v2)&(c=1))&!((u1)&(p1!=v2)&(c=1))&!((u1)&(p1=v2)&(c=1))&!((u1)&(p1!=v2)&(c=1))&!((!u1)&(c=1))&!((!u1)&(c=1)) -> 1 : (u1'=false)&(v1'=0)&(Process1'=2);
-[WXGWR] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((u1)&(p1=v2)&(c=1))&!((u1)&(p1!=v2)&(c=1))&!((u1)&(p1=v2)&(c=1))&!((u1)&(p1!=v2)&(c=1))&!((!u1)&(c=1))&true -> 1 : (u1'=false)&(v1'=0)&(p1'=0)&(Process1'=3);
-[MMDEY] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((u1)&(p1=v2)&(c=1))&!((u1)&(p1!=v2)&(c=1))&!((u1)&(p1=v2)&(c=1))&!((u1)&(p1!=v2)&(c=1))&!((!u1)&(c=1)) -> 1 :  (Process1'=4);
-[QRZOQ] (Process1=1)&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((u1)&(p1=v2)&(c<1))&!((u1)&(p1!=v2)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((!u1)&(c<1))&!((u1)&(p1=v2)&(c=1))&!((u1)&(p1!=v2)&(c=1))&!((u1)&(p1=v2)&(c=1))&!((u1)&(p1!=v2)&(c=1))&!((!u1)&(c=1))&!(true) -> 1 : (u1'=false)&(v1'=0)&(p1'=0)&(Process1'=0);
+p1 : [0..K-1] init 0;
+v1 : [0..K-1] init 0;
+u1 : bool;
+[BKKXT](Process1 = 0) -> 1/K:(p1'=0)&(v1'=0)&(u1'=true)&(Process1'=1) + 1/K:(p1'=1)&(v1'=1)&(u1'=true)&(Process1'=1) + 1/K:(p1'=2)&(v1'=2)&(u1'=true)&(Process1'=1) + 1/K:(p1'=2)&(v1'=3)&(u1'=true)&(Process1'=1) + 1/K:(p1'=2)&(v1'=4)&(u1'=true)&(Process1'=1) + 1/K:(p1'=2)&(v1'=5)&(u1'=true)&(Process1'=1) + 1/K:(p1'=2)&(v1'=6)&(u1'=true)&(Process1'=1) + 1/K:(p1'=2)&(v1'=7)&(u1'=true)&(Process1'=1);
+[YQBDX] (Process1 = 1)&u1&!(p1=2)&(c<N-1) -> 1 : (u1'=true)&(v1'=v2)&(Process1'=2);
+[YQBDX] (Process1 = 1)&u1&(p1=2)&(c<N-1) -> 1 : (u1'=false)&(v1'=v2)&(p1'=0)&(Process1'=2);
+[YQBDX] (Process1 = 1)&!u1&(c<N-1) -> 1 : (u1'=false)&(v1'=v2)&(Process1'=2);
+[YQBDX] (Process1 = 1)&u1&!(p1=v2)&(c=N-1) -> 1 : (u1'=true)&(v1'=0)&(p1'=0)&(Process1'=2);
+[YQBDX] (Process1 = 1)&u1&(p1=v2)&(c=N-1) -> 1 : (u1'=false)&(v1'=0)&(p1'=0)&(Process1'=2);
+[YQBDX] (Process1 = 1)&!u1&(c=N-1) -> 1 : (u1'=false)&(v1'=0)&(Process1'=2);
+[ELTMI] (Process1=2) -> 1 : (u1'=false)&(v1'=0)&(p1'=0)&(Process1'=3);
+[AWUQP] (Process1 = 3)&null -> 1 :  &(Process1'=4);
+[LJTIP] (Process1=2) -> 1 : (u1'=false)&(v1'=0)&(p1'=0)&(Process1'=0);
 endmodule
-module Counter
-Counter : [0..2] init 0;
-c : [0..1] init 0;
-[URRKM]  (Counter=0) -> 1 : (c'=c+1)&(Counter'=0);
-[AQFHB]  (Counter=0) -> 1 : (c'=c)&(Counter'=0);
-[LYTRQ]  (Counter=0) -> 1 : (c'=c)&(Counter'=-1);
-[WXGWR] (Counter=0)&(u1)|(u2) -> 1 : (c'=c)&(Counter'=1);
-[MMDEY]  (Counter=1) -> 1 :  (Counter'=2);
-[QRZOQ] (Counter=0)&!((u1)|(u2)) -> 1 : (c'=1)&(Counter'=0);
+module Process2
+Process2 : [0..4] init 0;
+p2 : [0..K-1] init 0;
+v2 : [0..K-1] init 0;
+u2 : bool;
+[BKKXT](Process2 = 0) -> 1/K:(p2'=0)&(v2'=0)&(u2'=true)&(Process2'=1) + 1/K:(p2'=1)&(v2'=1)&(u2'=true)&(Process2'=1) + 1/K:(p2'=2)&(v2'=2)&(u2'=true)&(Process2'=1) + 1/K:(p2'=2)&(v2'=3)&(u2'=true)&(Process2'=1) + 1/K:(p2'=2)&(v2'=4)&(u2'=true)&(Process2'=1) + 1/K:(p2'=2)&(v2'=5)&(u2'=true)&(Process2'=1) + 1/K:(p2'=2)&(v2'=6)&(u2'=true)&(Process2'=1) + 1/K:(p2'=2)&(v2'=7)&(u2'=true)&(Process2'=1);
+[YQBDX] (Process2 = 1)&u2&!(p2=v1)&(c<N-1) -> 1 : (u2'=true)&(v2'=v1)&(Process2'=2);
+[YQBDX] (Process2 = 1)&u2&(p2=v1)&(c<N-1) -> 1 : (u2'=false)&(v2'=v1)&(p2'=0)&(Process2'=2);
+[YQBDX] (Process2 = 1)&!u2&(c<N-1) -> 1 : (u2'=false)&(v2'=v2)&(Process2'=2);
+[YQBDX] (Process2 = 1)&u1&!(p2=v1)&(c=N-1) -> 1 : (u2'=true)&(v2'=0)&(p2'=0)&(Process2'=2);
+[YQBDX] (Process2 = 1)&u2&(p2=v1)&(c=N-1) -> 1 : (u2'=false)&(v2'=0)&(p2'=0)&(Process2'=2);
+[YQBDX] (Process2 = 1)&!u2&(c=N-1) -> 1 : (u2'=false)&(v2'=0)&(Process2'=2);
+[ELTMI] (Process2=2) -> 1 : (u2'=false)&(v2'=0)&(p2'=0)&(Process2'=3);
+[AWUQP] (Process2 = 3)&null -> 1 :  &(Process2'=4);
+[LJTIP] (Process2=2) -> 1 : (u2'=false)&(v2'=0)&(p2'=0)&(Process2'=0);
+endmodule
+module Process3
+Process3 : [0..4] init 0;
+p3 : [0..K-1] init 0;
+v3 : [0..K-1] init 0;
+u3 : bool;
+[BKKXT](Process3 = 0) -> 1/K:(p3'=0)&(v3'=0)&(u3'=true)&(Process3'=1) + 1/K:(p3'=1)&(v3'=1)&(u3'=true)&(Process3'=1) + 1/K:(p3'=2)&(v3'=2)&(u3'=true)&(Process3'=1) + 1/K:(p3'=2)&(v3'=3)&(u3'=true)&(Process3'=1) + 1/K:(p3'=2)&(v3'=4)&(u3'=true)&(Process3'=1) + 1/K:(p3'=2)&(v3'=5)&(u3'=true)&(Process3'=1) + 1/K:(p3'=2)&(v3'=6)&(u3'=true)&(Process3'=1) + 1/K:(p3'=2)&(v3'=7)&(u3'=true)&(Process3'=1);
+[YQBDX] (Process3 = 1)&u3&!(p3=v1)&(c<N-1) -> 1 : (u3'=true)&(v3'=v1)&(Process3'=2);
+[YQBDX] (Process3 = 1)&u3&(p3=v1)&(c<N-1) -> 1 : (u3'=false)&(v3'=v1)&(p3'=0)&(Process3'=2);
+[YQBDX] (Process3 = 1)&!u3&(c<N-1) -> 1 : (u3'=false)&(v3'=v3)&(Process3'=2);
+[YQBDX] (Process3 = 1)&u1&!(p3=v1)&(c=N-1) -> 1 : (u3'=true)&(v3'=0)&(p3'=0)&(Process3'=2);
+[YQBDX] (Process3 = 1)&u3&(p3=v1)&(c=N-1) -> 1 : (u3'=false)&(v3'=0)&(p3'=0)&(Process3'=2);
+[YQBDX] (Process3 = 1)&!u3&(c=N-1) -> 1 : (u3'=false)&(v3'=0)&(Process3'=2);
+[ELTMI] (Process3=2) -> 1 : (u3'=false)&(v3'=0)&(p3'=0)&(Process3'=3);
+[AWUQP] (Process3 = 3)&null -> 1 :  &(Process3'=4);
+[LJTIP] (Process3=2) -> 1 : (u3'=false)&(v3'=0)&(p3'=0)&(Process3'=0);
+endmodule
+module Process4
+Process4 : [0..4] init 0;
+p4 : [0..K-1] init 0;
+v4 : [0..K-1] init 0;
+u4 : bool;
+[BKKXT](Process4 = 0) -> 1/K:(p4'=0)&(v4'=0)&(u4'=true)&(Process4'=1) + 1/K:(p4'=1)&(v4'=1)&(u4'=true)&(Process4'=1) + 1/K:(p4'=2)&(v4'=2)&(u4'=true)&(Process4'=1) + 1/K:(p4'=2)&(v4'=3)&(u4'=true)&(Process4'=1) + 1/K:(p4'=2)&(v4'=4)&(u4'=true)&(Process4'=1) + 1/K:(p4'=2)&(v4'=5)&(u4'=true)&(Process4'=1) + 1/K:(p4'=2)&(v4'=6)&(u4'=true)&(Process4'=1) + 1/K:(p4'=2)&(v4'=7)&(u4'=true)&(Process4'=1);
+[YQBDX] (Process4 = 1)&u4&!(p4=v1)&(c<N-1) -> 1 : (u4'=true)&(v4'=v1)&(Process4'=2);
+[YQBDX] (Process4 = 1)&u4&(p4=v1)&(c<N-1) -> 1 : (u4'=false)&(v4'=v1)&(p4'=0)&(Process4'=2);
+[YQBDX] (Process4 = 1)&!u4&(c<N-1) -> 1 : (u4'=false)&(v4'=v4)&(Process4'=2);
+[YQBDX] (Process4 = 1)&u1&!(p4=v1)&(c=N-1) -> 1 : (u4'=true)&(v4'=0)&(p4'=0)&(Process4'=2);
+[YQBDX] (Process4 = 1)&u4&(p4=v1)&(c=N-1) -> 1 : (u4'=false)&(v4'=0)&(p4'=0)&(Process4'=2);
+[YQBDX] (Process4 = 1)&!u4&(c=N-1) -> 1 : (u4'=false)&(v4'=0)&(Process4'=2);
+[ELTMI] (Process4=2) -> 1 : (u4'=false)&(v4'=0)&(p4'=0)&(Process4'=3);
+[AWUQP] (Process4 = 3)&null -> 1 :  &(Process4'=4);
+[LJTIP] (Process4=2) -> 1 : (u4'=false)&(v4'=0)&(p4'=0)&(Process4'=0);
 endmodule

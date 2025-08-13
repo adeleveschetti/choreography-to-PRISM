@@ -16,6 +16,7 @@ public class ListPair {
     }
 
     public void add(Triplet<String, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> el) {
+
         data.add(el);
     }
 
@@ -26,6 +27,11 @@ public class ListPair {
     public void set(int index, Triplet<String, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> el) {
         data.set(index, el);
     }
+
+    public void remove(int index) {
+        data.remove(index);
+    }
+
 
     public ArrayList<Triplet<String, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>>> getList() {
         return data;
@@ -181,25 +187,32 @@ public class ListPair {
             boolean flag = false;
             boolean firstEqual = false;
             boolean rateEqual = el.getFirst().equals(pair.getFirst());
-
+            int counter1 = 0;
             for (int i = 0; i < el.getSecond().size(); i++) {
-                if (el.getSecond().get(i).getFirst().equals(pair.getSecond().get(i).getFirst()) && (int) el.getSecond().get(i).getSecond() != (int) pair.getSecond().get(i).getSecond()) {
+                /*if (el.getSecond().get(i).getFirst().equals(pair.getSecond().get(i).getFirst()) && (int) el.getSecond().get(i).getSecond() != (int) pair.getSecond().get(i).getSecond()) {
                     flag = true;
                 }
                 if (!flag && i == el.getSecond().size() - 1) {
                     firstEqual = true;
+                }*/
+                if (el.getSecond().get(i).getFirst().equals(pair.getSecond().get(i).getFirst()) && (int) el.getSecond().get(i).getSecond() == (int) pair.getSecond().get(i).getSecond()) {
+                    counter1++;
                 }
             }
             flag = false;
+            int counter2 = 0;
             for (int i = 0; i < el.getThird().size(); i++) {
-                if (el.getThird().get(i).getFirst().equals(pair.getThird().get(i).getFirst()) && (int) el.getThird().get(i).getSecond() != (int) pair.getThird().get(i).getSecond()) {
+                if (el.getThird().get(i).getFirst().equals(pair.getThird().get(i).getFirst()) && (int) el.getThird().get(i).getSecond() == (int) pair.getThird().get(i).getSecond()) {
                     flag = true;
+                    counter2 ++;
                 }
-                if (!flag && i == el.getThird().size() - 1 && rateEqual && firstEqual) {
+                /*if (counter==el.getThird().size() && i == el.getThird().size() - 1 && rateEqual && firstEqual) {
                     return true;
-                }
+                }*/
             }
-
+            if(counter1 == el.getSecond().size() && counter2 == el.getThird().size() && rateEqual){
+                return true;
+            }
         }
 
         return false;

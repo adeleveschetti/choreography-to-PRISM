@@ -2,142 +2,67 @@
 preamble
 "dtmc"
 
-"const N = 3;"
+"const N = 4;"
 "const K = 3;"
+"const L;"
 endpreamble
 
-n = 1;
+n = 4;
 
-Process1 ->
-Process1 : "p1 : [0..2] init 0;", "v1 : [0..2] init 0;", "u1 : boolean init true;" ;
-
-Process2 ->
-Process2 : "p2 : [0..2] init 0;", "v2 : [0..2] init 0;", "u2 : boolean init true;" ;
-
-
+Process[i] -> i in [1...n]
+Process[i] : "p[i] : [0..K-1] init 0;", "v[i] : [0..K-1] init 0;", "u[i] : bool;" ;
 
 Counter ->
-Counter : "c : [0..1] init 0;" ;
+Counter : "c : [0..N-1] init 0;" ;
 
 {
-Election := Process1 -> Process2 : (+["0.333*0.333"] "(p1'=0)&(v1'=0)&(u1'=true)" "(p2'=1)&(v2'=1)&(u2'=true)" . Election2
-                                    +["0.333*0.333"] "(p1'=0)&(v1'=0)&(u1'=true)" "(p2'=0)&(v2'=0)&(u2'=true)" . Election2
-                                    +["0.333*0.333"] "(p1'=0)&(v1'=0)&(u1'=true)" "(p2'=2)&(v2'=2)&(u2'=true)" . Election2
-                                    +["0.333*0.333"] "(p1'=1)&(v1'=1)&(u1'=true)" "(p2'=1)&(v2'=1)&(u2'=true)" . Election2
-                                    +["0.333*0.333"] "(p1'=1)&(v1'=1)&(u1'=true)" "(p2'=0)&(v2'=0)&(u2'=true)" . Election2
-                                    +["0.333*0.333"] "(p1'=1)&(v1'=1)&(u1'=true)" "(p2'=2)&(v2'=2)&(u2'=true)" . Election2
-                                    +["0.333*0.333"] "(p1'=2)&(v1'=2)&(u1'=true)" "(p2'=2)&(v2'=2)&(u2'=true)" . Election2
-                                    +["0.333*0.333"] "(p1'=2)&(v1'=2)&(u1'=true)" "(p2'=1)&(v2'=1)&(u2'=true)" . Election2
-                                    +["0.333*0.333"] "(p1'=2)&(v1'=2)&(u1'=true)" "(p2'=0)&(v2'=0)&(u2'=true)" . Election2
-                                )
 
-Election := allsynch(Process[j]) | j=1,..,N :
-                (
-                    + ["1/K"] "(p[i]'=0)&(v[i]'=0)&(u[i]'=true)"
-                    + ["1/K"] "(p[i]'=1)&(v[i]'=1)&(u[i]'=true)"
-                    + ["1/K"] "(p[i]'=2)&(v[i]'=2)&(u[i]'=true)"
-                )
+Election := allSynch{ j in [1...4]
+                            Process[j] : (true -> "1/K" : "(p[i]'=0)&(v[i]'=0)&(u[i]'=true)"  + "1/K" : "(p[i]'=1)&(v[i]'=1)&(u[i]'=true)" + "1/K" : "(p[i]'=2)&(v[i]'=2)&(u[i]'=true)"  + "1/K" : "(p[i]'=2)&(v[i]'=3)&(u[i]'=true)"
+                             + "1/K" : "(p[i]'=2)&(v[i]'=4)&(u[i]'=true)"  + "1/K" : "(p[i]'=2)&(v[i]'=5)&(u[i]'=true)"  + "1/K" : "(p[i]'=2)&(v[i]'=6)&(u[i]'=true)"  + "1/K" : "(p[i]'=2)&(v[i]'=7)&(u[i]'=true)")
+                     } . allSynch{
+                        Counter : ("(c<N-1)" -> "1" : "(c'=c+1)")
+                        Counter : ("(c=N-1)" -> "1" : "(c'=c)")
 
-Protocol :=  allsynch(Counter,Process[j]) | j=1,..,N :
-                (
-                    if "(c<N-1)"@Process[j],Counter {
-                         "(c'=c+1)"@Counter , if "(u[j])"@Process[j] {
-                            if "(p[j]=p[j+1])"@Process[j] {
-                                "(u[j]'=true) & (v[j]'=v[j+1]) "
-                            }
-                            else{
-                                "(u[j]'=false) & (v[j]'=v[j+1]) & (p[j]'=0)"
-                            }
-                         }
-                         else {
-                            if
-                         }
-                    }
-                    else{
+                        Process1 : ("u1&!(p1=2)&(c<N-1)" -> "1" : "(u1'=true)&(v1'=v2)")
+                        Process1 : ("u1&(p1=2)&(c<N-1)" -> "1" : "(u1'=false)&(v1'=v2)&(p1'=0)")
+                        Process1 : ("!u1&(c<N-1)" -> "1" : "(u1'=false)&(v1'=v2)")
+                        Process1 : ("u1&!(p1=v2)&(c=N-1)" -> "1" : "(u1'=true)&(v1'=0)&(p1'=0)")
+                        Process1 : ("u1&(p1=v2)&(c=N-1)" -> "1" : "(u1'=false)&(v1'=0)&(p1'=0)")
+                        Process1 : ("!u1&(c=N-1)" -> "1" : "(u1'=false)&(v1'=0)")
 
-                    }
+                        Process2 : ("u2&!(p2=v1)&(c<N-1)" -> "1" : "(u2'=true)&(v2'=v1)")
+                        Process2 : ("u2&(p2=v1)&(c<N-1)" -> "1" : "(u2'=false)&(v2'=v1)&(p2'=0)")
+                        Process2 : ("!u2&(c<N-1)" -> "1" : "(u2'=false)&(v2'=v2)")
+                        Process2 : ("u1&!(p2=v1)&(c=N-1)" -> "1" : "(u2'=true)&(v2'=0)&(p2'=0)")
+                        Process2 : ("u2&(p2=v1)&(c=N-1)" -> "1" : "(u2'=false)&(v2'=0)&(p2'=0)")
+                        Process2 : ("!u2&(c=N-1)" -> "1" : "(u2'=false)&(v2'=0)")
 
-                )
+                        Process3 : ("u3&!(p3=v1)&(c<N-1)" -> "1" : "(u3'=true)&(v3'=v1)")
+                        Process3 : ("u3&(p3=v1)&(c<N-1)" -> "1" : "(u3'=false)&(v3'=v1)&(p3'=0)")
+                        Process3 : ("!u3&(c<N-1)" -> "1" : "(u3'=false)&(v3'=v3)")
+                        Process3 : ("u1&!(p3=v1)&(c=N-1)" -> "1" : "(u3'=true)&(v3'=0)&(p3'=0)")
+                        Process3 : ("u3&(p3=v1)&(c=N-1)" -> "1" : "(u3'=false)&(v3'=0)&(p3'=0)")
+                        Process3 : ("!u3&(c=N-1)" -> "1" : "(u3'=false)&(v3'=0)")
 
+                        Process4 : ("u4&!(p4=v1)&(c<N-1)" -> "1" : "(u4'=true)&(v4'=v1)")
+                        Process4 : ("u4&(p4=v1)&(c<N-1)" -> "1" : "(u4'=false)&(v4'=v1)&(p4'=0)")
+                        Process4 : ("!u4&(c<N-1)" -> "1" : "(u4'=false)&(v4'=v4)")
+                        Process4 : ("u1&!(p4=v1)&(c=N-1)" -> "1" : "(u4'=true)&(v4'=0)&(p4'=0)")
+                        Process4 : ("u4&(p4=v1)&(c=N-1)" -> "1" : "(u4'=false)&(v4'=0)&(p4'=0)")
+                        Process4 : ("!u4&(c=N-1)" -> "1" : "(u4'=false)&(v4'=0)")
 
-Election2 :=
-        if "(u1)&(p1=v2)&(c<1)"@Process1, "(u2)&(p2=v1)&(c<1)"@Process2 then {
-                  Counter -> Process1,Process2: (["1*1"] "(c'=c+1)" "(u1'=false)&(v1'=v2)&(p1'=0)" "(u2'=false)&(v2'=v1)&(p2'=0)" .Election2)
-        }
-        else{
-            if "(u1)&(p1!=v2)&(c<1)"@Process1, "(u2)&(p2!=v1)&(c<1)"@Process2 then {
-                  Counter -> Process1,Process2: (["1*1"] "(c'=c+1)" "(u1'=true)&(v1'=v2)" "(u2'=true)&(v2'=v1)" .Election2)
-             }
-             else{
-                 if "(u1)&(p1=v2)&(c<1)"@Process1, "(!u2)&(c<1)"@Process2 then {
-                        Counter -> Process1,Process2: (["1*1"] "(c'=c+1)" "(u1'=false)&(v1'=v2)&(p1'=0)" "(u2'=false)&(v2'=v1)" .Election2)
-                 }
-                 else{
-                        if "(u1)&(p1!=v2)&(c<1)"@Process1, "(!u2)&(c<1)"@Process2 then {
-                             Counter -> Process1,Process2: (["1*1"] "(c'=c+1)" "(u1'=true)&(v1'=v2)" "(u2'=false)&(v2'=v1)" .Election2)
-                        }
-
-                        else{
-                            if "(!u1)&(c<1)"@Process1, "(u2)&(p2!=v1)&(c<1)"@Process2 then {
-                                  Counter -> Process1,Process2: (["1*1"] "(c'=c+1)" "(u1'=false)&(v1'=v2)" "(u2'=true)&(v2'=v1)" .Election2)
-
-                            }
-                            else{
-                                 if "(!u1)&(c<1)"@Process1, "(u2)&(p2=v1)&(c<1)"@Process2 then {
-                                            Counter -> Process1,Process2: (["1*1"] "(c'=c+1)" "(u1'=false)&(v1'=v2)" "(u2'=false)&(v2'=v1)&(p2'=0)" .Election2)
-                                 }
-                                 else{
-                                     if "(!u1)&(c<1)"@Process1, "(!u2)&(c<1)"@Process2 then {
-                                             Counter -> Process1,Process2: (["1*1"] "(c'=c+1)" "(u1'=false)&(v1'=v2)" "(u2'=false)&(v2'=v1)" .Election2)
-                                     }
-                                     else{
-                                         if "(u1)&(p1=v2)&(c=1)"@Process1, "(u2)&(p2=v1)&(c=1)"@Process2 then {
-                                               Counter -> Process1,Process2: (["1*1"] "(c'=c)" "(u1'=false)&(v1'=0)&(p1'=0)" "(u2'=false)&(v2'=0)&(p2'=0)" .Election3)
-                                         }
-                                         else{
-                                           if "(u1)&(p1!=v2)&(c=1)"@Process1, "(u2)&(p2!=v1)&(c=1)"@Process2 then {
-                                               Counter -> Process1,Process2: (["1*1"] "(c'=c)" "(u1'=true)&(v1'=0)&(p1'=0)" "(u2'=true)&(v2'=0)&(p2'=0)" .Election3)
-                                                        }
-                                                        else{
-                                                            if "(u1)&(p1=v2)&(c=1)"@Process1, "(!u2)&(c=1)"@Process2 then {
-                                                                 Counter -> Process1,Process2: (["1*1"] "(c'=c)" "(u1'=false)&(v1'=0)&(p1'=0)" "(u2'=true)&(v2'=0)&(p2'=0)" .Election3)
-                                                            }
-                                                            else{
-                                                                   if "(u1)&(p1!=v2)&(c=1)"@Process1, "(!u2)&(c=1)"@Process2 then {
-                                                                        Counter -> Process1,Process2: (["1*1"] "(c'=c)" "(u1'=true)&(v1'=0)&(p1'=0)" "(u2'=false)&(v2'=0)" .Election3)
-                                                                   }
-
-                                                                   else{
-                                                                       if "(!u1)&(c=1)"@Process1, "(u2)&(p2!=v1)&(c=1)"@Process2 then {
-                                                                            Counter -> Process1,Process2: (["1*1"] "(c'=c)" "(u1'=false)&(v1'=0)" "(u2'=true)&(v2'=0)&(p2'=0)" .Election3)
-                                                                       }
-                                                                       else{
-                                                                            if "(!u1)&(c=1)"@Process1, "(u2)&(p2=v1)&(c=1)"@Process2 then {
-                                                                                    Counter -> Process1,Process2: (["1*1"] "(c'=c)" "(u1'=false)&(v1'=0)" "(u2'=false)&(v2'=0)&(p2'=0)" .Election3)
-                                                                            }
-                                                                            else{
-                                                                                    Counter -> Process1,Process2: (["1*1"] "(c'=c)" "(u1'=false)&(v1'=0)" "(u2'=false)&(v2'=0)" .Election3)
-
-                                                                            }
-                                                                       }
-                                                                   }
-                                                            }
-                                                        }
-                                     }
-                                     }
-                                 }
-                            }
-                        }
-                 }
-             }
-             }
-
-
-
-Election3 := if "(u1)|(u2)"@Counter, "true"@Process1, "true"@Process2 then {
-                 Counter -> Process1, Process2: (["1*1"] "(c'=c)"  "(u1'=false)&(v1'=0)&(p1'=0)" "(u2'=false)&(v2'=0)&(p2'=0)" . Counter -> Process1, Process2 : (["1*1"] " " " " " " .END))
-             }
-             else{
-                 Counter -> Process1, Process2: (["1*1"] "(c'=1)"  "(u1'=false)&(v1'=0)&(p1'=0)" "(u2'=false)&(v2'=0)&(p2'=0)" .Election)
-             }
+                     } . if "u1 | u2 | u3 | u4"@Counter then {
+                            Counter -> Process[i] : (["1*1"] "(c'=c)" "(u[i]'=false)&(v[i]'=0)&(p[i]'=0)"
+                            . allSynch {
+                                                    Counter : (true -> "1" : "(c'=c)")
+                                                    Process1 : (true -> "1" : " ")
+                                                    Process2 : (true -> "1" : " ")
+                                                    Process3 : (true -> "1" : " ")
+                                                    Process4 : (true -> "1" : " ")
+                                                 } . END)
+                     }
+                     else{
+                            Counter -> Process[i] : (["1*1"] "(c'=1)" "(u[i]'=false)&(v[i]'=0)&(p[i]'=0)"  . Election)
+                     }
 }

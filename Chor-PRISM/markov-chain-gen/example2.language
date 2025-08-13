@@ -1,0 +1,31 @@
+
+preamble
+"dtmc"
+
+"const N = 3;"
+"const K = 3;"
+endpreamble
+
+n = 1;
+
+Process1 ->
+Process1 : "p1 : [0..200] init 0;";
+
+Process2 ->
+Process2 : "p2 : [0..200] init 0;";
+
+
+
+Counter ->
+Counter : "c : [0..110] init 0;" ;
+
+{
+
+Election := allSynch{ j in [1...2]
+                            Process[j] : (true -> "0.33" : "(p[i]'=100)"  + "0.33" : "(p[i]'=125)" + "0.33" : "(p[i]'=150)")
+                     } . allSynch{
+                        Counter : (true -> "1" : "(c'=100)")
+                        Process1 : (true -> "1" : "(p1'=0)")
+                        Process2 : (true -> "1" : "(p2'=0)")
+                     } . END
+}

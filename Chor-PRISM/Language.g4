@@ -22,9 +22,9 @@ branchStat : (BRANCH SLPAR rateValues+=rate SRPAR updates DOT statement) ;
 
 commStat : (SLPAR rateValues+=rate SRPAR updates DOT statement) ;
 
-allSynch : ALLSYNCH LPAR role RPAR MID indexSpec CLPAR (commList+=commands)* CRPAR DOT statement;
+allSynch : ALLSYNCH CLPAR indexSpec? (commands)* CRPAR DOT statement;
 
-commands : role COLON CLPAR (BRANCH? SLPAR rateValues+=rate SRPAR ups+=DOUBLE_STRING)* CRPAR ;
+commands : role COLON LPAR (cond | TRUE) FROM (rate COLON actions (BRANCH rate COLON actions)*)* RPAR;
 
 ifThenElse : IF cond AT role (COMMA cond AT role)* THEN CLPAR thenStat=statement CRPAR ELSE CLPAR elseStat=statement CRPAR;
 
@@ -56,7 +56,7 @@ roleGroup : ID  ;
 
 roleIndex : ID SLPAR (index | (index BRANCH INTEGER)) SRPAR ;
 
-indexSpec : index IN SLPAR INTEGER DOTS upperBound=CHAR SRPAR ; 
+indexSpec : index IN SLPAR INTEGER DOTS upperBound=(CHAR|INTEGER) SRPAR ;
 
 role : (roleGroup | roleIndex) ;
 
@@ -109,6 +109,8 @@ CONST 		: 'const';
 FOREACH		: 'foreach';
 IN			: 'in' ;
 ALLSYNCH    : 'allSynch';
+TRUE        : 'true' ;
+FALSE       : 'false';
 WS  		: [ \t\r\n\u00a0]+ -> skip ;
 DOUBLE_STRING
     : '"' ~('"')+ '"'

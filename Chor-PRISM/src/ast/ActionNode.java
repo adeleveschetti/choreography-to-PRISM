@@ -38,7 +38,7 @@ public class ActionNode implements Node{
 				return " &&"+actionB;
 			}
 		}
-		else{
+		else {
 			if(actionB == null || actionB.equals(" ")) {
 				return actionA + "&& ";
 			}

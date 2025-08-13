@@ -5,6 +5,8 @@ import java.util.Iterator;
 
 import lib.*;
 
+import javax.print.DocFlavor;
+
 public class IfThenElseNode implements Node {
 
     private ArrayList<String> roles;
@@ -559,29 +561,116 @@ public class IfThenElseNode implements Node {
     public ArrayList<Pair<String,ArrayList<String>>> generatePrismCode(ArrayList<Pair<String,ArrayList<String>>> code, int index, int maxIndex, String prot, ArrayList<Node> mods, ArrayList<Pair<String,ArrayList<State>>> states, ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>> recValues, ArrayList<String> moduleNames, ArrayList<Pair<String,ArrayList<Node>>> stms, Pair<String,State> lastUpdate, ArrayList<Pair<String,String>> consts){
         boolean found = false;
         String newState = "";
+        String newState2 = "";
+
         State newStates = new State();
         ArrayList<Pair<String,String>> codesIf = new ArrayList<>();
         ArrayList<Pair<String,String>> codesElse = new ArrayList<>();
 
-        for(int i=0; i<conds.size(); i++) {
+
+        ArrayList<String> newRoles = new ArrayList<>();
+        for(String el : roles){
+            if(el.contains("[")){
+                for (int i = 1; i <= maxIndex; i++) {
+                    String role = Functions.changeIndex(el, i, maxIndex);
+                    newRoles.add(role);
+                }
+            }
+            else{
+                newRoles.add(el);
+            }
+        }
+        ArrayList<String> newConds = new ArrayList<>();
+        for(String el : conds){
+            if(el.contains("[")){
+                for (int i = 1; i <= maxIndex; i++) {
+                    String role = Functions.returnStringNewIndex(el, i, maxIndex);
+                    newConds.add(role);
+                }
+            }
+            else{
+                newConds.add(el);
+            }
+        }
+
+
+        for(int i=0; i<newConds.size(); i++) {
 
             int max = -1;
             for(Pair<String,ArrayList<State>> state : states){
                 if(state.getFirst().equals(prot)){
                     found = true;
                     for(int j=0;j<state.getSecond().size();j++){
-                        if(state.getSecond().get(j).getModuleState(roles.get(i))>max) {
-                            max = state.getSecond().get(j).getModuleState(roles.get(i));
+                        if(state.getSecond().get(j).getModuleState(newRoles.get(i))>max) {
+                            max = state.getSecond().get(j).getModuleState(newRoles.get(i));
                         }
                     }
                 }
             }
-            newStates.addState(new Pair(roles.get(i),max));
-            String toAdd = "[] (" + roles.get(i) + "=" + max + ")";
-            String toAdd2 = "[] (" + roles.get(i) + "=" + max + ")";
 
+            if (thenStat instanceof RecNode) {
+
+                boolean found2 = false;
+                for (Pair<String, ArrayList<State>> state : states) {
+                    if (state.getFirst().equals(thenStat.toPrint())) {
+                        found2 = true;
+                        newState = String.valueOf(state.getSecond().get(0).getModuleState(newRoles.get(i)));
+                    }
+                }
+                if (!found2) {
+
+                    newState = String.valueOf(max);
+
+                }
+            }
+            if (elseStat instanceof RecNode) {
+
+                boolean found2 = false;
+                for (Pair<String, ArrayList<State>> state : states) {
+                    if (state.getFirst().equals(elseStat.toPrint())) {
+                        found2 = true;
+                        newState2 = String.valueOf(state.getSecond().get(0).getModuleState(newRoles.get(i)));
+                    }
+                }
+                if (!found2) {
+
+                    newState2 = String.valueOf(max);
+
+                }
+            }
+            //max = max + 1;
+            int indexToDel = -1;
+            String tmp2 = null;
+
+            for (Pair<String, ArrayList<String>> _code : code) {
+                if (_code.getFirst().equals(newRoles.get(i))) {
+                    for (int ii = 0; ii < _code.getSecond().size(); ii++) {
+
+                        if (_code.getSecond().get(ii).contains("IFTE")) {
+                            tmp2 = _code.getSecond().get(ii).substring(0, _code.getSecond().get(ii).indexOf("-> IFTE"));
+                            indexToDel = ii;
+                        }
+                    }
+                }
+                if (indexToDel != -1) {
+                    _code.getSecond().remove(indexToDel);
+                }
+            }
+            String toAdd = "";
+            String toAdd2 = "";
+
+            if(tmp2!=null){
+                toAdd = tmp2;
+                toAdd2 = tmp2;
+            }
+            else{
+                toAdd = "[] (" + newRoles.get(i) + "=" + max + ")";
+                toAdd2 = "[] (" + newRoles.get(i) + "=" + max + ")";
+            }
+
+            newStates.addState(new Pair(newRoles.get(i),max));
             for(Pair<String,ArrayList<String>> _code : code){
-                if(_code.getFirst().equals(roles.get(i))){
+                if(_code.getFirst().equals(newRoles.get(i))){
                     for(int ii=0; ii<_code.getSecond().size(); ii++){
                         if(_code.getSecond().get(ii).contains("IFTE")){
                             toAdd = _code.getSecond().get(ii).substring(0,_code.getSecond().get(ii).indexOf(" -> IFTE")) ;
@@ -590,15 +679,90 @@ public class IfThenElseNode implements Node {
                     }
                 }
             }
-            if(!conds.get(i).equals(" ")){
-                toAdd = toAdd + "&" + conds.get(i) + " -> IFTE";
-                toAdd2 = toAdd2 + "&!(" + conds.get(i) + ") -> IFTE";
+            if(!newConds.get(i).equals(" ")){
+                toAdd = toAdd + "&" + newConds.get(i) + " -> IFTE";
+                toAdd2 = toAdd2 + "&!(" + newConds.get(i) + ") -> IFTE";
             }
+            if(thenStat instanceof RecNode){
+                toAdd = toAdd.substring(0,toAdd.indexOf(" -> IFTE")) + "-> 1:(" + newRoles.get(i) + "'=" + newState + ");" ;
+            }
+            if(elseStat instanceof RecNode){
+                toAdd2 = toAdd2.substring(0,toAdd2.indexOf(" -> IFTE")) + "-> 1:(" + newRoles.get(i) + "'=" + newState2 + ");" ;
+            }
+            codesIf.add(new Pair(newRoles.get(i),toAdd));
+            codesElse.add(new Pair(newRoles.get(i),toAdd2));
 
-            codesIf.add(new Pair(roles.get(i),toAdd));
-            codesElse.add(new Pair(roles.get(i),toAdd2));
 
         }
+/*
+        if(thenStat instanceof BranchNode){
+            ArrayList<String> roles = ((BranchNode) thenStat).getOutRoles();
+            ArrayList<String> corrRoles = new ArrayList<>();
+            for(String el : roles){
+                if(el.contains("[")){
+                    for (int i = 1; i <= maxIndex; i++) {
+                        corrRoles.add(Functions.changeIndex(el, i, maxIndex));
+                    }
+                }
+                else {
+                    corrRoles = roles;
+                }
+            }
+
+            for(String el : corrRoles) {
+                int maxRole = -1;
+
+                for (Pair<String, ArrayList<State>> state : states) {
+                    if (state.getFirst().equals(prot)) {
+                        found = true;
+                        for (int j = 0; j < state.getSecond().size(); j++) {
+                            if(state.getSecond().get(j).getModuleState(el)>maxRole) {
+                                maxRole = state.getSecond().get(j).getModuleState(el);
+                            }
+                        }
+                    }
+                }
+                String toAdd = "[] (" + el+ "=" + maxRole + ") -> IFTE";
+                newStates.addState(new Pair(el,maxRole));
+                codesIf.add(new Pair(el,toAdd));
+
+            }
+        }
+
+        if(elseStat instanceof BranchNode){
+            ArrayList<String> roles = ((BranchNode) thenStat).getOutRoles();
+            ArrayList<String> corrRoles = new ArrayList<>();
+            for(String el : roles){
+                    if(el.contains("[")){
+                    for (int i = 1; i <= maxIndex; i++) {
+                        corrRoles.add(Functions.changeIndex(el, i, maxIndex));
+                    }
+                }
+                else {
+                    corrRoles = roles;
+                }
+            }
+
+            for(String el : corrRoles) {
+                int maxRole = -1;
+
+                for (Pair<String, ArrayList<State>> state : states) {
+                    if (state.getFirst().equals(prot)) {
+                        found = true;
+                        for (int j = 0; j < state.getSecond().size(); j++) {
+                            if(state.getSecond().get(j).getModuleState(el)>maxRole) {
+                                maxRole = state.getSecond().get(j).getModuleState(el);
+                            }
+                        }
+                    }
+                }
+                String toAdd = "[] (" + el+ "=" + maxRole + ") -> IFTE";
+                newStates.addState(new Pair(el,maxRole));
+                codesElse.add(new Pair(el,toAdd));
+
+            }
+        }*/
+
         for(Pair<String,String> el : codesIf) {
             for (Pair<String, ArrayList<String>> pair : code) {
                 if (pair.getFirst().equals(el.getFirst())){

@@ -15,7 +15,9 @@ User2-> ;
 
 CheckOut -> ;
 {
-  Protocol0 := CheckOut -> User1, User2: (+["1*lambda"] " " "(x'=x+1)" "(y'=y-1)". CheckOut -> User1, User2: (+["1*mu"] " " " ". Protocol0)
-                                      +["1*lambda"] " " "(x'=x-1)" "(y'=y+1)". CheckOut -> User1, User2: (+["1*theta"] " " " ". END
+  Protocol0 := CheckOut -> User1, User2: (+["1*lambda"] " " "(x'=x+1)" "(y'=y-1)".
+               CheckOut -> User1, User2: (+["1*mu"] " " " ". Protocol0)
+                                          +["1*lambda"] " " "(x'=x-1)" "(y'=y+1)".
+                                          CheckOut -> User1, User2: (+["1*theta"] " " " ". END
                                                                                                    +["1*theta"] " " " ". END))
 }

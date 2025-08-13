@@ -187,13 +187,24 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 	@Override
 	public Node visitAllSynch(AllSynchContext ctx){
 		ArrayList<String> roles = new ArrayList<>();
+
 		ArrayList<Node> commands = new ArrayList<>();
-		for(CommandsContext el : ctx.commList){
+		for(CommandsContext el : ctx.commands()){
 			roles.add(el.role().getText());
 			commands.add(visitCommands(el));
 		}
+
 		Node statement = visitStatement(ctx.statement());
-		return new AllSynchNode(roles,commands,statement);
+		for(Node el : commands){
+			((CommandNode) el).addCont(statement);
+		}
+		boolean isPar = ctx.indexSpec()!=null;
+		int maxIndex = -1;
+
+		if(ctx.indexSpec()!=null){
+			maxIndex = Integer.parseInt(ctx.indexSpec().upperBound.getText());
+		}
+		return new AllSynchNode(roles,commands,statement,isPar,maxIndex);
 	}
 
 	@Override
@@ -201,12 +212,15 @@ public class LanguageVisitorImpl extends LanguageBaseVisitor<Node>{
 		String role = ctx.role().getText();
 		ArrayList<String> rates = new ArrayList<>();
 		ArrayList<String> updates = new ArrayList<>();
-		for(int i=0; i<ctx.ups.size(); i++){
-			rates.add(ctx.rateValues.get(i).DOUBLE_STRING().getText().substring(1,ctx.rateValues.get(i).DOUBLE_STRING().getText().length()-1));
-			updates.add(ctx.ups.get(i).getText().substring(1,ctx.ups.get(i).getText().length()-1));
+		String guard = null;
+		for(int i=0; i<ctx.actions().size(); i++){
+			rates.add(ctx.rate().get(i).DOUBLE_STRING().getText().substring(1,ctx.rate().get(i).DOUBLE_STRING().getText().length()-1));
+			updates.add(ctx.actions().get(i).getText().substring(1,ctx.actions().get(i).getText().length()-1));
 		}
-
-		return new CommandNode(role,rates,updates);
+		if(ctx.cond()!=null){
+			guard = ctx.cond().DOUBLE_STRING().getText().substring(1,ctx.cond().DOUBLE_STRING().getText().length()-1);
+		}
+		return new CommandNode(role,rates,updates,guard);
 	}
 
 	@Override 

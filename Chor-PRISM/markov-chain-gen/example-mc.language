@@ -4,7 +4,6 @@ preamble
 "const int N = 10;"
 "const double mu1 = 0.10;"
 "const double mu2 = 0.20;"
-
 "const double lambda1 = 0.5;"
 "const double lambda2 = 0.25;"
 endpreamble

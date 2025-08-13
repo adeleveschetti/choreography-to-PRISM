@@ -10,12 +10,30 @@ public class ProgramNode implements Node{
 	public ArrayList<Node> modules = new ArrayList<Node>();
 	public ArrayList<Node> protocols = new ArrayList<Node>();
 	public int n ;
-
+	public ArrayList<Pair<String,Integer>> vars = new ArrayList<>();
+	public ArrayList<State> states = new ArrayList<>();
 	ProgramNode(Node _preamble, ArrayList<Node> _modules, ArrayList<Node> _protocols, int _n){
 		preamble = _preamble;
 		modules = _modules;
 		protocols = _protocols;
 		n = _n;
+		for(Node el : modules){
+			for(Pair var : ((ModuleNode) el).getIntVars()){
+				vars.add(var);
+			}
+		}
+
+
+		State initState = new State();
+		for(Pair<String,Integer> el :  vars){
+			initState.addState(el);
+		}
+		states.add(initState);
+
+	}
+
+	public int getN(){
+		return n;
 	}
 
 	@Override
@@ -160,6 +178,9 @@ public class ProgramNode implements Node{
 		for(Node el : protocols) {
 			stms.add(new Pair(el.toPrint(),((ProtocolNode)el).getStatements()));
 		}
+
+
+
 		for(Node el : protocols) {
 			toRet = el.generateStates(modules,states,recValues,moduleNames,stms,states.get(states.getSize()-1).getThird(),consts);
 			states = toRet.getSecond();

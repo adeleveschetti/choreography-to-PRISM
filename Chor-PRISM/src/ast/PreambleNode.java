@@ -69,9 +69,16 @@ public class PreambleNode implements Node {
 
 		for (Triplet<String, ArrayList<Pair<String, Integer>>, ArrayList<Pair<String, Integer>>> el : states.getList()) {
 			if(el.getFirst().length()>1) {
-				String rate1 = el.getFirst().substring(0, el.getFirst().indexOf("*"));
-				String rate2 = el.getFirst().substring(el.getFirst().indexOf("*") + 1, el.getFirst().length());
+				String rate1, rate2 ;
+				if(el.getFirst().contains("*")) {
+					rate1 = el.getFirst().substring(0, el.getFirst().indexOf("*"));
+					 rate2 = el.getFirst().substring(el.getFirst().indexOf("*") + 1, el.getFirst().length());
 
+				}
+				else{
+					rate1 = el.getFirst();
+					rate2 = "1";
+				}
 				String val1 = "";
 				String val2 = "";
 				for (int i =0; i<rate.size(); i++) {

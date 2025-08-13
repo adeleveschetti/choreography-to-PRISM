@@ -21,6 +21,7 @@ public class State {
 
     public int getModuleState(String module){
         for(Pair<String,Integer> pair : listOfStates){
+
             if(pair.getFirst().equals(module)){
                 return pair.getSecond();
             }
@@ -28,4 +29,11 @@ public class State {
         return -1;
     }
 
+    public String toPrint(){
+        String toRet="";
+        for(Pair<String,Integer> el : listOfStates){
+            toRet+=("<" + el.getFirst() + "," + el.getSecond() + ">");
+        }
+        return toRet;
+    }
 }

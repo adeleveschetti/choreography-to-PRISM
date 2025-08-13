@@ -75,7 +75,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws Exception {
-        String fileName = "Chor-PRISM/markov-chain-gen/new-syntax";
+        String fileName = "Chor-PRISM/markov-chain-gen/example-jasmin";
         FileInputStream is = new FileInputStream(fileName + ".language");
         @SuppressWarnings("deprecation")
         ANTLRInputStream input = new ANTLRInputStream(is);
@@ -140,7 +140,9 @@ public class Main {
                 }
             }
         }
-        tmpList.remove(index);
+        if(index!=-1) {
+            tmpList.remove(index);
+        }
         for(ArrayList<Pair<String,Integer>> el : tmpList){
             System.out.print("[");
             for(Pair<String,Integer> pair : el) {
@@ -168,10 +170,10 @@ public class Main {
             toPrint = toPrint + "P("+index1+","+index2+")="+array.getFirst()+";\n";
         }
 
-        output2.write(toPrint);
-        output2.close();
-*/
 
+        System.out.println(states.getSize());
+
+*/
     }
 
 }

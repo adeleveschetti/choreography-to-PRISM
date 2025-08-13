@@ -23,7 +23,10 @@ public class MessageNode implements Node {
 
 	@Override
 	public String toPrint() {
-		return actions.toPrint();
+		if(actions!=null) {
+			return actions.toPrint();
+		}
+		return null;
 	}
 
 	@Override
@@ -32,7 +35,6 @@ public class MessageNode implements Node {
 			return actions.generateCode(mods,index,maxIndex,isCtmc,labels,prot);
 		}
 		else if(actions==null && loop.size()>1) {
-
 			String ret = "";
 			for(int i=0; i<loop.size(); i++) {
 				ret = ret + loop.get(i).generateCode(mods,index,maxIndex,isCtmc,labels,prot);

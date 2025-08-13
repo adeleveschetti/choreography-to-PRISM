@@ -1,0 +1,53 @@
+preamble
+
+
+"dtmc"
+"const int N = 3;"
+"const int p1 = 1;"
+"const int p2 = 2;"
+"const int p3 = 3;"
+"global pay : [0..N];"
+
+endpreamble
+
+n = 3;
+
+crypt[i] -> i in [1...n]
+crypt[i] : "coin[i] : [0..2] init 0;", "s[i] : [0..1] init 0;", "agree[i] : [0..1] init 0;" ;
+
+{
+Crypto := if "(coin[i]=0)"@crypt[i] then {
+            crypt[i] -> crypt[i] : (+["0.5*1"] "(coin[i]'=1)" . Crypto2
+                                    +["0.5*1"] "(coin[i]'=2)" . Crypto2)
+          }
+          else{
+               Crypto
+          }
+
+Crypto2 := if "((coin[i]>0)&(coin[i+1]>0))"@crypt[i] then{
+                if "(coin[i]=coin[i+1])"@crypt[i] then {
+                    if "(pay=p[i])"@crypt[i] then {
+                        Crypto3
+                    }
+                    else{
+                        ["1"] "(agree[i]'=1)"@crypt[i]. Crypto3
+                    }
+                }
+                else{
+                     if "(pay=p[i])"@crypt[i] then {
+                        ["1"] "(agree[i]'=1)"@crypt[i]. Crypto3
+                     }
+                     else{
+                        Crypto3
+                    }
+                }
+            }
+            else {
+                Crypto2
+            }
+
+Crypto3 := allSynch{ j in [1...3]
+                     crypt[j] : (true -> "1" : "true;" )
+                    }.END
+}
+

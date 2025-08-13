@@ -15,6 +15,7 @@ public class ModuleNode implements Node{
 	private int lastState = -1;
 	private ArrayList<Pair<String,Integer>> varsValues = new ArrayList<Pair<String,Integer>>();
 	private ArrayList<String> varsNames = new ArrayList<String>();
+	public ArrayList<Pair<String,Integer>> intVars = new ArrayList<>();
 
 
 	public ModuleNode(String _name, ArrayList<String> _vars) {
@@ -22,12 +23,12 @@ public class ModuleNode implements Node{
 		vars = _vars;
 		String str = "init";
 		if(vars!=null) {
+
 			for (String el : vars) { // TODO: here we can add the check for unbounded variables
 				String[] split = el.split(" ");
 				String varName = split[0];
 				int index = el.indexOf(str) + str.length() + 1;
 				char init = el.charAt(index);
-
 				if (Character.isLetter(init)) {
 					if (String.valueOf(init).equals("t")) {
 						init = '1';
@@ -38,14 +39,21 @@ public class ModuleNode implements Node{
 				if (Character.isDigit(el.charAt(index + 1))) {
 					String newStr = new StringBuilder().append(init).append(el.charAt(index + 1)).toString();
 					varsValues.add(new Pair(varName, Integer.parseInt(String.valueOf(newStr))));
-				} else {
+				}
+				else if(!el.contains("block") && !el.contains("blockchain") && !el.contains("list") && !el.contains("bool")) {
 					varsValues.add(new Pair(varName, Integer.parseInt(String.valueOf(init))));
 				}
+
+				//varsValues.add(new Pair(varName,0));
 			}
+
 		}
 	}
 
 
+	public ArrayList<Pair<String,Integer>> getIntVars(){
+		return varsValues;
+	}
 	public int getMaxState() {
 		int maxState = 0;
 		for(Pair<String,ArrayList<Integer>> el : recursions) {

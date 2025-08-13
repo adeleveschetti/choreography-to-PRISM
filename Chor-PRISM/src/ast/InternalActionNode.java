@@ -35,7 +35,7 @@ public class InternalActionNode implements Node {
         return role;
     }
 
-    public Node getStatement(){
+    public Node getStatement() {
         return statement;
     }
 
@@ -121,33 +121,33 @@ public class InternalActionNode implements Node {
 
     @Override
     public String generateCode(ArrayList<Node> mods, int index, int maxIndex, boolean isCtmc, ArrayList<String> labels, String prot) {
-		Functions funs = new Functions();
-		for(int k=0; k<updates.size(); k++){
-		String roleTmp = Functions.changeIndex(role.get(k), index, maxIndex);
+        Functions funs = new Functions();
+        for (int k = 0; k < updates.size(); k++) {
+            String roleTmp = Functions.changeIndex(role.get(k), index, maxIndex);
 
 
-		String toRet = "";
-		int stateRole = 0;
-		int iA = -1;
-		for (int i = 0; i < mods.size(); i++) {
-			if (mods.get(i).toPrint().equals(roleTmp)) {
-				iA = i;
-			}
-		}
+            String toRet = "";
+            int stateRole = 0;
+            int iA = -1;
+            for (int i = 0; i < mods.size(); i++) {
+                if (mods.get(i).toPrint().equals(roleTmp)) {
+                    iA = i;
+                }
+            }
 
 
-		String updatesNew = updates.get(k).generateCode(mods, index, maxIndex, isCtmc, labels, prot);
-		updatesNew = Functions.returnStringNewIndex(updatesNew, index, maxIndex);
-		if (!updatesNew.equals(" ")) {
-			updatesNew = updatesNew.substring(0, updatesNew.length() - 3) + "&";
-		}
+            String updatesNew = updates.get(k).generateCode(mods, index, maxIndex, isCtmc, labels, prot);
+            updatesNew = Functions.returnStringNewIndex(updatesNew, index, maxIndex);
+            if (!updatesNew.equals(" ")) {
+                updatesNew = updatesNew.substring(0, updatesNew.length() - 3) + "&";
+            }
 
-		int upState = ((ModuleNode) mods.get(iA)).getValueRecursion(prot);
+            int upState = ((ModuleNode) mods.get(iA)).getValueRecursion(prot);
 
-		if (upState == -1) {
-			upState = ((ModuleNode) mods.get(iA)).getMaxState();
-			((ModuleNode) mods.get(iA)).setValueRecursion(prot, upState);
-		} else {
+            if (upState == -1) {
+                upState = ((ModuleNode) mods.get(iA)).getMaxState();
+                ((ModuleNode) mods.get(iA)).setValueRecursion(prot, upState);
+            } else {
 			/*if(((ModuleNode) mods.get(iA)).getMaxValueRecursion(prot)<=((ModuleNode) mods.get(iA)).getNewState(prot) && ((ModuleNode) mods.get(iA)).getNewState(prot)!=-1) {
 				if(((ModuleNode) mods.get(iA)).getNewStates(prot)!=null) {
 					System.out.println("internal ======");
@@ -167,49 +167,163 @@ public class InternalActionNode implements Node {
 			else {
 				upState = ((ModuleNode) mods.get(iA)).getMaxValueRecursion(prot);
 			}*/
-			upState = ((ModuleNode) mods.get(iA)).getMaxNewStates(prot);
+                upState = ((ModuleNode) mods.get(iA)).getMaxNewStates(prot);
 
-		}
-		upState = upState + 1;
-		if (statement instanceof RecNode) {
-			int stateRec = ((ModuleNode) mods.get(iA)).getValueRecursion(statement.toPrint());
+            }
+            upState = upState + 1;
+            if (statement instanceof RecNode) {
+                int stateRec = ((ModuleNode) mods.get(iA)).getValueRecursion(statement.toPrint());
 
-			if (stateRec == -1) {
+                if (stateRec == -1) {
 
-				((ModuleNode) mods.get(iA)).setValueRecursion(statement.toPrint(), upState + 1);
-				upState = upState + 1;
-			} else {
-				upState = stateRec;
-			}
+                    ((ModuleNode) mods.get(iA)).setValueRecursion(statement.toPrint(), upState + 1);
+                    upState = upState + 1;
+                } else {
+                    upState = stateRec;
+                }
 
-		}
-		updatesNew = updatesNew + "(" + roleTmp + "'=" + upState + "); ";
-		String statFin = "";
-		for (String el : ((ModuleNode) mods.get(iA)).getCommands()) {
-			if (el.contains("IFTE")) {
-				statFin = el.substring(0, el.indexOf("IFTE"));
-			}
-		}
-		((ModuleNode) mods.get(iA)).addCommand(statFin + rate.get(k) + " : " + updatesNew);
+            }
+            updatesNew = updatesNew + "(" + roleTmp + "'=" + upState + "); ";
+            String statFin = "";
+            for (String el : ((ModuleNode) mods.get(iA)).getCommands()) {
+                if (el.contains("IFTE")) {
+                    statFin = el.substring(0, el.indexOf("IFTE"));
+                }
+            }
+            ((ModuleNode) mods.get(iA)).addCommand(statFin + rate.get(k) + " : " + updatesNew);
 
-		Iterator<String> itr = ((ModuleNode) mods.get(iA)).getCommands().iterator();
-		while (itr.hasNext()) {
-			String el = itr.next();
-			if (el.contains("IFTE") && el.substring(0, el.indexOf("IFTE")).equals(statFin)) {
-				itr.remove();
-			}
-		}
-		if (!(statement instanceof EndNode)) {
-			((ModuleNode) mods.get(iA)).setNewStateIndex(prot, upState, 0);
-		}
-	}
+            Iterator<String> itr = ((ModuleNode) mods.get(iA)).getCommands().iterator();
+            while (itr.hasNext()) {
+                String el = itr.next();
+                if (el.contains("IFTE") && el.substring(0, el.indexOf("IFTE")).equals(statFin)) {
+                    itr.remove();
+                }
+            }
+            if (!(statement instanceof EndNode)) {
+                ((ModuleNode) mods.get(iA)).setNewStateIndex(prot, upState, 0);
+            }
+        }
         statement.generateCode(mods, index, maxIndex, isCtmc, labels, prot);
         return null;
     }
 
     @Override
-    public ArrayList<Pair<String,ArrayList<String>>> generatePrismCode(ArrayList<Pair<String,ArrayList<String>>> code, int index, int maxIndex, String prot, ArrayList<Node> mods, ArrayList<Pair<String,ArrayList<State>>> states, ArrayList<Pair<String,ArrayList<Pair<String,Integer>>>> recValues, ArrayList<String> moduleNames, ArrayList<Pair<String,ArrayList<Node>>> stms, Pair<String,State> lastUpdate, ArrayList<Pair<String,String>> consts){
-        return code;
+    public ArrayList<Pair<String, ArrayList<String>>> generatePrismCode(ArrayList<Pair<String, ArrayList<String>>> code, int index, int maxIndex, String prot, ArrayList<Node> mods, ArrayList<Pair<String, ArrayList<State>>> states, ArrayList<Pair<String, ArrayList<Pair<String, Integer>>>> recValues, ArrayList<String> moduleNames, ArrayList<Pair<String, ArrayList<Node>>> stms, Pair<String, State> lastUpdate, ArrayList<Pair<String, String>> consts) {
+
+        ArrayList<String> roles = new ArrayList<>();
+        for (String el : role) {
+            if (el.contains("[")) {
+                for (int i = 1; i <= maxIndex; i++) {
+                    String tmp = Functions.changeIndex(el, i, maxIndex);
+                    roles.add(tmp);
+                }
+            } else {
+                roles.add(el);
+            }
+        }
+
+        ArrayList<String> rates = new ArrayList<>();
+        for (String el : rate) {
+            if (el.contains("[")) {
+                for (int i = 1; i <= maxIndex; i++) {
+                    String tmp = Functions.changeIndex(el, i, maxIndex);
+                    rates.add(tmp);
+                }
+            } else {
+                rates.add(el);
+            }
+        }
+
+        ArrayList<String> ups = new ArrayList<>();
+        for (Node el : updates) {
+            if (el.toPrint().contains("[")) {
+                for (int i = 1; i <= maxIndex; i++) {
+                    String tmp = Functions.returnStringNewIndex(el.toPrint().substring(0, el.toPrint().length() - 3), i, maxIndex);
+                    ups.add(tmp);
+                }
+            } else {
+                ups.add(el.toPrint());
+            }
+        }
+
+        State newStates = new State();
+
+
+        for (int j = 0; j < roles.size(); j++) {
+            String newState = "";
+
+            int max = -1;
+            boolean found = false;
+            for (Pair<String, ArrayList<State>> state : states) {
+                if (state.getFirst().equals(prot)) {
+                    found = true;
+                    for (int i = 0; i < state.getSecond().size(); i++) {
+                        if (state.getSecond().get(i).getModuleState(roles.get(j)) > max) {
+                            max = state.getSecond().get(i).getModuleState(roles.get(j));
+                        }
+                    }
+                }
+            }
+
+            if (statement instanceof RecNode) {
+
+                boolean found2 = false;
+                for (Pair<String, ArrayList<State>> state : states) {
+                    if (state.getFirst().equals(statement.toPrint())) {
+                        found2 = true;
+                        newState = String.valueOf(state.getSecond().get(0).getModuleState(roles.get(j)));
+                    }
+                }
+                if (!found2) {
+                    newState = String.valueOf(max);
+                }
+            } else if (statement instanceof EndNode) {
+                newState = "TBD"; // TODO: change the value of the state
+            } else {
+                boolean roleContained = false;
+                for (String el : statement.getRoles()) {
+                    if (el.contains(roles.get(j).substring(0, roles.get(j).length() - 1))) {
+                        roleContained = true;
+                    }
+                }
+
+                if (!roleContained) {
+                    newState = String.valueOf(0);
+                } else {
+                    newState = String.valueOf(max + 1);
+                }
+            }
+            newStates.addState(new Pair(roles.get(j), Integer.valueOf(newState)));
+            ArrayList<String> newLines = new ArrayList<>();
+            for (Pair<String, ArrayList<String>> el : code) {
+                if (el.getFirst().equals(roles.get(j))) {
+                    for (String line : el.getSecond()) {
+                        if (line.contains("IFTE")) {
+                            String newline = line.substring(0, line.indexOf("-> IFTE")) + "-> " + Functions.changeIndex(rate.get(0), j+1, maxIndex) + ":" + ups.get(j) + "&(" + roles.get(j) + "'=" + newState + ");";
+                            newLines.add(newline);
+
+                        }
+                        else{
+                            newLines.add(line);
+                        }
+                    }
+                }
+            }
+            for(Pair<String,ArrayList<String>> pair : code){
+                if(pair.getFirst().equals(roles.get(j))){
+                    pair.setSecond(newLines);
+                }
+            }
+        }
+        ArrayList<Pair<String, ArrayList<String>>> newCode = new ArrayList<>();
+
+        for (Pair<String, ArrayList<State>> pair : states) {
+            if (pair.getFirst().equals(prot)) {
+                pair.getSecond().add(newStates);
+            }
+        }
+
+        return statement.generatePrismCode(code,index,maxIndex,prot,mods,states,recValues,moduleNames, stms, new Pair(prot,newStates), consts);
     }
 
 }

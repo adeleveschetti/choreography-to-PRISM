@@ -17,7 +17,7 @@ public class BranchNode implements Node {
     private ArrayList<Node> updates;
     private ArrayList<Node> preconditions;
     private ArrayList<Node> statements;
-    private boolean isCtmc ;
+    private boolean isCtmc;
 
     public BranchNode(String _role, ArrayList<String> _outRole, boolean _branch, ArrayList<String> _rates, ArrayList<Node> _preconditions, ArrayList<Node> _updates, ArrayList<Node> _statements) {
         role = _role;
@@ -29,7 +29,7 @@ public class BranchNode implements Node {
         statements = _statements;
     }
 
-    public void setCtmc(boolean _isCtmc){
+    public void setCtmc(boolean _isCtmc) {
         isCtmc = _isCtmc;
     }
 
@@ -470,23 +470,53 @@ public class BranchNode implements Node {
         return roles;
     }
 
+    public ArrayList<String> getOutRoles() {
+        return outRole;
+    }
+
     @Override
     public ArrayList<Pair<String, ArrayList<String>>> generatePrismCode(ArrayList<Pair<String, ArrayList<String>>> code, int index, int maxIndex, String prot, ArrayList<Node> mods, ArrayList<Pair<String, ArrayList<State>>> states, ArrayList<Pair<String, ArrayList<Pair<String, Integer>>>> recValues, ArrayList<String> moduleNames, ArrayList<Pair<String, ArrayList<Node>>> stms, Pair<String, State> lastUpdate, ArrayList<Pair<String, String>> consts) {
 
 
         String roleB = "";
-        String roleA = Functions.changeIndex(role, index, maxIndex);
         ArrayList<String> roles = new ArrayList<>();
         ArrayList<String> outRoles = new ArrayList<>();
+        ArrayList<String> inRoles = new ArrayList<>();
+        boolean oneRoleComm = false;
+        String newRoleA = "";
+        if(outRole.size()==1 && outRole.get(0).equals(role)){
+            oneRoleComm = true;
+        }
+        if (role.contains("[")) {
+            for (int i = 1; i <= maxIndex; i++) {
+                newRoleA = Functions.changeIndex(role, i, maxIndex);
+                inRoles.add(newRoleA);
+                roles.add(newRoleA);
+            }
+        } else {
+            inRoles.add(role); //add possibility of having 2 (or more) inputRoles
+            roles.add(role);
 
-        roles.add(roleA);
+        }
+
         for (String el : outRole) { // TODO: there could be more than one output role
-            for(int i=1; i<=maxIndex; i++) {
-                roleB = Functions.changeIndex(el, i, maxIndex);
-                outRoles.add(roleB);
-                roles.add(roleB);
+            if (el.contains("[")) {
+                for (int i = 1; i <= maxIndex; i++) {
+                    roleB = Functions.changeIndex(el, i, maxIndex);
+                    outRoles.add(roleB);
+                    if(!oneRoleComm){
+                        roles.add(roleB);
+                    }
+
+                }
+            } else {
+                outRoles.add(el);
+                if(!oneRoleComm){
+                    roles.add(el);
+                }
             }
         }
+
         String label = "";
         ArrayList<String> labels = new ArrayList<String>();
 
@@ -502,64 +532,73 @@ public class BranchNode implements Node {
             }
         }
         Pair<ArrayList<Pair<String, ArrayList<Pair<String, Integer>>>>, ListPair> toRet = null;
-        ArrayList<Pair<String,State>> newRecs = new ArrayList<>();
+        ArrayList<Pair<String, State>> newRecs = new ArrayList<>();
         State newStates = null;
         ArrayList<String> toAddNotCtmc = new ArrayList<>();
         for (int i = 0; i < updates.size(); i++) {
             newStates = new State();
             boolean firstLabel = false;
+            ArrayList<String> labelsSync = new ArrayList<>();
 
-            while (!firstLabel) {
-                String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                StringBuilder salt = new StringBuilder();
-                Random rnd = new Random();
-                int size = 5;
-                while (salt.length() < size) { // length of the random string.
-                    int indexLabel = (int) (rnd.nextFloat() * SALTCHARS.length());
-                    salt.append(SALTCHARS.charAt(indexLabel));
-                }
-                label = salt.toString();
-                if (labels == null) {
-                    labels = new ArrayList<String>();
-                    labels.add(label);
-                    firstLabel = true;
-                } else {
-                    if (!labels.contains(label)) {
-                        firstLabel = true;
+            for(int k=0; k<inRoles.size(); k++) {
+                firstLabel = false;
+                while (!firstLabel) {
+                    String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                    StringBuilder salt = new StringBuilder();
+                    Random rnd = new Random();
+                    int size = 5;
+                    while (salt.length() < size) { // length of the random string.
+                        int indexLabel = (int) (rnd.nextFloat() * SALTCHARS.length());
+                        salt.append(SALTCHARS.charAt(indexLabel));
+                    }
+                    label = salt.toString();
+                    if (labels == null) {
+                        labels = new ArrayList<String>();
                         labels.add(label);
+                        labelsSync.add(label);
+                        firstLabel = true;
+                    } else {
+                        if (!labels.contains(label)) {
+                            firstLabel = true;
+                            labels.add(label);
+                            labelsSync.add(label);
+
+                        }
                     }
                 }
             }
+            if(inRoles.size()>outRoles.size()){
+                for(int k=outRoles.size(); k< inRoles.size(); k++){
+                    roles.add(outRoles.get(0));
+                    outRoles.add(outRoles.get(0));
+                }
+            }
+
             String[] rts = new String[roles.size()];
             String[] tmp = rates.get(i).split("\\*");
-            for(int ii=0; ii<tmp.length; ii++){
-                rts[ii] = tmp[ii];
+
+            for (int p = 0; p < inRoles.size(); p++) {
+                rts[p] = Functions.returnStringNewIndex(tmp[0], p+1, maxIndex);
             }
-            if(tmp.length<roles.size()){
-                for(int j=tmp.length; j<roles.size(); j++){
-                    rts[j] = rts[j-1];
+            if(!oneRoleComm) {
+                for (int p = 0; p < outRoles.size(); p++) {
+                    rts[p + inRoles.size()] = Functions.returnStringNewIndex(tmp[1], p + 1, maxIndex);
                 }
-            }
-            for(int j=1; j<rts.length; j++){
-                rts[j] = Functions.returnStringNewIndex(rts[j], j, maxIndex);
             }
             String[] ups = new String[rts.length];
-            if(updates.get(i).toPrint().contains("&&")){
+
+            if (updates.get(i).toPrint() != null && updates.get(i).toPrint().contains("&&")) {
                 tmp = updates.get(i).toPrint().split("&&");
-                for(int ii=0; ii<tmp.length; ii++){
-                    ups[ii] = tmp[ii];
+                for (int p = 0; p < inRoles.size(); p++) {
+                    ups[p] = Functions.returnStringNewIndex(tmp[0], p+1, maxIndex);
                 }
-                if(tmp.length<roles.size()){
-                    for(int j=tmp.length; j<roles.size(); j++){
-                        ups[j] = ups[j-1];
+                if(!oneRoleComm) {
+                    for (int p = 0; p < outRoles.size(); p++) {
+                        ups[p + inRoles.size()] = Functions.returnStringNewIndex(tmp[1], p + 1, maxIndex);
                     }
                 }
-                for(int j=1; j<ups.length; j++){
-                    ups[j] = Functions.returnStringNewIndex(ups[j], j, maxIndex);
-                }
-            }
-            else{
-                for(int ii = 0; ii<ups.length; ii++){
+            } else {
+                for (int ii = 0; ii < ups.length; ii++) {
                     ups[ii] = "";
                 }
             }
@@ -568,137 +607,150 @@ public class BranchNode implements Node {
                 for (Pair<String, ArrayList<String>> pair : code) {
                     if (pair.getFirst().equals(roles.get(j))) {
                         String newState = "";
-                        if(statements.get(i) instanceof RecNode){
+                        if (statements.get(i) instanceof RecNode) {
                             boolean found = false;
-                            for(Pair<String,ArrayList<State>> state : states){
-                                if(state.getFirst().equals(statements.get(i).toPrint())){
+                            for (Pair<String, ArrayList<State>> state : states) {
+                                if (state.getFirst().equals(statements.get(i).toPrint())) {
                                     found = true;
                                     newState = String.valueOf(state.getSecond().get(0).getModuleState(roles.get(j)));
                                 }
                             }
-                            if(!found){
+                            if (!found) {
                                 boolean foundRole = false;
-                                for(Pair<String,State> pairNew : newRecs){
-                                    if(pairNew.getFirst().equals(statements.get(i).toPrint())){
-                                            if(pairNew.getSecond().getModuleState(roles.get(j))!=-1){
-                                                newState = String.valueOf(pairNew.getSecond().getModuleState(roles.get(j)));
-                                                foundRole = true;
-                                            }
+                                for (Pair<String, State> pairNew : newRecs) {
+                                    if (pairNew.getFirst().equals(statements.get(i).toPrint())) {
+                                        if (pairNew.getSecond().getModuleState(roles.get(j)) != -1) {
+                                            newState = String.valueOf(pairNew.getSecond().getModuleState(roles.get(j)));
+                                            foundRole = true;
+                                        }
                                     }
                                 }
-                                if(!foundRole){
+                                if (!foundRole) {
                                     newState = String.valueOf(initState.getSecond().getModuleState(roles.get(j)) + 1 + i);
                                     boolean added = false;
-                                    for(Pair<String,State> pairNew : newRecs) {
+                                    for (Pair<String, State> pairNew : newRecs) {
                                         if (pairNew.getFirst().equals(statements.get(i).toPrint())) {
                                             pairNew.getSecond().addState(new Pair(roles.get(j), Integer.parseInt(newState)));
                                             added = true;
                                         }
                                     }
-                                    if(newRecs.size()==1 || !added){
+                                    if (newRecs.size() == 1 || !added) {
                                         State stateToAdd = new State();
                                         stateToAdd.addState(new Pair(roles.get(j), Integer.parseInt(newState)));
-                                        newRecs.add(new Pair(statements.get(i).toPrint(),stateToAdd));
+                                        newRecs.add(new Pair(statements.get(i).toPrint(), stateToAdd));
                                     }
                                 }
                             }
-                        }
-                        else if(statements.get(i) instanceof EndNode){
+                        } else if (statements.get(i) instanceof EndNode) {
                             newState = "TBD"; // TODO: change the value of the state
-                        }
-                        else{
-                            newState = String.valueOf(initState.getSecond().getModuleState(roles.get(j)) + 1 + i) ;
-                        }
-                        if(j==0 || !roles.get(j).equals(roleA)){
-                            if(newState.equals("TBD")){
-                                newStates.addState(new Pair(roles.get(j), initState.getSecond().getModuleState(roles.get(j)) + 1));
+                        } else {
+                            boolean roleContained = false;
+                            for(String el : statements.get(i).getRoles()){
+                                if(el.contains(roles.get(j).substring(0,roles.get(j).length()-1))){
+                                    roleContained = true;
+                                }
                             }
-                            else {
+
+                            if(!roleContained){
+                                newState = String.valueOf(0);
+                            }
+                            else{
+                                newState = String.valueOf(initState.getSecond().getModuleState(roles.get(j)) + 1 + i);
+                            }
+                        }
+                        if (j == 0 || !roles.get(j).equals(inRoles.get(0))) { // TODO: to be fixed
+                            if (newState.equals("TBD")) {
+                                newStates.addState(new Pair(roles.get(j), initState.getSecond().getModuleState(roles.get(j)) + 1));
+                            } else {
                                 newStates.addState(new Pair(roles.get(j), Integer.valueOf(newState)));
                             }
                         }
-
                         String toAdd = "[";
-
-                        if (!outRoles.get(0).equals(roleA)) { // TODO: fix, this is temporary
-                            toAdd = toAdd + label + "] ";
+                        if (!oneRoleComm && !outRoles.get(0).equals(roles.get(0))) { // TODO: fix, this is temporary
+                            toAdd = toAdd + labelsSync.get((roles.size()+j)%labelsSync.size()) + "] ";
                         } else {
                             toAdd = toAdd + "] ";
                         }
                         int stateToSet = initState.getSecond().getModuleState(roles.get(j));
-                        if(stateToSet == -1){ stateToSet = 0;}
-                        if(i==0){
+                        if (stateToSet == -1) {
+                            stateToSet = 0;
+                        }
+                        if (i == 0) {
                             toAddNotCtmc.add(toAdd + " (" + roles.get(j) + "=" + stateToSet + ") -> ");
                         }
-                        toAdd = toAdd + " (" + roles.get(j) + "=" +stateToSet + ") -> " + rts[j] + " : " + ups[j] ;
+                        toAdd = toAdd + " (" + roles.get(j) + "=" + stateToSet + ") -> " + rts[j] + " : " + ups[j];
                         int indexToDel = -1;
-                        for(Pair<String,ArrayList<String>> _code : code){
-                            if(_code.getFirst().equals(roles.get(j))){
-                                for(int ii=0; ii<_code.getSecond().size(); ii++){
-                                    if(_code.getSecond().get(ii).contains("IFTE")){
-                                        String tmp2 = _code.getSecond().get(ii).substring(0,_code.getSecond().get(ii).indexOf("IFTE")) ;
+
+                        for (Pair<String, ArrayList<String>> _code : code) {
+                            if (_code.getFirst().equals(roles.get(j))) {
+                                for (int ii = 0; ii < _code.getSecond().size(); ii++) {
+                                    if (_code.getSecond().get(ii).contains("IFTE")) {
+                                        String tmp2 = _code.getSecond().get(ii).substring(0, _code.getSecond().get(ii).indexOf("IFTE"));
                                         indexToDel = ii;
-                                        if(!isCtmc){
-                                            toAdd = tmp2.substring(0,tmp2.indexOf("[")+1) + label + tmp2.substring(tmp2.indexOf("]"),tmp2.length());
-                                            toAddNotCtmc.set(j,toAdd);
-                                        }
-                                        else{
+
+                                        if (!isCtmc) {
+                                            toAdd = tmp2.substring(0, tmp2.indexOf("[") + 1);
+                                            if(!oneRoleComm){
+                                                toAdd = toAdd + label;
+                                            }
+                                            toAdd = toAdd  + tmp2.substring(tmp2.indexOf("]"), tmp2.length());
+                                            toAddNotCtmc.set(j, toAdd);
+                                        } else {
                                             toAdd = tmp2 + rts[j] + " : " + ups[j];
                                         }
                                     }
+
                                 }
-                                if(indexToDel!=-1) {
+                                if (indexToDel != -1) {
                                     _code.getSecond().remove(indexToDel);
                                 }
                             }
 
                         }
-                        if(i==0) {
-                            toAddNotCtmc.set(j, toAddNotCtmc.get(j) +  rts[j] + " : " + ups[j] );
-                        }
-                        else{
-                            String toPrint =  rts[j] + " : " + ups[j];
-                            if(!toAddNotCtmc.get(j).contains(toPrint)) {
+
+                        if (i == 0) {
+                            toAddNotCtmc.set(j, toAddNotCtmc.get(j) + rts[j] + " : " + ups[j]);
+                        } else {
+                            String toPrint = rts[j] + " : " + ups[j];
+                            if (!toAddNotCtmc.get(j).contains(toPrint)) {
                                 toAddNotCtmc.set(j, toAddNotCtmc.get(j) + "+" + toPrint);
-                            }
-                            else{
+                            } else {
                                 contained = true;
                             }
 
                         }
 
-                        if(ups[j]==null || ups[j].isEmpty() || ups[j].equals(" ")){
+                        if (ups[j] == null || ups[j].isEmpty() || ups[j].equals(" ")) {
                             toAdd = toAdd + "(" + roles.get(j) + "'=" + newState + ");";
-                            if(!contained) {
+                            if (!contained) {
                                 toAddNotCtmc.set(j, toAddNotCtmc.get(j) + "(" + roles.get(j) + "'=" + newState + ")");
                             }
-                            if(i==updates.size()-1 && !contained){
-                                toAddNotCtmc.set(j, toAddNotCtmc.get(j)  + ";");
+                            if (i == updates.size() - 1 && !contained) {
+                                toAddNotCtmc.set(j, toAddNotCtmc.get(j) + ";");
                             }
-                        }
-                        else{
+                        } else {
                             toAdd = toAdd + "&(" + roles.get(j) + "'=" + newState + ");";
-                            if(!contained) {
+                            if (!contained) {
                                 toAddNotCtmc.set(j, toAddNotCtmc.get(j) + "&(" + roles.get(j) + "'=" + newState + ")");
                             }
-                            if(i==updates.size()-1 && !contained){
-                                toAddNotCtmc.set(j, toAddNotCtmc.get(j)  + ";");
+                            if (i == updates.size() - 1 && !contained) {
+                                toAddNotCtmc.set(j, toAddNotCtmc.get(j) + ";");
                             }
                         }
+
                         boolean codeContained = false;
-                        for(String _code : pair.getSecond()) {
-                            if(isCtmc){
-                                if(_code.contains(toAdd.substring(toAdd.indexOf("]"),toAdd.length()))){
+                        for (String _code : pair.getSecond()) {
+                            if (isCtmc) {
+                                if (_code.contains(toAdd.substring(toAdd.indexOf("]"), toAdd.length()))) {
                                     codeContained = true;
                                 }
-                            }
-                            else{
-                                if(_code.contains(toAddNotCtmc.get(j).substring(toAddNotCtmc.get(j).indexOf("]"),toAddNotCtmc.get(j).length()))){
+                            } else {
+                                if (_code.contains(toAddNotCtmc.get(j).substring(toAddNotCtmc.get(j).indexOf("]"), toAddNotCtmc.get(j).length()))) {
                                     codeContained = true;
                                 }
                             }
                         }
-                        if (isCtmc && !codeContained && (j == 0 || !roles.get(j).equals(roleA))) {
+                        if (isCtmc && !codeContained /*&& (j == 0 || !roles.get(j).equals(roleA))*/) {
                             pair.getSecond().add(toAdd);
                         }
                         if (!isCtmc && i == updates.size() - 1 && !codeContained) {
@@ -707,42 +759,41 @@ public class BranchNode implements Node {
                     }
                 }
 
-
             }
 
-            for(Pair<String,Integer> pair : lastUpdate.getSecond().getListOfState()){
+            for (Pair<String, Integer> pair : lastUpdate.getSecond().getListOfState()) {
                 boolean contained = false;
-                for(Pair<String,Integer> pair2 : newStates.getListOfState()){
-                    if(pair.getFirst().equals(pair2.getFirst()) && pair.getSecond()==pair2.getSecond()){
+                for (Pair<String, Integer> pair2 : newStates.getListOfState()) {
+                    if (pair.getFirst().equals(pair2.getFirst()) && pair.getSecond() == pair2.getSecond()) {
                         contained = true;
                     }
                 }
-                if(!contained){
+                if (!contained) {
                     newStates.addState(pair);
                 }
             }
             boolean foundProt = false;
-            for(Pair<String, ArrayList<State>> pair : states){
-                if(pair.getFirst().equals(prot)){
+            for (Pair<String, ArrayList<State>> pair : states) {
+                if (pair.getFirst().equals(prot)) {
                     pair.getSecond().add(newStates);
                 }
-                if(pair.getFirst().equals(statements.get(i).toPrint())){
+                if (pair.getFirst().equals(statements.get(i).toPrint())) {
                     pair.getSecond().add(newStates);
                     foundProt = true;
                 }
             }
 
-            if(!foundProt){
+            //if (!foundProt) {
 
-                for(Pair<String,State> pair : newRecs){
+                for (Pair<String, State> pair : newRecs) {
                     ArrayList<State> newStatesRecs = new ArrayList<>();
                     newStatesRecs.add(pair.getSecond());
-                    states.add(new Pair(pair.getFirst(),newStatesRecs));
+                    states.add(new Pair(pair.getFirst(), newStatesRecs));
                 }
-            }
+            //}
 
-            if(!(statements.get(i) instanceof EndNode)){
-                code = statements.get(i).generatePrismCode(code,index,maxIndex,prot,mods,states,recValues,moduleNames, stms, new Pair(prot,newStates), consts);
+            if (!(statements.get(i) instanceof EndNode)) {
+                code = statements.get(i).generatePrismCode(code, index, maxIndex, prot, mods, states, recValues, moduleNames, stms, new Pair(prot, newStates), consts);
             }
 
         }
@@ -927,6 +978,7 @@ public class BranchNode implements Node {
             if (!states.contains(toAdd)) {
                 states.add(toAdd);
             }
+
             if (statements.get(i) instanceof RecNode) {
                 ArrayList<Node> newStms = new ArrayList<>();
                 for (Pair<String, ArrayList<Node>> el : stms) {
@@ -954,7 +1006,7 @@ public class BranchNode implements Node {
             }
         }
 
-        return new Pair(toRet.getFirst(), toRet.getSecond());
+        return toRet;
     }
 
     @Override
