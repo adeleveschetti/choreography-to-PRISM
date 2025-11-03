@@ -1,22 +1,23 @@
-In this section, we present an experimental evaluation of our
-  language.  The examples provided highlight two main points: firstly,
-  the representation using choreographic language is significantly
-  more concise; secondly, we demonstrate that PRISM behaves similarly
-  on both the projection and the original model in PRISM also in our
-  implementation.
-%In order to show that using choreographies is beneficial in the
-%presence of concurrency, we included an example modelling a single
-%process.
- % We have decided to provide two examples with concurrency and one
-% without .  
-In particular, we focus on six benchmarks: a modified version of the
-example reported in Section \ref{sec:example}; a simple Peer-To-Peer protocol;  the Bitcoin Proof of Work
-protocol~\cite{DBLP:journals/concurrency/BistarelliNGLMV23}; the
-Hybrid Casper
-protocol~\cite{DBLP:journals/distribledger/GallettaLMV23}; a synchronous leader election protocol~\cite{IR90} and a modelization of the dining cryptographers~\cite{Cha88}.  The
-generated PRISM files can be found in our online repository
-\cite{repository}.
+To evaluate our approach, we implemented the projection from choreographies to PRISM in Java, 
+using ANTLR to parse our language and automatically generate the corresponding PRISM modules.
+This implementation realises the projection formally defined in Section \ref{sec:proj} 
+and ensures that each benchmark presented below is automatically 
+produced from a single global choreography specification.
+The tool thus serves as an executable validation of our formal framework: 
+it guarantees that the semantics of the generated PRISM models 
+coincide with those of the original choreographies and 
+provides the basis for the empirical analysis reported in this section.
 
+In the following, we present an experimental evaluation of our language.
+The examples highlight two main points: \emph{(i)} the choreographic representation is significantly more concise than the corresponding PRISM code, 
+and \emph{(ii)} PRISM exhibits equivalent behaviour on both the projected and original models.
+We focus on six benchmarks: a modified version of the example reported in Section \ref{sec:example}, 
+a simple peer-to-peer protocol, 
+the Bitcoin Proof-of-Work protocol \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, 
+the Hybrid Casper protocol \cite{DBLP:journals/distribledger/GallettaLMV23}, 
+a synchronous leader-election protocol \cite{IR90}, 
+and a modelisation of the dining cryptographers \cite{Cha88}.
+The generated PRISM files are available in our online repository \cite{repository}.
 
 \paragraph{A Modified thinkteam Protocol.}
 In this modified version of the thinkteam protocol introduced in the earlier sections, we extend the protocol to involve generalised interactions with possible many receivers. Specifically, the \codechor{CheckOut} process now communicates with two users simultaneously, \codechor{User1} and \codechor{User2} each tasked with performing distinct actions upon access to the file. 
@@ -38,7 +39,7 @@ clear sequential structure makes it harder to follow the flow of
 interactions between components, 
 since module definitions and transition labels can be more challenging
 to read and comprehend compared to the concise and structured nature
-of the choreographic language.\newpage
+of the choreographic language.
 \begin{lstlisting}[style=prism-color,caption={Part of the generated PRISM model for the Modified thinkteam Protocol},captionpos=b,label={ex1-gen}]
    module CheckOut
       CheckOut_STATE : [0..2] init 0;
