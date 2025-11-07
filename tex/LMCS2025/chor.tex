@@ -383,7 +383,7 @@ Below, we discuss each of them:
   provided that the indices are known at compile time rather than
   determined dynamically at runtime.
 
-\item {\em Non-deterministic Synchronisation.}  Our implementation
+\item {\em Non-deterministic synchronisation.}  Our implementation
   supports the non-deterministic synchronisation language construct
   $\allsynch pGiI$, where $G$ has the form $\chorcommand g\lambda
   u$. The core idea behind this construct is to enable a set of roles,
@@ -424,7 +424,7 @@ Below, we discuss each of them:
   \end{displaymath}
   %
   This construct provides a compact and structured way to define
-  synchronized interactions. However, it can be rewritten without
+  synchronised interactions. However, it can be rewritten without
   using the $\allsynchName$ syntax by explicitly handling conditions
   using the $\mathtt{if\text{-}then\text{-}else}$ construct:
   
@@ -446,7 +446,7 @@ Below, we discuss each of them:
   %
   The two formulations are equivalent, with the $\allsynchName$ syntax
   acting as syntactic sugar for a structured and readable
-  representation of synchronization. The expanded version using
+  representation of synchronisation. The expanded version using
   $\mathtt{if\text{-}then\text{-}else}$ makes explicit the conditional
   execution of interactions but retains the same behaviour.
 

@@ -79,7 +79,7 @@ correct-by-construction~\cite{CM13}.
 
 This paper presents a choreographic language designed for modelling
 concurrent probabilistic systems.
-%\textcolor{red}{Our language enhances the modeling of concurrent probabilistic systems, providing clarity often absent in 
+%\textcolor{red}{Our language enhances the modelling of concurrent probabilistic systems, providing clarity often absent in 
 %traditional languages. However, it may lack expressivity in certain scenarios. For instance, in cases  where intricate behaviors rely 
 %on features such as conditional statements or probabilistic branching, our language's limitations become 
 %apparent, limiting accurate representation of these complex dynamics.}
@@ -124,11 +124,15 @@ step.  The corresponding PRISM translation is:
 \]
 
 In this translation, the command labeled \(a\) in \(\role{p}\)’s module corresponds to branch \(\lambda_1\) (with rate \(\mu_1\)), and the matching command in \(\role{q}\)’s module (with rate \(\gamma_1\)) sets \(y\) to 2; similarly, label \(b\) corresponds to branch \(\lambda_2\) (with rates \(\mu_2\) for \(\role{p}\) and \(\gamma_2\) for \(\role{q}\)), setting \(x\) and \(y\) appropriately. 
+\textcolor{blue}{
+In the PRISM notation, the prime symbol (e.g. $x'$, $y'$) 
+indicates the next-state value of the corresponding variable, 
+that is, the value it will take after the transition occurs. }
 After executing an interaction command in each module, a subsequent reset command (with rate 1) sets the state counters \( s_{\role p} \) and \( s_{\role q} \) to 0 due to the recursive call following the branching. This mechanism ensures that these commands are only executable when the system has reached this particular state.
 
 
 Through our contributions, we aim to provide a smooth workflow for
-modeling, analyzing, and verifying concurrent probabilistic systems,
+modelling, analysing, and verifying concurrent probabilistic systems,
 ultimately increasing their usability in various application domains.
 %
 In particular, by employing choreographies, we gain a clear and

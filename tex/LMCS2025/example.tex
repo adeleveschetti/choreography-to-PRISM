@@ -83,7 +83,7 @@ choreography representation of this example as the product of the two
 PRISM modules seen above.
 
 
-To formally analyze the system, we need to project the choreography onto individual components, resulting in a PRISM model that captures the behavior of each process explicitly. The projection process ensures that each role in the choreography, such as \codechor{User} and \codechor{CheckOut}, is assigned a state variable that tracks its execution progress. Interactions in the choreography correspond to PRISM synchronization labels, ensuring consistency across transitions. Furthermore, the rates in the choreography, such as $\lambda, \mu, \theta$, translate into transition rates in the PRISM model.
+To formally analyze the system, we need to project the choreography onto individual components, resulting in a PRISM model that captures the behaviour of each process explicitly. The projection process ensures that each role in the choreography, such as \codechor{User} and \codechor{CheckOut}, is assigned a state variable that tracks its execution progress. Interactions in the choreography correspond to PRISM synchronisation labels, ensuring consistency across transitions. Furthermore, the rates in the choreography, such as $\lambda, \mu, \theta$, translate into transition rates in the PRISM model.
 
 Each choreographic rule maps to a corresponding PRISM command. For instance, the choreographic transition 
 \begin{lstlisting}[style=chor-color,frame=none,escapechar=|]

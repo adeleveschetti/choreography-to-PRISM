@@ -17,7 +17,7 @@ state.
 Thus, our approach simulates a choreography interaction in PRISM by
 using (i) labels on which each involved module can synchronise and
 (ii) the state to enable the correct commands at the appropriate
-times.
+time.
 
 Before formalising this idea, we make a slight abuse of notation by
 assuming that each interaction in a choreography is annotated with a
@@ -75,8 +75,8 @@ while, the one below is not:
 %
 In order to ensure consistency for subsequent statements in a
 choreography, our definition of projection uses the function
-\( \mathsf{nodes}(C) \), which returns the number of nodes in abstract
-syntax tree of \( C \). Formally, it is defined as:
+\( \mathsf{nodes}(C) \), which returns the number of nodes in the abstract
+syntax tree (AST) of \( C \). Formally, it is defined as:
 \begin{displaymath}
   \begin{array}{llll}
     \mathsf{nodes}(\interact{p}{\role p_1,\ldots,\role p_n})\ =\ 1+\sum_{j\in J}\mathsf{nodes}(C_j)\\
@@ -106,7 +106,7 @@ begin with choreographies that involve rates:
           &  \boxed{\text{if }\role q=\role p}\\[2mm]
           \qquad
           % \{ 
-          \Big\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {\lambda_j:\ s_{q}\!=\!
+          \Big\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {\lambda_j:\ s_{q}'\!=\!
           s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
           {u_j}q\Big\}_{j\in J}
           \\
@@ -123,7 +123,7 @@ begin with choreographies that involve rates:
           &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
           \qquad
           % \{ 
-          \Big\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {1:\ s_{q}\!=\!
+          \Big\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {1:\ s_{q}'\!=\!
           s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
           {u_j}q\Big\}_{j\in J}
           \\
@@ -184,7 +184,7 @@ begin with choreographies that involve rates:
           \\\\
 
           \proj (\role q, X, \iota) = 
-          \commandBase {} {s_{q}\!=\! \iota}{\ 1: s'_{q}\!=\! \iota'}
+          \{ \commandBase {} {s_{q}\!=\! \iota}{\ 1: s'_{q}\!=\! \iota'} \}
           \qquad\text{ where } \textsf{defs}(X) = \iota'
 
         \end{array}
@@ -194,7 +194,7 @@ begin with choreographies that involve rates:
     three cases deal with the projection of an interaction. When
     projecting the first module \( \role p \), we create one command
     $\commandBase {a_j} {s_{\role q}\!=\! \iota} {\lambda_j:\ s_{\role
-        q}\!=\!  s_{\role q}
+        q}'\!=\!  s_{\role q}
       +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
     {u_j}{\role q}$ for each branch such that
     % 
@@ -359,10 +359,10 @@ begin with choreographies that involve rates:
     guarded by a condition on the state counter (for instance,
     \(s_{\role p}=0\) for the first branch) and includes the update
     that sets the counter to the new state computed above. The modules
-    for \(\role{p}\) and \(\role{q}\) synchronize on the unique labels
-    \(a\) and \(b\), and the overall system’s global transitions
+    for \(\role{p}\) and \(\role{q}\) synchronise on the unique labels
+    \(a\) and \(b\), and the overall system's global transitions
     (e.g. \(F_1\) and \(F_2\)) are derived by the composition of these
-    synchronized commands. The rates of these transitions are computed
+    synchronised commands. The rates of these transitions are computed
     as the product of the individual rates (i.e.,
     \(\lambda_i = \mu_i * \gamma_i\)).
   \end{enumerate}
@@ -517,7 +517,7 @@ by the projection.
 % Also, in the theorem statement, we assume that such variables are
 % initialised to $0$.
 In the projection, we utilize
-alphabetized parallel composition $\pp$, wherein modules synchronise
+alphabetised parallel composition $\pp$, wherein modules synchronise
 solely on labels that appear in both modules.
 %
 \begin{theorem}[Projection]\label{thm:epp}
@@ -603,7 +603,7 @@ solely on labels that appear in both modules.
       other roles are not enabled simply because we assume that the
       choreography is strongly connected; hence, any other
       synchronisation or if-then-else statement is blocked, as it must
-      involve $\role p$ (on different counter value).
+      involve $\role p$ (on a different counter value).
 
     \item $C=X$, and $C=\CEnd$. Similar to the other case.
   \end{itemize}

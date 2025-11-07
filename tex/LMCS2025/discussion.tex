@@ -41,11 +41,11 @@ be then model-checked.
 
 
 \mypar{Discussion and Future Work.}
-% In this section, we discuss the choices made in the development of the choreographic language for modeling and analysing concurrent probabilistic systems as presented in this paper. 
+% In this section, we discuss the choices made in the development of the choreographic language for modelling and analysing concurrent probabilistic systems as presented in this paper. 
 %
 The ultimate goal of the proposed framework is to use the concept of
 choreographic programming to improve several aspects, including
-usability, correctness, and efficiency in modeling and analysing
+usability, correctness, and efficiency in modelling and analysing
 systems.
 %
 In this paper, we address usability and efficiency of modelling
@@ -57,22 +57,22 @@ systems by proposing a probabilistic choreography language.
 % and daunting for users, particularly those without a strong background
 % in formal methods.
 %
-Our language improves the intuitive modeling of concurrent
-probabilistic systems. Traditional modeling languages often lack the
+Our language improves the intuitive modelling of concurrent
+probabilistic systems. Traditional modelling languages often lack the
 expressive clarity needed to effectively capture the intricacies of
 such systems. By designing a language specific for choreographing
-system behaviors, we provide an intuitive means of specifying system
+system behaviours, we provide an intuitive means of specifying system
 dynamics. This approach enables a more natural and straightforward
-modeling process, essential for accurately representing real-world
+modelling process, essential for accurately representing real-world
 systems and ensuring the efficacy of subsequent analysis.
 %
 
-Although choreograhies and the projection function aim to abstract
+Although choreographies and the projection function aim to abstract
 away low-level details, providing instead a higher-level
-representation of system behaviors,
-% However, while this abstraction facilitates intuitive modeling, it
+representation of system behaviours,
+% However, while this abstraction facilitates intuitive modelling, it
 % also introduces the risk of oversimplification. Certain aspects in
-% the behavior of concurrent probabilistic systems may be lost during
+% the behaviour of concurrent probabilistic systems may be lost during
 % the abstraction process, potentially leading to inaccuracies in the
 % analysis results [REALLY?  WHAT IS THIS?].
 the choreographic approach can have some limitations in
@@ -82,8 +82,8 @@ language. Specifically, there are two main cases where our approach
 encounters limitations:
 %
 \textit{(i)} in the asynchronous leader election case study, our
-language prohibits the use of an 'if-then' statement without an
-accompanying 'else' to prevent deadlocked states;
+language prohibits the use of an $\lq\lq$if-then$\lq\lq$ statement without an
+accompanying $\lq\lq$else$\lq\lq$ to prevent deadlocked states;
 %
 \textit{(ii)} in probabilistic broadcast protocols or cyclic server
 polling system models, the system requires probabilistic branching to
@@ -99,7 +99,7 @@ synchronise different modules based on the selected branch.
 % \item \textit{(ii)} Similarly, in probabilistic broadcast protocols,
 %   the issue lies in the labels of synchronizations. Here, all
 %   processes synchronize with the same label for every action. However,
-%   our language prohibits this behavior, as each label must be unique
+%   our language prohibits this behaviour, as each label must be unique
 %   for every synchronization between two or more processes.
 % \item \textit{(iii)} In the cyclic server polling system model, the
 %   processes "station$_i$" perform two distinct actions in the same
@@ -131,12 +131,12 @@ systems.
 % By presenting a simplified semantics for PRISM, we enhance the
 % platform's usability.
 The development of a choreographic language with tailored syntax and
-semantics offers an intuitive modeling approach. We have established
+semantics offers an intuitive modelling approach. We have established
 the correctness of a projection function that translates choreographic
 models to PRISM-compatible formats. Additionally, our compiler enables
 seamless translation of choreographic models to PRISM, facilitating
 powerful analysis while maintaining expressive clarity. These
-contributions bridge the gap between high-level modeling and robust
+contributions bridge the gap between high-level modelling and robust
 analysis in probabilistic systems, paving the way for advancements in
 the field. 
 
