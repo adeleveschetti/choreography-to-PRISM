@@ -32,14 +32,11 @@ In this modified version of the thinkteam protocol introduced in the earlier sec
  \end{lstlisting}
 
  Part of the generated PRISM model is reported in Listing \ref{ex1-gen}. 
-The model is less clear compared to its
-choreographic representation, primarily due to its lack of sequential
-structure and lower level of readability.  In the PRISM model, the absence of a
-clear sequential structure makes it harder to follow the flow of
-interactions between components, 
-since module definitions and transition labels can be more challenging
-to read and comprehend compared to the concise and structured nature
-of the choreographic language.
+It presents the behaviour in a decentralised form: 
+interactions are encoded through synchronising commands distributed across the relevant modules. 
+As a result, understanding the overall flow requires considering 
+how these module-local transitions align, 
+rather than reading a single global specification as in the choreographic representation.
 \begin{lstlisting}[style=prism-color,caption={Part of the generated PRISM model for the Modified thinkteam Protocol},captionpos=b,label={ex1-gen}]
    module CheckOut
       CheckOut_STATE : [0..2] init 0;
@@ -364,6 +361,45 @@ In the original PRISM model, the transition is defined as:
 Here, the transition occurs from \codeprism{coin1 = 0} to \codeprism{coin1 = 1} or \codeprism{coin1 = 2}, without any dependency on the \codeprism{crypt1} state. This allows for a transition regardless of the initial value of \codeprism{crypt1}.
 In contrast, in our generated model, the transition is conditional on both \codeprism{coin1 = 0} and \codeprism{crypt1 = 0}, as shown at line \ref{first-line-crypto} of Listing \ref{dc-code-prism}.
 As a result, the model can only transition when both conditions are met, but in the original model, such a restriction does not exist. This difference in the initial state setup explains why the probability of certain events and the number of states and transtitions in our generated model differ significantly from that of the original model (95 states and 194 transitions in our model vs. 380 and 776 in the original model).
+
+
+\paragraph{Code Size Comparison}
+
+To complement the qualitative discussion of the benchmarks, we provide a quantitative
+comparison of the size of each choreography and the corresponding generated PRISM
+models. Table~\ref{tab:codesize} summarises the number of lines of code (LOC) taken
+from the listings shown in this article. The measurements reflect only the fragments printed
+in the paper; complete PRISM models are typically larger, as each interaction from the
+global choreography expands into multiple module-specific commands.
+
+\begin{table}[h]
+\centering
+\caption{Size comparison between choreographies and generated PRISM models. 
+LOC counts refer to the code fragments shown in the paper; complete PRISM models
+usually contain additional commands and modules.}
+\label{tab:codesize}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Benchmark} & \textbf{Choreography LOC} & \textbf{PRISM LOC (shown)} & \textbf{Notes} \\
+\midrule
+Modified thinkteam protocol & 9  & $\sim$35 & Three modules; fragment shown only \\
+Peer-to-Peer protocol       & 6  & 14       & PRISM shows one client; full model has $N$ clients \\
+Bitcoin Proof-of-Work       & $\sim$12 & n/a & Only a small excerpt shown; full PRISM model not printed \\
+Hybrid Casper               & $>$15 & n/a   & PRISM code omitted; known to be larger \\
+Leader Election             & $\sim$12 & $>$30 & Fragment of one process shown \\
+Dining Cryptographers       & $\sim$35 & $>$40 & Only \texttt{crypt1} shown; others omitted \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The table highlights a structural difference between the two formalisms: 
+choreographies describe global behaviour in a single specification, whereas PRISM distributes
+behaviour across several modules using synchronising commands. As a result, choreography
+descriptions tend to be more compact, while the generated PRISM models are necessarily more
+verbose in order to express the equivalent endpoint behaviour. This comparison motivates the
+use of choreographies as a higher-level modelling notation, while still enabling automated
+generation of analysable PRISM code.
+
 
 %%% Local Variables: 
 %%% mode: latex
