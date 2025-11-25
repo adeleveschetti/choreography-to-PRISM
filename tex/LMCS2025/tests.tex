@@ -367,29 +367,27 @@ As a result, the model can only transition when both conditions are met, but in 
 
 To complement the qualitative discussion of the benchmarks, we provide a quantitative
 comparison of the size of each choreography and the corresponding generated PRISM
-models. Table~\ref{tab:codesize} summarises the number of lines of code (LOC) taken
-from the listings shown in this article. The measurements reflect only the fragments printed
-in the paper; complete PRISM models are typically larger, as each interaction from the
-global choreography expands into multiple module-specific commands.
+models. Table~\ref{tab:codesize} summarises the number of lines of code (LoC) taken
+from the listings shown in this article. The measurements reflect only the fragments printed in the paper and exclude all variable declarations in both the choreography and the corresponding PRISM models. Moreover, complete PRISM models are typically larger, as each interaction from the global choreography expands into multiple module-specific commands.
+
 
 \begin{table}[h]
 \centering
-\caption{Size comparison between choreographies and generated PRISM models. 
-LOC counts refer to the code fragments shown in the paper; complete PRISM models
-usually contain additional commands and modules.}
-\label{tab:codesize}
+
 \begin{tabular}{lccc}
 \toprule
-\textbf{Benchmark} & \textbf{Choreography LOC} & \textbf{PRISM LOC (shown)} & \textbf{Notes} \\
+\textbf{Benchmark} & \textbf{Choreography LoC} & \textbf{PRISM LoC}  \\
 \midrule
-Modified thinkteam protocol & 9  & $\sim$35 & Three modules; fragment shown only \\
-Peer-to-Peer protocol       & 6  & 14       & PRISM shows one client; full model has $N$ clients \\
-Bitcoin Proof-of-Work       & $\sim$12 & n/a & Only a small excerpt shown; full PRISM model not printed \\
-Hybrid Casper               & $>$15 & n/a   & PRISM code omitted; known to be larger \\
-Leader Election             & $\sim$12 & $>$30 & Fragment of one process shown \\
-Dining Cryptographers       & $\sim$35 & $>$40 & Only \texttt{crypt1} shown; others omitted \\
+Modified thinkteam protocol & 4  & $\sim$15  \\
+Peer-to-Peer protocol       & 6  & $\sim$20       \\
+Bitcoin Proof-of-Work       & $\sim$45 & $\sim$100 \\
+Hybrid Casper               & $\sim$70 & $>$220   \\
+Leader Election             & $\sim$20 & $\sim$60 \\
+Dining Cryptographers       & $\sim$17 & $>$40 \\
 \bottomrule
 \end{tabular}
+\caption{Size comparison between choreographies and generated PRISM models.}
+\label{tab:codesize}
 \end{table}
 
 The table highlights a structural difference between the two formalisms: 

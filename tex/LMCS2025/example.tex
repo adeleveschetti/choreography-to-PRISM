@@ -49,10 +49,11 @@ program models a Continuous Time Markov Chain (CTMC). The command
 \codeprism{(User_STATE'=1)} is an update, indicating that
 \codeprism{User_STATE} changes to 1 when this transition fires.
 
-Understanding the interactions between processes in this example might
-indeed be challenging, especially without additional context or
-explanation.  Alternatively, when formalised using our choreographic
-language, the same model becomes significantly clearer.
+Understanding the interactions between processes in this example may require inspecting 
+several module transitions. 
+When formalised using our choreographic language, 
+the interaction structure is expressed as a single global description, 
+which makes the communication pattern directly visible.
 % , as shown in Listing \ref{example2}.
 \begin{lstlisting}[style=chor-color,% caption={Example of Listing \ref{example1} in our choreographic language},captionpos=b,
   frame=none, label={example2}]

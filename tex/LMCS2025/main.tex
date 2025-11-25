@@ -22,6 +22,7 @@
 \usepackage{amssymb}
 \usepackage{tikz}
 \usepackage{amsthm}
+\usepackage{booktabs}
 \usetikzlibrary{automata, positioning, arrows}
 \tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt        
 
@@ -75,10 +76,9 @@
   model-checker. This is achieved through the development of a
   choreography language, which is a specification language that allows
   to describe the desired interactions within a concurrent system from
-  a global viewpoint. Using choreographies gives a clear and complete
-  view of system interactions, making it easier to understand the
-  process flow and identify potential errors, which helps ensure
-  correct execution and improves system reliability. We equip our
+  a global viewpoint. Using choreographies provides a global view of system interactions, 
+  which can help in understanding process flow and identifying potential modelling issues. 
+  We equip our
   language with a probabilistic semantics and then define a formal
   encoding into the PRISM language and discuss its
   correctness. Properties of programs written in our choreographic
