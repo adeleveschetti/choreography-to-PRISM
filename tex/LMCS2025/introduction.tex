@@ -68,14 +68,17 @@ systems, choreographies have proven to be very useful in many use
 cases since they facilitate the automatic generation of decentralised
 implementations that are inherently
 correct-by-construction~\cite{CM13}.
-%
-% \marco{Choreographies particularly excel in environments characterised
-%   by deterministic communication patterns and clear sequencing of
-%   actions. However, they may not be well-suited for managing highly
-%   unpredictable or dynamically changing interactions. In scenarios
-%   where processes exhibit significant variability or intricate
-%   coordination logic, choreographies may lack the flexibility or
-%   adaptability required for effective orchestration.}
+\textcolor{blue}{
+In the kinds of distributed applications we can apply our technique on, the behaviour of the
+system is largely determined by how components communicate, rather than by
+arbitrary interleavings of independent local steps.  What matters is which
+participants interact, in which order, and under which conditions, and this
+is exactly the information that a choreography makes explicit.  Our setting
+is therefore designed towards systems whose main dynamics can be described in
+terms of such structured interaction patterns, while more loosely coordinated
+or highly unstructured behaviours are deliberately not addressed by the
+framework.
+}
 
 This paper presents a choreographic language designed for modelling
 concurrent probabilistic systems.

@@ -11,6 +11,22 @@ provides the basis for the empirical analysis reported in this section.
 In the following, we present an experimental evaluation of our language.
 The examples highlight two main points: \emph{(i)} the choreographic representation is significantly more concise than the corresponding PRISM code, 
 and \emph{(ii)} PRISM exhibits equivalent behaviour on both the projected and original models.
+\textcolor{blue}{In this context, "equivalent behaviour" refers to agreement on the
+quantitative properties that the original case studies were designed to
+analyse, 
+such as reachability and time-bounded probabilities or expected
+values. 
+Our projection targets a structured fragment of PRISM and is not
+intended to reproduce the exact syntactic form or the full range of
+nondeterminism present in some hand-written models. 
+As a consequence, we
+do not aim for bisimilarity or semantic equivalence at the model level.
+Instead, we verify that the projected and reference models lead to the same
+results for the relevant benchmark properties, 
+which is the criterion of
+equivalence we adopt in this evaluation.}
+
+
 We focus on six benchmarks: a modified version of the example reported in Section \ref{sec:example}, 
 a simple peer-to-peer protocol, 
 the Bitcoin Proof-of-Work protocol \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, 
@@ -305,6 +321,7 @@ This allows us to analyze and understand where discrepancies may arise,
 highlighting areas for improvement in the model generation process.
 This case study explores the dining cryptographers protocol introduced by Chaum~\cite{Cha88}, which allows a group of $N$ cryptographers to determine whether their master has anonymously paid for dinner without revealing the identity of the payer. The protocol functions by having each cryptographer flip a fair coin and share the outcome with their right-hand neighbour. Each cryptographer then publicly declares whether the two coins they observe—one they flipped and one received from the left—match or differ. If a cryptographer is the payer, they deliberately alter their response. The final count of $\lq\lq$agree$\lq\lq$ statements follows a predictable pattern: for an odd number of cryptographers, an odd count indicates that one of them paid, while an even count means the master paid. This pattern reverses for an even number of participants.
 
+
 To illustrate the protocol, we examined the case where $N=3$, using the PRISM model\footnote{\url{https://www.prismmodelchecker.org/casestudies/dining_cryptographers.php}} reported in the official repository. We expressed this scenario in our choreographic language, as shown in Listing~\ref{dc-code}.
 \begin{lstlisting}[style=chor-color,caption={Choreography for the Dining Cryptographers Protocol},captionpos=b,label={dc-code}]
    Crypto := if "(coin[i]=0)"@crypt[i] then {
@@ -352,15 +369,35 @@ In fact, in the generated PRISM model in Listing~\ref{dc-code-prism}, we can obs
    $\ldots$
 \end{lstlisting}
 
-In this case, however, the generated model does not exhibit the same behaviour as the original one in the PRISM repository. When analysing the probability of anonimity, the result obtained by the original model, as reported on the website, is 0.25, whereas in our generated model, the probability is 0. This discrepancy arises from a fundamental difference in how the initial state is handled between the two models.
 
-In the original PRISM model, the transition is defined as:
+In this case, however, the generated model does not exhibit the same behaviour as the
+original one in the PRISM repository. When analysing the probability of anonymity, the
+result obtained by the original model, as reported on the website, is \(\,0.25\,\), whereas in
+our generated model the probability is \(0\). This discrepancy arises from a structural
+difference in how transitions are enabled in the two models. In the original PRISM model,
+the initial coin toss of cryptographer~1 is specified as
 \begin{lstlisting}[style=prism-color, frame=none, numbers=none]
-   [] (coin1=0) -> 0.5 : (coin1'=1)&(crypt1'=1) + 0.5 : (coin1'=2)&(crypt1'=1);
-   \end{lstlisting}
-Here, the transition occurs from \codeprism{coin1 = 0} to \codeprism{coin1 = 1} or \codeprism{coin1 = 2}, without any dependency on the \codeprism{crypt1} state. This allows for a transition regardless of the initial value of \codeprism{crypt1}.
-In contrast, in our generated model, the transition is conditional on both \codeprism{coin1 = 0} and \codeprism{crypt1 = 0}, as shown at line \ref{first-line-crypto} of Listing \ref{dc-code-prism}.
-As a result, the model can only transition when both conditions are met, but in the original model, such a restriction does not exist. This difference in the initial state setup explains why the probability of certain events and the number of states and transtitions in our generated model differ significantly from that of the original model (95 states and 194 transitions in our model vs. 380 and 776 in the original model).
+[] (coin1 = 0) -> 0.5 : (coin1' = 1) & (crypt1' = 1) + 0.5 : (coin1' = 2) & (crypt1' = 1);
+\end{lstlisting}
+and is enabled solely on the condition \texttt{coin1 = 0}, independently of the current value
+of \texttt{crypt1}. \textcolor{blue}{In contrast, in our generated model the corresponding transition is guarded
+by both \texttt{coin1 = 0} and \texttt{crypt1 = 0} (see line~\ref{first-line-crypto} of
+Listing~\ref{dc-code-prism}). This additional guard is not incidental: it reflects a fundamental
+property of our projection, namely that every interaction in a choreography is associated
+with a unique control state of each role. The projection introduces control variables to ensure
+that, for each module, only the commands corresponding to the current control state are
+enabled. As a result, our translated models enforce a single enabled action per module per
+state, whereas the original PRISM model permits the initial coin toss to be enabled in
+several control contexts.}
+
+This mismatch in the enabling conditions reduces the reachable state space of the generated
+model and leads to different quantitative results (95 states and 194 transitions in our model
+versus 380 states and 776 transitions in the original one). More generally, this illustrates a
+limitation of our current projection approach: PRISM models in which certain probabilistic
+transitions are enabled independently of the logical control flow of a process -- potentially
+coexisting with other enabled commands -- cannot be reproduced exactly via projection from
+a choreography, because the projection enforces a control discipline absent in such models.
+
 
 
 \paragraph{Code Size Comparison}

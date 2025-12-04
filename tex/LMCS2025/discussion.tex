@@ -28,21 +28,26 @@ undecidable and has no model-checking algorithm. % More recently,
 As far as our knowledge extends, there is currently no work that
 generates probabilistic models from choreographic languages that can
 be then model-checked.
-% However, the concept of synthesizing local participant specifications
-% in accordance with choreographies has been a prominent research focus
-% for over two decades. Research in this domain commonly relies on
-% abstractions rooted in automata or process calculi
-% \cite{DBLP:conf/popl/HondaYC08,DBLP:journals/scp/AutiliIT18}.  Earlier
-% implementations of choreographic programming include Chor
-% \cite{DBLP:conf/popl/CarboneM13} and AIOCJ
-% \cite{DBLP:journals/corr/PredaGGLM16} both of which are grounded in
-% process calculi and capable of generating executable Jolie code.
 
+\textcolor{blue}{
+    A complementary line of research concerns the implementability and
+realisability of global specifications, where the central question is
+whether a given global transition system can be decomposed into
+synchronously communicating local components whose composition
+preserves the intended behaviour
+\cite{10.1007/3-540-46691-6_17, Mukund2002, 10.1007/978-3-031-47963-2_15, 10.1007/978-3-031-62697-5_10}.
+In those settings, the global description is typically unconstrained
+and substantial effort goes into characterising which behaviours admit
+a distributed realisation.  By contrast, choreographies impose a
+structured form of global specification in which all interactions are
+explicitly declared.  This discipline ensures that every choreography
+is directly realisable via projection, but it also restricts the kinds
+of distributed behaviours that can be expressed, placing our approach
+within a well-behaved subspace of the broader realisability landscape.
+}
 
 
 \mypar{Discussion and Future Work.}
-% In this section, we discuss the choices made in the development of the choreographic language for modelling and analysing concurrent probabilistic systems as presented in this paper. 
-%
 The ultimate goal of the proposed framework is to use the concept of
 choreographic programming to improve several aspects, including
 usability, correctness, and efficiency in modelling and analysing
@@ -50,13 +55,6 @@ systems.
 %
 In this paper, we address usability and efficiency of modelling
 systems by proposing a probabilistic choreography language.
-%
-% The decision to introduce a choreographic language for modelling
-% processes for PRISM is based on the need to improve the usability of
-% the model checker. Its language, while very powerful, can be complex
-% and daunting for users, particularly those without a strong background
-% in formal methods.
-%
 Our language improves the intuitive modelling of concurrent
 probabilistic systems. Traditional modelling languages often lack the
 expressive clarity needed to effectively capture the intricacies of
@@ -66,17 +64,21 @@ dynamics. This approach enables a more natural and straightforward
 modelling process, essential for accurately representing real-world
 systems and ensuring the efficacy of subsequent analysis.
 %
-
 Although choreographies and the projection function aim to abstract
 away low-level details, providing instead a higher-level
-representation of system behaviours,
-% However, while this abstraction facilitates intuitive modelling, it
-% also introduces the risk of oversimplification. Certain aspects in
-% the behaviour of concurrent probabilistic systems may be lost during
-% the abstraction process, potentially leading to inaccuracies in the
-% analysis results [REALLY?  WHAT IS THIS?].
-the choreographic approach can have some limitations in
-expressivity. Some of the case studies presented in the PRISM
+representation of system behaviours, the choreographic approach
+naturally imposes some restrictions on expressivity.
+\textcolor{blue}{A choreography prescribes a single global interaction structure that
+determines, for each role, a unique enabled action at any control
+state.  This discipline is crucial for correctness-by-construction but
+also limits the class of systems that can be expressed: models that
+rely on multiple independently enabled transitions, nondeterministic
+interleavings, or asynchronous local evolution cannot, in general, be
+captured by our current framework.  The systems supported by our
+approach are therefore those whose behaviour can be organised around
+explicitly coordinated interactions with a globally determined
+branching structure.} 
+Some of the case studies presented in the PRISM
 documentation~\cite{PRISMdoc} cannot be modeled by using our current
 language. Specifically, there are two main cases where our approach
 encounters limitations:
