@@ -24,8 +24,18 @@
 \newcommand{\indentrule}{\color{code_indent}\vrule\hspace{2pt}}
 
 % Syntax
-\newcommand{\interactBase}[2]{\role{#1}\rightarrow \{\role{#2}\}}
-\newcommand{\interactBasel}[3]{\role{#1}\rightarrow^{#2} \{\role{#3}\}}
+\definecolor{bloodyred}{rgb}{0.6,0.1,0.1}
+\newcommand{\role}[1]{\textcolor{bloodyred}{\mathtt{#1}}}
+%\newcommand{\role}[1]{\mathtt{#1}}
+\newcommand{\nr}{\role p}
+\newcommand{\nrr}{\role q}
+\newcommand{\nrrr}{\role r}
+
+\newcommand{\Var}{\mathsf{Var}}
+\newcommand{\Val}{\mathsf{Val}}
+
+\newcommand{\interactBase}[2]{{#1}\rightarrow \{{#2}\}}
+\newcommand{\interactBasel}[3]{#1\rightarrow^{#2} \{#3\}}
 \newcommand{\interact}[2]{\interactBase{#1}{#2}:\,\Sigma_{j\in J}\lambda_j: u_j;\ C_j}
 \newcommand{\interactl}[3]{\interactBasel{#1}{#2}{#3}:\,\Sigma_{j\in J}\lambda_j: u_j;\ C_j}
 \newcommand{\doubleand}{\text{\&\&}}
@@ -36,14 +46,11 @@
 \newcommand{\commandBase}[3] {[#1]\ #2\ \rightarrow #3}
 \newcommand{\chorcommandBase}[2] {#1\ \rightarrow #2}
 \newcommand{\chorcommand}[3] {\chorcommandBase {#1} \Sigma_{i\in I}#2_i: #3_i}
-\newcommand{\ifTE}[4]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@\role {#2}\ \textcolor{sh_keyword}{\mathtt{then}}\ {#3} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#4}}
-\newcommand{\ifTEl}[5]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@^{#2}\role {#3} \ \textcolor{sh_keyword}{\mathtt{then}}\ {#4} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#5}}
+\newcommand{\ifTE}[4]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@{#2}\ \textcolor{sh_keyword}{\mathtt{then}}\ {#3} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#4}}
+\newcommand{\ifTEl}[5]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@^{#2}{#3} \ \textcolor{sh_keyword}{\mathtt{then}}\ {#4} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#5}}
 \newcommand{\codeprism}[1]{\lstinline[style=prism-color,basicstyle=\small\sffamily]{#1}}
 \newcommand{\codechor}[1]{\lstinline[style=chor-color,basicstyle=\small\ttfamily,mathescape=true]{#1}}
 
-\newcommand{\role}[1]{\mathtt{#1}}
-\newcommand{\Var}{\mathsf{Var}}
-\newcommand{\Val}{\mathsf{Val}}
 
 
 \newcommand{\CEnd}{\mathbf{0}}

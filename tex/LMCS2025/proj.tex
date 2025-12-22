@@ -26,7 +26,7 @@ label. We refer to such a choreography as an {\em annotated
 %
 \begin{definition}[Annotated Choreography]
   An \emph{annotated choreography} is obtained from the choreography
-  syntax by adding a label to each interaction:
+  syntax by adding a label (from $\mathcal L$) to each interaction:
   \[C ::= \interactl{p}a{\role p_1,\ldots,\role p_n} \mid\dots\]
 \end{definition}
 %
@@ -93,10 +93,105 @@ syntax tree (AST) of \( C \). Formally, it is defined as:
 
 We now define the projection function. Since there are key differences
 between using probabilities and using rates, we proceed separately. We
-begin with choreographies that involve rates:
+begin with choreographies that involve rates: \marco{write about $a$ vs $a_j$}
 % 
 \begin{definition}[Projection, CTMC]\label{def:projCTMC} Given an
-  annotated choreography with rates $C$, a module $\role p$, a natural
+  annotated choreography with rates $C$, a module $\role q$, a natural
+  number $\iota$, and $J=\{1,\dots,m\}$, we define the function
+  $\proj$ as:
+  \begin{displaymath}\small
+        \begin{array}{lr}
+
+          \proj (\role q,\interactl{p}{a}{\role p_1,\ldots,\role p_n})= 
+          &  \boxed{\text{if }\role q=\role p}\\[2mm]
+          \qquad
+          % \{ 
+          \left\{\commandBase {a_j} {\ s_{q}\!=\! a} {\lambda_j:}
+          \ s_{q}'\!=\! \mathsf{top}_{\role q}(C_j)\ 
+          \&\ \projE {u_j}q\right\}_{j\in J}
+          \\
+          \qquad\cup\ \bigcup_{j} \proj (\role q, C_j)
+          
+          \\\\
+          % \end{array}
+          % \end{displaymath}
+          
+          % \begin{displaymath}\small
+          %   \begin{array}{lr}
+          
+          \proj (\role q,\interactl{p}{a}{\role p_1,\ldots,\role p_n}, \iota)= 
+          &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
+          \qquad
+          % \{ 
+          \left\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {1:\ s_{q}'\!=\!
+          \left(s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\right)
+          \ \&\ \projE {u_j}q\right\}_{j\in J}
+          \\
+          \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+
+          \\\\
+
+          \proj (\role q,\interactl{p}a{\role p_1,\ldots,\role p_n}, \iota)=
+          % \ \proj (\role{q}, C_1, \iota)
+          &  \hspace{-1.8cm}\boxed{\text{if }\role q\not\in\{\role p, 
+            \role p_1,\ldots,\role p_n\}}
+          \\[2mm]
+
+          \qquad\bigcup_{j} \proj (\role q, C_j, \iota+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+
+          \\\\
+
+          \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
+          &  \boxed{\text{if }\role q=\role p}\\[2mm]
+          \qquad\left\{ 
+          \begin{array}{lll}
+            \commandBase {} {s_{q}\!=\! \iota\ \&\ E}{\ 1: s'_{q}\!=\! \iota+1},\\ 
+            \commandBase {} {s_{q}\!=\! \iota\ \&\ \mathsf{not}(E)}
+            {\ 1: s'_{q}\!=\! \iota+\mathsf{nodes}(C_1)+1}
+          \end{array}
+          \right\}
+          \\[3mm]
+          \qquad\cup\quad \proj (\role{p}, C_1, \iota+1)
+          \quad\cup\quad
+          \proj (\role{p}, C_2, \iota+\mathsf{nodes}(C_1)+1)
+          \\\\
+
+          \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
+          % \ \proj (\role{q}, C_1, \iota)
+          &  \boxed{\text{if }\role q\neq\role p}\\[2mm]
+          %
+          % \quad\cup\quad
+          % \proj (\role{q}, C_2, \iota+\mathsf{nodes}(C_1)+1)
+          % \\[2mm]
+
+
+          \qquad \proj (\role{q}, C_1, \iota)
+          \quad\cup\quad
+          \proj (\role{q}, C_2, \iota+\mathsf{nodes}(C_1))
+
+
+          % \qquad\text{such that if } 
+          % % 
+          % \forall i. 
+          % % \role q\in C_i
+          % \proj (\role{q}, C_i, \iota)\neq\emptyset
+          % \text{ then } \proj (\role{q}, C_1, \iota)= \proj (\role{q}, C_2, \iota)
+
+          \\\\
+
+          \proj (\role q,\CEnd, \iota) = \emptyset
+
+          \\\\
+
+          \proj (\role q, X, \iota) = 
+          \{ \commandBase {} {s_{q}\!=\! \iota}{\ 1: s'_{q}\!=\! \iota'} \}
+          \qquad\text{ where } \textsf{defs}(X) = \iota'
+
+        \end{array}
+      \end{displaymath}
+    \end{definition}
+    \begin{definition}[Projection, CTMC]\label{def:projCTMC} Given an
+  annotated choreography with rates $C$, a module $\role q$, a natural
   number $\iota$, and $J=\{1,\dots,m\}$, we define the function
   $\proj$ as:
   \begin{displaymath}\small
@@ -106,9 +201,9 @@ begin with choreographies that involve rates:
           &  \boxed{\text{if }\role q=\role p}\\[2mm]
           \qquad
           % \{ 
-          \Big\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {\lambda_j:\ s_{q}'\!=\!
-          s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
-          {u_j}q\Big\}_{j\in J}
+          \left\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {\lambda_j:\ s_{q}'\!=\!
+          \left(s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\right)\
+          \&\ \projE {u_j}q\right\}_{j\in J}
           \\
           \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
           
@@ -123,9 +218,9 @@ begin with choreographies that involve rates:
           &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
           \qquad
           % \{ 
-          \Big\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {1:\ s_{q}'\!=\!
-          s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
-          {u_j}q\Big\}_{j\in J}
+          \left\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {1:\ s_{q}'\!=\!
+          \left(s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\right)
+          \ \&\ \projE {u_j}q\right\}_{j\in J}
           \\
           \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
 
@@ -277,7 +372,7 @@ begin with choreographies that involve rates:
   branches. Its annotated form can be written as:
   \begin{displaymath}
     \begin{array}{lll}
-      C \stackrel{\mathsf{def}}{=} \interactBasel{p}a{q}
+      C \stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=} \interactBasel{p}a{q}
       \left\{
       \begin{array}{lll}
         \lambda_1: (x'=1)\&(y'=2);\ C
@@ -420,7 +515,7 @@ identifies the modules involved in the next action of a choreography:
     \begin{array}{rll}
       \hmodules(\interact{p}{\role p_1,\ldots,\role p_n})\ & = \ \{\role p, \role p_1,\dots,\role p_n\}\\
       \hmodules(\ifTE {E}{p}{C_1}{C_2}) \ & =\ \{\role p\}\\
-      \hmodules(X) \ & =\ \hmodules (C)\qquad\qquad(\text{if } X\stackrel{\mathsf{def}}{=} C\in\defin)\\
+      \hmodules(X) \ & =\ \hmodules (C)\qquad\qquad(\text{if } X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=} C\in\defin)\\
       \hmodules(\CEnd) \ & =\ \emptyset
     \end{array}
   \end{displaymath}
@@ -451,8 +546,9 @@ Then, the property of strongly connected is defined below.
       \infer {
       \sconnected(X)
       } {
-      \sconnected(C)\qquad\qquad X\stackrel{\mathsf{def}}{=} C\in\defin
-      }
+      \sconnected(C)\qquad\qquad X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=} C\in\defin
+      &\text{\marco{is this wrong? Annotate? } }
+        }
 
       \qquad\qquad
 
@@ -478,7 +574,7 @@ calls.
 %
 For example, the choreography
 \begin{displaymath}\small
-  X\stackrel{\mathsf{def}}{=} 
+  X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=} 
   \interactBase{p}{q}:\,
   \left(
     \begin{array}{l}
@@ -490,7 +586,7 @@ For example, the choreography
 %
 is strongly connected while 
 % 
-$%  X\stackrel{\mathsf{def}}{=} 
+$
 \interactBase{p}{q}:\,
 \left(
   \begin{array}{l}
@@ -525,6 +621,9 @@ solely on labels that appear in both modules.
   $(S,C) \red{\lambda} (S', C')$ if and only if\quad
   $\pp_{\role q\in C}\ \proj (\role q, C,\iota)\vdash S_{+}
   \red{\lambda} S_{+}'$.
+
+  \marco{Here we need to relate $S'_+$ with $C'$. Discuss an example
+    with Adele to see how it looks}
 \end{theorem}
 \begin{proof}
   The proof proceeds by cases on the syntax of $C$.
