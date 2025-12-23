@@ -59,8 +59,10 @@ The term $\ifTE {E}{\nr}{C_1}{C_2}$ denotes a system where module
   located at other modules) and then (deterministically) branches
   accordingly.  The term $X$ is a (possibly recursive) procedure call:
   in the semantics, we assume that such procedure names are defined
-  separately.  The term $\CEnd$ denotes the system finishing its
-  computation.
+  separately. Moreover, we assume that such definitions are
+  non-contractive, i.e., we avoid definitions of the form
+  $X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=}X$. The term
+  $\CEnd$ denotes the system finishing its computation.
 
 \bigskip
 

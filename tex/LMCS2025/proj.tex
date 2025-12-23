@@ -19,8 +19,8 @@ using (i) labels on which each involved module can synchronise and
 (ii) the state to enable the correct commands at the appropriate
 time.
 
-Before formalising this idea, we make a slight abuse of notation by
-assuming that each interaction in a choreography is annotated with a
+Before formalising this idea, we % make a slight abuse of notation by
+assume that each interaction in a choreography is annotated with a
 label. We refer to such a choreography as an {\em annotated
   choreography}:
 %
@@ -91,207 +91,188 @@ syntax tree (AST) of \( C \). Formally, it is defined as:
 % compute how far into the choreography a particular interaction or
 % branch has progressed.
 
+Additionally, given a label $a$ and a set of indices $I$, the set $\{a_i|i\in I\}$ contains unique identifiers generated from $a$.
+
 We now define the projection function. Since there are key differences
 between using probabilities and using rates, we proceed separately. We
-begin with choreographies that involve rates: \marco{write about $a$ vs $a_j$}
+begin with choreographies that involve rates: 
 % 
 \begin{definition}[Projection, CTMC]\label{def:projCTMC} Given an
-  annotated choreography with rates $C$, a module $\role q$, a natural
-  number $\iota$, and $J=\{1,\dots,m\}$, we define the function
-  $\proj$ as:
+  annotated choreography with rates $C$, a module $\nrr$, and
+  $J=\{1,\dots,m\}$, we define the function $\proj$ as:
   \begin{displaymath}\small
-        \begin{array}{lr}
+    \begin{array}{lr}
 
-          \proj (\role q,\interactl{p}{a}{\role p_1,\ldots,\role p_n})= 
-          &  \boxed{\text{if }\role q=\role p}\\[2mm]
-          \qquad
-          % \{ 
-          \left\{\commandBase {a_j} {\ s_{q}\!=\! a} {\lambda_j:}
-          \ s_{q}'\!=\! \mathsf{top}_{\role q}(C_j)\ 
-          \&\ \projE {u_j}q\right\}_{j\in J}
-          \\
-          \qquad\cup\ \bigcup_{j} \proj (\role q, C_j)
+      \proj (\role q,\interactl{\nr}{a}{\nr_1,\ldots,\nr_n})= 
+      &  \boxed{\text{if }\nrr=\nr}\\[2mm]
+      \qquad
+      % \{ 
+      \left\{\commandBase {a_j} {\ s_{\nrr}\!=\! a} {\lambda_j:}
+      \ s_{\nrr}'\!=\! \mathsf{top}_{\nrr}(C_j)\ 
+      \&\ \projE {u_j}\nrr\right\}_{j\in J}
+      \ \quad\cup\ \quad\bigcup_{j\in J} \proj (\nrr, C_j)
+      
+      \\[1cm]
+
           
-          \\\\
-          % \end{array}
-          % \end{displaymath}
-          
-          % \begin{displaymath}\small
-          %   \begin{array}{lr}
-          
-          \proj (\role q,\interactl{p}{a}{\role p_1,\ldots,\role p_n}, \iota)= 
-          &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
-          \qquad
-          % \{ 
-          \left\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {1:\ s_{q}'\!=\!
-          \left(s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\right)
-          \ \&\ \projE {u_j}q\right\}_{j\in J}
-          \\
-          \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+      \proj (\nrr,\interactl{\nr}{a}{\nr_1,\ldots,\nr_n}, \iota)= 
+      &  \boxed{\text{if }
+        \nrr\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
+      \qquad
+      \left\{\commandBase {a_j} {\ s_{\nrr}\!=\! a} {1:\ s_{\nrr}'\!=\!
+      \mathsf{top}_{\nrr}(C_j)
+      }
+      \ \&\ \projE {u_j}\nrr\right\}_{j\in J}
+      \ \quad\cup\ \quad \bigcup_{j\in J} \proj (\role q, C_j)
+      
+      \\[1cm]
+      
+      \proj (\nrr,\interactl{\nr}a{\nr_1,\ldots,\nr_n})\ =
+      \ \bigcup_{j\in J} \proj (\role q, C_j)
+      &  \hspace{-1cm}\boxed{\text{if }\role q\not\in\{\role p, 
+        \nr_1,\ldots,\nr_n\}}
 
-          \\\\
+      \\[1cm]
 
-          \proj (\role q,\interactl{p}a{\role p_1,\ldots,\role p_n}, \iota)=
-          % \ \proj (\role{q}, C_1, \iota)
-          &  \hspace{-1.8cm}\boxed{\text{if }\role q\not\in\{\role p, 
-            \role p_1,\ldots,\role p_n\}}
-          \\[2mm]
+      \proj (\nrr,\ifTEl {E}a{\nr}{C_1}{C_2}) = 
+      &  \boxed{\text{if }\nrr=\nr}\\[2mm]
+      \qquad\left\{ 
+      \begin{array}{lll}
+        \commandBase {} {s_{\nrr}\!=\! a\ \&\ E}{\ 1: s'_{\nrr}\!=\!
+        \mathsf{top}_{\nrr}(C_1)},\\ 
+        \commandBase {} {s_{\nrr}\!=\! a\ \&\ \mathsf{not}(E)}
+        {\ 1: s'_{\nrr}\!=\! \mathsf{top}_{\nrr}(C_2)}
+      \end{array}
+      \right\}
+      \quad\cup\quad \proj (\nrr, C_1)
+      \quad\cup\quad
+      \proj (\nrr, C_2)
+      \\[1cm]
 
-          \qquad\bigcup_{j} \proj (\role q, C_j, \iota+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+      \proj (\nrr,\ifTEl {E}a{\nr}{C_1}{C_2}) \ =\
+      \proj (\nrr, C_1)
+      \ \cup\
+      \proj (\nrr, C_2)
 
-          \\\\
+      &  \boxed{\text{if }\nrr\neq\nr}
+      
 
-          \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
-          &  \boxed{\text{if }\role q=\role p}\\[2mm]
-          \qquad\left\{ 
-          \begin{array}{lll}
-            \commandBase {} {s_{q}\!=\! \iota\ \&\ E}{\ 1: s'_{q}\!=\! \iota+1},\\ 
-            \commandBase {} {s_{q}\!=\! \iota\ \&\ \mathsf{not}(E)}
-            {\ 1: s'_{q}\!=\! \iota+\mathsf{nodes}(C_1)+1}
-          \end{array}
-          \right\}
-          \\[3mm]
-          \qquad\cup\quad \proj (\role{p}, C_1, \iota+1)
-          \quad\cup\quad
-          \proj (\role{p}, C_2, \iota+\mathsf{nodes}(C_1)+1)
-          \\\\
+      \\[1cm]
 
-          \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
-          % \ \proj (\role{q}, C_1, \iota)
-          &  \boxed{\text{if }\role q\neq\role p}\\[2mm]
-          %
-          % \quad\cup\quad
-          % \proj (\role{q}, C_2, \iota+\mathsf{nodes}(C_1)+1)
-          % \\[2mm]
+      \proj (\nrr,\CEnd) = \emptyset
 
+      \qquad\qquad
 
-          \qquad \proj (\role{q}, C_1, \iota)
-          \quad\cup\quad
-          \proj (\role{q}, C_2, \iota+\mathsf{nodes}(C_1))
-
-
-          % \qquad\text{such that if } 
-          % % 
-          % \forall i. 
-          % % \role q\in C_i
-          % \proj (\role{q}, C_i, \iota)\neq\emptyset
-          % \text{ then } \proj (\role{q}, C_1, \iota)= \proj (\role{q}, C_2, \iota)
-
-          \\\\
-
-          \proj (\role q,\CEnd, \iota) = \emptyset
-
-          \\\\
-
-          \proj (\role q, X, \iota) = 
-          \{ \commandBase {} {s_{q}\!=\! \iota}{\ 1: s'_{q}\!=\! \iota'} \}
-          \qquad\text{ where } \textsf{defs}(X) = \iota'
+      \proj (\nrr, X^a) = 
+      \{ \commandBase {} {s_{\nrr}\!=\! a}{\ 1: s'_{\nrr}\!=\! } \mathsf{top}_{\nrr}(C)\}
+      &\boxed{X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=} C\in\defin}
 
         \end{array}
       \end{displaymath}
     \end{definition}
-    \begin{definition}[Projection, CTMC]\label{def:projCTMC} Given an
-  annotated choreography with rates $C$, a module $\role q$, a natural
-  number $\iota$, and $J=\{1,\dots,m\}$, we define the function
-  $\proj$ as:
-  \begin{displaymath}\small
-        \begin{array}{lr}
+  %   \begin{definition}[Projection, CTMC]\label{def:projCTMC} Given an
+  % annotated choreography with rates $C$, a module $\role q$, a natural
+  % number $\iota$, and $J=\{1,\dots,m\}$, we define the function
+  % $\proj$ as:
+  % \begin{displaymath}\small
+  %       \begin{array}{lr}
 
-          \proj (\role q,\interactl{p}{a}{\role p_1,\ldots,\role p_n}, \iota)= 
-          &  \boxed{\text{if }\role q=\role p}\\[2mm]
-          \qquad
-          % \{ 
-          \left\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {\lambda_j:\ s_{q}'\!=\!
-          \left(s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\right)\
-          \&\ \projE {u_j}q\right\}_{j\in J}
-          \\
-          \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+  %         \proj (\role q,\interactl{p}{a}{\role p_1,\ldots,\role p_n}, \iota)= 
+  %         &  \boxed{\text{if }\role q=\role p}\\[2mm]
+  %         \qquad
+  %         % \{ 
+  %         \left\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {\lambda_j:\ s_{q}'\!=\!
+  %         \left(s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\right)\
+  %         \&\ \projE {u_j}\nrr\right\}_{j\in J}
+  %         \\
+  %         \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
           
-          \\\\
-          % \end{array}
-          % \end{displaymath}
+  %         \\\\
+  %         % \end{array}
+  %         % \end{displaymath}
           
-          % \begin{displaymath}\small
-          %   \begin{array}{lr}
+  %         % \begin{displaymath}\small
+  %         %   \begin{array}{lr}
           
-          \proj (\role q,\interactl{p}{a}{\role p_1,\ldots,\role p_n}, \iota)= 
-          &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
-          \qquad
-          % \{ 
-          \left\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {1:\ s_{q}'\!=\!
-          \left(s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\right)
-          \ \&\ \projE {u_j}q\right\}_{j\in J}
-          \\
-          \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+  %         \proj (\role q,\interactl{p}{a}{\role p_1,\ldots,\role p_n}, \iota)= 
+  %         &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
+  %         \qquad
+  %         % \{ 
+  %         \left\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {1:\ s_{q}'\!=\!
+  %         \left(s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\right)
+  %         \ \&\ \projE {u_j}\nrr\right\}_{j\in J}
+  %         \\
+  %         \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
 
-          \\\\
+  %         \\\\
 
-          \proj (\role q,\interactl{p}a{\role p_1,\ldots,\role p_n}, \iota)=
-          % \ \proj (\role{q}, C_1, \iota)
-          &  \hspace{-1.8cm}\boxed{\text{if }\role q\not\in\{\role p, 
-            \role p_1,\ldots,\role p_n\}}
-          \\[2mm]
+  %         \proj (\role q,\interactl{p}a{\role p_1,\ldots,\role p_n}, \iota)=
+  %         % \ \proj (\role{q}, C_1, \iota)
+  %         &  \hspace{-1.8cm}\boxed{\text{if }\role q\not\in\{\role p, 
+  %           \role p_1,\ldots,\role p_n\}}
+  %         \\[2mm]
 
-          \qquad\bigcup_{j} \proj (\role q, C_j, \iota+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+  %         \qquad\bigcup_{j} \proj (\role q, C_j, \iota+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
 
-          \\\\
+  %         \\\\
 
-          \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
-          &  \boxed{\text{if }\role q=\role p}\\[2mm]
-          \qquad\left\{ 
-          \begin{array}{lll}
-            \commandBase {} {s_{q}\!=\! \iota\ \&\ E}{\ 1: s'_{q}\!=\! \iota+1},\\ 
-            \commandBase {} {s_{q}\!=\! \iota\ \&\ \mathsf{not}(E)}
-            {\ 1: s'_{q}\!=\! \iota+\mathsf{nodes}(C_1)+1}
-          \end{array}
-          \right\}
-          \\[3mm]
-          \qquad\cup\quad \proj (\role{p}, C_1, \iota+1)
-          \quad\cup\quad
-          \proj (\role{p}, C_2, \iota+\mathsf{nodes}(C_1)+1)
-          \\\\
+  %         \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
+  %         &  \boxed{\text{if }\role q=\role p}\\[2mm]
+  %         \qquad\left\{ 
+  %         \begin{array}{lll}
+  %           \commandBase {} {s_{q}\!=\! \iota\ \&\ E}{\ 1: s'_{q}\!=\! \iota+1},\\ 
+  %           \commandBase {} {s_{q}\!=\! \iota\ \&\ \mathsf{not}(E)}
+  %           {\ 1: s'_{q}\!=\! \iota+\mathsf{nodes}(C_1)+1}
+  %         \end{array}
+  %         \right\}
+  %         \\[3mm]
+  %         \qquad\cup\quad \proj (\role{p}, C_1, \iota+1)
+  %         \quad\cup\quad
+  %         \proj (\role{p}, C_2, \iota+\mathsf{nodes}(C_1)+1)
+  %         \\\\
 
-          \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
-          % \ \proj (\role{q}, C_1, \iota)
-          &  \boxed{\text{if }\role q\neq\role p}\\[2mm]
-          %
-          % \quad\cup\quad
-          % \proj (\role{q}, C_2, \iota+\mathsf{nodes}(C_1)+1)
-          % \\[2mm]
-
-
-          \qquad \proj (\role{q}, C_1, \iota)
-          \quad\cup\quad
-          \proj (\role{q}, C_2, \iota+\mathsf{nodes}(C_1))
+  %         \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
+  %         % \ \proj (\role{q}, C_1, \iota)
+  %         &  \boxed{\text{if }\role q\neq\role p}\\[2mm]
+  %         %
+  %         % \quad\cup\quad
+  %         % \proj (\role{q}, C_2, \iota+\mathsf{nodes}(C_1)+1)
+  %         % \\[2mm]
 
 
-          % \qquad\text{such that if } 
-          % % 
-          % \forall i. 
-          % % \role q\in C_i
-          % \proj (\role{q}, C_i, \iota)\neq\emptyset
-          % \text{ then } \proj (\role{q}, C_1, \iota)= \proj (\role{q}, C_2, \iota)
+  %         \qquad \proj (\role{q}, C_1, \iota)
+  %         \quad\cup\quad
+  %         \proj (\role{q}, C_2, \iota+\mathsf{nodes}(C_1))
 
-          \\\\
 
-          \proj (\role q,\CEnd, \iota) = \emptyset
+  %         % \qquad\text{such that if } 
+  %         % % 
+  %         % \forall i. 
+  %         % % \role q\in C_i
+  %         % \proj (\role{q}, C_i, \iota)\neq\emptyset
+  %         % \text{ then } \proj (\role{q}, C_1, \iota)= \proj (\role{q}, C_2, \iota)
 
-          \\\\
+  %         \\\\
 
-          \proj (\role q, X, \iota) = 
-          \{ \commandBase {} {s_{q}\!=\! \iota}{\ 1: s'_{q}\!=\! \iota'} \}
-          \qquad\text{ where } \textsf{defs}(X) = \iota'
+  %         \proj (\role q,\CEnd, \iota) = \emptyset
 
-        \end{array}
-      \end{displaymath}
-    \end{definition}
-    We examine the various cases in the definition above. The first
-    three cases deal with the projection of an interaction. When
-    projecting the first module \( \role p \), we create one command
+  %         \\\\
+
+  %         \proj (\role q, X, \iota) = 
+  %         \{ \commandBase {} {s_{q}\!=\! \iota}{\ 1: s'_{q}\!=\! \iota'} \}
+  %         \qquad\text{ where } \textsf{defs}(X) = \iota'
+
+  %       \end{array}
+  %     \end{displaymath}
+  %   \end{definition}
+    \marco{text must fixed later, first get the proof done} We examine
+    the various cases in the definition above. The first three cases
+    deal with the projection of an interaction. When projecting the
+    first module \( \role p \), we create one command
     $\commandBase {a_j} {s_{\role q}\!=\! \iota} {\lambda_j:\ s_{\role
         q}'\!=\!  s_{\role q}
       +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
-    {u_j}{\role q}$ for each branch such that
+    {u_j}{\nrr}$ for each branch such that
     % 
     \begin{itemize}
     \item the label $a_j$ and its uniqueness ensure that all modules
@@ -307,7 +288,7 @@ begin with choreographies that involve rates: \marco{write about $a$ vs $a_j$}
       function $\mathsf{nodes}$ ensures that every interaction in all
       branches is assigned to a different counter value, thereby also
       discarding all branches that are not selected;
-    \item the projected update $\projE {u_j}{\role q}$ acts as a
+    \item the projected update $\projE {u_j}{\nrr}$ acts as a
       filter on the list of updates in $u_j$, ensuring that only those
       variables local to $\role q$ are updated.
     \end{itemize}
@@ -485,7 +466,7 @@ begin with choreographies that involve rates: \marco{write about $a$ vs $a_j$}
             \commandBase {} {s_{q}\!=\! \iota}{\ \sum_{j\in J} \lambda_j: s'_{q}\!=\! \iota+1+j},\\ 
             \{\commandBase {l_j} {s_{q}\!=\! \iota+1+j}
             \ 1: s'_{q}\!=\! \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})\ \&\ \projE
-            {u_j}q\}_{j\in J}
+            {u_j}\nrr\}_{j\in J}
           \end{array}
           \right\}
           \\
@@ -513,8 +494,9 @@ identifies the modules involved in the next action of a choreography:
   The function $\hmodules$ is defined as follows:
   \begin{displaymath}
     \begin{array}{rll}
-      \hmodules(\interact{p}{\role p_1,\ldots,\role p_n})\ & = \ \{\role p, \role p_1,\dots,\role p_n\}\\
-      \hmodules(\ifTE {E}{p}{C_1}{C_2}) \ & =\ \{\role p\}\\
+      \hmodules(\interact{\nr}{\nr_1,\ldots,\nr_n})\
+      & = \ \{\nr, \nr_1,\dots,\nr_n\}\\
+      \hmodules(\ifTE {E}{\nr}{C_1}{C_2}) \ & =\ \{\nr\}\\
       \hmodules(X) \ & =\ \hmodules (C)\qquad\qquad(\text{if } X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=} C\in\defin)\\
       \hmodules(\CEnd) \ & =\ \emptyset
     \end{array}
@@ -641,7 +623,7 @@ solely on labels that appear in both modules.
     \[
       \Big\{\commandBase {a_j} {\ s_{\role p}\!=\! \iota} {\lambda_j:\ s_{\role p}\!=\!
         s_{\role p} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
-      {u_j}{\role p}\Big\}_{j\in J}
+      {u_j}{\nr}\Big\}_{j\in J}
       \ \cup\ \bigcup_{j} \proj (\role q, C_j,
       \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
     \]
@@ -649,7 +631,7 @@ solely on labels that appear in both modules.
     \[
       \Big\{\commandBase {a_j} {\ s_{\role p_i}\!=\! \iota} {1:\ s_{\role p_i}\!=\!
         s_{\role p_i} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ 
-       \projE{u_j}{\role p_i}\Big\}_{j\in J}
+       \projE{u_j}{\nr_i}\Big\}_{j\in J}
       \ \cup\ \bigcup_{j} \proj (\role p_i, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
     \]
     %
