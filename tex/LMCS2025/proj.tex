@@ -587,25 +587,74 @@ $
 
 \smallskip
 
-We are now ready for our main theorem. In the sequel, $S_+$ is
-obtained from state $S$ by extending its domain with the extra
-variables $s_{\role q}$ (one for each module in a choreography) used
-by the projection. 
-%%% THIS ASSUMPTION BELOW IS NOT GOOD, REMOVED
-% Also, in the theorem statement, we assume that such variables are
-% initialised to $0$.
-In the projection, we utilize
-alphabetised parallel composition $\pp$, wherein modules synchronise
-solely on labels that appear in both modules.
+% We are now ready for our main theorem. In the sequel, $S_+$ is
+% obtained from state $S$ by extending its domain with the extra
+% variables $s_{\role q}$ (one for each module in a choreography) used
+% by the projection.  In the projection, we utilize alphabetised
+% parallel composition $\pp$, wherein modules synchronise solely on
+% labels that appear in both modules.
+We are now ready to state our main theorem, which relates a
+(projectable, strongly connected) choreography with its PRISM
+projection.  In the sequel, $S_+$ denotes the extension of a global
+state $S$ with the additional variables $s_{\role q}$ (one for each
+role $\role q$), introduced by the projection.  The projection uses
+alphabetised parallel composition~$\pp$, where modules synchronise
+only on shared labels.
+
+The theorem departs from standard projection results for choreography
+languages.  In most settings, both choreographies and endpoints are
+expressed in a process algebra in which control flow is encoded
+syntactically, and correctness is shown by relating reductions of
+programs.  PRISM, instead, is declarative: a module consists of a
+fixed set of commands, and execution is driven solely by state changes
+through the enabling of commands.
 %
+Our choreography language combines both aspects.  Although it
+maintains an explicit runtime state for variables, its syntax
+determines the next action to be executed.  The projection reconciles
+this mismatch by encoding control-flow information into the state: the
+variables $s_{\role q}$ act as a distributed program counter, yielding
+the extended state $S_+$.
+%
+Consequently, choreography reduction corresponds in the projection to
+transitions on $S_+$ rather than to syntactic changes of PRISM
+modules.  This induces an apparent asymmetry: reducing a choreography
+before projection may result in fewer commands than projecting first,
+whereas PRISM execution never alters the set of commands.  Our main
+theorem shows that this asymmetry is benign: the observable behaviour
+of the projected model is completely determined by the evolution of
+the extended state $S_+$, which faithfully captures choreography
+execution.
+%
+
+\newpage
+\begin{theorem}[Projection]\label{thm:epp}
+  Let $C$ be a choreography such that $\sconnected(C)$, and let $S_+$
+  be the extension of a global state $S$ with the control variables
+  introduced by the projection.
+  Then
+  \[
+    (S, C) \red{\lambda} (S', C')
+    \quad\text{if and only if}\quad
+    \pp_{\role q\in C}\ \proj(\role q, C)\ \vdash\
+    S_+ \red{\lambda} S_+' ,
+  \]
+  and moreover, for every role $\role q$,
+  \[
+    \proj(\role q, C') \subseteq \proj(\role q, C).
+  \]
+\end{theorem}
+
+
+
+
+
+ 
 \begin{theorem}[Projection]\label{thm:epp}
   Given a choreography $C$ such that $\sconnected(C)$, we have that
   $(S,C) \red{\lambda} (S', C')$ if and only if\quad
   $\pp_{\role q\in C}\ \proj (\role q, C,\iota)\vdash S_{+}
   \red{\lambda} S_{+}'$.
-
-  \marco{Here we need to relate $S'_+$ with $C'$. Discuss an example
-    with Adele to see how it looks}
 \end{theorem}
 \begin{proof}
   The proof proceeds by cases on the syntax of $C$.
