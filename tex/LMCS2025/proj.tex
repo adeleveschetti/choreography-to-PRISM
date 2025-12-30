@@ -5,37 +5,40 @@ constitutes the mapping from choreographies to the PRISM language.
 \subsection{Mapping Choreographies to PRISM} 
 %
 The process of generating endpoint code from a choreography is
-commonly referred to as {\em projection}.  Typically, projection is
+commonly referred to as \emph{projection}. Typically, projection is
 defined separately for each module appearing in the choreography
-program, i.e., given a module (often called a role) and a
-choreography, it generates the code for that particular role.
-However, this is not the case in our approach, as PRISM relies solely
-on label synchronisation and a notion of state, which can be modified
-through standard imperative assignments enabled by conditions on the
-state.
+program, that is, given a module (often called a role) and a
+choreography, it generates the code for that particular module.
 %
-Thus, our approach simulates a choreography interaction in PRISM by
-using (i) labels on which each involved module can synchronise and
-(ii) the state to enable the correct commands at the appropriate
-time.
+In our approach, projection targets PRISM modules and is realised
+using the mechanisms provided by the PRISM modelling language. In
+particular, a choreography interaction is simulated in PRISM by using
+(i) labels on which the involved modules synchronise and (ii) state
+variables that enable the appropriate commands at the correct points
+in the execution.
+%
 
-Before formalising this idea, we % make a slight abuse of notation by
-assume that each interaction in a choreography is annotated with a
-label. We refer to such a choreography as an {\em annotated
-  choreography}:
+Before formalising this idea, we introduce additional machinery that
+allows us to define projection.
 %
+To this end, we annotate choreographies with labels. We refer to such
+choreographies as \emph{annotated choreographies}. Formally,
 \begin{definition}[Annotated Choreography]
   An \emph{annotated choreography} is obtained from the choreography
   syntax by adding a label (from $\mathcal L$) to each interaction:
-  \[C ::= \interactl{\nr}a{\nr_1,\ldots,\nr_n} \mid\dots\]
+  \[
+    C::=\interactl{\nr}a{\nr_1,\ldots,\nr_n}
+    \ \mid\  \ifTEl {E}a{\nr}{C_1}{C_2}
+      \ \mid\  X^a \ \mid\  \CEnd^a
+    \]
 \end{definition}
 %
 The intuition behind annotations is that they allow us to identify a
-particular interaction in the choreography, enabling all modules
-involved to synchronise. Since these annotations must be unique, we
-make the following assumption, which is key to our results:
-\begin{assumption}
-  Each annotation in an annotated choreography occurs exactly once.
+particular point in the choreography, enabling all modules involved to
+synchronise. Since these annotations must be unique, we make the
+following assumption, which is key to our results:
+\begin{assumption}\label{ass:1}
+  Each label in an annotated choreography occurs exactly once.
 \end{assumption}
 % This assumption above ensures that every interaction can be uniquely
 % identified and referenced in the corresponding endpoint projection. 
@@ -45,11 +48,11 @@ As an example, the following choreography is annotated correctly:
   \interactBasel{\nr}a{\nrr,\nrrr}:
   \left(
     \begin{array}{ll}
-      \lambda_1: \ \CEnd \\
+      \lambda_1: \ \CEnd^b \\
       \quad+\\
       \lambda_2:\
       % 
-      \ifTE {E}{\nr}{\ \interactBasel{\nr}b{\nrr}: \lambda_1: \CEnd\ }{\CEnd}
+      \ifTEl {E}c{\nr}{\ \interactBasel{\nr}d{\nrr}: \lambda_1: \CEnd^e\ }{\CEnd^f}
     \end{array}
   \right)
 \]
@@ -60,38 +63,20 @@ while, the one below is not:
   \interactBasel{\nr}a{\nrr,\nrrr}:
   \left(
     \begin{array}{ll}
-      \lambda_1: \ \CEnd \\
+      \lambda_1: \ \CEnd^b \\
       \quad+\\
       \lambda_2:\
       % 
-      \ifTE {E}{\nr}{\ \interactBasel{\nr}a{\nrr}: \lambda_1: \CEnd\ }{\CEnd}
+      \ifTEl {E}c{\nr}{\ \interactBasel{\nr}a{\nrr}: \lambda_1: \CEnd^e\ }{\CEnd^f}
     \end{array}
   \right)
 \]
 % 
 
-\smallskip
+\bigskip
 
-%
-In order to ensure consistency for subsequent statements in a
-choreography, our definition of projection uses the function
-\( \mathsf{nodes}(C) \), which returns the number of nodes in the abstract
-syntax tree (AST) of \( C \). Formally, it is defined as:
-\begin{displaymath}
-  \begin{array}{llll}
-    \mathsf{nodes}(\interact{p}{\role p_1,\ldots,\role p_n})\ =\ 1+\sum_{j\in J}\mathsf{nodes}(C_j)\\
-    \mathsf{nodes}(\ifTE {E}{p}{C_1}{C_2})\ =\ 1+\mathsf{nodes}(C_1)+\mathsf{nodes}(C_2)\\
-    \mathsf{nodes}(X)\ =\ 
-    \mathsf{nodes}(\CEnd)\ =\ 1
-  \end{array}
-\end{displaymath}
-% Specifically, it counts the steps (or interaction points) within
-% each branch of the choreography. In the context of recursive
-% choreographies, it also counts the recursive steps, helping to
-% compute how far into the choreography a particular interaction or
-% branch has progressed.
-
-Additionally, given a label $a$ and a set of indices $I$, the set $\{a_i|i\in I\}$ contains unique identifiers generated from $a$.
+Additionally, given a label $a$ and a set of indices $I$, the set
+$\{a_i|i\in I\}$ contains unique identifiers generated from $a$.
 
 We now define the projection function. Since there are key differences
 between using probabilities and using rates, we proceed separately. We
@@ -105,38 +90,38 @@ begin with choreographies that involve rates:
 
       \proj (\role q,\interactl{\nr}{a}{\nr_1,\ldots,\nr_n})= 
       &  \boxed{\text{if }\nrr=\nr}\\[2mm]
-      \qquad
+      \quad
       % \{ 
       \left\{\commandBase {a_j} {\ s_{\nrr}\!=\! a} {\lambda_j:}
       \ s_{\nrr}'\!=\! \mathsf{top}_{\nrr}(C_j)\ 
       \&\ \projE {u_j}\nrr\right\}_{j\in J}
-      \ \quad\cup\ \quad\bigcup_{j\in J} \proj (\nrr, C_j)
+      \ \ \cup\ \ \bigcup_{j\in J} \proj (\nrr, C_j)
       
       \\[1cm]
 
           
-      \proj (\nrr,\interactl{\nr}{a}{\nr_1,\ldots,\nr_n}, \iota)= 
+      \proj (\nrr,\interactl{\nr}{a}{\nr_1,\ldots,\nr_n})= 
       &  \boxed{\text{if }
         \nrr\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
-      \qquad
+      \quad
       \left\{\commandBase {a_j} {\ s_{\nrr}\!=\! a} {1:\ s_{\nrr}'\!=\!
       \mathsf{top}_{\nrr}(C_j)
       }
       \ \&\ \projE {u_j}\nrr\right\}_{j\in J}
-      \ \quad\cup\ \quad \bigcup_{j\in J} \proj (\role q, C_j)
+      \ \ \cup\ \ \bigcup_{j\in J} \proj (\role q, C_j)
       
       \\[1cm]
       
       \proj (\nrr,\interactl{\nr}a{\nr_1,\ldots,\nr_n})\ =
       \ \bigcup_{j\in J} \proj (\role q, C_j)
-      &  \hspace{-1cm}\boxed{\text{if }\role q\not\in\{\role p, 
+      &  \hspace{-2cm}\boxed{\text{if }\role q\not\in\{\role p, 
         \nr_1,\ldots,\nr_n\}}
 
       \\[1cm]
 
       \proj (\nrr,\ifTEl {E}a{\nr}{C_1}{C_2}) = 
       &  \boxed{\text{if }\nrr=\nr}\\[2mm]
-      \qquad\left\{ 
+      \quad\left\{ 
       \begin{array}{lll}
         \commandBase {} {s_{\nrr}\!=\! a\ \&\ E}{\ 1: s'_{\nrr}\!=\!
         \mathsf{top}_{\nrr}(C_1)},\\ 
@@ -144,8 +129,8 @@ begin with choreographies that involve rates:
         {\ 1: s'_{\nrr}\!=\! \mathsf{top}_{\nrr}(C_2)}
       \end{array}
       \right\}
-      \quad\cup\quad \proj (\nrr, C_1)
-      \quad\cup\quad
+      \ \cup\ \proj (\nrr, C_1)
+      \ \cup\
       \proj (\nrr, C_2)
       \\[1cm]
 
@@ -167,179 +152,49 @@ begin with choreographies that involve rates:
       \{ \commandBase {a} {s_{\nrr}\!=\! a}{\ 1: s'_{\nrr}\!=\! } \mathsf{top}_{\nrr}(C)\}
       &\boxed{X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=} C\in\defin}
 
-        \end{array}
-      \end{displaymath}
-    \end{definition}
-  %   \begin{definition}[Projection, CTMC]\label{def:projCTMC} Given an
-  % annotated choreography with rates $C$, a module $\role q$, a natural
-  % number $\iota$, and $J=\{1,\dots,m\}$, we define the function
-  % $\proj$ as:
-  % \begin{displaymath}\small
-  %       \begin{array}{lr}
+    \end{array}
+  \end{displaymath}
+\end{definition}
+We examine the various cases in the definition above. The first three
+cases deal with the projection of an interaction. When projecting the
+first module $\nr$, we create one command
+$\commandBase {a_j} {s_{\nrr}\!=\! a} {\lambda_j:\ s_{\role q}'\!=\!
+  \topannotation \nrr{C_j}}\ \&\ \projE {u_j}{\nrr}$ for each branch
+such that
+% 
+\begin{itemize}
+\item the label $a_j$ and its uniqueness ensure that all modules take
+  the same branch;
+\item the guard $s_{\role q}\!=\! a$ ensures that these commands are
+  only executable when the system has reached this particular state,
+  identified by the reserved variable $s_{\role q}$;
+\item the rate $\lambda_j$ is the rate that appears in the same branch
+  of the choreography
+\item the successor state is determined by updating $s_{\role q}$ to
+  $\topannotation \nrr{C_j}$, depending on which branch $j$ was
+  selected. Assumption~\ref{ass:1} ensures that every other step in
+  all branches is assigned to a different label, thereby also
+  discarding all branches that are not selected;
+\item the projected update $\projE {u_j}{\nrr}$ acts as a filter on
+  the list of updates in $u_j$, ensuring that only those variables
+  local to $\role q$ are updated.
+\end{itemize}
 
-  %         \proj (\role q,\interactl{p}{a}{\role p_1,\ldots,\role p_n}, \iota)= 
-  %         &  \boxed{\text{if }\role q=\role p}\\[2mm]
-  %         \qquad
-  %         % \{ 
-  %         \left\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {\lambda_j:\ s_{q}'\!=\!
-  %         \left(s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\right)\
-  %         \&\ \projE {u_j}\nrr\right\}_{j\in J}
-  %         \\
-  %         \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
-          
-  %         \\\\
-  %         % \end{array}
-  %         % \end{displaymath}
-          
-  %         % \begin{displaymath}\small
-  %         %   \begin{array}{lr}
-          
-  %         \proj (\role q,\interactl{p}{a}{\role p_1,\ldots,\role p_n}, \iota)= 
-  %         &  \!\!\!\!\!\! \!\!\!\!\!\!\boxed{\text{if }\role q\in\{\role p_1,\ldots,\role p_n\}}\\[2mm]
-  %         \qquad
-  %         % \{ 
-  %         \left\{\commandBase {a_j} {\ s_{q}\!=\! \iota} {1:\ s_{q}'\!=\!
-  %         \left(s_{q} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\right)
-  %         \ \&\ \projE {u_j}\nrr\right\}_{j\in J}
-  %         \\
-  %         \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
-
-  %         \\\\
-
-  %         \proj (\role q,\interactl{p}a{\role p_1,\ldots,\role p_n}, \iota)=
-  %         % \ \proj (\role{q}, C_1, \iota)
-  %         &  \hspace{-1.8cm}\boxed{\text{if }\role q\not\in\{\role p, 
-  %           \role p_1,\ldots,\role p_n\}}
-  %         \\[2mm]
-
-  %         \qquad\bigcup_{j} \proj (\role q, C_j, \iota+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
-
-  %         \\\\
-
-  %         \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
-  %         &  \boxed{\text{if }\role q=\role p}\\[2mm]
-  %         \qquad\left\{ 
-  %         \begin{array}{lll}
-  %           \commandBase {} {s_{q}\!=\! \iota\ \&\ E}{\ 1: s'_{q}\!=\! \iota+1},\\ 
-  %           \commandBase {} {s_{q}\!=\! \iota\ \&\ \mathsf{not}(E)}
-  %           {\ 1: s'_{q}\!=\! \iota+\mathsf{nodes}(C_1)+1}
-  %         \end{array}
-  %         \right\}
-  %         \\[3mm]
-  %         \qquad\cup\quad \proj (\role{p}, C_1, \iota+1)
-  %         \quad\cup\quad
-  %         \proj (\role{p}, C_2, \iota+\mathsf{nodes}(C_1)+1)
-  %         \\\\
-
-  %         \proj (\role q,\ifTE {E}{p}{C_1}{C_2}, \iota) = 
-  %         % \ \proj (\role{q}, C_1, \iota)
-  %         &  \boxed{\text{if }\role q\neq\role p}\\[2mm]
-  %         %
-  %         % \quad\cup\quad
-  %         % \proj (\role{q}, C_2, \iota+\mathsf{nodes}(C_1)+1)
-  %         % \\[2mm]
-
-
-  %         \qquad \proj (\role{q}, C_1, \iota)
-  %         \quad\cup\quad
-  %         \proj (\role{q}, C_2, \iota+\mathsf{nodes}(C_1))
-
-
-  %         % \qquad\text{such that if } 
-  %         % % 
-  %         % \forall i. 
-  %         % % \role q\in C_i
-  %         % \proj (\role{q}, C_i, \iota)\neq\emptyset
-  %         % \text{ then } \proj (\role{q}, C_1, \iota)= \proj (\role{q}, C_2, \iota)
-
-  %         \\\\
-
-  %         \proj (\role q,\CEnd, \iota) = \emptyset
-
-  %         \\\\
-
-  %         \proj (\role q, X, \iota) = 
-  %         \{ \commandBase {} {s_{q}\!=\! \iota}{\ 1: s'_{q}\!=\! \iota'} \}
-  %         \qquad\text{ where } \textsf{defs}(X) = \iota'
-
-  %       \end{array}
-  %     \end{displaymath}
-  %   \end{definition}
-    \marco{text must fixed later, first get the proof done} We examine
-    the various cases in the definition above. The first three cases
-    deal with the projection of an interaction. When projecting the
-    first module \( \role p \), we create one command
-    $\commandBase {a_j} {s_{\role q}\!=\! \iota} {\lambda_j:\ s_{\role
-        q}'\!=\!  s_{\role q}
-      +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
-    {u_j}{\nrr}$ for each branch such that
-    % 
-    \begin{itemize}
-    \item the label $a_j$ and its uniqueness ensure that all modules
-      take the same branch;
-    \item the guard $s_{\role q}\!=\! \iota$ ensures that these
-      commands are only executable when the system has reached this
-      particular state, identified by the reserved variable
-      $s_{\role q}$;
-    \item the rate $\lambda_j$ is the rate that appears in the same
-      branch of the choreography
-    \item the successor state is determined by incrementing
-      $s_{\role q}$, depending on which branch was selected—the
-      function $\mathsf{nodes}$ ensures that every interaction in all
-      branches is assigned to a different counter value, thereby also
-      discarding all branches that are not selected;
-    \item the projected update $\projE {u_j}{\nrr}$ acts as a
-      filter on the list of updates in $u_j$, ensuring that only those
-      variables local to $\role q$ are updated.
-    \end{itemize}
-    %
-    %
-    Note that the translation works only with rates. In the case of
-    probabilities, the definition above is incorrect, as we must
-    ensure that the probabilities in a branching sum to 1.
-    % Obviously, when projecting the next branch, we need to consider
-    % all other possible branches that may have already been
-    % projected. Intuitively, a label and an integer (denoted by
-    % \( \iota \)) identify a node in the abstract syntax tree of a
-    % choreography. Also, from a label \( a \), we generate distinct
-    % sublabels \( a_j \) by simply adding an index \( j \).
-    % % For the sake of space, we do not define the function precisely,
-    % % but we observe that it could also be easily defined via the
-    % % label annotations.
-
-    The second case defines the projection of an interaction for one
-    of the modules \( \{\role p_1, \ldots, \role p_n\} \). Similarly
-    to the previous case, we define a command for each branch of the
-    interaction. However, the rate of each command is set to 1,
-    ensuring that each branch synchronises with probability
-    \( \lambda_j \cdot 1 \) (see rule \( \mathsf{(P_2)} \) in
-    Figure~\ref{fig:semantics}).
-    %
-    The third case is the one when we are projecting a module that is
-    not in the set $\{\role p, \role p_1,\ldots,\role p_n\}$. % Our
-    % projection takes a standard approach that requires each branch to
-    % project the same~\cite{HYC16}. A generalisation of this, which may
-    % require a merging operation~\cite{CHY12} and perhaps a more
-    % intrinsic treatment of rates and probabilities, is left as future
-    % work.
-    % 
-    % \marco{BEST TO COMMENT ON SELF-INTERACTION HERE and RELATED TO
-    %   PROJECTION: The paper does nor require the usual condition of
-    %   non-self-interaction (as evident in Listing 1.4). Additionally,
-    %   clarification is needed on how projection works in cases where
-    %   non-self-interaction is not enforced. Are the projection rules
-    %   ordered? }
-    The if-then-else construct focuses on the module $\role p$ where
-    the guard $E$ must be evaluated. As a consequence, we do not need
-    to have any label for synchronisation. 
-    % As in the previous case, the other modules must project the same
-    % in $C_1$ and $C_2$.
-    For recursive calls, we generate a command that resets the counter
-    to a distinct value given by the auxiliary function
-    $\textsf{defs}$. 
-    %As an example, we can apply the projection
-    %function to Example~\ref{example2} and obtain the PRISM modules
-    %from Example~\ref{example3}.
+The second case defines the projection of an interaction for one of
+the modules \( \{\role p_1, \ldots, \role p_n\} \). Similarly to the
+previous case, we define a command for each branch of the
+interaction. However, the rate of each command is set to~1, ensuring
+that each branch synchronises with rate \( \lambda_j \cdot 1 \) (see
+rule \( \mathsf{(P_2)} \) in Figure~\ref{fig:semantics}).
+% 
+The third case concerns the projection of a module that does not
+belong to the set \( \{\nr, \nr_1,\ldots,\nr_n\} \). The
+if--then--else construct focuses on the module \( \nr \), where the
+guard \(E\) is evaluated. As a consequence, no synchronisation labels
+are required. For recursive calls, we generate a command that
+redirects the execution to the projection of the definitions
+\(\defin\), which are projected separately and are assumed to be
+uniquely annotated.
 
 \begin{example}\label{example-proj}
   %
@@ -350,7 +205,7 @@ begin with choreographies that involve rates:
   Example~\ref{example3}, but which implement the same behaviour.
   %
   In Example \ref{example2}, we defined a recursive choreography in
-  which role \(\role{p}\) interacts with role \(\role{q}\) through two
+  which module \(\nr\) interacts with role \(\nrr\) through two
   branches. Its annotated form can be written as:
   \begin{displaymath}
     \begin{array}{lll}
@@ -389,7 +244,7 @@ begin with choreographies that involve rates:
       \end{array}
       \right\}
       \\[7mm]
-      \role{q}:
+      \nrr:
       \left\{
       \begin{array}{lll}
         \commandBase {d}{s_{\nrr}=d} 
@@ -402,7 +257,7 @@ begin with choreographies that involve rates:
         \commandBase {a_2}{s_{\role q}=a} {1:(y'=1)
         \ \&\ (s_{\role q}'=c) },
         & \quad \commandBase {c}{s_{\role q}=c} 
-          {1:(s_{\role q}'=a) }
+          {1:(s_{\nrr}'=a) }
       \end{array}
       \right\}
     \end{array}
@@ -547,51 +402,51 @@ begin with choreographies that involve rates:
 
 \end{example}
 
-    As hinted above, the projection in Definition~\ref{def:projCTMC}
-    would be incorrect if instead of using rates we used
-    probabilities. This is simply because we cannot force both
-    $\role p$ and $\{\role p_1,\ldots,\role p_n\}$ to take the same
-    branch with the probability distribution of the $\lambda_i$'s. To
-    fix this problem, we have the following definition instead:
-    % 
-    \begin{definition}[Projection, DTMC]\label{def:projDTMC} Given an annotated
-      choreography with probabilities $C$, a module $\role p$, and a
-      natural number $\iota$, we define $\proj$ as:
-      \begin{displaymath}\small
-        \begin{array}{lr}
-
-          \proj (\role q,\interact{p}{\role p_1,\ldots,\role p_n}, \iota)= 
-          &  \boxed{\text{if }\role q=\role p}\\[2mm]
-          \qquad
-          \left\{
-          \begin{array}{lll}
-            \commandBase {} {s_{q}\!=\! \iota}{\ \sum_{j\in J} \lambda_j: s'_{q}\!=\! \iota+1+j},\\ 
-            \{\commandBase {l_j} {s_{q}\!=\! \iota+1+j}
-            \ 1: s'_{q}\!=\! \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})\ \&\ \projE
-            {u_j}\nrr\}_{j\in J}
-          \end{array}
-          \right\}
-          \\
-          \qquad\cup\ \bigcup_{j} \proj (\role q, C_j, s+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
-          \\\\
-
-        \end{array}
-      \end{displaymath}
-      The other cases of the definition are equivalent to those in
-      Definition \ref{def:projCTMC}.
-    \end{definition}
-    The fix is immediate: module $\role p$ takes a (probabilistic)
-    internal decision on the $j^{\text{th}}$ branch and then
-    synchronises on label $l_j$ with $\{\role p_1,\ldots,\role p_n\}$.       
+Note that the projection from Definition~\ref{def:projCTMC} works only
+with rates. In the case of probabilities, we must ensure that the
+probabilities of a branching sum to~1, which is not guaranteed by
+Definition~\ref{def:projCTMC}.
+%
+This is because we cannot enforce both $\nr$ and
+$\{\nr_1,\ldots,\nr_n\}$ to take the same branch according to the
+probability distribution given by the \(\lambda_i\)’s. To address this
+issue, we introduce the following definition instead:
+% 
+\begin{definition}[Projection, DTMC]\label{def:projDTMC} Given an
+  annotated choreography with probabilities $C$ and a module $\nr$, we
+  define $\proj$ as:
+  \begin{displaymath}\small
+    \begin{array}{lr}
+      \proj (\nrr,\interactl{\nr}a{\nr_1,\ldots,\nr_n})= 
+      &  \boxed{\text{if }\nrr=\nr}\\[2mm]
+      \
+      \begin{array}{lll}
+        \left\{\commandBase {} {s_{\nrr}\!=\! a_0}{\ \sum_{j\in J}
+        \lambda_j: s'_{\nrr}\!=\! a_1}\right\}\quad\cup\\[2mm]
+        \left\{\commandBase {a_j} {\ s_{\nrr}\!=\! a_1} {\lambda_j:}
+        \ s_{\nrr}'\!=\! \mathsf{top}_{\nrr}(C_j)\ 
+        \&\ \projE {u_j}\nrr\right\}_{j\in J}
+        \ \ \cup\ \ \bigcup_{j\in J} \proj (\nrr, C_j)
+      \end{array}
+    \end{array}
+  \end{displaymath}
+  The other cases of the definition are equivalent to those in
+  Definition \ref{def:projCTMC}.
+\end{definition}
+The fix is immediate: module $\nr$ takes a (probabilistic) internal
+decision on the $j^{\text{th}}$ branch and then synchronises on label
+$a_j$ with $\{\nr_1,\ldots,\nr_n\}$.
 
 \smallskip
 
-\subsection{Correctness.} Our projection operations are correct with
-respect to the semantics of choreographies and PRISM.
+\subsection{Correctness.}
+Our projection guarantees a correspondence between the semantics of a
+choreography and that of its projection.
 %
-In order to state our main result, we need to use the notions of {\em
-  head modules} and {\em strongly connected} choreography. The former
-identifies the modules involved in the next action of a choreography:
+In order to state this correspondence, we rely on the notions of
+\emph{head modules} and \emph{strongly connected} choreographies. The
+former identifies the modules involved in the next action of a
+choreography:
 \begin{definition}[Head Modules]
   The function $\hmodules$ is defined as follows:
   \begin{displaymath}\small
@@ -613,9 +468,9 @@ Then, the property of strongly connected is defined below.
   \begin{displaymath}\small
     \begin{array}{c}
       \infer {
-      \sconnected(\interact{p}{\role p_1,\ldots,\role p_n})
+      \sconnected(\interact{\nr}{\nr_1,\ldots,\nr_n})
       } {
-      \forall j\in J.\ \sconnected(C_j)\ \land\ \hmodules(C_j)\neq\emptyset\Rightarrow \hmodules(C_j)\cap\{\role p, \role p_1,\dots,\role p_n\}\neq\emptyset
+      \forall j\in J.\ \sconnected(C_j)\ \land\ \hmodules(C_j)\neq\emptyset\Rightarrow \hmodules(C_j)\cap\{\nr, \nr_1,\dots,\nr_n\}\neq\emptyset
       }      
 
 
@@ -632,7 +487,7 @@ Then, the property of strongly connected is defined below.
       \sconnected(\ifTE {E}{\nr}{C_1}{C_2})
       } {
       \forall j\in \{1,2\}.\ \sconnected(C_j)\ \land\ \hmodules(C_j)
-      \neq\emptyset\Rightarrow \role p\in\hmodules(C_j)
+      \neq\emptyset\Rightarrow \nr\in\hmodules(C_j)
       }      
 
       \qquad\qquad
@@ -657,10 +512,9 @@ same approach as that of Carbone et al.~\cite{CHY12}. The basic idea
 is that each interaction shares at least one module with the
 subsequent choreography. In particular, in every branch of a
 probabilistic choice or an if-then-else involving modules
-$\role p_1, \ldots, \role p_n$, the first action (if any) of every
-other module $\role q$ must be an interaction with one of
-$\role p_1, \ldots, \role p_n$, possibly after unfolding recursive
-calls.
+$\nr_1, \ldots, \nr_n$, the first action (if any) of every other
+module $\nrr$ must be an interaction with one of
+$\nr_1, \ldots, \nr_n$, possibly after unfolding recursive calls.
 %
 For example, the choreography $X$, obtained from the definition
 \begin{displaymath}\small
@@ -705,52 +559,23 @@ We are now ready to state our main theorem, which relates a
 (projectable, strongly connected) choreography with its PRISM
 projection.  In the sequel, $S_+$ denotes the extension of a global
 state $S$ with the additional reserved variables $s_{\nrr}$ (one for
-each role $\role q$), introduced by the projection.  The projection
+each module $\nrr$), introduced by the projection.  The projection
 uses alphabetised parallel composition~$\pp$, where modules
 synchronise only on shared labels.
-
-The theorem departs from standard projection results for choreography
-languages.  In most settings, both choreographies and endpoints are
-expressed in a process algebra in which control flow is encoded
-syntactically, and correctness is shown by relating reductions of
-programs.  PRISM, instead, is declarative: a module consists of a
-fixed set of commands, and execution is driven solely by state changes
-through the enabling of commands.
 %
-Our choreography language combines both aspects.  Although it
-maintains an explicit runtime state for variables, its syntax
-determines the next action to be executed.  The projection reconciles
-this mismatch by encoding control-flow information into the state: the
-variables $s_{\role q}$ act as a distributed program counter, yielding
-the extended state $S_+$.
-%
-Consequently, choreography reduction corresponds in the projection to
-transitions on $S_+$ rather than to syntactic changes of PRISM
-modules.  This induces an apparent asymmetry: reducing a choreography
-before projection may result in fewer commands than projecting first,
-whereas PRISM execution never alters the set of commands.  Our main
-theorem shows that this asymmetry is benign: the observable behaviour
-of the projected model is completely determined by the evolution of
-the extended state $S_+$, which faithfully captures choreography
-execution.
-%
-
-
 \begin{theorem}[Projection]\label{thm:epp}
   Let $C$ be an annotated choreography such that $\sconnected(C)$, and
   let $S_+$ be an extension of a global state $S$ such that for all
   $\nrr\in C$, we have that $S_+(s_{\nrr})=\topannotation\nrr C$.
   Then,
   \[
-    (S, C) \red{\lambda} (S', C')
-    \quad\text{if and only if}\quad
-    \pp_{\role q\in C}\ \proj(\role q, C)\ \vdash\
-    S_+ \red{\lambda} S_+' ,
+    (S, C) \red{\lambda} (S', C') \quad\text{if and only if}\quad
+    \pp_{\nrr\in C}\ \proj(\nrr, C)\ \vdash\ S_+ \red{\lambda} S_+' ,
   \]
   such that: 
   \begin{itemize}
   \item for all $\nrr\in C$, we have that
-    $\proj(\role q, C') \subseteq \proj(\role q, C)$
+    $\proj(\nrr, C') \subseteq \proj(\nrr, C)$
   \item $S'=S'_{+}\backslash \{s_{\nrr}\}_{\nrr\in C}$
   \item for all $\nrr\in C$, we have that
     $S_+'(s_{\nrr}) = \topannotation\nrr {C'}$
@@ -762,86 +587,112 @@ execution.
 \begin{proof}
   The proof proceeds by induction on $C$.
   \begin{itemize}
-  \item $C=\interact{p}{\role p_1,\ldots,\role p_n}$.  By (the only
-    applicable) rule \textsf{(Interact)}, we have that
+
+  \item $C=\interactl{p}a{\nr_1,\ldots,\nr_n}$. By the only
+    applicable rule \textsf{(Interact)}, we have
     % 
     \[
-      (S, \interact{p}{\role p_1,\ldots,\role p_n})
-      \red{\lambda_j} (S[u_j], C_j) 
+      (S, \interact{p}{\nr_1,\ldots,\nr_n}) \red{\lambda_k}
+      (S[u_k], C_k).
     \]
     % 
     By definition of projection, we obtain the following PRISM
-    commands. Role $\role p$ is projected as:
+    commands.  Module \(\nr\) is projected as:
     \[
-      \Big\{\commandBase {a_j} {\ s_{\role p}\!=\! \iota} {\lambda_j:\ s_{\role p}\!=\!
-        s_{\role p} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ \projE
-      {u_j}{\nr}\Big\}_{j\in J}
-      \ \cup\ \bigcup_{j} \proj (\role q, C_j,
-      \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+      \left\{ \commandBase{a_j}{s_{\nr}=a}{\lambda_j:\ s_{\nr}'=
+          \mathsf{top}_{\nr}(C_j)\ \&\ \projE{u_j}{\nr}}
+      \right\}_{j\in J} \ \cup\ \bigcup_{j\in J} \proj(\nr, C_j).
     \]
-    Roles $\role{p_i}$ are projected as:
+    Modules \(\nr_i\) are projected as:
     \[
-      \Big\{\commandBase {a_j} {\ s_{\role p_i}\!=\! \iota} {1:\ s_{\role p_i}\!=\!
-        s_{\role p_i} +1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k})}\ \&\ 
-       \projE{u_j}{\nr_i}\Big\}_{j\in J}
-      \ \cup\ \bigcup_{j} \proj (\role p_i, C_j, \iota+1+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+      \left\{
+        \commandBase{a_j}{s_{\nr_i}=a}{1:\ s_{\nr_i}'=
+          \mathsf{top}_{\nr_i}(C_j)\ \&\ \projE{u_j}{\nr_i}}
+      \right\}_{j\in J}
+      \ \cup\ 
+      \bigcup_{j\in J} \proj(\nr_i, C_j).
     \]
-    %
-    while any other role is projected as: 
-    \[\bigcup_{j} \proj (\role q, C_j, \iota+\sum_{k=1}^{j-1}\mathsf{nodes}({C_k}))
+    % 
+    Any other role $\nrr$ is projected as:
+    \[
+      \bigcup_{j\in J} \proj(\nrr, C_j).
     \]
-    We need to show two things: first, that the projection above can
-    make the same transition; second, that if the projection makes a
-    transition, it must be corresponding to that of the choreography
-    above.
-    %
-    Observe that the state of a generated CTMC is uniquely identified
-    by the counter $\iota$.  The uniqueness of the label $a$
-    (Assumption~1) makes sure that all and only those modules involved
-    in this interaction synchronise with this action (this shows from
-    the rules in Figure~\ref{fig:semantics}).  As a consequence of
-    this and since choreographies are strongly connected, the commands
-    generated by this step of the translation are such that any state
-    $S_+$ is exclusively going to enable these commands (because of
-    the guard $s_{\role q}=\iota$) which obviously implies that it
-    must be done with rate $\lambda_j$ applying the rules in
-    Figure~\ref{fig:semantics}. This argument is key for proving both
-    directions of the if and only if.
 
-  \item $C=\ifTE {E}{p}{C_1}{C_2}$. In this case, the projection of
-      $\role p$ is
-      \begin{equation*}
-        \begin{array}{lll}
-          \left\{ 
-          \begin{array}{lll}
-            \commandBase {} {s_{\role p}\!=\! \iota\ \&\ E}{\ 1: s'_{\role p}\!=\! \iota+1},\\ 
-            \commandBase {} {s_{\role p}\!=\! \iota\ \&\ \mathsf{not}(E)}
-            {\ 1: s'_{\role p}\!=\! \iota+\mathsf{nodes}(C_1)+1}
-          \end{array}
-          \right\}
-          \qquad\cup\quad 
-          \\\\
-          \qquad\proj (\role{p}, C_1, \iota+1)
-          \quad\cup\quad
-          \proj (\role{p}, C_2, \iota+\mathsf{nodes}(C_1)+1)
+    We must show two properties: first, that the projection above can
+    make the same transition; and second, that if the projection makes
+    a transition, it necessarily corresponds to the transition of the
+    choreography above.
+    % 
+    Observe that the state of the generated CTMC is uniquely
+    identified by the label \(a\), since Assumption~\ref{ass:1}
+    ensures that, for all \(\nrr\), there is no other command whose
+    guard satisfies \(s_{\nrr}=a\).
+
+    Therefore, the only-if direction of the theorem follows directly
+    by applying rule \textsf{(Interact)}, whose premise is satisfied
+    by deriving, via rule \textsf{(P$_2$)}, the command:
+    \[
+      \begin{array}{l}
+        \commandBase{a_k}{(s_{\nr}=a) \land (s_{\nr_1}=a)
+        \land \dots \land (s_{\nr_n}=a)}\\[1mm]
+        \qquad
+        \begin{array}{ll}
+          (\lambda_k \cdot 1^n):\ &
+                                    (\projE{u_k}{\nr})\ \&\
+                                    (\projE{u_k}{\nr_1})\ \&\
+                                    \dots\ \&\
+                                    (\projE{u_k}{\nr_n})
+          \\[1mm]
+                                  &\ \&\
+                                    (s_{\nr}'=\topannotation{\nr}{C_k})\ \&\
+                                    (s_{\nr_1}'=\topannotation{\nr_1}{C_k})\ \&\
+                                    \dots\ \&\
+                                    (s_{\nr_n}'=\topannotation{\nr_n}{C_k})
         \end{array}
-      \end{equation*}
-      while, for all other roles, we have
+      \end{array}
+    \]
+
+    For the converse direction, as far as the modules
+    \(\nr, \nr_1, \dots, \nr_n\) are concerned, there can only be a
+    synchronisation on the label \(a\). In this case, since no other
+    command can synchronise on \(a\), we conclude that the transition
+    must arise from the projection of the choreography, which can
+    always perform the corresponding step.  It remains to consider the
+    case in which a reduction in the projection involves only commands
+    on modules different from \(\nr, \nr_1, \dots, \nr_n\). However,
+    this case is impossible, since we assume the choreography to be
+    strongly connected. As a consequence, any other transition
+    involving different modules must be causally dependent on one of
+    \(\nr, \nr_1, \dots, \nr_n\).
+
+
+  \item $C=\ifTEl {E}a{\nr}{C_1}{C_2}$.
+      % 
+      In this case, the projection of $\nr$ is
       \begin{equation*}
-          \qquad \proj (\role{q}, C_1, \iota)
-          \quad\cup\quad
-          \proj (\role{q}, C_2, \iota+\mathsf{nodes}(C_1))
+        \quad\left\{ 
+          \begin{array}{lll}
+            \commandBase {} {s_{\nr}\!=\! a\ \&\ E}{\ 1: s'_{\nr}\!=\!
+            \mathsf{top}_{\nr}(C_1)},\\ 
+            \commandBase {} {s_{\nr}\!=\! a\ \&\ \mathsf{not}(E)}
+            {\ 1: s'_{\nr}\!=\! \mathsf{top}_{\nr}(C_2)}
+          \end{array}
+        \right\}
+        \ \cup\ \proj (\nr, C_1)
+        \ \cup\
+        \proj (\nr, C_2)
       \end{equation*}
-      In this case, role $\role p$ is enabled by the counter. All
-      other roles are not enabled simply because we assume that the
-      choreography is strongly connected; hence, any other
+      while, for all other modules, we have
+      $ \proj (\nrr, C_1) \ \cup\ \proj (\nrr, C_2) $.  In this case,
+      module $\nr$ is enabled by the uniqueness of $a$, while all
+      other modules are not simply because we assume that the
+      choreography is strongly connected. Hence, any other
       synchronisation or if-then-else statement is blocked, as it must
-      involve $\role p$ (on a different counter value).
+      involve $\nr$.
+      
 
-    \item $C=X$, and $C=\CEnd$. Similar to the other case.
-
-  \item $C=X^a$. By definition, assuming $X\defrec C_X\in \defin$, it
-    must be the case that, for all $\nrr\in C$:
+    \item $C=X^a$. By definition, assuming $X\defrec C_X\in \defin$,
+      it must be the case that, for all $\nrr\in C$:
     \[\proj (\nrr, X^a) = \{ \commandBase {a} {s_{\nrr}\!=\! a}{\ 1:
         s'_{\nrr}\!=\! }
       \mathsf{top}_{\nrr}(C)\}\qquad\cup\quad\bigcup_{(Y\defrec
@@ -851,18 +702,17 @@ execution.
     \begin{itemize}
     \item (only if). Here, we know that $(S, X^a) \red{1} (S,
       C_X)$. From the uniqueness of $a$, we can derive
-      $\pp_{\role q\in C}\ \proj(\role q, C)\ \vdash\ S_+
-      \red{\lambda} S_+'$ by applying rule (\textsf{M}) on each
-      module, then rule (\textsf{P$_2$}), and finally rule
-      (\textsf{Transition}).
+      $\pp_{\nrr\in C}\ \proj(\nrr, C)\ \vdash\ S_+ \red{\lambda}
+      S_+'$ by applying rule (\textsf{M}) on each module, then rule
+      (\textsf{P$_2$}), and finally rule (\textsf{Transition}).
       % 
       Moreover, we observe that the command
       $s'_{\nrr}\!=\!  \mathsf{top}_{\nrr}(C)$ has no effect on the
       state except modifying the extended variables with the top
       annotation in $C$ which, by assumption again, it is
       unique. Additionally, we observe that for all $\nrr\in C$, we
-      have that $\proj(\role q, C') \subseteq \proj(\role q,
-      C)$. Finally, for all $\nrr\in C$, we have that
+      have that $\proj(\nrr, C') \subseteq \proj(\nrr, C)$. Finally,
+      for all $\nrr\in C$, we have that
       $S_+'(s_{\nrr}) = \topannotation\nrr {C'}$.
 
     \item (if). In this direction, we just observe that, for all
@@ -872,24 +722,53 @@ execution.
 
     \end{itemize}
 
-
+  \item $C=\CEnd^a$. Immediate. 
     
   \end{itemize}
         The case for DTMC is also similar.
 
      
 \end{proof}
+We observe that the theorem departs from standard projection results
+for choreography languages.  In most settings, both choreographies and
+endpoints are expressed in a process algebra in which control flow is
+encoded syntactically, and correctness is shown by relating reductions
+of programs.  PRISM, instead, is declarative: a module consists of a
+fixed set of commands, and execution is driven solely by state changes
+through the enabling of commands.
+%
+Our choreography language combines both aspects.  Although it
+maintains an explicit runtime state for variables, its syntax
+determines the next action to be executed.  The projection reconciles
+this mismatch by encoding control-flow information into the state: the
+variables $s_{\nrr}$ act as a distributed program counter, yielding
+the extended state $S_+$.
+%
+Consequently, choreography reduction corresponds in the projection to
+transitions on $S_+$ rather than to syntactic changes of PRISM
+modules.  
+% Our main theorem shows that this asymmetry is benign: the observable
+% behaviour of the projected model is completely determined by the
+% evolution of the extended state $S_+$, which faithfully captures
+% choreography execution.
+%
+
+
 
 
 \begin{remark}
-  % 
-  We now compare the semantics of the choreography \(X^d\), obtained
-  from the recursive definition in Example~\ref{example2}, with that
-  of its projection from Example~\ref{example-proj}. Starting from a
-  state \(S_0\) in which \(x=0\) and \(y=0\), and from its extension
-  \(S_0^+\), where additionally \(s_{\nr}=d\) and \(s_{\nrr}=d\), both
-  the choreography and its projection from Equation~\ref{eq:1} admit a
-  single possible transition:
+  %
+  Our theorem induces an asymmetry: reducing a choreography before
+  projection may result in fewer commands than projecting first,
+  whereas PRISM execution never alters the set of commands.  Let us
+  focus on an example where we compare the semantics of the
+  choreography \(X^d\), obtained from the recursive definition in
+  Example~\ref{example2}, with that of its projection from
+  Example~\ref{example-proj}. Starting from a state \(S_0\) in which
+  \(x=0\) and \(y=0\), and from its extension \(S_0^+\), where
+  additionally \(s_{\nr}=d\) and \(s_{\nrr}=d\), both the choreography
+  and its projection from Equation~\ref{eq:1} have a single possible
+  transition:
   \begin{displaymath}
     \begin{array}{lll}
       (S_0,\ X^d)\red 1
