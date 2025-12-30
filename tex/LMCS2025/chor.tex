@@ -275,12 +275,12 @@ remainder, we implicitly adopt this program-indexed view.
   Consider the following choreography definition:
   \begin{displaymath}
     \begin{array}{lll}
-      C \stackrel{\mathsf{def}}{=}
+      X \stackrel{\mathsf{def}}{=}
       \interactBase{\nr}{\nrr}
       \left\{
       \begin{array}{l}
-        \lambda_1 : (x' = 1)\ \&\ (y' = 2);\ C \\[0.5mm]
-        \lambda_2 : (x' = 3)\ \&\ (y' = 1);\ C
+        \lambda_1 : (x' = 1)\ \&\ (y' = 2);\ X \\[0.5mm]
+        \lambda_2 : (x' = 3)\ \&\ (y' = 1);\ X
       \end{array}
       \right.
     \end{array}
@@ -289,8 +289,8 @@ remainder, we implicitly adopt this program-indexed view.
   $S_1$ and $S_2$ the states obtained by the two branches of the
   interaction, i.e., $S_1(x)=1,S_1(y)=2$ and $S_2(x)=3,S_2(y)=1$.
   % 
-  The induced Markov chain therefore contains six states,
-  depicted as
+  The induced Markov chain for a recursive call $X$ contains six
+  states, depicted as
   % 
   \begin{center}
     \begin{tikzpicture}[ scale=0.8, transform shape, node distance=0.1cm
@@ -300,7 +300,7 @@ remainder, we implicitly adopt this program-indexed view.
       % Initial recursive state
       \node[conf] (c0) {$
         \begin{array}{c}
-          x=0\\ y=0\\ \hline C
+          x=0\\ y=0\\ \hline X
         \end{array}$};
   
       % Initial interaction
@@ -318,12 +318,12 @@ remainder, we implicitly adopt this program-indexed view.
         \begin{array}{c}
           x=1\\ y=2\\
           \hline
-          C
+          X
         \end{array}$};
       
       \node[conf] (c2) [below right=of i0] {$
         \begin{array}{c}
-          x=3\\ y=1\\ \hline C
+          x=3\\ y=1\\ \hline X
         \end{array}$};
       
       % Interaction states
