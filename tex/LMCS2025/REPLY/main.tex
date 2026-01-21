@@ -1,0 +1,400 @@
+\documentclass[11pt]{article}
+
+% Page layout
+\usepackage{geometry}
+\geometry{margin=1in}
+
+% Formatting
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{enumitem}
+
+% Boxes for reviewer comments
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% Very light grey background
+\definecolor{reviewgray}{gray}{0.95}
+
+\newtcolorbox{reviewercomment}{
+  breakable,
+  colback=reviewgray,
+  colframe=black!20,
+  boxrule=0.3pt,
+  arc=2pt,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+% Commands
+\newcommand{\revcomment}[1]{%
+  \begin{reviewercomment}
+  \textbf{Reviewer comment.} #1
+  \end{reviewercomment}
+}
+
+\newcommand{\revresponse}[1]{%
+  \par\noindent\textbf{Response.} #1
+}
+
+\newcommand{\revchanges}[1]{%
+  \par\noindent\textbf{Changes in the manuscript.} #1
+}
+
+\begin{document}
+
+\title{Response to Reviewers}
+\author{<Paper title>}
+\date{}
+\maketitle
+
+\section*{General Response}
+
+We thank the Editor and the Reviewers for their careful reading of the manuscript and
+for their detailed and constructive feedback. We have revised the paper accordingly
+and believe that the changes substantially improve both clarity and technical depth.
+Below we address each comment point by point.
+
+\newpage
+
+% ============================================================
+\section*{Reviewer 1}
+
+\subsection*{Summary and General Evaluation}
+
+\revcomment{
+This paper introduces a probabilistic version of the Choreography programming approach.
+[...] An additional example highlights the limitations of the approach for modeling dining cryptographers.
+}
+
+\revresponse{
+Thank you for the positive assessment of the contribution and for highlighting both
+its novelty and its relevance. We address the technical concerns in detail below.
+}
+
+\subsection*{Major Technical Concerns}
+
+\revcomment{
+I found the technical result establishing operational equivalence between choreographies
+and their projections rather weak. [...] I would also expect a result establishing
+operational correspondence for a sequence of reductions.
+}
+
+\revresponse{
+<Your response here. Typically: clarify scope of correspondence, explain limitations,
+justify design choice, and outline strengthening of theorem or discussion added.>
+}
+
+\revchanges{
+<Describe changes to Theorem 1, proof structure, added discussion, or limitations section.>
+}
+
+\revcomment{
+I have also some concerns about the way in which the choreography state is projected on
+different participants.
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\revchanges{
+<Where the projection of state is clarified or formalised.>
+}
+
+% ------------------------------------------------------------
+\subsection*{Detailed Comments (Reviewer 1)}
+
+\subsubsection*{Page 2}
+
+\revcomment{
+When giving examples, the use of prime variables is not clear at this point.
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\revchanges{
+<Clarification added to example or notation section.>
+}
+
+\subsubsection*{Page 3}
+
+\revcomment{
+“this is the first probabilistic choreography language that is not a type abstraction”.
+What does this mean?
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\subsubsection*{Page 4}
+
+\revcomment{
+I did not understand the explanation of foreach. What is the role of k? What is op?
+A formal encoding would be welcome.
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\subsubsection*{Page 5}
+
+\revcomment{
+I am puzzled about the notion of Non-deterministic Synchronization. [...]
+}
+
+\revresponse{
+<Your response here, possibly structured around the three bullet questions.>
+}
+
+\revchanges{
+<Formal definition added / well-formedness conditions clarified.>
+}
+
+\subsubsection*{Page 10}
+
+\revcomment{
+Example 3: The modules in this example share variables (y and x). [...]
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\subsubsection*{Page 11}
+
+\revcomment{
+The choice of annotating choreographies with labels seems somewhat ad hoc.
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\subsubsection*{Page 12}
+
+\revcomment{
+Projection of conditionals: I do not understand why the conditional is not projected.
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\revcomment{
+Projection of choreography variable X: This relies on defs(X). [...]
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\revchanges{
+<Formal definition of defs added.>
+}
+
+\subsubsection*{Page 13}
+
+\revcomment{
+Projection of updates: Are you assuming that updates at the choreography level are
+well-formed in some way?
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\subsubsection*{Page 14}
+
+\revcomment{
+Definition 4: Is it not the case that the choreography is annotated?
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\subsubsection*{Page 15}
+
+\revcomment{
+The correspondence theorem (Th. 1) appears somewhat weak [...]
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\subsubsection*{Page 25}
+
+\revcomment{
+Although I can follow the reasoning, I wonder what the fundamental limitation is here.
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\revchanges{
+Added explanation on page 24.
+}
+
+\newpage
+
+% ============================================================
+\section*{Reviewer 2}
+
+\subsection*{General Comments}
+
+\revcomment{
+The authors present an extended version of the COORDINATION 2024 paper.
+}
+
+\revresponse{
+We thank the reviewer for their careful comparison with the conference version.
+}
+
+\revcomment{
+The main changes as stated by the authors at the end of the Introduction are:
+[...] The paper does not help the reader in identifying them.
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\revchanges{
+<Explicit pointers to sections added in the Introduction.>
+}
+
+\revcomment{
+The experimental analysis in Section 7 needs to be improved.
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\revcomment{
+Section 6 is irrelevant and can be removed.
+}
+
+\revresponse{
+<Your response here (removed, shortened, or justified).>
+}
+
+% ------------------------------------------------------------
+\subsection*{Detailed Comments (Reviewer 2)}
+
+\revcomment{
+It is confusing that you use lambda1,2 as label in page 2 [...]
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\revcomment{
+Are you sure Def. 1 works as intended? What happens if x appears in u?
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\revchanges{
+<Definition corrected and semantics clarified.>
+}
+
+\revcomment{
+Is it relevant that your implementation consists of 1246 lines of Java?
+}
+
+\revresponse{
+<Your response here.>
+}
+
+% (Continue similarly for remaining detailed comments as needed.)
+
+\newpage
+
+% ============================================================
+\section*{Reviewer 3}
+
+\subsection*{General Assessment}
+
+\revcomment{
+The paper is well written, well organised, and the results are sound [...]
+}
+
+\revresponse{
+We thank the reviewer for the positive assessment and for the detailed suggestions.
+}
+
+\subsection*{General Comments}
+
+\revcomment{
+The pros and cons of choreographic programming as opposed to process-oriented
+programming are not elaborated upon very much.
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\revchanges{
+Added discussion on pages 2 and 25--26.
+}
+
+\revcomment{
+How does this relate to the notions of implementability and realisability [...]?
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\revchanges{
+Related work extended on page 25.
+}
+
+\revcomment{
+Could the authors imagine a more thorough comparison, e.g., bisimilarity?
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\revchanges{
+Added discussion on page 17.
+}
+
+\subsection*{Detailed Comments}
+
+\revcomment{
+Various spelling inconsistencies (UK vs US spelling).
+}
+
+\revresponse{
+All spelling inconsistencies have been corrected to UK English throughout the paper.
+}
+
+\revchanges{
+Systematic spelling revision applied across the manuscript.
+}
+
+\revcomment{
+Pages 27--28: inconsistent formatting of authors' first names in references.
+}
+
+\revresponse{
+<Your response here.>
+}
+
+\end{document}
