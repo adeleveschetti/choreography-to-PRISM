@@ -414,16 +414,28 @@ Below, we discuss each of them:
   can be further facilitated by introducing syntactic sugar that
   allows iteration over the set of indices that parameterise these
   modules. To this end, our language implementation includes the
-  construct $\textsf{foreach } (k\ \textit{op}\ i)\ u@A[i]$, which can
-  be used in front of and update $u$ to parameterise with respect to
-  multiple instances of the same type of variable over different
+  construct $\textsf{foreach } (k\ \textit{op}\ i)\ u@A[k]$, which can
+  be used in front of and update $u$ to parameterise it with respect
+  to multiple instances of the same type of variable over different
   modules.
+  
+  The construct enables the expression $(k\ \textit{op}\ i)$, where
+  $k$ binds in $u@A[k]$, to identify a set of indices which can then
+  be used in the update $u@A[i]$.
   %
-  The construct enables the expression $(k\ \textit{op}\ i)$ to range
-  over a set of indices, which can then be used in $u@A[i]$. In
-  essence, it provides a more concise and readable way to express
-  operations over multiple indexed modules. Notably, this construct
-  can be encoded explicitly by numbering the modules manually,
+  Such set is obtained from the predicate determined by the operator
+  $\textit{op}$ with respect to the distinguished index $i$.
+  %
+  Formally, $(k\ \textit{op}\ i)$ denotes the set
+  $\{\, k \in I \mid \textit{op}(k,i) \,\}$.
+  %
+  For example, $(k \neq i)$ denotes $\{\, k \in I \mid k \neq i \,\}$,
+  that is, all defined indices except $i$.
+  % 
+
+  In essence, the {\sf foreach} construct provides a concise and
+  readable way to express operations over multiple indexed modules. It
+  can be encoded explicitly by enumerating the modules manually,
   provided that the indices are known at compile time rather than
   determined dynamically at runtime.
 
