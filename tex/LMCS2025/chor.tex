@@ -64,7 +64,10 @@ The term $\ifTE {E}{\nr}{C_1}{C_2}$ denotes a system where module
   $X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=}X$. The term
   $\CEnd$ denotes the system finishing its computation.
 
-\bigskip
+\paragraph{Assumption.} We assume that every writable choreography is
+such that, for every interaction $\interact{\nr}{\nr_1,\ldots,\nr_n}$,
+all updates in each $u_j$ are assignments to variables located at
+$\nr, \nr_1,\ldots,\nr_n$.
 
 
 \subsection{Semantics.} The semantics of a choreography is a relation
