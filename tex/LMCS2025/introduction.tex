@@ -108,30 +108,52 @@ example. We have a choreographic language specification:
 \]
 %
 This specification recursively defines an interaction where process
-\(\role{p}\) communicates with process \(\role{q}\), choosing either
-branch \(\lambda_1\) (setting \(x\) to 1 and \(y\) to 2) or branch
-\(\lambda_2\) (setting \(x\) to 3 and \(y\) to 1).  The projection
-mechanism translates this global choreography into local PRISM modules
-by annotating each interaction with a unique label (e.g., \(a\) for
-\(\lambda_1\) and \(b\) for \(\lambda_2\)) and using a state counter
-(e.g., \(s_{\role p}\) and \(s_{\role q}\)) to uniquely identify each
-step.  The corresponding PRISM translation is:
-
+\(\role{p}\) communicates with process \(\role{q}\), choosing the
+first branch with rate $\lambda_1$ (and setting \(x\) to 1 and \(y\)
+to 2) or the second branch with rate $\lambda_2$ (and setting \(x\) to
+3 and \(y\) to 1). Here, we adopt PRISM notation where the prime
+symbol (e.g. $x'$, $y'$) indicates the next-state value of the
+corresponding variable, that is, the value it will take after the
+transition occurs.
+% 
+The projection mechanism translates this global choreography into
+local PRISM modules by annotating each branch with a unique label
+(e.g., $a$ and $b$) and using a state variable (e.g., \(s_{\role p}\)
+and \(s_{\role q}\)) to uniquely identify each step.
+%
+The behaviour described by the choreography could be represented in
+PRISM as:
+%
 \[
 \begin{array}{llll}
-\role{p}: \{ & \quad \commandBase {a}{s_{\role p}=0} {\mu_1:(x'=1)\ \&\ (s_{\role p}'=1)} \quad\qquad \commandBase {}{s_{\role p}=1} {1:(s_{\role p}'=0)}\\[2mm]
-              & \quad \commandBase {b}{s_{\role p}=0} {\mu_2:(x'=3)\ \&\ (s_{\role p}'=2)} \quad\qquad \commandBase {}{s_{\role p}=2} {1:(s_{\role p}'=0)} \quad \}\\[2mm]
-\role{q}: \{ & \quad \commandBase {a}{s_{\role q}=0} {\gamma_1:(y'=2)\ \&\ (s_{\role q}'=1)} \qquad\quad \commandBase {}{s_{\role q}=1} {1:(s_{\role q}'=0)}\\[2mm]
-              & \quad \commandBase {b}{s_{\role q}=0} {\gamma_2:(y'=1)\ \&\ (s_{\role q}'=2)} \qquad\quad \commandBase {}{s_{\role q}=2} {1:(s_{\role q}'=0)} \quad \}\\
+\role{p}: \{ & \quad \commandBase {a}{s_{\role p}=0} {\lambda_1:(x'=1)\ \&\ (s_{\role p}'=1)} \quad\qquad \commandBase {}{s_{\role p}=1} {1:(s_{\role p}'=0)}\\[2mm]
+              & \quad \commandBase {b}{s_{\role p}=0} {\lambda_2:(x'=3)\ \&\ (s_{\role p}'=2)} \quad\qquad \commandBase {}{s_{\role p}=2} {1:(s_{\role p}'=0)} \quad \}\\[2mm]
+\role{q}: \{ & \quad \commandBase {a}{s_{\role q}=0} {1:(y'=2)\ \&\ (s_{\role q}'=1)} \qquad\quad \commandBase {}{s_{\role q}=1} {1:(s_{\role q}'=0)}\\[2mm]
+              & \quad \commandBase {b}{s_{\role q}=0} {1:(y'=1)\ \&\ (s_{\role q}'=2)} \qquad\quad \commandBase {}{s_{\role q}=2} {1:(s_{\role q}'=0)} \quad \}\\
 \end{array}
 \]
 
-In this translation, the command labeled \(a\) in \(\role{p}\)’s module corresponds to branch \(\lambda_1\) (with rate \(\mu_1\)), and the matching command in \(\role{q}\)’s module (with rate \(\gamma_1\)) sets \(y\) to 2; similarly, label \(b\) corresponds to branch \(\lambda_2\) (with rates \(\mu_2\) for \(\role{p}\) and \(\gamma_2\) for \(\role{q}\)), setting \(x\) and \(y\) appropriately. 
-\textcolor{blue}{
-In the PRISM notation, the prime symbol (e.g. $x'$, $y'$) 
-indicates the next-state value of the corresponding variable, 
-that is, the value it will take after the transition occurs. }
-After executing an interaction command in each module, a subsequent reset command (with rate 1) sets the state counters \( s_{\role p} \) and \( s_{\role q} \) to 0 due to the recursive call following the branching. This mechanism ensures that these commands are only executable when the system has reached this particular state.
+In this translation, modules $\nr$ and $\nrr$ contain a set of
+commands. For example,
+$\commandBase {a}{s_{\role p}=0} {\lambda_1:(x'=1)\ \&\ (s_{\role
+    p}'=1)}$ in module $\nr$ is a command where $a$ is a label over
+which the module can synchronise with other modules, $s_{\role p}=0$
+is a guard, $\lambda_1$ is a rate, and $(x'=1)\ \&\ (s_{\role p}'=1)$
+is a list of commands for modifying the state. In this particular
+translation, labels $a$ and $b$ are used for simulating the two
+branches of the choreography, respectively.
+%
+The command labeled \(a\) in \(\role{p}\)’s module corresponds to the
+branch with rate \(\lambda_1\), and the matching command in
+\(\role{q}\)’s module (with rate \(1\)) sets \(y\) to 2; similarly,
+label \(b\) corresponds to the second branch with rate \(\lambda_2\)
+for \(\role{p}\) and rate \(1\) for \(\role{q}\), setting \(x\) and
+\(y\) appropriately.  After executing an interaction command in each
+module, a subsequent reset command (with rate 1) sets the state
+counters \( s_{\role p} \) and \( s_{\role q} \) to 0 due to the
+recursive call following the branching. This mechanism ensures that
+these commands are only executable when the system has reached this
+particular state.
 
 
 Through our contributions, we aim to provide a smooth workflow for
