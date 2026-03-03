@@ -8,23 +8,22 @@ it guarantees that the semantics of the generated PRISM models
 coincide with those of the original choreographies and 
 provides the basis for the empirical analysis reported in this section.
 
-In the following, we present an experimental evaluation of our language.
-The examples highlight two main points: \emph{(i)} the choreographic representation is significantly more concise than the corresponding PRISM code, 
-and \emph{(ii)} PRISM exhibits equivalent behaviour on both the projected and original models.
-\textcolor{blue}{In this context, "equivalent behaviour" refers to agreement on the
-quantitative properties that the original case studies were designed to
-analyse, 
-such as reachability and time-bounded probabilities or expected
-values. 
-Our projection targets a structured fragment of PRISM and is not
-intended to reproduce the exact syntactic form or the full range of
-nondeterminism present in some hand-written models. 
-As a consequence, we
-do not aim for bisimilarity or semantic equivalence at the model level.
-Instead, we verify that the projected and reference models lead to the same
-results for the relevant benchmark properties, 
-which is the criterion of
-equivalence we adopt in this evaluation.}
+In the following, we present an experimental evaluation of our
+language.  The examples highlight two main points: \emph{(i)} the
+choreographic representation is significantly more concise than the
+corresponding PRISM code, and \emph{(ii)} PRISM exhibits equivalent
+behaviour on both the projected and original models.  {In this
+  context, "equivalent behaviour" refers to agreement on the
+  quantitative properties that the original case studies were designed
+  to analyse, such as reachability and time-bounded probabilities or
+  expected values.  Our projection targets a structured fragment of
+  PRISM and is not intended to reproduce the exact syntactic form or
+  the full range of nondeterminism present in some hand-written
+  models.  As a consequence, we do not aim for bisimilarity or
+  semantic equivalence at the model level.  Instead, we verify that
+  the projected and reference models lead to the same results for the
+  relevant benchmark properties, which is the criterion of equivalence
+  we adopt in this evaluation.}
 
 
 We focus on six benchmarks: a modified version of the example reported in Section \ref{sec:example}, 
@@ -379,16 +378,20 @@ the initial coin toss of cryptographer~1 is specified as
 \begin{lstlisting}[style=prism-color, frame=none, numbers=none]
 [] (coin1 = 0) -> 0.5 : (coin1' = 1) & (crypt1' = 1) + 0.5 : (coin1' = 2) & (crypt1' = 1);
 \end{lstlisting}
-and is enabled solely on the condition \texttt{coin1 = 0}, independently of the current value
-of \texttt{crypt1}. \textcolor{blue}{In contrast, in our generated model the corresponding transition is guarded
-by both \texttt{coin1 = 0} and \texttt{crypt1 = 0} (see line~\ref{first-line-crypto} of
-Listing~\ref{dc-code-prism}). This additional guard is not incidental: it reflects a fundamental
-property of our projection, namely that every interaction in a choreography is associated
-with a unique control state of each role. The projection introduces control variables to ensure
-that, for each module, only the commands corresponding to the current control state are
-enabled. As a result, our translated models enforce a single enabled action per module per
-state, whereas the original PRISM model permits the initial coin toss to be enabled in
-several control contexts.}
+and is enabled solely on the condition \texttt{coin1 = 0},
+independently of the current value of \texttt{crypt1}. {In contrast,
+  in our generated model the corresponding transition is guarded by
+  both \texttt{coin1 = 0} and \texttt{crypt1 = 0} (see
+  line~\ref{first-line-crypto} of Listing~\ref{dc-code-prism}). This
+  additional guard is not incidental: it reflects a fundamental
+  property of our projection, namely that every interaction in a
+  choreography is associated with a unique control state of each
+  role. The projection introduces control variables to ensure that,
+  for each module, only the commands corresponding to the current
+  control state are enabled. As a result, our translated models
+  enforce a single enabled action per module per state, whereas the
+  original PRISM model permits the initial coin toss to be enabled in
+  several control contexts.}
 
 This mismatch in the enabling conditions reduces the reachable state space of the generated
 model and leads to different quantitative results (95 states and 194 transitions in our model

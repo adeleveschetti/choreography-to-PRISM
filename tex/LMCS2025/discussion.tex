@@ -29,22 +29,22 @@ As far as our knowledge extends, there is currently no work that
 generates probabilistic models from choreographic languages that can
 be then model-checked.
 
-\textcolor{blue}{
-    A complementary line of research concerns the implementability and
-realisability of global specifications, where the central question is
-whether a given global transition system can be decomposed into
-synchronously communicating local components whose composition
-preserves the intended behaviour
-\cite{10.1007/3-540-46691-6_17, Mukund2002, 10.1007/978-3-031-47963-2_15, 10.1007/978-3-031-62697-5_10}.
-In those settings, the global description is typically unconstrained
-and substantial effort goes into characterising which behaviours admit
-a distributed realisation.  By contrast, choreographies impose a
-structured form of global specification in which all interactions are
-explicitly declared.  This discipline ensures that every choreography
-is directly realisable via projection, but it also restricts the kinds
-of distributed behaviours that can be expressed, placing our approach
-within a well-behaved subspace of the broader realisability landscape.
-}
+{ A complementary line of research concerns the implementability and
+  realisability of global specifications, where the central question
+  is whether a given global transition system can be decomposed into
+  synchronously communicating local components whose composition
+  preserves the intended behaviour \cite{10.1007/3-540-46691-6_17,
+    Mukund2002, 10.1007/978-3-031-47963-2_15,
+    10.1007/978-3-031-62697-5_10}.  In those settings, the global
+  description is typically unconstrained and substantial effort goes
+  into characterising which behaviours admit a distributed
+  realisation.  By contrast, choreographies impose a structured form
+  of global specification in which all interactions are explicitly
+  declared.  This discipline ensures that every choreography is
+  directly realisable via projection, but it also restricts the kinds
+  of distributed behaviours that can be expressed, placing our
+  approach within a well-behaved subspace of the broader realisability
+  landscape.  }
 
 
 \mypar{Discussion and Future Work.}
@@ -67,21 +67,20 @@ systems and ensuring the efficacy of subsequent analysis.
 Although choreographies and the projection function aim to abstract
 away low-level details, providing instead a higher-level
 representation of system behaviours, the choreographic approach
-naturally imposes some restrictions on expressivity.
-\textcolor{blue}{A choreography prescribes a single global interaction structure that
-determines, for each role, a unique enabled action at any control
-state.  This discipline is crucial for correctness-by-construction but
-also limits the class of systems that can be expressed: models that
-rely on multiple independently enabled transitions, nondeterministic
-interleavings, or asynchronous local evolution cannot, in general, be
-captured by our current framework.  The systems supported by our
-approach are therefore those whose behaviour can be organised around
-explicitly coordinated interactions with a globally determined
-branching structure.} 
-Some of the case studies presented in the PRISM
-documentation~\cite{PRISMdoc} cannot be modeled by using our current
-language. Specifically, there are two main cases where our approach
-encounters limitations:
+naturally imposes some restrictions on expressivity.  {A choreography
+  prescribes a single global interaction structure that determines,
+  for each role, a unique enabled action at any control state.  This
+  discipline is crucial for correctness-by-construction but also
+  limits the class of systems that can be expressed: models that rely
+  on multiple independently enabled transitions, nondeterministic
+  interleavings, or asynchronous local evolution cannot, in general,
+  be captured by our current framework.  The systems supported by our
+  approach are therefore those whose behaviour can be organised around
+  explicitly coordinated interactions with a globally determined
+  branching structure.}  Some of the case studies presented in the
+PRISM documentation~\cite{PRISMdoc} cannot be modeled by using our
+current language. Specifically, there are two main cases where our
+approach encounters limitations:
 %
 \textit{(i)} in the asynchronous leader election case study, our
 language prohibits the use of an $\lq\lq$if-then$\lq\lq$ statement without an

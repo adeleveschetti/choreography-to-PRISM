@@ -77,10 +77,17 @@ while, the one below is not:
 
 Additionally, given a label $a$ and a set of indices $I$, the set
 $\{a_i|i\in I\}$ contains unique identifiers generated from $a$.
+Moreover, we extend a state with special variables $s_{\nr}$, one for
+each module that we are considering in a given choreography.
+%
+The intuition is to use this variable to store the state of the
+choreography that its projection is simulating. This is in line with
+the example in Section~\ref{sec:intro}, except that our formal
+projection uses annotation labels instead of natural numbers.
 
-We now define the projection function. Since there are key differences
-between using probabilities and using rates, we proceed separately. We
-begin with choreographies that involve rates: 
+We can then define the projection function. Since there are key
+differences between using probabilities and using rates, we proceed
+separately. We begin with choreographies that involve rates:
 % 
 \begin{definition}[Projection, CTMC]\label{def:projCTMC} Given an
   annotated choreography with rates $C$, a module $\nrr$, and
@@ -175,9 +182,16 @@ such that
   selected. Assumption~\ref{ass:1} ensures that every other step in
   all branches is assigned to a different label, thereby also
   discarding all branches that are not selected;
-\item the projected update $\projE {u_j}{\nrr}$ acts as a filter on
-  the list of updates in $u_j$, ensuring that only those variables
-  local to $\role q$ are updated.
+  
+\item The projected update $\projE{u_j}{\nrr}$ acts as a filter on the
+  list of updates in $u_j$, ensuring that only those variables local
+  to $\role q$ are updated. 
+  %
+  We do not define $\projE{u_j}{\nrr}$ explicitly, but we assume that
+  it adheres to the allocation of variables fixed prior to projection.
+  %
+  Since PRISM would reject an input in which multiple modules update
+  the same variables, our projection is undefined in such cases.
 \end{itemize}
 
 The second case defines the projection of an interaction for one of
@@ -536,7 +550,9 @@ $
   \begin{array}{l}
     \lambda_1: u_1;\ \interactBase{\nrrr_1}{\nrrr_2}:\, \lambda_1':u_1';\ \CEnd.
   \end{array}
-\right) $ is not.
+\right) $ is not. Note, it is possible to transform choreographies
+that are not strongly connected into strongly connected ones, by
+adding extra interactions.
 % 
 
 %%%%  THIS LEMMA HERE MEANS NOTHING AS IT IS STATED

@@ -6,7 +6,7 @@ the concrete syntax of our tool, adopting instead a more
 process-algebraic format, which makes the syntax more concise and
 better suited to formal definitions and proofs.
 
-\subsection{Syntax} 
+\subsection{Syntax}\label{sub:syntax}
 %
 Let $\role p$ range over a (possibly infinite) set of module names
 $\mathcal R$, $x$ over a (possibly infinite) set of variables $\Var$,
@@ -64,77 +64,13 @@ The term $\ifTE {E}{\nr}{C_1}{C_2}$ denotes a system where module
   $X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=}X$. The term
   $\CEnd$ denotes the system finishing its computation.
 
-\paragraph{Assumption.} We assume that every writable choreography is
-such that, for every interaction $\interact{\nr}{\nr_1,\ldots,\nr_n}$,
-all updates in each $u_j$ are assignments to variables located at
-$\nr, \nr_1,\ldots,\nr_n$.
-
-
-\subsection{Semantics.} The semantics of a choreography is a relation
-that captures how the values assigned to variables are modified when
-the various modules synchronise with each other. Similar to the
-operational semantics of imperative languages, we define a state,
-denoted by $S$, as a mapping from variables to values, i.e.,
-$S: \Var \rightarrow\Val$.
-%
-
-Given a state, substitution allows to modify some of its values:
-  \begin{definition}
-  Given a value $v$ and a variable $x$, a substitution $[v/x]$ is an
-  update on a state, i.e., $\small S[v/x] (y)= \left\{
-  \begin{array}{ll} 
-    v    & \text{ if } y=x\\ 
-    S(y) & \text{ otherwise}
-  \end{array} \right.
-$
-Then, the update $S[u]$ is such that
-$S[x'=E\ \&\ u] = S[\eval ES/x][u]$ and $S[x'=E] = S[\eval ES/x]$,
-where $\eval ES$ is an unspecified (decidable) evaluation of the
-expression $E$ in the state $S$.
-\end{definition}
-
-
-Given the set of all possible states $\mathcal S$ and a set of
-definitions $\defin$ of the form
-$X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=} C$, we can define
-the operational semantics of choreographies as the minimal relation
-$\red{}\!\!\!\!^\defin\subseteq \mathcal S\times C\times \mathbb
-R\times \mathcal S\times C$ such that (we omit $\defin$ if not
-relevant):
-\begin{displaymath}\small
-  \begin{array}{l@{\quad}llll}
-    \textsf{(Interact)} &
-    (S, \interact{p}{\role p_1,\ldots,\role p_n}) 
-    % \red{\Sigma_{(S[u_j],C_j)=(S',C')}\lambda_j}
-    % (S', C') 
-                          \red{\lambda_j}
-                          (S[u_j], C_j) 
-    \\[1mm]
-    \textsf{(IfThenElseT)} &
-                             \eval ES = \mathsf{tt} \quad\Rightarrow\quad
-                             (S,\ifTE {E}{p}{C_1}{C_2}) 
-                             \red{1}
-                             (S, C_1)
-    \\[1mm]
-    \textsf{(IfThenElseF)} &
-                             \eval ES = \mathsf{ff} \quad\Rightarrow\quad
-                             (S,\ifTE {E}{p}{C_1}{C_2}) 
-                             \red{1}
-                             (S, C_2)
-    \\[1mm]
-    \textsf{(Call)} &
-                      X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=} C\in\defin \quad\Rightarrow\quad (S, X) \red{1}(S,C)
-  \end{array}
-\end{displaymath}
-
-[ADD THAT THIS SHIT IS ALSO DETERMINISTIC (so DTMC) 
-The transition relation is a Discrete Time Markov Chain (DTMC) or a
-Continuous Time Markov Chain (CTMC) depending on whether we use
-probabilities or rates in the branching construct. Note that states of
-the Markov chain are the pairs $(S,C)$, while the transitions are
-given by the relation $\red{}$.
-%
-
+  \begin{assumption}\label{ass:0}
+    We assume that every writable choreography is such that, for every
+    interaction $\interact{\nr}{\nr_1,\ldots,\nr_n}$, all updates in
+    each $u_j$ are assignments to variables located at
+    $\nr, \nr_1,\ldots,\nr_n$.
+  \end{assumption}
+  
 \subsection{Semantics.}
 The semantics of a choreography is a relation that captures how the
 values assigned to variables are modified when the various modules
@@ -145,19 +81,27 @@ from variables to values, that is, $S : \Var \rightarrow \Val$.
 Given a state, substitution allows us to modify some of its values.
 
 \begin{definition}
-Given a value $v$ and a variable $x$, a substitution $[v/x]$ is an
-update on a state, defined as follows:
-\[
-  S[v/x](y)=
-  \begin{cases}
-    v    & \text{if } y = x,\\
-    S(y) & \text{otherwise.}
-  \end{cases}
-\]
-An update $S[u]$ is defined inductively by
-$S[x' = E \;\&\; u] = S[\eval E S / x][u]$ and
-$S[x' = E] = S[\eval E S / x]$, where $\eval E S$ denotes a
-(decidable) evaluation of the expression $E$ in the state $S$.
+  % Given a value $v$ and a variable $x$, a substitution $[v/x]$ is an
+  % update on a state, defined as follows:
+  % \[
+  %   S[v/x](y)=
+  %   \begin{cases}
+  %     v    & \text{if } y = x,\\
+  %     S(y) & \text{otherwise.}
+  %   \end{cases}
+  % \]
+  Given distinct variables $x_1,\ldots,x_n$ and expressions
+  $E_1,\ldots,E_n$, a state update
+  $S[x_1' = E_1\ \&\ \cdots \&\ x_n' = E_n]$ is defined as
+  \[
+    S[x_1' = E_1\ \&\ \cdots \&\ x_n' = E_n](y) =
+    \begin{cases}
+      \eval{E_i}{S} & \text{if } y = x_i \text{ for some } i \in \{1, \ldots, n\},\\
+      S(y)          & \text{otherwise.}
+    \end{cases}
+  \]
+  where $\eval {E_i} S$ denotes a (decidable) evaluation of the
+  expression $E$ in the state $S$.
 \end{definition}
 
 Let $\mathcal S$ be the set of all possible states and let $\defin$ be
@@ -376,8 +320,8 @@ Below, we discuss each of them:
 
 \item {\em Parametric modules.} In our implemented language, modules
   can be parameterised (indexed) as done in PRISM. We denote
-  parameterised roles as $\role p[n]$ for $n$ ranging some finite set
-  $N$.
+  parameterised modules as $\role p[n]$ for $n$ ranging some finite
+  set $N$.
   %
   As an example, the choreography
   \[\interactBase {p[i]}{q[i]}:\lambda:U;\quad 
@@ -442,80 +386,101 @@ Below, we discuss each of them:
   provided that the indices are known at compile time rather than
   determined dynamically at runtime.
 
-\item {\em Non-deterministic synchronisation.}  Our implementation
-  supports the non-deterministic synchronisation language construct
-  $\allsynch pGiI$, where $G$ has the form $\chorcommand g\lambda
-  u$. The core idea behind this construct is to enable a set of roles,
-  denoted by $\role{p_i}$, to synchronise while allowing each role to
-  non-deterministically select from a range of possible local
-  actions. This provides a structured mechanism for defining
-  interactions where multiple roles must coordinate, but their precise
-  behaviour may vary dynamically (with a certain probability
-  distribution/rate).
-
-  A key advantage of this construct is its compactness and readability
-  in specifying this type of interactions. For instance, in a scenario
-  where two roles, $\role{p}$ and $\role{q}$, participate in a
-  synchronised exchange, the $\allsynchName$ syntax allows for a
-  concise definition of conditions under which each role updates its
-  state. This avoids the need for manually encoding synchronisation
-  through nested conditional constructs.
-  % 
-  Despite its expressiveness, the $\allsynchName$ construct does not
-  introduce a new semantics but serves as syntactic sugar for an
-  equivalent formulation.  In fact, $\allsynchName$ can be rewritten
-  using a series of nested $\mathtt{if\text{-}then\text{-}else}$
-  constructs, ensuring that the synchronisation conditions are met
-  before proceeding with the interaction. For example, consider the
-  non-deterministic synchronisation between roles $\role p$ and
+\item {\em The {\sf \textcolor{sh_keyword}{allsynch}} construct.} Our
+  implementation supports $\allsynch pGiI$, where $G$ has the form
+  $\chorcommand g\lambda u$. The construct requires all modules
+  $\nr_i$ to synchronise while independently choosing a branch, unlike
+  the interaction $\interact{\nr}{\nr_1,\ldots,\nr_n}$, where the
+  chosen branch must be taken by all modules. This provides a
+  structured mechanism for defining interactions in which multiple
+  modules must coordinate, while their precise behaviour may vary
+  dynamically (with a certain probability distribution or rate). For
+  example, consider the synchronisation between modules $\role p$ and
   $\role q$:
-  %
   \begin{displaymath}
-    % C \stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=}
-    %
     \allsynchName\left\{
       \begin{array}{lll}
-        \role{p} : (x=5) \rightarrow 10 : (x'=0) \\
-        \role{p} : (x=1) \rightarrow 5 : (x'=100) \\
-        \role{q} : (y=1) \rightarrow 1 : (y'=0)
+        \nr  : (x=5) \rightarrow 42 : (x'=0) \\[1mm]
+        \nr  : (x=5) \rightarrow 67 : (x'=100) \\[1mm]
+        \nr  : (x=5\ \&\ z=3) \rightarrow 10 : (x'=13) \\[1mm]
+        \nrr : (y=1) \rightarrow 1 : (y'=0)
       \end{array}
     \right\} ; \CEnd
   \end{displaymath}
-  %
-  This construct provides a compact and structured way to define
-  synchronised interactions. However, it can be rewritten without
-  using the $\allsynchName$ syntax by explicitly handling conditions
-  using the $\mathtt{if\text{-}then\text{-}else}$ construct:
+  The above choreography states that (i) $\nr$ and $\nrr$ must
+  synchronise, and (ii) $\nr$ can execute any of the three declared
+  updates with the respective rates, provided their guards are
+  satisfied. Such behaviour partially departs from the usual {\em
+    global} description given by a choreography. In this case, there
+  is indeed a global synchronisation between the modules, but it is
+  not specified which command must be paired with which. In a state
+  where $x=5$ and $z=3$, $\nr$ can execute any of these
+  actions. However, in a state where $x=5$ but $z\neq 3$, only the
+  first two updates can be carried out.
+
   
+  A key advantage of this construct is its compactness and readability
+  in specifying this type of interactions. In the scenario above,
+  where modules $\role{p}$ and $\role{q}$ participate in a
+  synchronised exchange, the $\allsynchName$ syntax allows for a
+  concise definition of conditions under which each module updates its
+  state. This avoids the need for manually encoding synchronisation
+  through nested conditional constructs.
+  % 
+  Despite its usefulness, the $\allsynchName$ construct does not
+  introduce any new expressiveness but serves as syntactic sugar for
+  an equivalent formulation.  In fact, the example above can be
+  rewritten by nesting $\mathtt{if\text{-}then\text{-}else}$
+  constructs, ensuring that the synchronisation conditions are met:
   \begin{displaymath}
     \begin{array}{ll}
-      & \mathtt{if}\ (x=5)@\role {p}\ \mathtt{then}\\
-      & \quad \mathtt{if}\ (y=1)@\role {q}\ \mathtt{then}\\
-      & \quad \quad \interactBase{p}{q}\ 10 : (x'=0)\&(y'=0);\CEnd \\
+      & \mathtt{if}\ (x=5\ \&\ z=3)@\nr\ \mathtt{then}\\[1mm]
+      & \quad \mathtt{if}\ (y=1)@\nrr\ \mathtt{then}\\[1mm]
+      & \quad \quad \interactBase{\nr}{\nrr}
+        \left\{
+        \begin{array}{rlll}
+          42 : &  (x'=0)\,\&\,(y'=0);\CEnd \\[1mm]
+          67 : &  (x'=100)\,\&\,(y'=0);\CEnd \\[1mm]
+          10 : &  (x'=13)\,\&\,(y'=0);\CEnd
+        \end{array}
+        \right.
+      \\
       & \quad \mathtt{else}\ \CEnd \\
-      & \mathtt{else}\\
-      & \quad \mathtt{if}\ (x=1)@\role {p}\ \mathtt{then}\\
-      & \quad\quad \mathtt{if}\ (y=1)@\role {q}\ \mathtt{then}\\
-      & \quad\quad \quad \interactBase{p}{q}\ 5 : (x'=100)\&(y'=0);\CEnd \\
-      & \quad\quad \mathtt{else}\ \CEnd \\
-      & \quad\ \mathtt{else}\ \CEnd \\
+      & \mathtt{else}\ \mathtt{if}\ (x=5\ \&\ z\neq3)@\nr\
+        \mathtt{then}\\[1mm]
+      & \phantom{\mathtt{else}\ }\quad
+        \mathtt{if}\ (y=1)@\nrr\ \mathtt{then}\\[1mm]
+      & \phantom{\mathtt{else}\ \quad}\quad
+        \interactBase{\nr}{\nrr}
+        \left\{
+        \begin{array}{rlll}
+          42 : &  (x'=0)\,\&\,(y'=0);\CEnd \\[1mm]
+          67 : &  (x'=100)\,\&\,(y'=0);\CEnd \\[1mm]
+        \end{array}
+        \right.
+      \\
+      & \phantom{\mathtt{else}\ }\quad\mathtt{else}\ \CEnd
     \end{array}
   \end{displaymath}
   %
   The two formulations are equivalent, with the $\allsynchName$ syntax
-  acting as syntactic sugar for a structured and readable
-  representation of synchronisation. The expanded version using
-  $\mathtt{if\text{-}then\text{-}else}$ makes explicit the conditional
-  execution of interactions but retains the same behaviour.
+  acting as syntactic sugar that provides a structured and readable
+  representation of synchronisation. In general, its encoding into the
+  core choreographic language requires determining non-overlapping
+  guards in advance. For example, from the three guards $(x=5)$,
+  $(x=5)$, and $(x=5\ \&\ z=3)$, it is necessary to derive the
+  conditional guards $(x=5\ \&\ z=3)$ and $(x=5\ \&\ z\neq 3)$. This
+  process depends on the logical operators that are adopted, which we
 
-  The $\allsynchName$ construct is more efficient (in terms of code)
-  than manually encoding synchronisation with nested
+  Note that the $\allsynchName$ construct is more efficient (in terms
+  of code size) than manually encoding synchronisation with nested
   $\mathtt{if\text{-}then\text{-}else}$ statements.  As the number of
-  synchronising roles and conditions increases, the depth and
-  complexity of the nested conditionals grow exponentially, making the
-  explicit formulation harder to read, write, and process.  In
-  contrast, $\allsynchName$ provides a compact and structured way to
-  express the same logic without the combinatorial explosion of nested
+  synchronising modules and conditions increases (in our example,
+  there is only a single choice for $\nrr$), the depth and complexity
+  of the nested conditionals grow exponentially, making the explicit
+  formulation harder to read, write, and process.  In contrast,
+  $\allsynchName$ provides a compact and structured way to express the
+  same logic without the combinatorial explosion of nested
   conditionals.
 \end{itemize}
 

@@ -8,10 +8,98 @@
 \usepackage{xcolor}
 \usepackage{setspace}
 \usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{url}
 
 % Boxes for reviewer comments
 \usepackage{tcolorbox}
 \tcbuselibrary{skins,breakable}
+
+% Markers
+\newcommand{\addressed}{\textcolor{green!60!black}{\checkmark}\ }
+\newcommand{\notaddressed}{\textcolor{red!70!black}{\texttimes}\ }
+
+\newcommand{\defin}{\mathcal D}
+
+\newcommand{\sem}[1]{\{\![#1]\!\}}
+\newcommand{\eval}[2]{#1\!\!\downarrow_{#2}}
+
+\newcommand{\mypar}[1]{\noindent{\bf #1}}
+
+\newcommand{\state}{\mathsf{state}}
+
+\newcommand{\proj}{\mathsf{proj}}
+\newcommand{\projE}[2]{#1\downarrow_{#2}}
+
+\newcommand{\sconnected}{\mathsf{sConn}}
+\newcommand{\hmodules}{\mathsf{hMods}}
+
+
+\newcommand{\topannotation}[2]{\mathsf{top}_{#1}(#2)}
+
+\newcommand{\marco}[1]{\textcolor{cyan}{{\footnotesize Marco: #1}}}
+\newcommand{\adele}[1]{\textcolor{blue}{{\footnotesize Adele: #1}}}
+
+\definecolor{code_indent}{HTML}{CCCCCC}
+
+\newcommand{\indentrule}{\color{code_indent}\vrule\hspace{2pt}}
+
+% Syntax
+\definecolor{bloodyred}{rgb}{0.6,0.1,0.1}
+\newcommand{\role}[1]{\textcolor{bloodyred}{\mathtt{#1}}}
+%\newcommand{\role}[1]{\mathtt{#1}}
+\newcommand{\nr}{\role p}
+\newcommand{\nrr}{\role q}
+\newcommand{\nrrr}{\role r}
+
+\newcommand{\Var}{\mathsf{Var}}
+\newcommand{\Val}{\mathsf{Val}}
+
+\newcommand{\interactBase}[2]{{#1}\rightarrow \{{#2}\}}
+\newcommand{\interactBasel}[3]{#1\rightarrow^{#2} \{#3\}}
+\newcommand{\interact}[2]{\interactBase{#1}{#2}:\,\Sigma_{j\in J}\lambda_j: u_j;\ C_j}
+\newcommand{\interactl}[3]{\interactBasel{#1}{#2}{#3}:\,\Sigma_{j\in J}\lambda_j: u_j;\ C_j}
+\newcommand{\doubleand}{\text{\&\&}}
+\newcommand{\allsynchName}{\textcolor{bloodyred}{\mathtt{allsynch}}}
+\newcommand{\allsynch}[4]{\allsynchName\, \{ {\role{#1}}_{#3}:#2_{#3}\}_{#3\in #4}}
+
+\newcommand{\command}[4] {\commandBase {#1} {#2} \Sigma_{i\in I}#3_i: #4_i}
+\newcommand{\commandBase}[3] {[#1]\ #2\ \rightarrow #3}
+\newcommand{\chorcommandBase}[2] {#1\ \rightarrow #2}
+\newcommand{\chorcommand}[3] {\chorcommandBase {#1} \Sigma_{i\in I}#2_i: #3_i}
+\newcommand{\ifTE}[4]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@{#2}\ \textcolor{sh_keyword}{\mathtt{then}}\ {#3} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#4}}
+\newcommand{\ifTEl}[5]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@^{#2}{#3} \ \textcolor{sh_keyword}{\mathtt{then}}\ {#4} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#5}}
+\newcommand{\codeprism}[1]{\lstinline[style=prism-color,basicstyle=\small\sffamily]{#1}}
+\newcommand{\codechor}[1]{\lstinline[style=chor-color,basicstyle=\small\ttfamily,mathescape=true]{#1}}
+
+
+
+\newcommand{\CEnd}{\mathbf{0}}
+\newcommand{\pp}{|\!|}
+\newcommand{\ppp}[1]{|[#1]|}
+\newcommand{\cmd}[6]{[#1] #2 \rightarrow \{#3: #4 = #5\}_{#6}}
+
+\newcommand{\defrec}{\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=}}
+
+  
+% Semantics
+\newcommand{\red}[1]{\ \longrightarrow_{#1}\ } 
+\newcommand{\prismred}[1]{\ \stackrel{#1}{\rightsquigarrow}\ } 
+\newcommand{\lab}[3]{\ [#1][#2:\;#3]\ } 
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+\definecolor{keywordColor}{rgb}{0.50,0.00,0.33}
+\definecolor{stringColor}{rgb}{0.16,0.00,1.00}
+\definecolor{lineNumberColor}{rgb}{0.47,0.47,0.47}
+
+\definecolor{carminepink}{rgb}{0.92, 0.3, 0.26}
+\definecolor{jesuscolour}{rgb}{0.3, 0.92, 0.26}
+\newcommand{\AV}[1]{\todo[inline, color=carminepink]{\textbf{AV}:~#1}}
+\newcommand{\MC}[1]{\todo[inline, color=jesuscolour]{\textbf{MC}:~#1}}
+
 
 % Very light grey background
 \definecolor{reviewgray}{gray}{0.95}
@@ -35,104 +123,128 @@
   \end{reviewercomment}
 }
 
-\newcommand{\revresponse}[1]{%
-  \par\noindent\textbf{Response.} #1
+\newcommand{\revresponse}[2][]{%
+  \par\noindent\textbf{Response.} #1 #2
 }
 
-\newcommand{\revchanges}[1]{%
+\newcommand{\revchanges}[2][]{%
   \par\noindent\textbf{Changes in the manuscript.} #1
+  #2\par\bigskip
 }
 
 \begin{document}
 
 \title{Response to Reviewers}
-\author{<Paper title>}
+\author{A PROBABILISTIC CHOREOGRAPHY LANGUAGE FOR PRISM}
 \date{}
 \maketitle
+\vspace{-0.5\baselineskip}
+\begin{center}
+{\large Marco Carbone and Adele Veschetti}
+\end{center}
 
 \section*{General Response}
 
 We thank the Editor and the Reviewers for their careful reading of the manuscript and
 for their detailed and constructive feedback. We have revised the paper accordingly
 and believe that the changes substantially improve both clarity and technical depth.
-Below we address each comment point by point.
+
+One major change in this revision concerns the definition of
+projection. In the previous version, the projection relied on explicit
+counters (denoted by $\iota$) to generate fresh identifiers; this
+mechanism was cumbersome and could be error-prone in proofs. We now
+adopt a more direct approach by annotating choreographies with unique
+labels, which the projection can use directly. This yields a cleaner
+and more easily readable projection in the theoretical
+development. For practical reasons, our implementation still uses
+counters; these can be seen as a concrete realisation of the
+label-generation mechanism that the paper now abstracts into the
+choreography annotations.
+
+Below we address each reviewer point by point. Minor comments have
+been omitted from the reply, but addressed.
+
 
 \newpage
 
 % ============================================================
 \section*{Reviewer 1}
 
-\subsection*{Summary and General Evaluation}
-
-\revcomment{
-This paper introduces a probabilistic version of the Choreography programming approach.
-[...] An additional example highlights the limitations of the approach for modeling dining cryptographers.
-}
-
-\revresponse{
-Thank you for the positive assessment of the contribution and for highlighting both
-its novelty and its relevance. We address the technical concerns in detail below.
-}
-
-\subsection*{Major Technical Concerns}
 
 \revcomment{
 I found the technical result establishing operational equivalence between choreographies
-and their projections rather weak. [...] I would also expect a result establishing
+and their projections rather weak. [...] This may ultimately be irrelevant, but I believe the issue should be discussed in the paper. I would also expect a result establishing
 operational correspondence for a sequence of reductions.
 }
 
-\revresponse{
-<Your response here. Typically: clarify scope of correspondence, explain limitations,
-justify design choice, and outline strengthening of theorem or discussion added.>
+\revresponse{ We thank the reviewer for highlighting the mismatch
+  between standard operational-correspondence results for
+  choreographies and this paper focussing on PRISM.  PRISM modules are
+  declarative (a fixed set of commands whose enabling depends on the
+  current state), whereas choreographies have an explicit control-flow
+  syntax; therefore, in the projection, control-flow is reified into
+  the (extended) runtime state via the distributed program-counter
+  variables $s_{\nr}$, yielding an extended state space $S_+$. As a
+  consequence, reductions of the choreography correspond to
+  transitions on $S_+$ in the projected model rather than to syntactic
+  evolution of PRISM modules.
+%
+In the revised manuscript we make this design choice explicit and discuss the resulting asymmetry (projection-after-reduction may yield fewer commands than reduction-after-projection). At the end of Section 5, we include a concrete example illustrating that, while the set of commands may differ, the projected models exhibit the same observable behaviour up to a suitable PRISM-induced equivalence; we leave the identification of the most appropriate equivalence (e.g., probabilistic bisimulation) and the corresponding strengthening of the theorem to future work.
 }
 
-\revchanges{
-<Describe changes to Theorem 1, proof structure, added discussion, or limitations section.>
-}
+\revchanges{ We expanded the discussion around Theorem 1 to clarify
+  (i) why standard reduction-to-reduction correspondence does not
+  directly apply to PRISM, (ii) how control-flow information is
+  encoded in the extended state $S_+$ via the distributed
+  program-counter variables, and (iii) why the correspondence
+  statement is formulated in terms of transitions on $S_+$ rather than
+  syntactic changes of modules. We also added a detailed remark and
+  worked example to make the asymmetry and its implications explicit,
+  and we added a paragraph outlining how a future extension based on
+  probabilistic bisimulation could capture correspondence across
+  different command sets.  }
+
+\revcomment{ Furthermore, the proof of this correspondence (Theorem 1)
+  reads more like a proof sketch than a complete proof; a more
+  detailed and carefully paced proof would be preferable.  }
+
+\revresponse{ We thank the reviewer for this suggestion. In the
+  revised version, we have substantially expanded the proof of Theorem
+  1 and made its structure more explicit, in particular by spelling
+  out the interaction case in detail and by making clear the key
+  invariants on the extended state $S_+$ used in the correspondence
+  argument. To keep the exposition readable, we do not enumerate every
+  routine PRISM semantic step, but we provide enough detail for each
+  case to be checked unambiguously.  }
+
+\revchanges{ Proof of Theorem 1 rewritten and expanded; interaction
+  case detailed; key invariants on $S_+$ made explicit.  }
+
+
 
 \revcomment{
 I have also some concerns about the way in which the choreography state is projected on
 different participants.
 }
 
-\revresponse{
-<Your response here.>
-}
-
-\revchanges{
-<Where the projection of state is clarified or formalised.>
-}
+\revchanges{ Definitions~4 (CTMC) and~5 (DTMC) have been updated.  }
 
 % ------------------------------------------------------------
-\subsection*{Detailed Comments (Reviewer 1)}
-
-\subsubsection*{Page 2}
 
 \revcomment{
 When giving examples, the use of prime variables is not clear at this point.
 }
 
-\revresponse{
-<Your response here.>
-}
+\revchanges{ We added a brief clarification in the manuscript.  }
 
-\revchanges{
-<Clarification added to example or notation section.>
-}
-
-\subsubsection*{Page 3}
 
 \revcomment{
 “this is the first probabilistic choreography language that is not a type abstraction”.
 What does this mean?
 }
 
-\revresponse{
-<Your response here.>
-}
+\revchanges{ Comment removed.  }
 
-\subsubsection*{Page 4}
 
 \revcomment{
 I did not understand the explanation of foreach. What is the role of k? What is op?
@@ -140,51 +252,87 @@ A formal encoding would be welcome.
 }
 
 \revresponse{
-<Your response here.>
+  We apologise for the limited explanation of this construct. The basic idea is to provide an operator that quantifies over indices via the predicate $op(i)$. The formal translation is straightforward: we add one update for each role, assuming that the relevant roles can be determined statically.
 }
 
-\subsubsection*{Page 5}
+\revchanges{ We have updated the text where the foreach construct is
+  discussed, with a more precise explanation of what it does.  }
+
+
+\revcomment{ I am puzzled about the notion of Non-deterministic
+  Synchronization. [...] I have a couple of questions here:
+
+  \begin{enumerate}
+  \item Does the specification determine the direction of
+    communication? In the provided example, it seems that the
+    interaction could also be expressed in the opposite direction,
+    i.e., $q \rightarrow {p}$. Is the direction of the interaction
+    relevant, or is it never relevant?
+  \item Does any synchronization specification yield a correct
+    choreography? Should there not be a requirement for some
+    well-formedness condition on the allsync constructor?
+  \item Could you provide a formal definition of the encoding?
+  \end{enumerate}
+}
+
+\revresponse{The terminology we used is incorrect, thanks for pointing
+  this out. . The allsync is not "nondeterministic" but it is still a
+  probabilistic choice. We have rewritten (and expanded) the entire
+  paragraph with a clearer explanation. As for the detailed questions:
+  \begin{enumerate}
+    
+  \item in our choreography language, writing $q\longrightarrow\{p\}$
+    or $p\longrightarrow\{q\}$ is the same. However, it has an impact
+    on the projection, since we need to distinguish one of the modules
+    (the one on the left) because it has a different projection.
+    
+  \item The notion of strong connectedness can be extended to
+    $\allsynchName$, as it is, after all, an interaction between the
+    modules $\nr_i$. However, this is not necessary if we first
+    translate it into standard interactions (and if-then-else
+    constructs), since strong connectedness can then be checked at
+    that level. In the new example we have provided, strong
+    connectedness does not hold because the nested if-then-else
+    constructs are not connected. As this part is not a formal
+    development but rather a section justifying how our implementation
+    extends the theoretical framework, we do not consider it necessary
+    to present a connected choreography here. In any case (as noted in
+    a comment added to the projection section), these choreographies
+    can be transformed into connected ones by introducing additional
+    interactions.
+
+    
+  \item the translation should be straightforward once there is a
+    precisely defined language for guards. See new text added. 
+ \end{enumerate}
+}
+
+\revchanges{ The paragraph has been rewritten.  }
+
 
 \revcomment{
-I am puzzled about the notion of Non-deterministic Synchronization. [...]
+Example 3: The modules in this example share variables (y and x). I wonder whether there is a choreography that describes their behavior, since my understanding is that variables are local to modules in choreographies
 }
 
 \revresponse{
-<Your response here, possibly structured around the three bullet questions.>
+In the example, $x$ and $y$ are indeed owned by two different modules and are therefore shared only in read mode. In PRISM, all modules can read all variables, but only the owning module can modify its own variable. This is consistent with our choreographic reading, where updates are only performed as part of an interaction, so the write is still attributed to a specific role in that interaction. The only caveat is that, in choreographies, guards in conditionals must be local (i.e., evaluated by a single role). Thus, for this example, we could simulate the interactive execution (sync on $a$) by nesting two if-then-else constructs. However, since choreographies focus only on interactions, the internal actions (no label) cannot be simulated.
 }
-
-\revchanges{
-<Formal definition added / well-formedness conditions clarified.>
-}
-
-\subsubsection*{Page 10}
 
 \revcomment{
-Example 3: The modules in this example share variables (y and x). [...]
+The choice of annotating choreographies with labels seems somewhat ad hoc. Why are they not introduced as a syntactic element [...] given that they are necessary and play a role in the implementation?
 }
 
 \revresponse{
-<Your response here.>
+It is certainly true that labels are a key aspect of the implementation. However, the purpose of this work is to define a higher-level language that abstracts away from such implementation details. Therefore, labels are part of the projection algorithm and are irrelevant to the programmer who writes a choreography.
 }
 
-\subsubsection*{Page 11}
-
-\revcomment{
-The choice of annotating choreographies with labels seems somewhat ad hoc.
-}
-
-\revresponse{
-<Your response here.>
-}
-
-\subsubsection*{Page 12}
 
 \revcomment{
 Projection of conditionals: I do not understand why the conditional is not projected.
 }
 
 \revresponse{
-<Your response here.>
+We believe this is a misunderstanding, and we are grateful for the opportunity to clarify it. The conditional \emph{is} projected, but only in the module of the evaluating role $\mathsf p$. This is consistent with the intended semantics: the guard $E$ is evaluated by $\mathsf p$ and the result deterministically selects the branch. The point that may be confusing is that we do \emph{not} require $E$ to be local to $\mathsf p$. As stated on page 5, $E$ may mention variables owned by other modules; in PRISM, all modules can read all variables, while only the owning module can modify them. Therefore, the projection places the conditional in $\mathsf p$'s module, and the guard can still refer to remote variables, exactly as in the PRISM syntax.
 }
 
 \revcomment{
@@ -192,52 +340,50 @@ Projection of choreography variable X: This relies on defs(X). [...]
 }
 
 \revresponse{
-<Your response here.>
-}
+We agree with the reviewer. }
 
 \revchanges{
-<Formal definition of defs added.>
+In the revised formulation, counters are replaced by
+explicit labels on choreographies, which makes the treatment of variables cleaner and more uniform. We have also expanded the proof for this case and
+included more details to make the reasoning fully explicit.
 }
 
-\subsubsection*{Page 13}
 
 \revcomment{
-Projection of updates: Are you assuming that updates at the choreography level are
-well-formed in some way?
+Projection of updates: Are you assuming that updates at the choreography level are well-formed in some way? For instance, could an assignment y' = x occur where y belongs to p and x to q? If not, this restriction should be stated clearly. Moreover, from which element of the choreography is the assignment derived? If I have missed this, it should nonetheless be clarified explicitly in the paper.
 }
 
 \revresponse{
-<Your response here.>
+As discussed above, assignments such as $y' = x$ are permitted even when $x$ is located at $\nr$ and $y$ is located at $\nrr$. At the choreography level, the restriction is simply that, in an interaction $\interact{\nr}{\nr_1,\ldots,\nr_n}$, every update in each $u_j$ assigns to a variable owned by one of $\nr, \nr_1,\ldots,\nr_n$.
 }
-
-\subsubsection*{Page 14}
+\revchanges{
+We have added a clear assumption on page 6 (new PDF).
+}
 
 \revcomment{
 Definition 4: Is it not the case that the choreography is annotated?
 }
 
 \revresponse{
-<Your response here.>
+Interactions are now also annotaed. See new version. 
 }
 
-\subsubsection*{Page 15}
 
 \revcomment{
-The correspondence theorem (Th. 1) appears somewhat weak [...]
+  - How are variables quantified? Are $S$, $S'$, and $\iota$ universally quantified?
 }
 
 \revresponse{
-<Your response here.>
+  Yes, although now $\iota$ has disappeared.
 }
 
-\subsubsection*{Page 25}
+\revcomment{ The correspondence theorem (Theorem 1) appears somewhat
+  weak [...]  }
+
+\revresponse{ See our reply about your first comment.  }
 
 \revcomment{
 Although I can follow the reasoning, I wonder what the fundamental limitation is here.
-}
-
-\revresponse{
-<Your response here.>
 }
 
 \revchanges{
@@ -249,75 +395,107 @@ Added explanation on page 24.
 % ============================================================
 \section*{Reviewer 2}
 
-\subsection*{General Comments}
-
-\revcomment{
-The authors present an extended version of the COORDINATION 2024 paper.
-}
-
-\revresponse{
-We thank the reviewer for their careful comparison with the conference version.
-}
 
 \revcomment{
 The main changes as stated by the authors at the end of the Introduction are:
 [...] The paper does not help the reader in identifying them.
 }
 
-\revresponse{
-<Your response here.>
+\revresponse{ Here is a list of the major differences between this
+  latest version and the conference version:
+  \begin{itemize}
+  \item presentation of three different macros that are used in the
+    implementation
+  \item a new, cleaner, projection function that no longer uses
+    counters for the control state
+  \item detailed proof of Theorem 1
+  \item new case study: Simple Peer-To-Peer Protocol
+  \item new case study: Synchronous Leader Election
+  \item new case study: Dining Cryptographers
+  \item new case study: Code Size Comparison
+  \item more detailed discussions and related work
+  \end{itemize}
 }
 
-\revchanges{
-<Explicit pointers to sections added in the Introduction.>
-}
 
+\revcomment{ "The introduction should be more clear about which kind
+  of concurrent process is amenable for choreographies, and for which
+  class of concurrent processes choreographies are not suitable."  The
+  comment still applies for the new introduction.  }
+
+\revchanges{We have added a paragraph in the introduction. }
+
+  
 \revcomment{
 The experimental analysis in Section 7 needs to be improved.
 }
 
-\revresponse{
-<Your response here.>
+\revchanges{
+  This part has been updated accordingly. 
 }
 
 \revcomment{
 Section 6 is irrelevant and can be removed.
 }
 
-\revresponse{
-<Your response here (removed, shortened, or justified).>
+\revchanges{
+  Removed. 
 }
 
-% ------------------------------------------------------------
-\subsection*{Detailed Comments (Reviewer 2)}
 
 \revcomment{
 It is confusing that you use lambda1,2 as label in page 2 [...]
 }
+%
+\revchanges{
+ Fixed by rewriting the whole example paragraph in the introduction. 
+}
 
-\revresponse{
-<Your response here.>
+\revcomment{ [...]
+the text uses sometimes the math symbols and sometimes the full name of the greek letters lambda, mu, theta. [...]
+}
+%
+\revchanges{
+ Fixed.
 }
 
 \revcomment{
-Are you sure Def. 1 works as intended? What happens if x appears in u?
+  I don't know if this intentional, but if one wants to specify no update, one has to write x' = x (a void update). In PRISM one can simply write true, if I recall properly. This is related also to the syntax of PRISM introduced in 4.1.
 }
 
 \revresponse{
-<Your response here.>
+  From a theoretical point of view, there is no difference, therefore we will leave this as it is. Our implementation allows also True. 
+}
+
+\revcomment{
+  Are you sure Def. 1 works as intended? What happens if x appears in u? For example, [x' = 0, y' = x]. In Prism, y will be updated to the value of x in S (see remark at the bottom of \url{https://www.prismmodelchecker.org/manual/ThePRISMLanguage/Commands}), but in your case it will be set to the new value of x (0). This is also relevant to the definion of mu in page 9 and needs to be fixed. 
+}
+
+\revresponse{
+ Yes sorry, our definition is incorrect. 
 }
 
 \revchanges{
-<Definition corrected and semantics clarified.>
+ We have now updated the definition so that it handles multiple updates at the same time. 
 }
 
 \revcomment{
-Is it relevant that your implementation consists of 1246 lines of Java?
+General remark: the way you define unique identifiers for the control points in the choreographies is not self-explainable. Readers familiar with bulding control flow graphs and similar graphical structures from code will get it, but other readers may find it cryptic. I would suggest enriching the explaination of how control points sq are correctly created. }
+
+\revchanges{
+ Added some text. 
 }
 
-\revresponse{
-<Your response here.>
+
+\revcomment{
+  "he projected update uj ↓q acts as a filter on the list of updates in uj" is this defined in the paper?
 }
+
+
+\revchanges{
+  We have added further comments on this. 
+}
+
 
 % (Continue similarly for remaining detailed comments as needed.)
 
@@ -326,75 +504,28 @@ Is it relevant that your implementation consists of 1246 lines of Java?
 % ============================================================
 \section*{Reviewer 3}
 
-\subsection*{General Assessment}
-
-\revcomment{
-The paper is well written, well organised, and the results are sound [...]
-}
-
-\revresponse{
-We thank the reviewer for the positive assessment and for the detailed suggestions.
-}
-
-\subsection*{General Comments}
 
 \revcomment{
 The pros and cons of choreographic programming as opposed to process-oriented
 programming are not elaborated upon very much.
 }
 
-\revresponse{
-<Your response here.>
-}
-
 \revchanges{
 Added discussion on pages 2 and 25--26.
 }
+
+
+
 
 \revcomment{
 How does this relate to the notions of implementability and realisability [...]?
 }
 
-\revresponse{
-<Your response here.>
-}
+\revchanges{ We have extended related work on page 25.  }
 
-\revchanges{
-Related work extended on page 25.
-}
+\revcomment{ Could the authors imagine a more thorough comparison,
+  e.g., bisimilarity?  }
 
-\revcomment{
-Could the authors imagine a more thorough comparison, e.g., bisimilarity?
-}
-
-\revresponse{
-<Your response here.>
-}
-
-\revchanges{
-Added discussion on page 17.
-}
-
-\subsection*{Detailed Comments}
-
-\revcomment{
-Various spelling inconsistencies (UK vs US spelling).
-}
-
-\revresponse{
-All spelling inconsistencies have been corrected to UK English throughout the paper.
-}
-
-\revchanges{
-Systematic spelling revision applied across the manuscript.
-}
-
-\revcomment{
-Pages 27--28: inconsistent formatting of authors' first names in references.
-}
-
-\revresponse{
-<Your response here.>
-}
+\revchanges{ We have added a discussion on page 17.  }
 
 \end{document}
