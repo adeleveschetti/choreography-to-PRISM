@@ -355,7 +355,7 @@ Below, we discuss each of them:
     \end{array}
   \]
   Given that parameters range over a finite set, this operation is
-  redundant as far as the theory is concerned.
+  redundant. % as far as the theory is concerned.
 
 \item {\em The {\sf foreach} construct.} The use of parametric modules
   can be further facilitated by introducing syntactic sugar that
@@ -415,8 +415,8 @@ Below, we discuss each of them:
   is indeed a global synchronisation between the modules, but it is
   not specified which command must be paired with which. In a state
   where $x=5$ and $z=3$, $\nr$ can execute any of these
-  actions. However, in a state where $x=5$ but $z\neq 3$, only the
-  first two updates can be carried out.
+  actions. However, in a state where $x=5$ but $z\neq 3$, only one of
+  the first two updates can be carried out.
 
   
   A key advantage of this construct is its compactness and readability
@@ -470,7 +470,7 @@ Below, we discuss each of them:
   guards in advance. For example, from the three guards $(x=5)$,
   $(x=5)$, and $(x=5\ \&\ z=3)$, it is necessary to derive the
   conditional guards $(x=5\ \&\ z=3)$ and $(x=5\ \&\ z\neq 3)$. This
-  process depends on the logical operators that are adopted, which we
+  process depends on the functions $f(\tilde E)$ used in guards.
 
   Note that the $\allsynchName$ construct is more efficient (in terms
   of code size) than manually encoding synchronisation with nested

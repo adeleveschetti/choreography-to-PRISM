@@ -46,58 +46,54 @@ increases.
 %SINCRONO]
 
 Choreographic programming~\cite{M23} is an emerging programming
-paradigm in which programs, referred to as choreographies, serve as
-specifications providing a global perspective on the communication
-patterns inherent in a distributed system. 
+paradigm for distributed systems in which programs, referred to as
+choreographies, specify communication protocols from a global
+perspective. Instead of programming the behaviour of each component
+independently or relying on a central orchestrator, choreographic
+languages describe the interactions among participants directly. A
+choreography therefore abstracts away from the internal implementation
+of individual components and focuses on the communication structure
+that governs their coordination.
 %
-In particular, instead of relying on a central orchestrator or
-controller to dictate the behaviour of individual components,
-choreographic languages focus on defining communication patterns and
-protocols that govern the interactions between entities.
+In this approach, the primary concern is not the arbitrary
+interleavings of local computations but the communication structure of
+the system: which participants interact, in which order, and under
+which conditions. Choreographies make these interaction patterns
+explicit at the level of the program.
 %
-In essence, choreographies abstract away the internal details of
-individual components and emphasise the global behaviour as a
-composition of decentralised interactions. % Within the context of
-% concurrent and distributed systems, choreographic languages serve as
-% tools for defining interaction protocols that govern the communication
-% between processes. 
-%
-%
-Although, this approach can be used for a proper subset of distributed
-systems, choreographies have proven to be very useful in many use
-cases since they facilitate the automatic generation of decentralised
-implementations that are inherently
-correct-by-construction~\cite{CM13}.
-{
-In the kinds of distributed applications we can apply our technique on, the behaviour of the
-system is largely determined by how components communicate, rather than by
-arbitrary interleavings of independent local steps.  What matters is which
-participants interact, in which order, and under which conditions, and this
-is exactly the information that a choreography makes explicit.  Our setting
-is therefore designed towards systems whose main dynamics can be described in
-terms of such structured interaction patterns, while more loosely coordinated
-or highly unstructured behaviours are deliberately not addressed by the
-framework.
-}
+Choreographic programming naturally applies to distributed systems
+whose behaviour can be described through structured interaction
+protocols. Systems whose dynamics rely heavily on loosely coordinated,
+highly unstructured, or unpredictable communication patterns are
+generally less amenable to this approach. Within its intended scope,
+however, choreographic programming has proved effective in practice,
+since choreographies enable the automatic generation of decentralised
+implementations that are correct by construction~\cite{CM13}.
+
+% { In the kinds of distributed applications we can apply our
+% technique on, the behaviour of the system is largely determined by
+% how components communicate, rather than by arbitrary interleavings
+% of independent local steps.  What matters is which participants
+% interact, in which order, and under which conditions, and this is
+% exactly the information that a choreography makes explicit.  Our
+% setting is therefore designed towards systems whose main dynamics
+% can be described in terms of such structured interaction patterns,
+% while more loosely coordinated or highly unstructured behaviours are
+% deliberately not addressed by the framework.  }
 
 This paper presents a choreographic language designed for modelling
-concurrent probabilistic systems.
-%\textcolor{red}{Our language enhances the modelling of concurrent probabilistic systems, providing clarity often absent in 
-%traditional languages. However, it may lack expressivity in certain scenarios. For instance, in cases  where intricate behaviors rely 
-%on features such as conditional statements or probabilistic branching, our language's limitations become 
-%apparent, limiting accurate representation of these complex dynamics.}
-% with clarity and precision. 
-Additionally, we introduce a compiler for translating protocols
-described in this language into PRISM code. This choreographic
-approach not only simplifies the modelling process but also ensures
-integration with PRISM's powerful analysis capabilities.
-
-To illustrate the idea with concrete commands, consider the following
-example. We have a choreographic language specification:
+concurrent probabilistic systems and introduces a {\em projection}
+function for translating protocols described in this language into
+PRISM code. This choreographic approach not only simplifies the
+modelling process but also ensures integration with PRISM's powerful
+analysis capabilities.
+%
+In order to illustrate the idea concretely, consider the following
+choreography:
 %
 \[
   \begin{array}{lll}
-    C \stackrel{\mathsf{def}}{=} \interactBase{p}{q}
+    C \stackrel{\mathsf{def}}{=} \interactBase{\nr}{\nrr}
     \left\{
     \begin{array}{lll}
       \lambda_1: \ (x'=1)\ \&\ (y'=2);\ C\\[1mm]
@@ -112,7 +108,7 @@ This specification recursively defines an interaction where process
 first branch with rate $\lambda_1$ (and setting \(x\) to 1 and \(y\)
 to 2) or the second branch with rate $\lambda_2$ (and setting \(x\) to
 3 and \(y\) to 1). Here, we adopt PRISM notation where the prime
-symbol (e.g. $x'$, $y'$) indicates the next-state value of the
+symbol, e.g., $x'$, $y'$, indicates the next-state value of the
 corresponding variable, that is, the value it will take after the
 transition occurs.
 % 
@@ -121,27 +117,28 @@ local PRISM modules by annotating each branch with a unique label
 (e.g., $a$ and $b$) and using a state variable (e.g., \(s_{\role p}\)
 and \(s_{\role q}\)) to uniquely identify each step.
 %
-The behaviour described by the choreography could be represented in
-PRISM as:
+One possible representation of the behaviour described by the
+choreography in PRISM is the following:
+% The behaviour described by the choreography can be represented in
+% PRISM as:
 %
 \[
 \begin{array}{llll}
 \role{p}: \{ & \quad \commandBase {a}{s_{\role p}=0} {\lambda_1:(x'=1)\ \&\ (s_{\role p}'=1)} \quad\qquad \commandBase {}{s_{\role p}=1} {1:(s_{\role p}'=0)}\\[2mm]
-              & \quad \commandBase {b}{s_{\role p}=0} {\lambda_2:(x'=3)\ \&\ (s_{\role p}'=2)} \quad\qquad \commandBase {}{s_{\role p}=2} {1:(s_{\role p}'=0)} \quad \}\\[2mm]
+              & \quad \commandBase {b}{s_{\role p}=0} {\lambda_2:(x'=3)\ \&\ (s_{\role p}'=2)} \quad\qquad \commandBase {}{s_{\role p}=2} {1:(s_{\role p}'=0)} \quad \}\\[4mm]
 \role{q}: \{ & \quad \commandBase {a}{s_{\role q}=0} {1:(y'=2)\ \&\ (s_{\role q}'=1)} \qquad\quad \commandBase {}{s_{\role q}=1} {1:(s_{\role q}'=0)}\\[2mm]
               & \quad \commandBase {b}{s_{\role q}=0} {1:(y'=1)\ \&\ (s_{\role q}'=2)} \qquad\quad \commandBase {}{s_{\role q}=2} {1:(s_{\role q}'=0)} \quad \}\\
 \end{array}
 \]
-
+%
 In this translation, modules $\nr$ and $\nrr$ contain a set of
 commands. For example,
 $\commandBase {a}{s_{\role p}=0} {\lambda_1:(x'=1)\ \&\ (s_{\role
     p}'=1)}$ in module $\nr$ is a command where $a$ is a label over
 which the module can synchronise with other modules, $s_{\role p}=0$
 is a guard, $\lambda_1$ is a rate, and $(x'=1)\ \&\ (s_{\role p}'=1)$
-is a list of commands for modifying the state. In this particular
-translation, labels $a$ and $b$ are used for simulating the two
-branches of the choreography, respectively.
+is a list of commands for modifying the state. Here, we use labels $a$
+and $b$ for simulating the two branches of the choreography.
 %
 The command labeled \(a\) in \(\role{p}\)’s module corresponds to the
 branch with rate \(\lambda_1\), and the matching command in
@@ -150,10 +147,11 @@ label \(b\) corresponds to the second branch with rate \(\lambda_2\)
 for \(\role{p}\) and rate \(1\) for \(\role{q}\), setting \(x\) and
 \(y\) appropriately.  After executing an interaction command in each
 module, a subsequent reset command (with rate 1) sets the state
-counters \( s_{\role p} \) and \( s_{\role q} \) to 0 due to the
+counters \( s_{\role p} \) and \( s_{\role q} \) back to 0 due to the
 recursive call following the branching. This mechanism ensures that
 these commands are only executable when the system has reached this
 particular state.
+
 
 
 Through our contributions, we aim to provide a smooth workflow for
@@ -190,27 +188,40 @@ follows:
   in transforming models described in our choreographic language into
   PRISM-compatible representations;
 
-\item we give a compiler implementation that executes the defined
-  translation function (\S~\ref{sec:impl}),
-  % This compiler transforms choreographies into PRISM models,
-  enabling users to utilise PRISM's robust analysis features while
-  benefiting from the expressiveness of choreographies;
+\item we give an implementation~\cite{repository} that executes the
+  defined translation function, enabling users to utilise PRISM's
+  robust analysis features while benefiting from the expressiveness of
+  choreographies;
 
 \item we show some use cases in order to demonstrate the applicability
   of our language (\S~\ref{sec:bench}).
 \end{itemize}
 
+% \paragraph{Changes with respect to the conference version.}
+% %
+% This article is an expanded version of our paper presented at
+% COORDINATION 2024~\cite{CV24}. It includes detailed definitions and a
+% proof, which were previously omitted. Additionally, we provide a
+% thorough analysis of richer language constructs incorporated in the
+% implementation. Furthermore, we introduce a new set of use cases,
+% analysed through choreographies, including an example that illustrates
+% when the PRISM endpoint setting can be just as effective as a
+% choreography-based approach.
+
 \paragraph{Changes with respect to the conference version.}
 %
 This article is an expanded version of our paper presented at
 COORDINATION 2024~\cite{CV24}. It includes detailed definitions and a
-proof, which were previously omitted. Additionally, we provide a
-thorough analysis of richer language constructs incorporated in the
-implementation. Furthermore, we introduce a new set of use cases,
-analysed through choreographies, including an example that illustrates
-when the PRISM endpoint setting can be just as effective as a
-choreography-based approach.
-
+complete proof of the main theorem, which were previously omitted. We
+also present a revised projection function that provides a cleaner
+formalisation and no longer relies on counters for the control state.
+Furthermore, we introduce additional language constructs, which are
+also supported by the implementation. Additionally, we provide a more
+extensive discussion of the language features supported by the
+implementation and expand the related work section. Finally, we
+introduce new use cases analysed through choreographies, including
+case studies on a simple peer-to-peer protocol, synchronous leader
+election, and the Dining Cryptographers protocol.
 
 %%% Local Variables: 
 %%% mode: latex
