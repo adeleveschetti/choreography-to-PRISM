@@ -145,20 +145,21 @@
 
 \section*{General Response}
 
-We thank the Editor and the Reviewers for their careful reading of the manuscript and
-for their detailed and constructive feedback. We have revised the paper accordingly
-and believe that the changes substantially improve both clarity and technical depth.
+We thank the Editor and the Reviewers for their detailed and
+constructive feedback. We have revised the paper accordingly and
+believe that the changes substantially improve both clarity and
+technical depth.
 
 One major change in this revision concerns the definition of
 projection. In the previous version, the projection relied on explicit
-counters (denoted by $\iota$) to generate fresh identifiers; this
-mechanism was cumbersome and could be error-prone in proofs. We now
-adopt a more direct approach by annotating choreographies with unique
-labels, which the projection can use directly. This yields a cleaner
-and more easily readable projection in the theoretical
-development. For practical reasons, our implementation still uses
-counters; these can be seen as a concrete realisation of the
-label-generation mechanism that the paper now abstracts into the
+counters (natural numbers, denoted by $\iota$) to generate fresh
+identifiers; this mechanism was cumbersome and could be
+error-prone. We now adopt a more direct approach by annotating
+choreographies with unique labels, which the projection can use
+directly. This yields a cleaner and more easily readable projection in
+the theoretical development. For practical reasons, our implementation
+still uses counters; these can be seen as a concrete realisation of
+the label-generation mechanism that the paper now abstracts into the
 choreography annotations.
 
 Below we address each reviewer point by point. Minor comments have
@@ -183,42 +184,47 @@ operational correspondence for a sequence of reductions.
   declarative (a fixed set of commands whose enabling depends on the
   current state), whereas choreographies have an explicit control-flow
   syntax; therefore, in the projection, control-flow is reified into
-  the (extended) runtime state via the distributed program-counter
-  variables $s_{\nr}$, yielding an extended state space $S_+$. As a
-  consequence, reductions of the choreography correspond to
-  transitions on $S_+$ in the projected model rather than to syntactic
-  evolution of PRISM modules.
+  the (extended) runtime state via the variables $s_{\nr}$, yielding
+  an extended state space $S_+$. As a consequence, reductions of the
+  choreography correspond to transitions on $S_+$ in the projected
+  model rather than to syntactic evolution of PRISM modules.
 %
-In the revised manuscript we make this design choice explicit and discuss the resulting asymmetry (projection-after-reduction may yield fewer commands than reduction-after-projection). At the end of Section 5, we include a concrete example illustrating that, while the set of commands may differ, the projected models exhibit the same observable behaviour up to a suitable PRISM-induced equivalence; we leave the identification of the most appropriate equivalence (e.g., probabilistic bisimulation) and the corresponding strengthening of the theorem to future work.
-}
+  In the revised manuscript, we make this design choice explicit and
+  discuss the resulting asymmetry (projection-after-reduction may
+  yield fewer commands than reduction-after-projection). At the end of
+  Section 5, we include a concrete example illustrating that, while
+  the set of commands may differ, the projected models exhibit the
+  same observable behaviour up to a suitable PRISM-induced
+  equivalence; we leave the identification of the most appropriate
+  equivalence (e.g., probabilistic bisimulation) and the corresponding
+  strengthening of the theorem to future work.  }
 
 \revchanges{ We expanded the discussion around Theorem 1 to clarify
   (i) why standard reduction-to-reduction correspondence does not
   directly apply to PRISM, (ii) how control-flow information is
-  encoded in the extended state $S_+$ via the distributed
-  program-counter variables, and (iii) why the correspondence
-  statement is formulated in terms of transitions on $S_+$ rather than
-  syntactic changes of modules. We also added a detailed remark and
-  worked example to make the asymmetry and its implications explicit,
-  and we added a paragraph outlining how a future extension based on
-  probabilistic bisimulation could capture correspondence across
-  different command sets.  }
+  encoded in the extended state $S_+$ via the distributed state
+  variables, and (iii) why the correspondence statement is formulated
+  in terms of transitions on $S_+$ rather than syntactic changes of
+  modules. We also added a detailed remark and worked example to make
+  the asymmetry and its implications explicit, and we added a
+  paragraph outlining how a future extension based on probabilistic
+  bisimulation could capture correspondence across different command
+  sets.  }
 
 \revcomment{ Furthermore, the proof of this correspondence (Theorem 1)
   reads more like a proof sketch than a complete proof; a more
   detailed and carefully paced proof would be preferable.  }
 
 \revresponse{ We thank the reviewer for this suggestion. In the
-  revised version, we have substantially expanded the proof of Theorem
-  1 and made its structure more explicit, in particular by spelling
-  out the interaction case in detail and by making clear the key
-  invariants on the extended state $S_+$ used in the correspondence
-  argument. To keep the exposition readable, we do not enumerate every
-  routine PRISM semantic step, but we provide enough detail for each
-  case to be checked unambiguously.  }
+  revised version, we have expanded the proof of Theorem 1 and made
+  its structure more explicit, in particular by spelling out the
+  interaction case in detail and by making clear the key invariants on
+  the extended state $S_+$ used in the correspondence argument. To
+  keep the exposition readable, we do not enumerate every PRISM
+  semantic step.  }
 
-\revchanges{ Proof of Theorem 1 rewritten and expanded; interaction
-  case detailed; key invariants on $S_+$ made explicit.  }
+\revchanges{ Proof of Theorem 1 rewritten and expanded and interaction
+  case detailed.}
 
 
 
@@ -227,7 +233,9 @@ I have also some concerns about the way in which the choreography state is proje
 different participants.
 }
 
-\revchanges{ Definitions~4 (CTMC) and~5 (DTMC) have been updated.  }
+\revchanges{ Definitions~4 (CTMC) and~5 (DTMC) have been updated. Now
+  states are pre-generated making it more clear how the projection
+  works. }
 
 % ------------------------------------------------------------
 
@@ -238,12 +246,12 @@ When giving examples, the use of prime variables is not clear at this point.
 \revchanges{ We added a brief clarification in the manuscript.  }
 
 
-\revcomment{
-“this is the first probabilistic choreography language that is not a type abstraction”.
-What does this mean?
-}
+% \revcomment{
+% “this is the first probabilistic choreography language that is not a type abstraction”.
+% What does this mean?
+% }
 
-\revchanges{ Comment removed.  }
+% \revchanges{ Comment removed.  }
 
 
 \revcomment{
@@ -276,15 +284,16 @@ A formal encoding would be welcome.
 }
 
 \revresponse{The terminology we used is incorrect, thanks for pointing
-  this out. . The allsync is not "nondeterministic" but it is still a
-  probabilistic choice. We have rewritten (and expanded) the entire
+  this out.  $\allsynchName$ is not "nondeterministic" but it is still
+  a probabilistic choice. We have rewritten (and expanded) the entire
   paragraph with a clearer explanation. As for the detailed questions:
   \begin{enumerate}
     
-  \item in our choreography language, writing $q\longrightarrow\{p\}$
-    or $p\longrightarrow\{q\}$ is the same. However, it has an impact
-    on the projection, since we need to distinguish one of the modules
-    (the one on the left) because it has a different projection.
+  \item in our choreography language, writing
+    $\nrr\longrightarrow\{\nr\}$ or $\nr\longrightarrow\{\nrr\}$ is
+    the same. However, it has an impact on the projection, since we
+    need to distinguish one of the modules (the one on the left)
+    because it has a different projection.
     
   \item The notion of strong connectedness can be extended to
     $\allsynchName$, as it is, after all, an interaction between the
@@ -322,9 +331,14 @@ In the example, $x$ and $y$ are indeed owned by two different modules and are th
 The choice of annotating choreographies with labels seems somewhat ad hoc. Why are they not introduced as a syntactic element [...] given that they are necessary and play a role in the implementation?
 }
 
-\revresponse{
-It is certainly true that labels are a key aspect of the implementation. However, the purpose of this work is to define a higher-level language that abstracts away from such implementation details. Therefore, labels are part of the projection algorithm and are irrelevant to the programmer who writes a choreography.
-}
+\revresponse{ It is certainly true that labels are a key aspect of the
+  implementation. However, the purpose of this work is to define a
+  higher-level language that abstracts away from such implementation
+  details. Therefore, labels are part of the projection algorithm and
+  are irrelevant to the programmer who writes a
+  choreography. Nevertheless, we now use an intermediate choreographic
+  language and a function for annotating choreographies in a ``safe''
+  way. }
 
 
 \revcomment{
@@ -364,9 +378,7 @@ We have added a clear assumption on page 6 (new PDF).
 Definition 4: Is it not the case that the choreography is annotated?
 }
 
-\revresponse{
-Interactions are now also annotaed. See new version. 
-}
+\revresponse{ Interactions are now also annotated. See new version.  }
 
 
 \revcomment{
@@ -402,13 +414,13 @@ The main changes as stated by the authors at the end of the Introduction are:
 }
 
 \revresponse{ Here is a list of the major differences between this
-  latest version and the conference version:
+  latest version and the conference version (random order):
   \begin{itemize}
   \item presentation of three different macros that are used in the
     implementation
   \item a new, cleaner, projection function that no longer uses
-    counters for the control state
-  \item detailed proof of Theorem 1
+    natural numbers for the control state
+  \item proof of Theorem 1
   \item new case study: Simple Peer-To-Peer Protocol
   \item new case study: Synchronous Leader Election
   \item new case study: Dining Cryptographers
@@ -526,6 +538,6 @@ How does this relate to the notions of implementability and realisability [...]?
 \revcomment{ Could the authors imagine a more thorough comparison,
   e.g., bisimilarity?  }
 
-\revchanges{ We have added a discussion on page 17.  }
+\revchanges{ We have added a discussion at the end of Section 5.  }
 
 \end{document}
