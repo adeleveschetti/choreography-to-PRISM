@@ -840,20 +840,22 @@ synchronise only on shared labels.
 
     For the converse direction, we must show that the above is the
     only enabled reduction in the PRISM semantics. As for modules
-    $\nr$, $\nr_1$, \ldots, $\nr_n$, since the state $S$ yields
+    $\nr$, $\nr_1$, \ldots, $\nr_n$, since the state $S_+$ yields
     $\iota$, $\iota_1$, \dots, $\iota_n$, no other reduction is
     possible. Other modules, projected as
-    $\bigcup_{j\in J} \proj(\nrr, \anno C_j)$, are locally enabled by state
-    $S$ to perform their next action. If, by contradiction, we can
-    apply rule $\mathsf{(Transition)}$, derived by an application of
-    rule $\mathsf{(P_1)}$ on some label $a$, on a different set of
-    modules, then we could show that there is no causal dependency
-    between modules $\nr$, $\nr_1$, \ldots, $\nr_n$ and such other
-    modules, violating indeed the fact that the choreography is
-    strongly connected. This reasoning is standard for projection
-    theorems like the one we are proving~\cite{CHY12}. It remains to
-    show that any other module $\nrr$ can synchronise with the correct
-    chosen branch: this is guaranteed by the uniqueness of labels.
+    $\bigcup_{j\in J} \proj(\nrr, \anno C_j)$, are locally enabled by
+    state $S_+$ to perform their next action. If, by contradiction, we
+    can apply rule $\mathsf{(Transition)}$, derived by an application
+    of rule $\mathsf{(P_1)}$ on some label $b$ (which must be
+    different from $a$), on a different set of modules $\{\nrrr_k\}$,
+    then we could show that there is no causal dependency between
+    modules $\nr$, $\nr_1$, \ldots, $\nr_n$ and modules $\{\nrrr_k\}$,
+    violating indeed the fact that the choreography is strongly
+    connected. This reasoning is standard for projection theorems like
+    the one we are proving~\cite{CHY12}.
+    % It remains to show that any other module $\nrr$ can synchronise
+    % with the correct chosen branch: this is guaranteed by the
+    % uniqueness of labels.
 
 
   \item $\anno C=\ifTEl {E}a{\nr}{\anno C_1}{\anno C_2}$.
@@ -898,9 +900,9 @@ synchronise only on shared labels.
       (\textsf{P$_2$}), and finally rule (\textsf{Transition}).
       % 
       Moreover, we observe that the command
-      $s'_{\nrr}\!=\!  \mathsf{top}_{\nrr}(\anno C)$ has no effect on
-      the state except modifying the extended variables with the top
-      annotation in $\anno C$ which, by assumption again, it is
+      $s'_{\nrr}\!=\!  \mathsf{top}_{\nrr}(\anno C_X)$ has no effect
+      on the state except modifying the extended variables with the
+      top annotation in $\anno C_X$ which, by assumption again, it is
       unique. Additionally, we observe that for all $\nrr\in \anno C$,
       we have that
       $\proj(\nrr, \anno C_1) \subseteq \proj(\nrr, \anno
