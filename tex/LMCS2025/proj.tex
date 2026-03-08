@@ -744,8 +744,9 @@ synchronise only on shared labels.
 %
 \begin{theorem}[Projection]\label{thm:epp}
   Let $C$ be a choreography such that $\sconnected(C)$, let
-  $\anno C = \mathsf{annot}(C)$, and let $S_+$ be an extension of a
-  global state $S$ such that for all $\nrr\in C$, we have that
+  $\anno C = \mathsf{annot}(\sigma, C)$ for some fresh $\sigma$, and
+  let $S_+$ be an extension of a global state $S$ such that for all
+  $\nrr\in C$, we have that
   $S_+(s_{\nrr})=\topannotation\nrr {\anno C}$.  Then,
   \[
     (S, \anno C) \red{\lambda} (S', \anno {C}_1) \quad\text{if and only if}\quad
