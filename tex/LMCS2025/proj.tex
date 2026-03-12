@@ -125,12 +125,13 @@ follows:
 \]
 \end{definition}
 The function above places a fresh control label $a$ in every language
-construct. Additionally, it marks each occurrence of a module $\nr$
-with the state label $\sigma(\nr)$. After a state label is used, the
-function updates the state assignment by replacing it with a fresh
-state labels in the continuations. Note that this mechanism does not
-make state labels globally unique, since a module may be assigned the
-same state label on different branches during the annotation process.
+construct (except from $\CEnd$). Additionally, it marks each
+occurrence of a module $\nr$ with the state label $\sigma(\nr)$. After
+a state label is used, the function updates the state assignment by
+replacing it with a fresh state labels in the continuations. Note that
+this mechanism does not make state labels globally unique, since a
+module may be assigned the same state label on different branches
+during the annotation process.
 %
 For example, consider the choreography
 % 
@@ -204,12 +205,10 @@ choreography.  Formally, it is defined as:
 \]
 
 We observe that $\toprole$ is always defined if the annotation is
-obtained from $\mathsf{annot}$:
-\begin{lemma}
-  Given a choreography $C$, a module $\nr$, and a $\sigma$, we have
-  that there exists $\iota$ such that
-  $\toprole_{\nr}(\mathsf{annot}(C))=\iota$.
-\end{lemma}
+obtained from $\mathsf{annot}$. More precisely, given a choreography
+$C$, a module $\nr$, and a $\sigma$, we have that there exists $\iota$
+such that $\toprole_{\nr}(\mathsf{annot}(C,\sigma))=\iota$.
+
 
 Given a label $a$ and a set of indices $I$, the set $\{a_i|i\in I\}$
 contains unique identifiers generated from $a$.  We do similarly for
@@ -744,7 +743,7 @@ synchronise only on shared labels.
 %
 \begin{theorem}[Projection]\label{thm:epp}
   Let $C$ be a choreography such that $\sconnected(C)$, let
-  $\anno C = \mathsf{annot}(\sigma, C)$ for some fresh $\sigma$, and
+  $\anno C = \mathsf{annot}(C,\sigma)$ for some fresh $\sigma$, and
   let $S_+$ be an extension of a global state $S$ such that for all
   $\nrr\in C$, we have that
   $S_+(s_{\nrr})=\topannotation\nrr {\anno C}$.  Then,
