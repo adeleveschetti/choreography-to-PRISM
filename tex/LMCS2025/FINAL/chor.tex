@@ -1,0 +1,491 @@
+%
+In the previous section, we illustrated our choreography language by
+means of an example. We now formalise the language by presenting its
+syntax and semantics. For the sake of clarity, we slightly depart from
+the concrete syntax of our tool, adopting instead a more
+process-algebraic format, which makes the syntax more concise and
+better suited to formal definitions and proofs.
+
+\subsection{Syntax}\label{sub:syntax}
+%
+Let $\role p$ range over a (possibly infinite) set of module names
+$\mathcal R$, $x$ over a (possibly infinite) set of variables $\Var$,
+and $v$ over a (possibly infinite) set of values $\Val$.
+%
+Choreographies, the key component of our language, are defined by the
+following syntax:
+%
+\begin{displaymath}\small
+  \begin{array}{llllllllllll}
+    C & ::= &      & \interact{\nr}{\nr_1,\ldots,\nr_n} & \text{(interaction)}\\[1mm]
+      &     & \mid & \ifTE {E}{\nr}{C_1}{C_2} & \text{(conditional)}\\[1mm]
+      &     & \mid & X     & \text{(recursive call)}\\[1mm]
+      &     & \mid & \CEnd & \text{(inact)}
+    \\[2mm]
+    \defin \ & ::= & & X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=} C,\ \defin 
+                     \quad \mid \quad \emptyset & \text{(definitions)}
+    \\[2mm]
+    u     & ::=  && (x' = E)\ \&\ u \quad\mid\quad    (x' = E) & \text{(assignments)}\\[2mm]
+    E, g  & ::=  && f(\tilde E)\quad\mid\quad x\quad\mid\quad v & \text{(expressions)}
+  \end{array}
+\end{displaymath}
+%
+% We comment the various constructs.
+The syntactic category $C$ denotes choreographic programs. The
+interaction term
+$\nr\rightarrow \{\nr_1,\ldots,\nr_n\}:\,\Sigma\{\lambda_j: x_j=E_j.\
+C_j\}_{j\in J}$ denotes an interaction initiated by module $\nr$ with
+modules $\nr_i$'s, with $\nr$ and $\nr_i$'s all distinct. A
+choreography specifies what interaction must be executed next,
+shifting the focus from what can happen to what must happen. When the
+interaction happens, one of the $j$ branches is selected as a
+continuation. Branching is a random move: the number
+$\lambda_j\in\mathbb R$ denotes either a probability or a rate. This
+will depend on the language we wish to use. In the case of
+probabilities, it must be the case that $0\leq\lambda_j\leq 1$ and
+$\Sigma_j\lambda_j=1$. Once a branch $j$ is taken, the choreography
+will execute some assignments $u_j$. A single assignment has the
+syntax $(x' = E)$ meaning that the value obtained by evaluating
+expression $E$ is assigned to variable $x$; assignments can be
+concatenated with the operator $\&$.  Note that $x'$ is used for an
+assignment to $x$: here, we follow the syntax adopted in PRISM
+(see~\S~\ref{sec:prism}). Expressions are obtained by applying some
+unspecified functions to other expressions or, as base terms, i.e.,
+variables and values (denoted by $v$).
+%
+
+The term $\ifTE {E}{\nr}{C_1}{C_2}$ denotes a system where module
+  $\role p$ evaluates the guard $E$ (which can contain variables
+  located at other modules) and then (deterministically) branches
+  accordingly.  The term $X$ is a (possibly recursive) procedure call:
+  in the semantics, we assume that such procedure names are defined
+  separately. Moreover, we assume that such definitions are
+  non-contractive, i.e., we avoid definitions of the form
+  $X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=}X$. The term
+  $\CEnd$ denotes the system finishing its computation.
+
+  \newmark{R1.11}%
+  \begin{asm}\label{ass:0}
+    \new{We assume that every writable choreography is such that, for
+    every interaction $\interact{\nr}{\nr_1,\ldots,\nr_n}$, all
+    updates in each $u_j$ are assignments to variables located at
+    $\nr, \nr_1,\ldots,\nr_n$.}
+  \end{asm}
+  
+\subsection{Semantics.}
+The semantics of a choreography is a relation that captures how the
+values assigned to variables are modified when the various modules
+synchronise with each other. Similar to the operational semantics of
+imperative languages, we define a state, denoted by $S$, as a mapping
+from variables to values, that is, $S : \Var \rightarrow \Val$.
+
+Given a state, substitution allows us to modify some of its values.
+
+\newmark{R2.8}%
+\begin{defi}
+  \new{Given distinct variables $x_1,\ldots,x_n$ and expressions
+  $E_1,\ldots,E_n$, a state update
+  $S[x_1' = E_1\ \&\ \cdots \&\ x_n' = E_n]$ is defined as}
+  \[
+    S[x_1' = E_1\ \&\ \cdots \&\ x_n' = E_n](y) =
+    \begin{cases}
+      \eval{E_i}{S} & \text{if } y = x_i \text{ for some } i \in \{1, \ldots, n\},\\
+      S(y)          & \text{otherwise.}
+    \end{cases}
+  \]
+  \new{where $\eval {E_i} S$ denotes a (decidable) evaluation of the
+  expression $E$ in the state $S$.}
+\end{defi}
+
+Let $\mathcal S$ be the set of all possible states and let $\defin$ be
+a set of definitions of the form
+$X \stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=} C$. The
+operational semantics of choreographies is defined as the smallest
+relation
+\[
+  \red{}\!\!\!\!^{\defin} \;\subseteq\; \mathcal S \times C \times
+  \mathbb R \times \mathcal S \times C
+\]
+satisfying the rules below (we omit $\defin$ when it is not relevant):
+\begin{displaymath}\small
+  \begin{array}{l@{\quad}llll}
+    \textsf{(Interact)} &
+                          (S, \interact{p}{\role p_1,\ldots,\role p_n})
+                          \red{\lambda_j}
+                          (S[u_j], C_j)
+    \\[1mm]
+    \textsf{(IfThenElseT)} &
+                             \eval E S = \mathsf{tt} \;\Rightarrow\;
+                             (S,\ifTE{E}{p}{C_1}{C_2})
+                             \red{1}
+                             (S, C_1)
+    \\[1mm]
+    \textsf{(IfThenElseF)} &
+                             \eval E S = \mathsf{ff} \;\Rightarrow\;
+                             (S,\ifTE{E}{p}{C_1}{C_2})
+                             \red{1}
+                             (S, C_2)
+    \\[1mm]
+    \textsf{(Call)} &
+                      X \stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=} C \in \defin
+                      \;\Rightarrow\;
+                      (S, X) \red{{1}}^{\!\!\!\!\!\!\!\defin} (S, C)
+  \end{array}
+\end{displaymath}
+%
+The above semantics is \emph{fully probabilistic}: for every
+configuration $(S,C)$, the rules determine a unique probability
+distribution over successor configurations. In particular, there is
+no source of nondeterminism in the semantics. As a consequence, the
+transition relation $\red{}$ induces a \emph{Discrete-Time Markov
+Chain} (DTMC) when the labels $\lambda_j$ are probabilities, or a
+\emph{Continuous-Time Markov Chain} (CTMC) when they are interpreted
+as rates.
+%
+Intuitively, the operational rules define a global (possibly
+infinite-state) Markov chain whose states are configurations of the
+form $(S,C)$, and whose transitions are exactly those derivable by the
+rules above, weighted by the corresponding probabilities or rates.
+This global Markov chain contains all possible choreographies of the
+language and all their possible states, independently of any
+particular initial program.
+%
+Equivalently, one may consider the Markov chain induced by restricting
+the global chain to the set of configurations reachable from a given
+pair $(S,C)$. Then, the behaviour of the choreography is given by the
+executions starting from this initial configuration, that is, by all
+reachable (finite or infinite) paths in the Markov chain. In the
+remainder, we implicitly adopt this program-indexed view.
+
+
+% Below, we look at two corner-case examples.
+\begin{exa}
+  Consider the following choreography:
+  \begin{displaymath}
+    \begin{array}{lll}
+      C \ {=}\ \interactBase{\nr}{\nrr}\ \lambda_1: (x'=1);\quad \interactBase{\nr}{\nrr}\
+      \lambda_2: (x'=1);\quad \CEnd
+    \end{array}
+  \end{displaymath}
+  %
+  The semantics of $C$ induces a Markov chain with states $(S_0,C)$,
+  $(S_1,C')$, and $(S_1,\CEnd)$ such that
+  $C'= \interactBase{\nr}{\nrr}\ \lambda_1: (x'=1);\CEnd$, $S_0(x)=0$,
+  and $S_1(x)=1$. The chain can be depicted as
+  %   
+  \begin{center}
+    \begin{tikzpicture}[ scale=0.8, transform shape, node distance=0cm
+      and 4cm, conf/.style={ draw, circle, align=center,
+        font=\scriptsize, inner sep=1.5pt }, ->, >=stealth ]
+
+      % Nodes
+      \node[conf] (c0) {$
+        \begin{array}{c}
+          x=0\\ \hline
+          C
+        \end{array}$};
+      
+      \node[conf] (c1) [right=of c0] {$
+        \begin{array}{c}
+          x=1\\ \hline
+          C'
+        \end{array}$};
+      
+      \node[conf] (c2) [right=of c1] {$
+        \begin{array}{c}
+          x=1\\ \hline
+          \CEnd
+        \end{array}$};
+      
+      % Incoming arrow
+      \draw[->] ([xshift=-1.2cm]c0.west) -- (c0.west);
+      
+      % Transitions
+      \draw (c0) -- node[above] {$\lambda_1$} (c1);
+      \draw (c1) -- node[above] {$\lambda_2$} (c2);
+    \end{tikzpicture}
+  \end{center}
+\end{exa}
+
+
+
+
+
+\begin{exa}\label{example2}
+  Consider the following choreography definition:
+  \begin{displaymath}
+    \begin{array}{lll}
+      X \stackrel{\mathsf{def}}{=}
+      \interactBase{\nr}{\nrr}
+      \left\{
+      \begin{array}{l}
+        \lambda_1 : (x' = 1)\ \&\ (y' = 2);\ X \\[0.5mm]
+        \lambda_2 : (x' = 3)\ \&\ (y' = 1);\ X
+      \end{array}
+      \right.
+    \end{array}
+  \end{displaymath}
+  Let $S_0$ be a state such that $S_0(x)=0$ and $S_0(y)=0$.  Denote by
+  $S_1$ and $S_2$ the states obtained by the two branches of the
+  interaction, i.e., $S_1(x)=1,S_1(y)=2$ and $S_2(x)=3,S_2(y)=1$.
+  % 
+  The induced Markov chain for a recursive call $X$ contains six
+  states, depicted as
+  % 
+  \begin{center}
+    \begin{tikzpicture}[ scale=0.8, transform shape, node distance=0.1cm
+      and 2.6cm, conf/.style={draw, circle, align=center,
+        font=\scriptsize, inner sep=1.5pt}, ->, >=stealth ]
+
+      % Initial recursive state
+      \node[conf] (c0) {$
+        \begin{array}{c}
+          x=0\\ y=0\\ \hline X
+        \end{array}$};
+  
+      % Initial interaction
+      \node[conf] (i0) [right=of c0] { $
+        \begin{array}{c}
+          x=0\\ y=0\\
+          \hline
+          {{\nr}\!\rightarrow\!{\nrr}\{...\}}
+        \end{array}
+        $};
+    
+      % Recursive states
+      \node[conf] (c1) [above right=of i0]
+      {$
+        \begin{array}{c}
+          x=1\\ y=2\\
+          \hline
+          X
+        \end{array}$};
+      
+      \node[conf] (c2) [below right=of i0] {$
+        \begin{array}{c}
+          x=3\\ y=1\\ \hline X
+        \end{array}$};
+      
+      % Interaction states
+      \node[conf] (i1) [right=of c1] {$
+        \begin{array}{c}
+          x=1\\ y=2\\ \hline
+          {{\nr}\!\rightarrow\!{\nrr}\{...\}}
+        \end{array}$};
+      
+      \node[conf] (i2) [right=of c2] {$
+        \begin{array}{c}
+          x=3\\ y=1\\ \hline
+          {{\nr}\!\rightarrow\!{\nrr}\{...\}}
+        \end{array}$};
+      
+      % Forward transitions
+      \draw[->] ([xshift=-1.2cm]c0.west) --  (c0.west);
+      
+      \draw (c0) -- node[above] {$1$} (i0);
+      
+      \draw (i0) -- node[above left] {$\lambda_1$} (c1); \draw (i0) --
+      node[below left] {$\lambda_2$} (c2);
+  
+      \draw (c1) -- node[above] {$1$} (i1); \draw (c2) -- node[below]
+      {$1$} (i2);
+      
+      % Curved returns (tight bends)
+      \draw[bend right=40] (i1) to node[above] {$\lambda_1$} (c1);
+      \draw[bend right=17] (i1) to node[above] {$\lambda_2$} (c2);
+      
+      \draw[bend left=16] (i2) to node[below] {$\lambda_1$} (c1);
+      \draw[bend left=30](i2) to node[below] {$\lambda_2$} (c2);
+    \end{tikzpicture}
+  \end{center}
+\end{exa}
+
+
+
+
+\subsection{Other language constructs}\label{sub:otherconstructs}
+%
+Our language includes constructs that are not part of the formal syntax defined above.
+These constructs are purely syntactic sugar and can be easily encoded. 
+Below, we discuss each of them:
+% 
+\begin{itemize}
+
+\item {\em Parametric modules.} In our implemented language, modules
+  can be parameterised (indexed) as done in PRISM. We denote
+  parameterised modules as $\role p[n]$ for $n$ ranging some finite
+  set $N$.
+  %
+  As an example, the choreography
+  \[\interactBase {p[i]}{q[i]}:\lambda:U;\quad 
+    \interactBase r{q[i]}:\lambda:U;\quad \CEnd
+  \]
+  can be easily encoded as:
+  \[
+    \begin{array}{llll}
+      \interactBase {p1}{q1}:\lambda:U;\quad \\
+      \interactBase {p2}{q2}:\lambda:U;\quad \\
+      \interactBase {p3}{q3}:\lambda:U;\quad \\
+      \interactBase r{q1}:\lambda:U;\quad \\
+      \interactBase r{q2}:\lambda:U;\quad \\
+      \interactBase r{q3}:\lambda:U;\quad \CEnd
+    \end{array}
+  \]
+  %
+  Additionally, the choreography
+  \[\interactBase {p[i]}{q[i]}:\lambda:U;\quad 
+    \interactBase {q[i+1]}{p[i]}:\lambda:U;\quad \CEnd
+  \]
+  can be encoded in our model language as
+  \[
+    \begin{array}{llll}
+      \interactBase {p1}{q1}:\lambda:U;\quad \\
+      \interactBase {p2}{q2}:\lambda:U;\quad \\
+      \interactBase {p3}{q3}:\lambda:U;\quad \\
+      \interactBase {q2}{p1}:\lambda:U;\quad \\
+      \interactBase {q3}{p2}:\lambda:U;\quad \\
+      \interactBase {q1}{p3}:\lambda:U;\quad  \CEnd
+    \end{array}
+  \]
+  Given that parameters range over a finite set, this operation is
+  redundant. % as far as the theory is concerned.
+
+\item {\em The {\sf foreach} construct.}\newmark{R1.5} The use of
+  parametric modules can be further facilitated by introducing
+  syntactic sugar that allows iteration over the set of indices that
+  parameterise these modules. To this end, our language implementation
+  includes the construct
+  $\textsf{foreach } (k\ \textit{op}\ i)\ u@A[k]$, which can be used
+  in front of and update $u$ to parameterise it with respect to
+  multiple instances of the same type of variable over different
+  modules.
+
+  \new{The construct enables the expression $(k\ \textit{op}\ i)$,
+  where $k$ binds in $u@A[k]$, to identify a set of indices which
+  can then be used in the update $u@A[i]$.
+  %
+  Such set is obtained from the predicate determined by the operator
+  $\textit{op}$ with respect to the distinguished index $i$.
+  %
+  Formally, $(k\ \textit{op}\ i)$ denotes the set
+  $\{\, k \in I \mid \textit{op}(k,i) \,\}$.
+  %
+  For example, $(k \neq i)$ denotes
+  $\{\, k \in I \mid k \neq i \,\}$, that is, all defined indices
+  except~$i$.}
+  %
+
+  In essence, the {\sf foreach} construct provides a concise and
+  readable way to express operations over multiple indexed modules. It
+  can be encoded explicitly by enumerating the modules manually,
+  provided that the indices are known at compile time rather than
+  determined dynamically at runtime.
+
+\item {\em The {\sf \textcolor{sh_keyword}{allsynch}}
+  construct.}\newmark{R1.6} Our implementation supports
+  $\allsynch pGiI$, where $G$ has the form
+  $\chorcommand g\lambda u$. \new{The construct requires all modules
+  $\nr_i$ to synchronise while independently choosing a branch,
+  unlike the interaction $\interact{\nr}{\nr_1,\ldots,\nr_n}$, where
+  the chosen branch must be taken by all modules. This provides a
+  structured mechanism for defining interactions in which multiple
+  modules must coordinate, while their precise behaviour may vary
+  dynamically (with a certain probability distribution or rate).} For
+  example, consider the synchronisation between modules $\role p$ and
+  $\role q$:
+  \begin{displaymath}
+    \allsynchName\left\{
+      \begin{array}{lll}
+        \nr  : (x=5) \rightarrow 42 : (x'=0) \\[1mm]
+        \nr  : (x=5) \rightarrow 67 : (x'=100) \\[1mm]
+        \nr  : (x=5\ \&\ z=3) \rightarrow 10 : (x'=13) \\[1mm]
+        \nrr : (y=1) \rightarrow 1 : (y'=0)
+      \end{array}
+    \right\} ; \CEnd
+  \end{displaymath}
+  \new{The above choreography states that (i) $\nr$ and $\nrr$ must
+  synchronise, and (ii) $\nr$ can execute any of the three declared
+  updates with the respective rates, provided their guards are
+  satisfied. Such behaviour partially departs from the usual {\em
+    global} description given by a choreography. In this case, there
+  is indeed a global synchronisation between the modules, but it is
+  not specified which command must be paired with which. In a state
+  where $x=5$ and $z=3$, $\nr$ can execute any of these
+  actions. However, in a state where $x=5$ but $z\neq 3$, only one of
+  the first two updates can be carried out.}
+
+  
+  A key advantage of this construct is its compactness and readability
+  in specifying this type of interactions. In the scenario above,
+  where modules $\role{p}$ and $\role{q}$ participate in a
+  synchronised exchange, the $\allsynchName$ syntax allows for a
+  concise definition of conditions under which each module updates its
+  state. This avoids the need for manually encoding synchronisation
+  through nested conditional constructs.
+  % 
+  \new{Despite its usefulness, the $\allsynchName$ construct does not
+  introduce any new expressiveness but serves as syntactic sugar for
+  an equivalent formulation.}  In fact, the example above can be
+  rewritten by nesting $\mathtt{if\text{-}then\text{-}else}$
+  constructs, ensuring that the synchronisation conditions are met:
+  \begin{displaymath}
+    \begin{array}{ll}
+      & \mathtt{if}\ (x=5\ \&\ z=3)@\nr\ \mathtt{then}\\[1mm]
+      & \quad \mathtt{if}\ (y=1)@\nrr\ \mathtt{then}\\[1mm]
+      & \quad \quad \interactBase{\nr}{\nrr}
+        \left\{
+        \begin{array}{rlll}
+          42 : &  (x'=0)\,\&\,(y'=0);\CEnd \\[1mm]
+          67 : &  (x'=100)\,\&\,(y'=0);\CEnd \\[1mm]
+          10 : &  (x'=13)\,\&\,(y'=0);\CEnd
+        \end{array}
+        \right.
+      \\
+      & \quad \mathtt{else}\ \CEnd \\
+      & \mathtt{else}\ \mathtt{if}\ (x=5\ \&\ z\neq3)@\nr\
+        \mathtt{then}\\[1mm]
+      & \phantom{\mathtt{else}\ }\quad
+        \mathtt{if}\ (y=1)@\nrr\ \mathtt{then}\\[1mm]
+      & \phantom{\mathtt{else}\ \quad}\quad
+        \interactBase{\nr}{\nrr}
+        \left\{
+        \begin{array}{rlll}
+          42 : &  (x'=0)\,\&\,(y'=0);\CEnd \\[1mm]
+          67 : &  (x'=100)\,\&\,(y'=0);\CEnd \\[1mm]
+        \end{array}
+        \right.
+      \\
+      & \phantom{\mathtt{else}\ }\quad\mathtt{else}\ \CEnd
+    \end{array}
+  \end{displaymath}
+  %
+  \new{The two formulations are equivalent, with the $\allsynchName$
+  syntax acting as syntactic sugar that provides a structured and
+  readable representation of synchronisation. In general, its
+  encoding into the core choreographic language requires determining
+  non-overlapping guards in advance. For example, from the three
+  guards $(x=5)$, $(x=5)$, and $(x=5\ \&\ z=3)$, it is necessary to
+  derive the conditional guards $(x=5\ \&\ z=3)$ and
+  $(x=5\ \&\ z\neq 3)$. This process depends on the functions
+  $f(\tilde E)$ used in guards.}
+
+  \new{Note that the $\allsynchName$ construct is more efficient (in
+  terms of code size) than manually encoding synchronisation with
+  nested $\mathtt{if\text{-}then\text{-}else}$ statements.  As the
+  number of synchronising modules and conditions increases (in our
+  example, there is only a single choice for $\nrr$), the depth and
+  complexity of the nested conditionals grow exponentially, making the
+  explicit formulation harder to read, write, and process.  In
+  contrast, $\allsynchName$ provides a compact and structured way to
+  express the same logic without the combinatorial explosion of nested
+  conditionals.}
+\end{itemize}
+
+  
+
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

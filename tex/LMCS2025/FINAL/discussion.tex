@@ -1,0 +1,147 @@
+%
+\mypar{Related Work.}  Choreographic programming~\cite{M23} is a
+language paradigm for specifying the expected interactions
+(communications) of a distributed system from a global viewpoint,
+from which decentralised implementations can be generated via
+projection. The notion of choreography has been substantially explored
+in the last decade, both from a theoretical perspective,
+e.g.,~\cite{CHY12,CM13}, to full integration into fully-fledged
+programming languages, such as WS-CDL~\cite{HYC07b} and
+Choral~\cite{GMP24}. Nevertheless, there is a scarcity of research on
+probabilistic aspects of choreographic programming.
+%
+To the best of our knowledge, Aman and Ciobanu~\cite{AC19,AC22} are
+the only ones who studied the concept of choreography and
+probabilities. Their work augments multiparty session types (type
+abstractions for communicating systems that use the concept of
+choreography) with a probabilistic internal choice similar to the one
+used by our choreographic branching. However, they do not provide any
+semantics with state in terms of Markov chains, and, most importantly,
+they do not project into a probabilistic declarative language model
+such as PRISM.
+%
+Carbone et al.~\cite{CGHL10} define a logic for expressing properties
+of a session-typed choreography language. However, the logic is
+undecidable and has no model-checking algorithm. % More recently,
+% Cruz-Filipe et al.~\cite{CGMP23}
+%
+As far as our knowledge extends, there is currently no work that
+generates probabilistic models from choreographic languages that can
+be then model-checked.
+
+\newid{R3.2}{A complementary line of research concerns the implementability and
+  realisability of global specifications, where the central question
+  is whether a given global transition system can be decomposed into
+  synchronously communicating local components whose composition
+  preserves the intended behaviour \cite{10.1007/3-540-46691-6_17,
+    Mukund2002, 10.1007/978-3-031-47963-2_15,
+    10.1007/978-3-031-62697-5_10}.  In those settings, the global
+  description is typically unconstrained and substantial effort goes
+  into characterising which behaviours admit a distributed
+  realisation.  By contrast, choreographies impose a structured form
+  of global specification in which all interactions are explicitly
+  declared.  This discipline ensures that every choreography is
+  directly realisable via projection, but it also restricts the kinds
+  of distributed behaviours that can be expressed, placing our
+  approach within a well-behaved subspace of the broader realisability
+  landscape.}
+
+
+\mypar{Discussion and Future Work.}
+The ultimate goal of the proposed framework is to use the concept of
+choreographic programming to improve several aspects, including
+usability, correctness, and efficiency in modelling and analysing
+systems.
+%
+In this paper, we address usability and efficiency of modelling
+systems by proposing a probabilistic choreography language.
+Our language improves the intuitive modelling of concurrent
+probabilistic systems. Traditional modelling languages often lack the
+expressive clarity needed to effectively capture the intricacies of
+such systems. By designing a language specific for choreographing
+system behaviours, we provide an intuitive means of specifying system
+dynamics. This approach enables a more natural and straightforward
+modelling process, essential for accurately representing real-world
+systems and ensuring the efficacy of subsequent analysis.
+%
+Although choreographies and the projection function aim to abstract
+away low-level details, providing instead a higher-level
+representation of system behaviours, the choreographic approach
+naturally imposes some restrictions on expressivity.  \newid{R3.1}{A
+  choreography prescribes a single global interaction structure that
+  determines, for each role, a unique enabled action at any control
+  state.  This discipline is crucial for correctness-by-construction
+  but also limits the class of systems that can be expressed: models
+  that rely on multiple independently enabled transitions,
+  nondeterministic interleavings, or asynchronous local evolution
+  cannot, in general, be captured by our current framework.  The
+  systems supported by our approach are therefore those whose
+  behaviour can be organised around explicitly coordinated
+  interactions with a globally determined branching structure.}  Some of the case studies presented in the
+PRISM documentation~\cite{PRISMdoc} cannot be modeled by using our
+current language. Specifically, there are two main cases where our
+approach encounters limitations:
+%
+\textit{(i)} in the asynchronous leader election case study, our
+language prohibits the use of an $\lq\lq$if-then$\lq\lq$ statement without an
+accompanying $\lq\lq$else$\lq\lq$ to prevent deadlocked states;
+%
+\textit{(ii)} in probabilistic broadcast protocols or cyclic server
+polling system models, the system requires probabilistic branching to
+synchronise different modules based on the selected branch.
+%
+% \begin{itemize}
+% \item \textit{(i)} In the context of asynchronous leader election,
+%   processes synchronize with the same label but under different
+%   conditions. Our choreographic language includes the "if-then-else"
+%   statement but disallows the "if-then" statement without an
+%   accompanying "else." This design choice prevents deadlock states
+%   from occurring.
+% \item \textit{(ii)} Similarly, in probabilistic broadcast protocols,
+%   the issue lies in the labels of synchronizations. Here, all
+%   processes synchronize with the same label for every action. However,
+%   our language prohibits this behaviour, as each label must be unique
+%   for every synchronization between two or more processes.
+% \item \textit{(iii)} In the cyclic server polling system model, the
+%   processes "station$_i$" perform two distinct actions in the same
+%   state. Specifically, at state 0 ("s$_i$=0"), processes may either
+%   synchronize with the "server" process or transition to a different
+%   state without synchronization. Our language cannot express this
+%   scenario, as synchronization is treated as a branch action,
+%   necessitating an alternative option with synchronization.
+% \end{itemize}
+These issues could be fixed by extending our choreographic language
+further and are therefore left as future work.
+
+Additionally to these extensions, we conjecture that our semantics for
+choreographies may be used for improving performance by directly
+generating a CTMC or a DTMC from a choreography, bypassing the
+projection into the PRISM language. In fact, the Markov chain
+construction from a choreography seems to be faster than the
+construction from a corresponding projection in the PRISM language,
+since it is not necessary to take into account all the possible
+synchronisations in the rules from Fig.~\ref{fig:semantics}. A formal
+complexity analysis, an implementation, and performance benchmarking
+are left as future work.
+
+
+
+In conclusion, this paper has introduced a framework for addressing
+the challenges of modelling and analysing concurrent probabilistic
+systems.
+% By presenting a simplified semantics for PRISM, we enhance the
+% platform's usability.
+The development of a choreographic language with tailored syntax and
+semantics offers an intuitive modelling approach. We have established
+the correctness of a projection function that translates choreographic
+models to PRISM-compatible formats. Additionally, our compiler enables
+seamless translation of choreographic models to PRISM, facilitating
+powerful analysis while maintaining expressive clarity. These
+contributions bridge the gap between high-level modelling and robust
+analysis in probabilistic systems, paving the way for advancements in
+the field. 
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

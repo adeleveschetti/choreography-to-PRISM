@@ -1,0 +1,126 @@
+%%% Random Macros
+
+% ---- Highlighting of new text in revision 2 --------------------------
+% Toggle: set \highlightnewtrue to show additions in blue + margin IDs,
+%         \highlightnewfalse to render everything as normal black text.
+\newif\ifhighlightnew
+\highlightnewfalse
+% Plain highlight (no margin marker)
+\newcommand{\new}[1]{\ifhighlightnew\textcolor{blue}{#1}\else#1\fi}
+% Margin marker only, no text wrapping.
+% Usage: place \newmark{R2.1} at the start of a paragraph or near a change.
+\newcommand{\newmark}[1]{%
+  \ifhighlightnew\marginpar{\scriptsize\color{blue}\textbf{[#1]}}\fi
+}
+% Highlight with a margin marker carrying a reviewer-comment ID.
+% Usage: \newid{R3.2}{the new text...}
+\newcommand{\newid}[2]{%
+  \ifhighlightnew
+    \marginpar{\scriptsize\color{blue}\textbf{[#1]}}%
+    \textcolor{blue}{#2}%
+  \else
+    #2%
+  \fi
+}
+% ----------------------------------------------------------------------
+
+\newcommand{\defin}{\mathcal D}
+
+\newcommand{\sem}[1]{\{\![#1]\!\}}
+\newcommand{\eval}[2]{#1\!\!\downarrow_{#2}}
+
+\newcommand{\mypar}[1]{\noindent{\bf #1}}
+
+\newcommand{\state}{\mathsf{state}}
+
+\newcommand{\proj}{\mathsf{proj}}
+\newcommand{\projE}[2]{#1\downarrow_{#2}}
+
+\newcommand{\sconnected}{\mathsf{sConn}}
+\newcommand{\hmodules}{\mathsf{hMods}}
+
+
+\newcommand{\topannotation}[2]{\mathsf{top}_{#1}(#2)}
+
+\definecolor{code_indent}{HTML}{CCCCCC}
+
+\newcommand{\indentrule}{\color{code_indent}\vrule\hspace{2pt}}
+
+% Syntax
+\definecolor{bloodyred}{rgb}{0.6,0.1,0.1}
+\newcommand{\role}[1]{\textcolor{bloodyred}{\mathtt{#1}}}
+%\newcommand{\role}[1]{\mathtt{#1}}
+\newcommand{\nr}{\role p}
+\newcommand{\nrr}{\role q}
+\newcommand{\nrrr}{\role r}
+
+\newcommand{\Var}{\mathsf{Var}}
+\newcommand{\Val}{\mathsf{Val}}
+
+\newcommand{\interactBase}[2]{{#1}\rightarrow \{{#2}\}}
+\newcommand{\interactBasel}[3]{#1\rightarrow^{#2} \{#3\}}
+\newcommand{\interact}[2]{\interactBase{#1}{#2}:\,\Sigma_{j\in J}\lambda_j: u_j;\ C_j}
+\newcommand{\interactl}[3]{\interactBasel{#1}{#2}{#3}:\,\Sigma_{j\in J}\lambda_j: u_j;\ \anno{C}_j}
+\newcommand{\doubleand}{\text{\&\&}}
+\newcommand{\allsynchName}{\textcolor{sh_keyword}{\mathtt{allsynch}}}
+\newcommand{\allsynch}[4]{\allsynchName\, \{ {\role{#1}}_{#3}:#2_{#3}\}_{#3\in #4}}
+
+\newcommand{\command}[4] {\commandBase {#1} {#2} \Sigma_{i\in I}#3_i: #4_i}
+\newcommand{\commandBase}[3] {[#1]\ #2\ \rightarrow #3}
+\newcommand{\chorcommandBase}[2] {#1\ \rightarrow #2}
+\newcommand{\chorcommand}[3] {\chorcommandBase {#1} \Sigma_{i\in I}#2_i: #3_i}
+\newcommand{\ifTE}[4]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@{#2}\ \textcolor{sh_keyword}{\mathtt{then}}\ {#3} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#4}}
+\newcommand{\ifTEl}[5]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@^{#2}{#3} \ \textcolor{sh_keyword}{\mathtt{then}}\ {#4} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#5}}
+\newcommand{\codeprism}[1]{\lstinline[style=prism-color,basicstyle=\small\sffamily]{#1}}
+\newcommand{\codechor}[1]{\lstinline[style=chor-color,basicstyle=\small\ttfamily,mathescape=true]{#1}}
+
+
+
+\newcommand{\CEnd}{\mathbf{0}}
+\newcommand{\pp}{|\!|}
+\newcommand{\ppp}[1]{|[#1]|}
+\newcommand{\cmd}[6]{[#1] #2 \rightarrow \{#3: #4 = #5\}_{#6}}
+
+\newcommand{\defrec}{\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=}}
+
+  
+% Semantics
+\newcommand{\red}[1]{\ \longrightarrow_{#1}\ } 
+\newcommand{\prismred}[1]{\ \stackrel{#1}{\rightsquigarrow}\ } 
+\newcommand{\lab}[3]{\ [#1][#2:\;#3]\ } 
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+\definecolor{keywordColor}{rgb}{0.50,0.00,0.33}
+\definecolor{stringColor}{rgb}{0.16,0.00,1.00}
+\definecolor{lineNumberColor}{rgb}{0.47,0.47,0.47}
+
+\lstdefinelanguage{Eclipse}{
+language=Java,
+tabsize=3,
+showspaces=false,
+captionpos=b,
+breaklines=true,
+extendedchars=true,
+numbers=none,
+postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}},
+  basicstyle=\ttfamily\tiny,
+  emphstyle=\bfseries,
+  keywordstyle=\color{keywordColor}\bfseries,
+  commentstyle=\markupComments,
+  stringstyle=\color{stringColor},
+  numberstyle=\color{lineNumberColor}\tiny,
+  morecomment=[s][\markupJavadocs]{/**}{*/}, % For Javadoc comments
+  showstringspaces=false,
+  morekeywords={and},
+  numbers=left,
+  mathescape=true
+%  ,frame=lines%shadowbox%trBL
+}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:
