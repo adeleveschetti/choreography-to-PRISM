@@ -66,7 +66,7 @@ follows:
   follows:\\
   \[
     \begin{array}{c}\small
-      
+      %
       \infer
       {
       \mathsf{annot}\!\left(
@@ -86,7 +86,7 @@ follows:
       \forall j\in J.\ \mathsf{annot}(C_j,\ \sigma_j')=\anno {C}_j
       }
       \\[6mm]
-
+      %
       \infer
       {
       \mathsf{annot}(\ifTE{E}{\nr}{C_1}{C_2},\sigma)
@@ -103,7 +103,7 @@ follows:
       \mathsf{annot}(C_2,\sigma_2)=\anno C_2
       }
       \\[6mm]
-
+      %
       \infer
       {
       \mathsf{annot}(X,\sigma)=X^{a,\sigma}
@@ -111,9 +111,9 @@ follows:
       {
       a=\mathsf{fresh}_{\mathsf c}
       }
-      
+      %
       \qquad\qquad
-
+      % 
       \infer
       {
       \mathsf{annot}(\CEnd,\sigma)=\CEnd^{\sigma}
@@ -195,12 +195,12 @@ choreography.  Formally, it is defined as:
 
     \toprole_{\nr}\ ( X^{a,\sigma})
     = \sigma(\nr)
-
+    %
     \qquad\qquad
-    
+    %
     \toprole_{\nr}\ (\CEnd^{\sigma})
     = \sigma(\nr)
-
+    %
 \end{array}
 \]
 
@@ -232,7 +232,6 @@ separately. We begin with choreographies that involve rates:
   we define the function $\proj$ as:
   \begin{displaymath}\small
     \begin{array}{lr}
-
       \proj
       (\nrr,\interactl{\nr^{\iota}}{a}{\nr_1^{\iota_1},\ldots,\nr_n^{\iota_n}})= 
       &  \boxed{\text{if }\nrr=\nr}\\[2mm]
@@ -242,9 +241,7 @@ separately. We begin with choreographies that involve rates:
       \ s_{\nrr}'\!=\! \mathsf{top}_{\nrr}(\anno{C}_j)\ 
       \&\ \projE {u_j}\nrr\right\}_{j\in J}
       \ \ \cup\ \ \bigcup_{j\in J} \proj (\nrr, \anno{C}_j)
-      
       \\[1cm]
-
           
       \proj
       (\nrr,\interactl{\nr^{\iota}}{a}{\nr_1^{\iota_1},\ldots,\nr_n^{\iota_n}})=
@@ -256,7 +253,6 @@ separately. We begin with choreographies that involve rates:
       }
       \ \&\ \projE {u_j}\nrr\right\}_{j\in J}
       \ \ \cup\ \ \bigcup_{j\in J} \proj (\role q, \anno{C}_j)
-      
       \\[1cm]
       
       \proj
@@ -264,7 +260,6 @@ separately. We begin with choreographies that involve rates:
       \ \bigcup_{j\in J} \proj (\role q, \anno{C}_j)
       &  \boxed{\text{if }\role q\not\in\{\role p, 
         \nr_1,\ldots,\nr_n\}}
-
       \\[1cm]
       % \end{array}
       % \end{displaymath}
@@ -290,21 +285,15 @@ separately. We begin with choreographies that involve rates:
       \proj (\nrr, \anno C_1)
       \ \cup\
       \proj (\nrr, \anno C_2)
-
       &  \boxed{\text{if }\nrr\neq\nr}
-      
-
       \\[1cm]
 
       \proj (\nrr,\CEnd^{\sigma}) = \emptyset
-
       \qquad\qquad
-
       \proj (\nrr, X^{a,\sigma}) = 
       \{ \commandBase {a} {s_{\nrr}\!=\! \sigma(\nrr)}{\ 1: s'_{\nrr}\!=\! } \mathsf{top}_{\nrr}(\anno C)\}
       &\boxed{X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=}
         \anno C\in\defin}
-
     \end{array}
   \end{displaymath}
 \end{definition}
@@ -643,13 +632,12 @@ Then, the property of strongly connected is defined below.
       \infer {
       \sconnected(\interact{\nr}{\nr_1,\ldots,\nr_n})
       } {
-      \forall j\in J.\ \sconnected(C_j)\ \land\ \hmodules(C_j)\neq\emptyset\Rightarrow \hmodules(C_j)\cap\{\nr, \nr_1,\dots,\nr_n\}\neq\emptyset
+      \forall j\in J.\ \sconnected(C_j)\ \land\ \hmodules(C_j)\neq\emptyset\Rightarrow
+      \hmodules(C_j)\cap\{\nr, \nr_1,\dots,\nr_n\}\neq\emptyset
       }      
-
-
-
+      %
       \qquad\qquad
-
+      %
       \infer {
       \sconnected(\CEnd)
       } {
@@ -662,7 +650,7 @@ Then, the property of strongly connected is defined below.
       \forall j\in \{1,2\}.\ \sconnected(C_j)\ \land\ \hmodules(C_j)
       \neq\emptyset\Rightarrow \nr\in\hmodules(C_j)
       }      
-
+      %
       \qquad\qquad
       \infer {
       \sconnected(X)
@@ -670,10 +658,7 @@ Then, the property of strongly connected is defined below.
       \sconnected(C)\qquad X\defrec C\in\defin
       % &\text{\marco{is this wrong? Annotate? } }
         }
-
       \\\\
-
-
     \end{array}
   \end{displaymath}
 \end{definition}

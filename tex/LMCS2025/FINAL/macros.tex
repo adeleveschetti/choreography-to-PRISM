@@ -1,4 +1,13 @@
 
+% ---- Review markup for camera-ready fixes (toggle off for final) ---
+% \reviewmarkstrue: additions in red, deletions struck through in red.
+% \reviewmarksfalse: additions plain black, deletions disappear.
+\newif\ifreviewmarks
+\reviewmarkstrue
+\newcommand{\rmadd}[1]{\ifreviewmarks{\color{red}#1}\else#1\fi}
+\newcommand{\rmdel}[1]{\ifreviewmarks{\color{red}\sout{#1}}\fi}
+% --------------------------------------------------------------------
+
 \newif\ifhighlightnew
 \highlightnewfalse
 \newcommand{\new}[1]{\ifhighlightnew\textcolor{blue}{#1}\else#1\fi}
@@ -24,6 +33,7 @@
 \newcommand{\state}{\mathsf{state}}
 
 \newcommand{\proj}{\mathsf{proj}}
+\newcommand{\projD}{\proj_{\defin}}
 \newcommand{\projE}[2]{#1\downarrow_{#2}}
 
 \newcommand{\sconnected}{\mathsf{sConn}}

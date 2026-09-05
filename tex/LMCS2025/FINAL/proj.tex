@@ -67,12 +67,10 @@ follows:
       {
       a=\mathsf{fresh}_{\mathsf c}
       \quad
-      \sigma_i'=\sigma[
+      \forall j\in J.\ \mathsf{annot}(C_j,\ \sigma[
       \nr\mapsto\mathsf{fresh}_{\mathsf s},
       \nr_1\mapsto\mathsf{fresh}_{\mathsf s},\ldots,
-      \nr_n\mapsto\mathsf{fresh}_{\mathsf s}]
-      \quad
-      \forall j\in J.\ \mathsf{annot}(C_j,\ \sigma_j')=\anno {C}_j
+      \nr_n\mapsto\mathsf{fresh}_{\mathsf s}])=\anno {C}_j
       }
       \\[6mm]
       \infer
@@ -84,7 +82,7 @@ follows:
       {
       a=\mathsf{fresh}_{\mathsf c}
       \quad
-      \sigma_i=\sigma[\nr\mapsto\mathsf{fresh}_{\mathsf s}]
+      \forall i\in\{1,2\}.\,\sigma_i=\sigma[\nr\mapsto\mathsf{fresh}_{\mathsf s}]
       \quad
       \mathsf{annot}(C_1,\sigma_1)=\anno C_1
       \quad
@@ -134,7 +132,7 @@ $
 $.
 Each definition
 $X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=} C$ in $\defin$
-must be annotated as $\mathsf{annot}(\sigma, C)$ starting from a fresh
+must be annotated as $\mathsf{annot}(C, \sigma)$ starting from a fresh
 $\sigma$.
 
 
@@ -157,7 +155,7 @@ choreography.  Formally, it is defined as:
     \\[2mm]
 
     \toprole_{\nrr}\ ( \interactl{\nr^{\iota}}a{\nr_1^{\iota_1},\ldots,\nr_n^{\iota_n}})
-    = \toprole_{\nrr}(C_1)
+    = \toprole_{\nrr}(\anno C_1)
     &  \quad (\forall i,j.\
       \toprole_{\nrr}(\anno C_i)=\toprole_{\nrr}(\anno C_j))
     \\[2mm]
@@ -312,7 +310,18 @@ The if--then--else construct focuses on the module \( \nr \), where
 the guard \(E\) is evaluated. Being this a local operation, no
 synchronisation labels are required. For recursive calls, we generate
 a command that redirects the execution to the projection of the
-definitions \(\defin\), which are projected separately. 
+definitions \(\defin\), which are projected separately.
+Formally, the commands of a module $\nrr$ are those generated
+from the choreography together with those generated from the body of
+every definition in $\defin$:
+\[
+  \projD(\nrr,\anno C)\ =\ \proj(\nrr,\anno C)\ \cup
+  \bigcup_{(X \defrec \anno C_X)\in\defin} \proj(\nrr,\anno C_X)
+\]
+The \emph{projected network} of $\anno C$ is then
+$\mathcal N(\anno C) = \pp_{\nrr\in\anno C}\ \projD(\nrr,\anno C)$,
+where $\pp$ denotes alphabetised parallel composition, in which
+modules synchronise only on shared labels.
 
 \begin{exa}\label{example-proj}
   In order to illustrate how our projection works, consider the
@@ -336,8 +345,8 @@ definitions \(\defin\), which are projected separately.
     \end{array}
   \end{displaymath}
   where
-  $\sigma_1=\sigma[\nr\mapsto\mathsf{fresh}_{\mathsf
-    c},\nrr\mapsto\mathsf{fresh}_{\mathsf c}]$ for some $\sigma$ such
+  $\sigma_1,\sigma_2=\sigma[\nr\mapsto\mathsf{fresh}_{\mathsf
+    s},\nrr\mapsto\mathsf{fresh}_{\mathsf s}]$ for some $\sigma$ such
   that $\sigma(\nr)=\iota_1$ and $\sigma(\nrr)=\iota_2$. Our
   projection, as defined in Definition~\ref{def:projCTMC}, when
   applied to a given choreography $X^{d,\sigma'}$ (which essentially
@@ -438,10 +447,10 @@ issue, we introduce the following definition instead:
       &  \boxed{\text{if }\nrr=\nr}\\[2mm]
       \
       \begin{array}{lll}
-        \left\{\commandBase {} {s_{\nrr}\!=\! \iota_1}{\ \sum_{j\in J}
-        \lambda_j: s'_{\nrr}\!=\! \iota_2}\right\}\quad\cup\\[2mm]
-        \left\{\commandBase {a_j} {\ s_{\nrr}\!=\! \iota_2} {\lambda_j:}
-        \ s_{\nrr}'\!=\! \mathsf{top}_{\nrr}(\anno C_j)\ 
+        \left\{\commandBase {} {s_{\nrr}\!=\! \iota}{\ \sum_{j\in J}
+        \lambda_j: s'_{\nrr}\!=\! \iota_j}\right\}\quad\cup\\[2mm]
+        \left\{\commandBase {a_j} {\ s_{\nrr}\!=\! \iota_j} {1:}
+        \ s_{\nrr}'\!=\! \mathsf{top}_{\nrr}(\anno C_j)\
         \&\ \projE {u_j}\nrr\right\}_{j\in J}
         \ \ \cup\ \ \bigcup_{j\in J} \proj (\nrr, \anno C_j)
       \end{array}
@@ -556,24 +565,22 @@ We are now ready to state our main theorem, which relates a
 (projectable, strongly connected) choreography with its PRISM
 projection.  In the sequel, $S_+$ denotes the extension of a global
 state $S$ with the additional reserved variables $s_{\nrr}$ (one for
-each module $\nrr$), introduced by the projection.  The projection
-uses alphabetised parallel composition~$\pp$, where modules
-synchronise only on shared labels.
+each module $\nrr$), introduced by the projection.  
 \begin{thm}[Projection]\label{thm:epp}
-  Let $C$ be a choreography such that $\sconnected(C)$, let
+  Let $C$ be a choreography with rates such that $\sconnected(C)$, let
   $\anno C = \mathsf{annot}(C,\sigma)$ for some fresh $\sigma$, and
   let $S_+$ be an extension of a global state $S$ such that for all
   $\nrr\in C$, we have that
   $S_+(s_{\nrr})=\topannotation\nrr {\anno C}$.  Then,
   \[
     (S, \anno C) \red{\lambda} (S', \anno {C}_1) \quad\text{if and only if}\quad
-    \pp_{\nrr\in C}\ \proj(\nrr, \anno C)\ \vdash\ S_+ \red{\lambda}
+    \mathcal N(\anno C)\ \vdash\ S_+ \red{\lambda}
     S_+' ,
   \]
   such that: 
   \begin{itemize}
   \item for all $\nrr\in \anno C$, we have that
-    $\proj(\nrr, \anno C_1) \subseteq \proj(\nrr, \anno C)$
+    $\projD(\nrr, \anno C_1) \subseteq \projD(\nrr, \anno C)$
   \item $S'=S'_{+}\backslash \{s_{\nrr}\}_{\nrr\in \anno C}$
   \item for all $\nrr\in \anno C$, we have that
     $S_+'(s_{\nrr}) = \topannotation\nrr {\anno C_1}$
@@ -691,7 +698,7 @@ synchronise only on shared labels.
     \item $\anno C=X^{a,\sigma}$. By definition, assuming
       $X\defrec C_X\in \defin$, it must be the case that, for all
       $\nrr\in C$:
-      \[\proj (\nrr, X^{a,\sigma}) = \{
+      \[\projD (\nrr, X^{a,\sigma}) = \{
         \commandBase {a} {s_{\nrr}\!=\! \sigma(\nrr)}{\ 1:
           s'_{\nrr}\!=\! } \mathsf{top}_{\nrr}(\anno
         C_X)\}\qquad\cup\quad\bigcup_{(Y\defrec
@@ -699,7 +706,7 @@ synchronise only on shared labels.
       In the only-if direction, we know that
       $(S, X^{a,\sigma}) \red{1} (S, \anno C_X)$. From the uniqueness
       of $a$, we can derive
-      $\pp_{\nrr\in C}\ \proj(\nrr, C)\ \vdash\ S_+ \red{\lambda}
+      $\mathcal N(\anno C)\ \vdash\ S_+ \red{1}
       S_+'$ by applying rule (\textsf{M}) on each module, then rule
       (\textsf{P$_2$}), and finally rule (\textsf{Transition}).
       Moreover, we observe that the command
@@ -708,7 +715,7 @@ synchronise only on shared labels.
       top annotation in $\anno C_X$ which, by assumption again, it is
       unique. Additionally, we observe that for all $\nrr\in \anno C$,
       we have that
-      $\proj(\nrr, \anno C_1) \subseteq \proj(\nrr, \anno
+      $\projD(\nrr, \anno C_1) \subseteq \projD(\nrr, \anno
       C)$. Finally, for all $\nrr\in C$, we have that
       $S_+'(s_{\nrr}) = \topannotation\nrr {\anno C_1}$.
 
@@ -721,9 +728,6 @@ synchronise only on shared labels.
     \item $C=\CEnd^\sigma$. Immediate.
     
   \end{itemize}
-        The case for DTMC is also similar.
-
-     
 \end{proof}
 We observe that the theorem departs from standard projection results
 for choreography languages.  In most settings, both choreographies and
@@ -740,10 +744,38 @@ variables $s_{\nrr}$ act as a distributed program counter, yielding
 the extended state $S_+$.
 Consequently, choreography reduction corresponds in the projection to
 transitions on $S_+$ rather than to syntactic changes of PRISM
-modules.  
+modules.
 
+\begin{rem}[Projection theorem for DTMC]\label{rem:dtmc}
+  Theorem~\ref{thm:epp} is stated for choreographies with rates,
+  projected according to Definition~\ref{def:projCTMC}. For
+  choreographies with probabilities, projected according to
+  Definition~\ref{def:projDTMC}, the correspondence is identical for
+  conditionals, recursive calls and termination, whose projections
+  perform exactly the same transitions with probability~1. An
+  interaction is instead simulated by exactly two consecutive
+  transitions of the projection:
+  \[
+    S_+ \red{\lambda_j} S_+[s_{\nr}'=\iota_j] \red{1} S_+'
+  \]
+  where the first transition is the internal probabilistic choice of
+  the initiator $\nr$, which selects branch $j$ and only updates the
+  reserved variable $s_{\nr}$, leaving $S$ unchanged.  The second is
+  the synchronisation on label $a_j$, which applies the updates $u_j$
+  and advances the reserved variables of all participants as in
+  Theorem~\ref{thm:epp}. By uniqueness of state labels, the
+  intermediate state enables exactly one command, so the composite
+  probability of simulating branch $j$ is
+  $\lambda_j\cdot 1=\lambda_j$. Theorem~\ref{thm:epp} thus holds for
+  choreographies with probabilities once each interaction step is
+  matched with this two-step transition of its projection.
 
-
+  We also note that no normalisation (see~\S~\ref{sec:prism}) is ever
+  required for projected networks: by uniqueness of state labels and
+  strong connectedness, in every reachable state exactly one (possibly
+  synchronised) command is enabled, and its probabilities sum to~$1$,
+  while every other generated command carries probability~$1$.
+\end{rem}
 
 \begin{rem}
   Our theorem induces an asymmetry: projecting after reducing a
@@ -768,7 +800,7 @@ modules.
       \end{array}
       \right.\right)
       \\\\
-      \pp_{\nrrr\in X^d}\ \proj (\nrrr, X^{d,\sigma'})\vdash S_{+}
+      \mathcal N(X^{d,\sigma'})\vdash S_{+}
       \red{\lambda} S_{+}[s_{\nr}'=\iota_1][s_{\nrr}'=\iota_2]
     \end{array}
   \end{displaymath}
