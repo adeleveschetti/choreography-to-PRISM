@@ -11,28 +11,11 @@ as follows:
     \text{(Networks)}  \quad
     & N, M  & ::=  &      & \CEnd & \text{empty network}\\[1mm]
     &       &      & \mid & \role{p}:\{F_i\}_i & \text{module}\\[1mm]
-%    &       &      & \mid & M \pp M    & \text{parallel composition}\\
     &       &      & \mid & M \ppp A M & \text{parallel composition}\\
-    % &       &      & \mid & M/A        & \text{action hiding}\\
-    % &       &      & \mid & \sigma M   & \text{substitution}\\
     \\
     \text{(Commands)}  \quad
     & F     & ::=  &      & \command \alpha g\lambda u
                                   & \text{} (\alpha\in\{\epsilon\}\cup\mathcal L) \\
-    % \\[1mm]
-    % \text{(Assignment)} \quad
-    % & u     & ::=  &      & (x' = E) & \text{update $x$ % , element of $\mathcal V$, 
-    %                                    with $E$}\\
-    % &       &      & \mid & u\ \&\ u   & \text{multiple assignments}
-    % \\[1mm]
-    % \text{(Expr)}\quad
-    % & E, g     & ::= &       & f(\tilde E)\quad\mid\quad x\quad\mid\quad v & \text{expressions}
-    % % \\[1mm]
-    % % \text{(Rates)}\quad   &     \lambda\in\mathbb R
-    % %  \\[1mm]
-    % %   \text{(Variables)}\quad &   x\in\mathsf{Var} 
-    % %  \\[1mm]
-    % %   \text{(Values)}\quad     &  v\in\mathsf{Val} 
   \end{array}
 \end{displaymath}
 Networks are the top syntactic category for system of modules composed
@@ -43,17 +26,8 @@ where $\role p$ is the name and the $F_i$'s are commands. Networks can
 be composed in parallel, in a CSP style: a term like $M_1 \ppp A M_2$
 says that networks $M_1$ and $M_2$ can synchronise using labels in the
 finite set $A$.
-%
 In this work, we omit PRISM's hiding and substitution constructs as
 they are irrelevant for our current choreography language.
-% The term $M/A$ is the standard CSP/CCS hiding operator. Finally
-% $\sigma M$ is equivalent to applying the substitution $\sigma$ to
-% all variables in $x$. A substitution is a function that given a
-% variable returns a value. When we write $\sigma N$ we refer to the
-% term obtained by replacing every free variable $x$ in $N$ with
-% $\sigma(x)$. \marco{Is this really the way substitution is used?
-% Where does it become important?}
-%
 Commands in a module have the form
 $[\alpha] g \rightarrow \Sigma_{i\in I}\{\lambda_i: u_i\}$. The
 character $\alpha$ can either be the empty string $\epsilon$ or a
@@ -72,27 +46,22 @@ documentation~\cite{PRISMdoc}.  Hereby, we do that by defining two
 relations: one with labels for networks and one on states. Our
 relation on networks is the smallest relation $\prismred{}{}$
 satisfying the rules given in Fig.~\ref{fig:semantics}.
-% 
 \begin{figure}[h]
   \begin{displaymath}\small
     \begin{array}{ccc}
       \infer[\mathsf{(M)}]
       { {\role{p}:\{F_k\}_k} \prismred{} F
-      % {\alpha}\lab{g}{\Sigma_{i\in I}\lambda_i\!}{u_i} 
       }
       {
-      % \command {\alpha}g\lambda u
       F\in\{F_k\}_k
       }
       \quad
       \infer[\mathsf{(P_1)}]
       {M_1\ppp A M_2\prismred{}\command {\alpha}g\lambda u
-      % {\alpha}\lab{g}{\Sigma_{i\in I}\lambda_i\!}{u_i}
       }
       {
       \exists j\in\{1,\!2\}.\ 
       M_j\prismred{} \command {\alpha}g\lambda u
-      % {\alpha}\lab{g}{\Sigma_{i\in I}\lambda_i\!}{u_i}
       & \alpha\!\not\in\! A
         }
       \\\\
@@ -103,10 +72,8 @@ satisfying the rules given in Fig.~\ref{fig:semantics}.
       }
       {
       M_1\prismred{}\command {a}g\lambda u
-      % {a}\lab{g}{\Sigma_{i\in I}\lambda_i}{\!u_i} 
       \quad&\quad 
         M_2\prismred{}\commandBase {a} {g'} \Sigma_{j\in J}\lambda'_j: u'_j
-        % {a}\lab{g'}{\Sigma_{j\in J}\lambda'_j}{\!u'_j} 
       \ &\
              a\!\in\! A}
     \end{array}
@@ -129,7 +96,6 @@ $$\mu(\command \alpha g\lambda u,\ S,\ S'\ ) = \Sigma_{S[u_i]=S',i\in I}\lambda_
 which gives the probability/rate for the system to go from state $S$
 to state $S'$ after executing command $\command \alpha g \lambda u$,
 for some $\alpha$.
-%
 If the $\lambda_i$ are probabilities, then the function must be a
 probability distribution. Note that $\mu(F,S,S')$ only denotes the
 probability/rate for the system to move from state $S$ to state $S'$
@@ -141,11 +107,9 @@ $$
 \infer[\mathsf{(Transition)}]
 {
   M\vdash S\red{\sum_{j} \mu(F_j,S,S')}S'
-  % M\vdash S\red{\sum_{S'= S[u_j]} \lambda_j}S'
 }
 {
   \forall j,\alpha.\ M\prismred{}F_j
-  % \command{\alpha_j} {g_j}{{\lambda_j}} {{u_j}}
   \quad&\quad
   S\vdash F_j
 }
@@ -188,10 +152,8 @@ obtained from our translation from choreography to PRISM.
   \end{displaymath}  
   Let $S_0$, $S_1$, $S_2$, and $S_3$ be all possible reachable states
   such that
-  %
   $S_0(x)=S_0(y)=0$, $S_1(x)=1$, $S_1(y)=0$, $S_2(x)=0$, $S_2(y)=1$,
   and $S_3(x)=S_3(y)=1$.
-  %
   Moreover, let $S_0$ be the starting state. Then, %, we have: % that:
   \begin{displaymath}
     \begin{array}{ll}
@@ -209,7 +171,6 @@ obtained from our translation from choreography to PRISM.
   $M\vdash S_0\rightarrow_{0.2} S_3$, and
   $M\vdash S_0\rightarrow_{0.3} S_0$. Clearly, both transitions should
   be normalised, finally yielding the following DTMC:
-  %
   \begin{center}
     \begin{tikzpicture}[
       scale=0.8,
@@ -224,7 +185,6 @@ obtained from our translation from choreography to PRISM.
       ->, >=stealth
       ]
 
-      % States (stores only)
       \node[conf] (S0) {$
         \begin{array}{c}
           S_0
@@ -245,16 +205,12 @@ obtained from our translation from choreography to PRISM.
           S_3
         \end{array}$};
 
-      % Incoming arrow
-      % \draw[->] ([xshift=-1.2cm]S0.west) --  (S0.west);
       
-      % Probabilistic transitions from S0
       \draw (S0) edge[loop above] node{$0.1$} (S0);
       \draw[bend left=30](S0) to node[above] {$0.4$} (S1);
       \draw[bend right=30] (S0) to node[below] {$0.43$} (S2);
       \draw (S0) to node[above right] {$0.07$} (S3);
       
-      % Deterministic transitions
       \draw[bend left=30] (S1) to node[above] {$1$} (S3);
       \draw[bend right=30] (S2) to node[below] {$1$} (S3);
       
@@ -302,40 +258,4 @@ according to $F_1$ or $F_2$, defined as follows:
 
 \end{exa}
 
-% SEMANTICS WITH GUESS (Early)
-%
-% \begin{figure}[t]
-%   \begin{displaymath}\small
-%     \begin{array}{ccc}
-%       \infer[\mathsf{(M_1)}]
-%       { {\role{p}:\{F_k\}_k} \prismred{}\lab{g}{\lambda_i}{u_i} }
-%       {\command {}g\lambda u\in\{F_k\}_k}
-%       \qquad
-%       \infer[\mathsf{(P_1)}]
-%       {M_1\ppp A M_2\prismred{\alpha}\lab g\lambda u }
-%       {
-%       \exists j\in\{1,2\}.\ 
-%       M_j\prismred{\alpha}\lab g\lambda u
-%       & \alpha\not\in A
-%         }
-%       \\\\
-%       \infer[\mathsf{(M_2)}]
-%       { {\role{p}:\{F_k\}_k} \prismred{a}\lab{g}{\lambda_i\!\!}{u_i} }
-%       {\command ag\lambda u\in\{F_k\}_k}
-%       \quad
-%       \infer[\mathsf{(P_2)}]
-%       {M_1\ppp A M_2\prismred{a}\lab{g_1\land g_2}{\lambda_1*\lambda_2\!\!}{u_1\& u_2} }
-%       {
-%       M_1\!\!\!\prismred{a}\!\!\!\lab{g_1}{\lambda_1\!\!}{\!\!u_1} 
-%       & M_2\!\!\!\prismred{a}\!\!\!\lab{g_2}{\lambda_2\!\!}{\!\!u_2} 
-%       & a\!\in\! A}
-%     \end{array}
-%   \end{displaymath}
-%   \caption{LTS for PRISM networks} 
-%   \label{fig:semantics}
-% \end{figure}
 
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "main"
-%%% End:

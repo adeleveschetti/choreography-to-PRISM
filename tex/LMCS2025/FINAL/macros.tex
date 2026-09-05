@@ -1,19 +1,10 @@
-%%% Random Macros
 
-% ---- Highlighting of new text in revision 2 --------------------------
-% Toggle: set \highlightnewtrue to show additions in blue + margin IDs,
-%         \highlightnewfalse to render everything as normal black text.
 \newif\ifhighlightnew
 \highlightnewfalse
-% Plain highlight (no margin marker)
 \newcommand{\new}[1]{\ifhighlightnew\textcolor{blue}{#1}\else#1\fi}
-% Margin marker only, no text wrapping.
-% Usage: place \newmark{R2.1} at the start of a paragraph or near a change.
 \newcommand{\newmark}[1]{%
   \ifhighlightnew\marginpar{\scriptsize\color{blue}\textbf{[#1]}}\fi
 }
-% Highlight with a margin marker carrying a reviewer-comment ID.
-% Usage: \newid{R3.2}{the new text...}
 \newcommand{\newid}[2]{%
   \ifhighlightnew
     \marginpar{\scriptsize\color{blue}\textbf{[#1]}}%
@@ -22,7 +13,6 @@
     #2%
   \fi
 }
-% ----------------------------------------------------------------------
 
 \newcommand{\defin}{\mathcal D}
 
@@ -46,10 +36,8 @@
 
 \newcommand{\indentrule}{\color{code_indent}\vrule\hspace{2pt}}
 
-% Syntax
 \definecolor{bloodyred}{rgb}{0.6,0.1,0.1}
 \newcommand{\role}[1]{\textcolor{bloodyred}{\mathtt{#1}}}
-%\newcommand{\role}[1]{\mathtt{#1}}
 \newcommand{\nr}{\role p}
 \newcommand{\nrr}{\role q}
 \newcommand{\nrrr}{\role r}
@@ -84,7 +72,6 @@
 \newcommand{\defrec}{\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=}}
 
   
-% Semantics
 \newcommand{\red}[1]{\ \longrightarrow_{#1}\ } 
 \newcommand{\prismred}[1]{\ \stackrel{#1}{\rightsquigarrow}\ } 
 \newcommand{\lab}[3]{\ [#1][#2:\;#3]\ } 
@@ -117,10 +104,5 @@ postbreak=\raisebox{0ex}[0ex][0ex]{\ensuremath{\color{red}\hookrightarrow\space}
   morekeywords={and},
   numbers=left,
   mathescape=true
-%  ,frame=lines%shadowbox%trBL
 }
 
-%%% Local Variables:
-%%% mode: latex
-%%% TeX-master: "main"
-%%% End:

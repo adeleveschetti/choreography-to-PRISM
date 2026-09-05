@@ -2,7 +2,6 @@ As an example, we consider a simplified version of the
 \text{thinkteam} example, a three-tier data management system
 \cite{DBLP:journals/entcs/BeekMLGFS05}, presented in the PRISM
 documentation\footnote{\url{https://www.prismmodelchecker.org/casestudies/thinkteam.php}}.
-%
 \begin{lstlisting}[style=prism-color,% caption={A PRISM example},captionpos=b,
 	frame=none,label={example1},escapechar=|]
 	  ctmc 
@@ -24,7 +23,6 @@ documentation\footnote{\url{https://www.prismmodelchecker.org/casestudies/thinkt
 		  [gamma_1,gamma_2] (CheckOut_STATE=1) $\rightarrow$ 1 : (CheckOut_STATE'=1);
 	  endmodule|\label{check-end}|
   \end{lstlisting}
-  %
   The protocol aims to manage exclusive access to a single file,
   controlled by the \codeprism{CheckOut} process. Users can request
   access, which can be granted based on the file's current status. The
@@ -67,16 +65,6 @@ describe the interaction patterns between the modules \codechor{CheckOut}
 and \codechor{User}. The state updates resulting from these
 interactions are not explicitly depicted as they are not relevant for
 this particular protocol, but necessary in the PRISM implementation.
-% Similarly, this consideration extends to the labels used within the
-% model.  Just as the state updates are automatically generated,
-% unique labels used to denote various transitions in the model are
-% also automatically assigned.
-%
-% \marco{ADD THIS COMMENT HERE: Second, is the choreography not just the
-%   product of both modules (seen as finite state machines)? Would that
-%   be the general idea, i.e. to model the state space as one
-%   finite-state machine directly?}
-%
 As evident from this example, the choreographic language facilitates a
 straightforward understanding of the interactions between processes,
 minimizing the likelihood of errors. In fact, we can think of the
@@ -107,13 +95,7 @@ $\ldots$
 [alpha_1] (CheckOut_STATE=0) -> 1 : (CheckOut_STATE'=1); // CheckOut module
 $\ldots$
 \end{lstlisting}
- %for the module \codeprism{User} as displayed at line \ref{lineUser} and  
- %for the \codeprism{CheckOut} as displayed at line \ref{lineCheck}.
  This ensures both modules execute in sync under the label \codeprism{alpha_1} and only when the modules are in the correct states (\codeprism{CheckOut_STATE=0} and \codeprism{User_STATE=0}). Similar transformations apply to other interactions.
 
 
 
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "main"
-%%% End:

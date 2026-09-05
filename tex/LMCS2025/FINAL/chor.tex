@@ -1,4 +1,3 @@
-%
 In the previous section, we illustrated our choreography language by
 means of an example. We now formalise the language by presenting its
 syntax and semantics. For the sake of clarity, we slightly depart from
@@ -7,14 +6,11 @@ process-algebraic format, which makes the syntax more concise and
 better suited to formal definitions and proofs.
 
 \subsection{Syntax}\label{sub:syntax}
-%
 Let $\role p$ range over a (possibly infinite) set of module names
 $\mathcal R$, $x$ over a (possibly infinite) set of variables $\Var$,
 and $v$ over a (possibly infinite) set of values $\Val$.
-%
 Choreographies, the key component of our language, are defined by the
 following syntax:
-%
 \begin{displaymath}\small
   \begin{array}{llllllllllll}
     C & ::= &      & \interact{\nr}{\nr_1,\ldots,\nr_n} & \text{(interaction)}\\[1mm]
@@ -29,8 +25,6 @@ following syntax:
     E, g  & ::=  && f(\tilde E)\quad\mid\quad x\quad\mid\quad v & \text{(expressions)}
   \end{array}
 \end{displaymath}
-%
-% We comment the various constructs.
 The syntactic category $C$ denotes choreographic programs. The
 interaction term
 $\nr\rightarrow \{\nr_1,\ldots,\nr_n\}:\,\Sigma\{\lambda_j: x_j=E_j.\
@@ -52,7 +46,6 @@ assignment to $x$: here, we follow the syntax adopted in PRISM
 (see~\S~\ref{sec:prism}). Expressions are obtained by applying some
 unspecified functions to other expressions or, as base terms, i.e.,
 variables and values (denoted by $v$).
-%
 
 The term $\ifTE {E}{\nr}{C_1}{C_2}$ denotes a system where module
   $\role p$ evaluates the guard $E$ (which can contain variables
@@ -132,7 +125,6 @@ satisfying the rules below (we omit $\defin$ when it is not relevant):
                       (S, X) \red{{1}}^{\!\!\!\!\!\!\!\defin} (S, C)
   \end{array}
 \end{displaymath}
-%
 The above semantics is \emph{fully probabilistic}: for every
 configuration $(S,C)$, the rules determine a unique probability
 distribution over successor configurations. In particular, there is
@@ -141,7 +133,6 @@ transition relation $\red{}$ induces a \emph{Discrete-Time Markov
 Chain} (DTMC) when the labels $\lambda_j$ are probabilities, or a
 \emph{Continuous-Time Markov Chain} (CTMC) when they are interpreted
 as rates.
-%
 Intuitively, the operational rules define a global (possibly
 infinite-state) Markov chain whose states are configurations of the
 form $(S,C)$, and whose transitions are exactly those derivable by the
@@ -149,7 +140,6 @@ rules above, weighted by the corresponding probabilities or rates.
 This global Markov chain contains all possible choreographies of the
 language and all their possible states, independently of any
 particular initial program.
-%
 Equivalently, one may consider the Markov chain induced by restricting
 the global chain to the set of configurations reachable from a given
 pair $(S,C)$. Then, the behaviour of the choreography is given by the
@@ -158,7 +148,6 @@ reachable (finite or infinite) paths in the Markov chain. In the
 remainder, we implicitly adopt this program-indexed view.
 
 
-% Below, we look at two corner-case examples.
 \begin{exa}
   Consider the following choreography:
   \begin{displaymath}
@@ -167,18 +156,15 @@ remainder, we implicitly adopt this program-indexed view.
       \lambda_2: (x'=1);\quad \CEnd
     \end{array}
   \end{displaymath}
-  %
   The semantics of $C$ induces a Markov chain with states $(S_0,C)$,
   $(S_1,C')$, and $(S_1,\CEnd)$ such that
   $C'= \interactBase{\nr}{\nrr}\ \lambda_1: (x'=1);\CEnd$, $S_0(x)=0$,
   and $S_1(x)=1$. The chain can be depicted as
-  %   
   \begin{center}
     \begin{tikzpicture}[ scale=0.8, transform shape, node distance=0cm
       and 4cm, conf/.style={ draw, circle, align=center,
         font=\scriptsize, inner sep=1.5pt }, ->, >=stealth ]
 
-      % Nodes
       \node[conf] (c0) {$
         \begin{array}{c}
           x=0\\ \hline
@@ -197,10 +183,8 @@ remainder, we implicitly adopt this program-indexed view.
           \CEnd
         \end{array}$};
       
-      % Incoming arrow
       \draw[->] ([xshift=-1.2cm]c0.west) -- (c0.west);
       
-      % Transitions
       \draw (c0) -- node[above] {$\lambda_1$} (c1);
       \draw (c1) -- node[above] {$\lambda_2$} (c2);
     \end{tikzpicture}
@@ -228,22 +212,18 @@ remainder, we implicitly adopt this program-indexed view.
   Let $S_0$ be a state such that $S_0(x)=0$ and $S_0(y)=0$.  Denote by
   $S_1$ and $S_2$ the states obtained by the two branches of the
   interaction, i.e., $S_1(x)=1,S_1(y)=2$ and $S_2(x)=3,S_2(y)=1$.
-  % 
   The induced Markov chain for a recursive call $X$ contains six
   states, depicted as
-  % 
   \begin{center}
     \begin{tikzpicture}[ scale=0.8, transform shape, node distance=0.1cm
       and 2.6cm, conf/.style={draw, circle, align=center,
         font=\scriptsize, inner sep=1.5pt}, ->, >=stealth ]
 
-      % Initial recursive state
       \node[conf] (c0) {$
         \begin{array}{c}
           x=0\\ y=0\\ \hline X
         \end{array}$};
   
-      % Initial interaction
       \node[conf] (i0) [right=of c0] { $
         \begin{array}{c}
           x=0\\ y=0\\
@@ -252,7 +232,6 @@ remainder, we implicitly adopt this program-indexed view.
         \end{array}
         $};
     
-      % Recursive states
       \node[conf] (c1) [above right=of i0]
       {$
         \begin{array}{c}
@@ -266,7 +245,6 @@ remainder, we implicitly adopt this program-indexed view.
           x=3\\ y=1\\ \hline X
         \end{array}$};
       
-      % Interaction states
       \node[conf] (i1) [right=of c1] {$
         \begin{array}{c}
           x=1\\ y=2\\ \hline
@@ -279,7 +257,6 @@ remainder, we implicitly adopt this program-indexed view.
           {{\nr}\!\rightarrow\!{\nrr}\{...\}}
         \end{array}$};
       
-      % Forward transitions
       \draw[->] ([xshift=-1.2cm]c0.west) --  (c0.west);
       
       \draw (c0) -- node[above] {$1$} (i0);
@@ -290,7 +267,6 @@ remainder, we implicitly adopt this program-indexed view.
       \draw (c1) -- node[above] {$1$} (i1); \draw (c2) -- node[below]
       {$1$} (i2);
       
-      % Curved returns (tight bends)
       \draw[bend right=40] (i1) to node[above] {$\lambda_1$} (c1);
       \draw[bend right=17] (i1) to node[above] {$\lambda_2$} (c2);
       
@@ -304,18 +280,15 @@ remainder, we implicitly adopt this program-indexed view.
 
 
 \subsection{Other language constructs}\label{sub:otherconstructs}
-%
 Our language includes constructs that are not part of the formal syntax defined above.
 These constructs are purely syntactic sugar and can be easily encoded. 
 Below, we discuss each of them:
-% 
 \begin{itemize}
 
 \item {\em Parametric modules.} In our implemented language, modules
   can be parameterised (indexed) as done in PRISM. We denote
   parameterised modules as $\role p[n]$ for $n$ ranging some finite
   set $N$.
-  %
   As an example, the choreography
   \[\interactBase {p[i]}{q[i]}:\lambda:U;\quad 
     \interactBase r{q[i]}:\lambda:U;\quad \CEnd
@@ -331,7 +304,6 @@ Below, we discuss each of them:
       \interactBase r{q3}:\lambda:U;\quad \CEnd
     \end{array}
   \]
-  %
   Additionally, the choreography
   \[\interactBase {p[i]}{q[i]}:\lambda:U;\quad 
     \interactBase {q[i+1]}{p[i]}:\lambda:U;\quad \CEnd
@@ -363,17 +335,13 @@ Below, we discuss each of them:
   \new{The construct enables the expression $(k\ \textit{op}\ i)$,
   where $k$ binds in $u@A[k]$, to identify a set of indices which
   can then be used in the update $u@A[i]$.
-  %
   Such set is obtained from the predicate determined by the operator
   $\textit{op}$ with respect to the distinguished index $i$.
-  %
   Formally, $(k\ \textit{op}\ i)$ denotes the set
   $\{\, k \in I \mid \textit{op}(k,i) \,\}$.
-  %
   For example, $(k \neq i)$ denotes
   $\{\, k \in I \mid k \neq i \,\}$, that is, all defined indices
   except~$i$.}
-  %
 
   In essence, the {\sf foreach} construct provides a concise and
   readable way to express operations over multiple indexed modules. It
@@ -422,7 +390,6 @@ Below, we discuss each of them:
   concise definition of conditions under which each module updates its
   state. This avoids the need for manually encoding synchronisation
   through nested conditional constructs.
-  % 
   \new{Despite its usefulness, the $\allsynchName$ construct does not
   introduce any new expressiveness but serves as syntactic sugar for
   an equivalent formulation.}  In fact, the example above can be
@@ -458,7 +425,6 @@ Below, we discuss each of them:
       & \phantom{\mathtt{else}\ }\quad\mathtt{else}\ \CEnd
     \end{array}
   \end{displaymath}
-  %
   \new{The two formulations are equivalent, with the $\allsynchName$
   syntax acting as syntactic sugar that provides a structured and
   readable representation of synchronisation. In general, its
@@ -485,7 +451,3 @@ Below, we discuss each of them:
 
 
 
-%%% Local Variables: 
-%%% mode: latex
-%%% TeX-master: "main"
-%%% End:
