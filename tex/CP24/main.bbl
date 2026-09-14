@@ -1,0 +1,52 @@
+\begin{thebibliography}{1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{https://doi.org/#1}
+
+\bibitem{PRISMdoc}
+Prism documentation. \url{https://www.prismmodelchecker.org/}, accessed:
+  2023-09-05
+
+\bibitem{bio1}
+Dannenberg, F., Kwiatkowska, M., Thachuk, C., Turberfield, A.: {DNA} walker
+  circuits: computational potential, design, and verification. In: Soloveichik,
+  D., Yurke, B. (eds.) {Proc. 19th International Conference on DNA Computing
+  and Molecular Programming (DNA 19)}. LNCS, vol.~8141, pp. 31--45. Springer
+  (2013)
+
+\bibitem{bio2}
+Heath, J., Kwiatkowska, M., Norman, G., Parker, D., Tymchyshyn, O.:
+  Probabilistic model checking of complex biological pathways. In: Priami, C.
+  (ed.) Proc. Computational Methods in Systems Biology (CMSB'06). Lecture Notes
+  in Bioinformatics, vol.~4210, pp. 32--47. Springer Verlag (2006)
+
+\bibitem{distr1}
+Kwiatkowska, M., Norman, G., Parker, D.: Probabilistic verification of
+  hermanâ€™s self-stabilisation algorithm. Formal Aspects of Computing
+  \textbf{24}(4),  661--670 (2012)
+
+\bibitem{security2}
+Kwiatkowska, M., Norman, G., Parker, D., Vigliotti, M.: Probabilistic mobile
+  ambients. Theoretical Computer Science  \textbf{410}(12--13),  1272--1303
+  (2009)
+
+\bibitem{distr2}
+Kwiatkowska, M., Norman, G., Segala, R.: Automated verification of a randomized
+  distributed consensus protocol using {Cadence SMV} and {PRISM}. In: Berry,
+  G., Comon, H., Finkel, A. (eds.) Proc. 13th International Conference on
+  Computer Aided Verification (CAV'01). LNCS, vol.~2102, pp. 194--206. Springer
+  (2001)
+
+\bibitem{multimedia}
+Kwiatkowska, M., Norman, G., Sproston, J.: Probabilistic model checking of
+  deadline properties in the {IEEE 1394 FireWire} root contention protocol.
+  Formal Aspects of Computing  \textbf{14}(3),  295--318 (2003)
+
+\bibitem{M23}
+Montesi, F.: Introduction to Choreographies. Cambridge University Press (2023)
+
+\bibitem{security1}
+Norman, G., Shmatikov, V.: Analysis of probabilistic contract signing. Journal
+  of Computer Security  \textbf{14}(6),  561--589 (2006)
+
+\end{thebibliography}

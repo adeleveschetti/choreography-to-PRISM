@@ -1,0 +1,234 @@
+\newcommand{\etalchar}[1]{$^{#1}$}
+\begin{thebibliography}{tBML{\etalchar{+}}04}
+
+\bibitem[AC19]{AC19}
+Bogdan Aman and Gabriel Ciobanu.
+\newblock Probabilities in session types.
+\newblock In Mircea Marin and Adrian Craciun, editors, {\em Proceedings Third
+  Symposium on Working Formal Methods, {FROM} 2019, Timi{\c{s}}oara, Romania,
+  3-5 September 2019}, volume 303 of {\em {EPTCS}}, pages 92--106, 2019.
+\newblock \href {https://doi.org/10.4204/EPTCS.303.7}
+  {\path{doi:10.4204/EPTCS.303.7}}.
+
+\bibitem[AC22]{AC22}
+Bogdan Aman and Gabriel Ciobanu.
+\newblock Interval probability for sessions types.
+\newblock In Agata Ciabattoni, Elaine Pimentel, and Ruy J. G.~B. de~Queiroz,
+  editors, {\em Logic, Language, Information, and Computation - 28th
+  International Workshop, WoLLIC 2022, Ia{\c{s}}i, Romania, September 20-23,
+  2022, Proceedings}, volume 13468 of {\em Lecture Notes in Computer Science},
+  pages 123--140. Springer, 2022.
+\newblock \href {https://doi.org/10.1007/978-3-031-15298-6\_8}
+  {\path{doi:10.1007/978-3-031-15298-6\_8}}.
+
+\bibitem[BNG{\etalchar{+}}23]{DBLP:journals/concurrency/BistarelliNGLMV23}
+Stefano Bistarelli, Rocco~De Nicola, Letterio Galletta, Cosimo Laneve, Ivan
+  Mercanti, and Adele Veschetti.
+\newblock Stochastic modeling and analysis of the bitcoin protocol in the
+  presence of block communication delays.
+\newblock {\em Concurr. Comput. Pract. Exp.}, 35(16), 2023.
+\newblock \href {https://doi.org/10.1002/cpe.6749}
+  {\path{doi:10.1002/cpe.6749}}.
+
+\bibitem[CGHL10]{CGHL10}
+Marco Carbone, Davide Grohmann, Thomas~T. Hildebrandt, and Hugo~A. L{\'{o}}pez.
+\newblock A logic for choreographies.
+\newblock In Kohei Honda and Alan Mycroft, editors, {\em Proceedings Third
+  Workshop on Programming Language Approaches to Concurrency and
+  communication-cEntric Software, {PLACES} 2010, Paphos, Cyprus, 21st March
+  2010}, volume~69 of {\em {EPTCS}}, pages 29--43, 2010.
+\newblock \href {https://doi.org/10.4204/EPTCS.69.3}
+  {\path{doi:10.4204/EPTCS.69.3}}.
+
+\bibitem[Cha88]{Cha88}
+David Chaum.
+\newblock The dining cryptographers problem: Unconditional sender and recipient
+  untraceability.
+\newblock {\em Journal of Cryptology}, 1:65--75, 1988.
+\newblock \href {https://doi.org/10.1007/BF00206326}
+  {\path{doi:10.1007/BF00206326}}.
+
+\bibitem[Cho]{repository}
+Choreoprism repository.
+\newblock \url{https://github.com/adeleveschetti/ChoreoPRISM}.
+\newblock Accessed: 2024-01-31.
+
+\bibitem[CHY12]{CHY12}
+Marco Carbone, Kohei Honda, and Nobuko Yoshida.
+\newblock Structured communication-centered programming for web services.
+\newblock {\em {ACM} Trans. Program. Lang. Syst.}, 34(2):8:1--8:78, 2012.
+\newblock \href {https://doi.org/10.1145/2220365.2220367}
+  {\path{doi:10.1145/2220365.2220367}}.
+
+\bibitem[CM13]{CM13}
+Marco Carbone and Fabrizio Montesi.
+\newblock Deadlock-freedom-by-design: multiparty asynchronous global
+  programming.
+\newblock In Roberto Giacobazzi and Radhia Cousot, editors, {\em The 40th
+  Annual {ACM} {SIGPLAN-SIGACT} Symposium on Principles of Programming
+  Languages, {POPL} '13, Rome, Italy - January 23 - 25, 2013}, pages 263--274.
+  {ACM}, 2013.
+\newblock \href {https://doi.org/10.1145/2429069.2429101}
+  {\path{doi:10.1145/2429069.2429101}}.
+
+\bibitem[CMT99]{10.1007/3-540-46691-6_17}
+Ilaria Castellani, Madhavan Mukund, and P.~S. Thiagarajan.
+\newblock Synthesizing distributed transition systems from global
+  specifications.
+\newblock In C.~Pandu Rangan, V.~Raman, and R.~Ramanujam, editors, {\em
+  Foundations of Software Technology and Theoretical Computer Science}, pages
+  219--231, Berlin, Heidelberg, 1999. Springer Berlin Heidelberg.
+\newblock \href {https://doi.org/10.1007/3-540-46691-6_17}
+  {\path{doi:10.1007/3-540-46691-6_17}}.
+
+\bibitem[CV24]{CV24}
+Marco Carbone and Adele Veschetti.
+\newblock A probabilistic choreography language for {PRISM}.
+\newblock In Ilaria Castellani and Francesco Tiezzi, editors, {\em Coordination
+  Models and Languages - 26th {IFIP} {WG} 6.1 International Conference,
+  {COORDINATION} 2024, Held as Part of the 19th International Federated
+  Conference on Distributed Computing Techniques, DisCoTec 2024, Groningen, The
+  Netherlands, June 17-21, 2024, Proceedings}, volume 14676 of {\em Lecture
+  Notes in Computer Science}, pages 20--37. Springer, 2024.
+\newblock \href {https://doi.org/10.1007/978-3-031-62697-5\_2}
+  {\path{doi:10.1007/978-3-031-62697-5\_2}}.
+
+\bibitem[DKTT13]{bio1}
+Frits Dannenberg, Marta Kwiatkowska, Chris Thachuk, and Andrew Turberfield.
+\newblock {DNA} walker circuits: computational potential, design, and
+  verification.
+\newblock In D.~Soloveichik and B.~Yurke, editors, {\em {Proc. 19th
+  International Conference on DNA Computing and Molecular Programming (DNA
+  19)}}, volume 8141 of {\em LNCS}, pages 31--45. Springer, 2013.
+\newblock \href {https://doi.org/10.1007/978-3-319-01928-4_3}
+  {\path{doi:10.1007/978-3-319-01928-4_3}}.
+
+\bibitem[GLMV23]{DBLP:journals/distribledger/GallettaLMV23}
+Letterio Galletta, Cosimo Laneve, Ivan Mercanti, and Adele Veschetti.
+\newblock Resilience of hybrid casper under varying values of parameters.
+\newblock {\em Distributed Ledger Technol. Res. Pract.}, 2(1):5:1--5:25, 2023.
+\newblock \href {https://doi.org/10.1145/3571587} {\path{doi:10.1145/3571587}}.
+
+\bibitem[GMP24]{GMP24}
+Saverio Giallorenzo, Fabrizio Montesi, and Marco Peressotti.
+\newblock Choral: Object-oriented choreographic programming.
+\newblock {\em {ACM} Trans. Program. Lang. Syst.}, 46(1):1:1--1:59, 2024.
+\newblock URL: \url{https://dl.acm.org/doi/10.1145/3632398}, \href
+  {https://doi.org/10.1145/3632398} {\path{doi:10.1145/3632398}}.
+
+\bibitem[HKN{\etalchar{+}}06]{bio2}
+John Heath, Marta Kwiatkowska, Gethin Norman, David Parker, and Oksana
+  Tymchyshyn.
+\newblock Probabilistic model checking of complex biological pathways.
+\newblock In C.~Priami, editor, {\em Proc. Computational Methods in Systems
+  Biology (CMSB'06)}, volume 4210 of {\em Lecture Notes in Bioinformatics},
+  pages 32--47. Springer Verlag, 2006.
+\newblock \href {https://doi.org/10.1007/11885191_3}
+  {\path{doi:10.1007/11885191_3}}.
+
+\bibitem[HYC07]{HYC07b}
+Kohei Honda, Nobuko Yoshida, and Marco Carbone.
+\newblock Web services, mobile processes and types.
+\newblock {\em Bull. {EATCS}}, 91:160--185, 2007.
+
+\bibitem[IR90]{IR90}
+Alon Itai and Michael Rodeh.
+\newblock Symmetry breaking in distributed networks.
+\newblock {\em Information and Computation}, 88(1), 1990.
+\newblock \href {https://doi.org/10.1016/0890-5401(90)90004-2}
+  {\path{doi:10.1016/0890-5401(90)90004-2}}.
+
+\bibitem[KNP12]{distr1}
+Marta Kwiatkowska, Gethin Norman, and David Parker.
+\newblock Probabilistic verification of herman's self-stabilisation algorithm.
+\newblock {\em Formal Aspects of Computing}, 24(4):661--670, 2012.
+\newblock \href {https://doi.org/10.1007/s00165-012-0227-6}
+  {\path{doi:10.1007/s00165-012-0227-6}}.
+
+\bibitem[KNPV09]{security2}
+Marta Kwiatkowska, Gethin Norman, David Parker, and Maria~Grazia Vigliotti.
+\newblock Probabilistic mobile ambients.
+\newblock {\em Theoretical Computer Science}, 410(12--13):1272--1303, 2009.
+\newblock \href {https://doi.org/10.1016/j.tcs.2008.12.058}
+  {\path{doi:10.1016/j.tcs.2008.12.058}}.
+
+\bibitem[KNS01]{distr2}
+Marta Kwiatkowska, Gethin Norman, and Roberto Segala.
+\newblock Automated verification of a randomized distributed consensus protocol
+  using {Cadence SMV} and {PRISM}.
+\newblock In G.~Berry, H.~Comon, and A.~Finkel, editors, {\em Proc. 13th
+  International Conference on Computer Aided Verification (CAV'01)}, volume
+  2102 of {\em LNCS}, pages 194--206. Springer, 2001.
+\newblock \href {https://doi.org/10.1007/3-540-44585-4_17}
+  {\path{doi:10.1007/3-540-44585-4_17}}.
+
+\bibitem[KNS03]{multimedia}
+Marta Kwiatkowska, Gethin Norman, and Jeremy Sproston.
+\newblock Probabilistic model checking of deadline properties in the {IEEE 1394
+  FireWire} root contention protocol.
+\newblock {\em Formal Aspects of Computing}, 14(3):295--318, 2003.
+\newblock \href {https://doi.org/10.1007/s001650300007}
+  {\path{doi:10.1007/s001650300007}}.
+
+\bibitem[Mon23]{M23}
+Fabrizio Montesi.
+\newblock {\em Introduction to Choreographies}.
+\newblock Cambridge University Press, 2023.
+\newblock \href {https://doi.org/10.1017/9781108981491}
+  {\path{doi:10.1017/9781108981491}}.
+
+\bibitem[Muk02]{Mukund2002}
+Madhavan Mukund.
+\newblock From global specifications to distributed implementations.
+\newblock In Beno{\^i}t Caillaud, Philippe Darondeau, Luciano Lavagno, and
+  Xiaolan Xie, editors, {\em Synthesis and Control of Discrete Event Systems},
+  pages 19--35. Springer US, Boston, MA, 2002.
+\newblock \href {https://doi.org/10.1007/978-1-4757-6656-1_2}
+  {\path{doi:10.1007/978-1-4757-6656-1_2}}.
+
+\bibitem[Nak08]{bitcoin}
+Satoshi Nakamoto.
+\newblock Bitcoin: A peer-to-peer electronic cash system.
+\newblock \url{https://bitcoin.org/bitcoin.pdf}, 2008.
+
+\bibitem[NS06]{security1}
+Gethin Norman and Vithaly Shmatikov.
+\newblock Analysis of probabilistic contract signing.
+\newblock {\em Journal of Computer Security}, 14(6):561--589, 2006.
+\newblock \href {https://doi.org/10.3233/JCS-2006-14604}
+  {\path{doi:10.3233/JCS-2006-14604}}.
+
+\bibitem[PRI]{PRISMdoc}
+Prism documentation.
+\newblock \url{https://www.prismmodelchecker.org/}.
+\newblock Accessed: 2023-09-05.
+
+\bibitem[tBHP23]{10.1007/978-3-031-47963-2_15}
+Maurice~H. ter Beek, Rolf Hennicker, and Jos{\'e} Proen{\c{c}}a.
+\newblock Realisability of global models of interaction.
+\newblock In Erika {\'A}brah{\'a}m, Clemens Dubslaff, and Silvia Lizeth~Tapia
+  Tarifa, editors, {\em Theoretical Aspects of Computing -- ICTAC 2023}, pages
+  236--255, Cham, 2023. Springer Nature Switzerland.
+\newblock \href {https://doi.org/10.1007/978-3-031-47963-2_15}
+  {\path{doi:10.1007/978-3-031-47963-2_15}}.
+
+\bibitem[tBHP24]{10.1007/978-3-031-62697-5_10}
+Maurice~H. ter Beek, Rolf Hennicker, and Jos{\'e} Proen{\c{c}}a.
+\newblock Team automata: Overview and roadmap.
+\newblock In Ilaria Castellani and Francesco Tiezzi, editors, {\em Coordination
+  Models and Languages}, pages 161--198, Cham, 2024. Springer Nature
+  Switzerland.
+\newblock \href {https://doi.org/10.1007/978-3-031-62697-5_10}
+  {\path{doi:10.1007/978-3-031-62697-5_10}}.
+
+\bibitem[tBML{\etalchar{+}}04]{DBLP:journals/entcs/BeekMLGFS05}
+Maurice~H. ter Beek, Mieke Massink, Diego Latella, Stefania Gnesi, Alessandro
+  Forghieri, and Maurizio Sebastianis.
+\newblock Model checking publish/subscribe notification for
+  thinkteam\({}^{\mbox{{\textregistered}}}\).
+\newblock In {\em {FMICS}}, volume 133 of {\em Electronic Notes in Theoretical
+  Computer Science}, pages 275--294. Elsevier, 2004.
+\newblock \href {https://doi.org/10.1016/j.entcs.2004.08.069}
+  {\path{doi:10.1016/j.entcs.2004.08.069}}.
+
+\end{thebibliography}

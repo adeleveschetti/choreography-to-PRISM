@@ -1,0 +1,29 @@
+
+
+
+
+C = 
+p -a-> q : { 5: * ;    q -b-> r 1: C,
+             25: x'=5 ; q -c-> r 4: C'}
+
+
+
+Proj C q = 
+[a1] (sq = a)  5: sq' = b
+[a2] (sq = a) 25: sq' = c & x'=5
+
+[c] (sq = c) 4: akfjds
+
+
+
+C' = q -c-> r 4: C'
+
+Proj C' q =
+
+[c] (sq = c) 4:
+
+
+
+
+
+

@@ -1,0 +1,1302 @@
+\documentclass[11pt]{article}
+
+% Page layout
+\usepackage{geometry}
+\geometry{margin=1in}
+
+% Formatting
+\usepackage{xcolor}
+\usepackage{setspace}
+\usepackage{enumitem}
+\usepackage{amssymb}
+\usepackage{url}
+
+% Boxes for reviewer comments
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+
+% Markers
+\newcommand{\addressed}{\textcolor{green!60!black}{\checkmark}\ }
+\newcommand{\notaddressed}{\textcolor{red!70!black}{\texttimes}\ }
+
+\newcommand{\defin}{\mathcal D}
+
+\newcommand{\sem}[1]{\{\![#1]\!\}}
+\newcommand{\eval}[2]{#1\!\!\downarrow_{#2}}
+
+\newcommand{\mypar}[1]{\noindent{\bf #1}}
+
+\newcommand{\state}{\mathsf{state}}
+
+\newcommand{\proj}{\mathsf{proj}}
+\newcommand{\projE}[2]{#1\downarrow_{#2}}
+
+\newcommand{\sconnected}{\mathsf{sConn}}
+\newcommand{\hmodules}{\mathsf{hMods}}
+
+
+\newcommand{\topannotation}[2]{\mathsf{top}_{#1}(#2)}
+
+\newcommand{\marco}[1]{\textcolor{cyan}{{\footnotesize Marco: #1}}}
+\newcommand{\adele}[1]{\textcolor{blue}{{\footnotesize Adele: #1}}}
+
+\definecolor{code_indent}{HTML}{CCCCCC}
+
+\newcommand{\indentrule}{\color{code_indent}\vrule\hspace{2pt}}
+
+% Syntax
+\definecolor{bloodyred}{rgb}{0.6,0.1,0.1}
+\newcommand{\role}[1]{\textcolor{bloodyred}{\mathtt{#1}}}
+%\newcommand{\role}[1]{\mathtt{#1}}
+\newcommand{\nr}{\role p}
+\newcommand{\nrr}{\role q}
+\newcommand{\nrrr}{\role r}
+
+\newcommand{\Var}{\mathsf{Var}}
+\newcommand{\Val}{\mathsf{Val}}
+
+\newcommand{\interactBase}[2]{{#1}\rightarrow \{{#2}\}}
+\newcommand{\interactBasel}[3]{#1\rightarrow^{#2} \{#3\}}
+\newcommand{\interact}[2]{\interactBase{#1}{#2}:\,\Sigma_{j\in J}\lambda_j: u_j;\ C_j}
+\newcommand{\interactl}[3]{\interactBasel{#1}{#2}{#3}:\,\Sigma_{j\in J}\lambda_j: u_j;\ C_j}
+\newcommand{\doubleand}{\text{\&\&}}
+\newcommand{\allsynchName}{\textcolor{bloodyred}{\mathtt{allsynch}}}
+\newcommand{\allsynch}[4]{\allsynchName\, \{ {\role{#1}}_{#3}:#2_{#3}\}_{#3\in #4}}
+
+\newcommand{\command}[4] {\commandBase {#1} {#2} \Sigma_{i\in I}#3_i: #4_i}
+\newcommand{\commandBase}[3] {[#1]\ #2\ \rightarrow #3}
+\newcommand{\chorcommandBase}[2] {#1\ \rightarrow #2}
+\newcommand{\chorcommand}[3] {\chorcommandBase {#1} \Sigma_{i\in I}#2_i: #3_i}
+\newcommand{\ifTE}[4]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@{#2}\ \textcolor{sh_keyword}{\mathtt{then}}\ {#3} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#4}}
+\newcommand{\ifTEl}[5]{\textcolor{sh_keyword}{\mathtt{if}}\ #1@^{#2}{#3} \ \textcolor{sh_keyword}{\mathtt{then}}\ {#4} \ \textcolor{sh_keyword}{\mathtt{else}}\ {#5}}
+% Reply document has no listings package, so use a plain
+% monospace fallback for the two code-formatting macros.
+\newcommand{\codeprism}[1]{\texttt{#1}}
+\newcommand{\codechor}[1]{\texttt{#1}}
+
+% Hardcoded label definitions so that \ref{sec:...} in this reply
+% reproduces the section numbers from the revised paper without
+% needing the paper's .aux file.  Update these if the paper's
+% numbering changes.
+\makeatletter
+\@namedef{r@sec:intro}{{1}{1}{Introduction}{section.1}{}}
+\@namedef{r@sec:example}{{2}{1}{A Motivating Example}{section.2}{}}
+\@namedef{r@sec:chor}{{3}{1}{Choreography Language}{section.3}{}}
+\@namedef{r@sub:otherconstructs}{{3.3}{1}{Other language constructs}{subsection.3.3}{}}
+\@namedef{r@sec:prism}{{4}{1}{The PRISM Language}{section.4}{}}
+\@namedef{r@sec:proj}{{5}{1}{Projection}{section.5}{}}
+\@namedef{r@def:annot}{{3}{1}{Annotation}{definition.3}{}}
+\@namedef{r@thm:epp}{{1}{1}{Projection}{theorem.1}{}}
+\@namedef{r@sec:bench}{{6}{1}{Benchmarking}{section.6}{}}
+\@namedef{r@tab:codesize}{{1}{1}{Code size table}{table.1}{}}
+\@namedef{r@ex3-res}{{3}{1}{Bitcoin PoW block-time probability}{figure.3}{}}
+\@namedef{r@sec:relwork}{{7}{1}{Related Work and Discussion}{section.7}{}}
+\makeatother
+
+
+
+\newcommand{\CEnd}{\mathbf{0}}
+\newcommand{\pp}{|\!|}
+\newcommand{\ppp}[1]{|[#1]|}
+\newcommand{\cmd}[6]{[#1] #2 \rightarrow \{#3: #4 = #5\}_{#6}}
+
+\newcommand{\defrec}{\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=}}
+
+  
+% Semantics
+\newcommand{\red}[1]{\ \longrightarrow_{#1}\ } 
+\newcommand{\prismred}[1]{\ \stackrel{#1}{\rightsquigarrow}\ } 
+\newcommand{\lab}[3]{\ [#1][#2:\;#3]\ } 
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
+\definecolor{keywordColor}{rgb}{0.50,0.00,0.33}
+\definecolor{stringColor}{rgb}{0.16,0.00,1.00}
+\definecolor{lineNumberColor}{rgb}{0.47,0.47,0.47}
+
+\definecolor{carminepink}{rgb}{0.92, 0.3, 0.26}
+\definecolor{jesuscolour}{rgb}{0.3, 0.92, 0.26}
+\newcommand{\AV}[1]{\todo[inline, color=carminepink]{\textbf{AV}:~#1}}
+\newcommand{\MC}[1]{\todo[inline, color=jesuscolour]{\textbf{MC}:~#1}}
+
+
+% Very light grey background
+\definecolor{reviewgray}{gray}{0.95}
+
+\newtcolorbox{reviewercomment}{
+  breakable,
+  colback=reviewgray,
+  colframe=black!20,
+  boxrule=0.3pt,
+  arc=2pt,
+  left=6pt,
+  right=6pt,
+  top=6pt,
+  bottom=6pt
+}
+
+% Commands
+\newcommand{\revcomment}[1]{%
+  \begin{reviewercomment}
+  \textbf{Reviewer comment.} #1
+  \end{reviewercomment}
+}
+
+\newcommand{\revresponse}[2][]{%
+  \par\noindent\textbf{Response.} #1 #2
+}
+
+\newcommand{\revchanges}[2][]{%
+  \par\noindent\textbf{Changes in the manuscript.} #1
+  #2\par\bigskip
+}
+
+\begin{document}
+
+\title{Response to Reviewers}
+\author{A PROBABILISTIC CHOREOGRAPHY LANGUAGE FOR PRISM}
+\date{}
+\maketitle
+\vspace{-0.5\baselineskip}
+\begin{center}
+{\large Marco Carbone and Adele Veschetti}
+\end{center}
+
+\section*{General Response}
+
+We thank the Editor and the Reviewers for their detailed and
+constructive feedback. We have revised the paper accordingly and
+believe that the changes substantially improve both clarity and
+technical depth.  Below we summarise the major changes and the
+conventions used in this response.
+
+\paragraph{Major structural change: projection (Section~5).}
+The definition of projection has been completely rewritten. In the
+previous version, the projection relied on explicit counters
+(natural numbers, denoted by~$\iota$) to generate fresh identifiers;
+this mechanism was cumbersome and could be error-prone. We now adopt
+a more direct approach by annotating choreographies with unique
+labels, which the projection can use directly. This yields a cleaner
+and more easily readable projection in the theoretical development.
+For practical reasons, our implementation still uses counters; these
+can be seen as a concrete realisation of the label-generation
+mechanism that the paper now abstracts into the choreography
+annotations. Because Section~5 was rewritten end-to-end, its changes
+are \emph{not} highlighted in blue; we kindly ask the reviewers to
+read it afresh.
+
+\paragraph{Convention for this response.}
+Each reviewer comment is tagged with a unique identifier
+(\textbf{[R$x$.$y$]}, where~$x$ is the reviewer number and~$y$ is
+the sequential position of the comment). Comments are quoted
+literally from the original reviews so that they can be immediately
+recognised.  Where the paper text was modified in response to a
+comment, the corresponding change is highlighted \textbf{in blue} in
+the accompanying highlighted PDF, and the same \textbf{[R$x$.$y$]}
+tag appears in the margin next to the modified passage. When a single
+passage in the paper addresses comments from different reviewers, the
+margin tag lists both identifiers (e.g., \textbf{[R2.18/R3.3]}).
+
+\paragraph{Summary of highlighted changes (by tag).}
+\begin{itemize}
+\item \textbf{[R2.1]} -- Section~1, ``Changes with respect to the
+  conference version'' paragraph: explicit section pointers added
+  inline.
+\item \textbf{[R2.2]} -- Section~1: new paragraph on which systems
+  the choreographic approach is suited for.
+\item \textbf{[R2.3]} -- Section~6: new opening paragraph + new
+  ``Code Size Comparison'' subsection with Table~1.
+\item \textbf{[R2.5]} -- Section~1: motivating-example paragraph
+  rewritten (consistent use of $\lambda_i$ as rates, distinct from
+  labels~$a, b$).
+\item \textbf{[R2.6]} -- Section~2: Greek-letter rate names formatted
+  as code (\texttt{lambda}, \texttt{mu}, \texttt{theta}).
+\item \textbf{[R2.18/R3.3]} -- Section~6: clarification of what
+  ``equivalent behaviour'' means in the experimental evaluation.
+\item \textbf{[R3.1]} -- Section~7, Discussion: new paragraph on
+  pros/cons and structural restrictions of the choreographic
+  approach.
+\item \textbf{[R3.2]} -- Section~7, Related Work: new paragraph
+  relating our setting to the implementability/realisability
+  literature.
+\end{itemize}
+
+\noindent Minor comments (typos, spelling inconsistencies,
+formatting) have been addressed throughout; they are not individually
+highlighted.
+
+
+\newpage
+
+% ============================================================
+\section*{Reviewer 1}
+
+
+\revcomment{\textbf{[R1.1]}\\
+I found the technical result establishing operational equivalence
+between choreographies and their projections rather weak. The result
+shows that the initial step is in correspondence provided that all
+projections are synchronized on some general state iota. However, it
+seems to me that this synchronization is not preserved by reduction,
+i.e., after a reduction step some projections remain in an iota
+state while others do not. This may ultimately be irrelevant, but I
+believe the issue should be discussed in the paper. I would also
+expect a result establishing operational correspondence for a
+sequence of reductions.
+}
+
+\revresponse{ We thank the reviewer for highlighting the mismatch
+  between standard operational-correspondence results for
+  choreographies and this paper focussing on PRISM.  PRISM modules are
+  declarative (a fixed set of commands whose enabling depends on the
+  current state), whereas choreographies have an explicit control-flow
+  syntax; therefore, in the projection, control-flow is reified into
+  the (extended) runtime state via the variables $s_{\nr}$, yielding
+  an extended state space $S_+$. As a consequence, reductions of the
+  choreography correspond to transitions on $S_+$ in the projected
+  model rather than to syntactic evolution of PRISM modules.
+%
+  In the revised manuscript, we make this design choice explicit and
+  discuss the resulting asymmetry (projection-after-reduction may
+  yield fewer commands than reduction-after-projection). At the end of
+  Section 5, we include a concrete example illustrating that, while
+  the set of commands may differ, the projected models exhibit the
+  same observable behaviour up to a suitable PRISM-induced
+  equivalence; we leave the identification of the most appropriate
+  equivalence (e.g., probabilistic bisimulation) and the corresponding
+  strengthening of the theorem to future work.  }
+
+\revchanges{ We expanded the discussion around Theorem 1 to clarify
+  (i) why standard reduction-to-reduction correspondence does not
+  directly apply to PRISM, (ii) how control-flow information is
+  encoded in the extended state $S_+$ via the distributed state
+  variables, and (iii) why the correspondence statement is formulated
+  in terms of transitions on $S_+$ rather than syntactic changes of
+  modules. We also added a detailed remark and worked example to make
+  the asymmetry and its implications explicit, and we added a
+  paragraph outlining how a future extension based on probabilistic
+  bisimulation could capture correspondence across different command
+  sets.  }
+
+\revcomment{\textbf{[R1.2]}\\
+Furthermore, the proof of this correspondence (Theorem 1) reads more
+like a proof sketch than a complete proof; a more detailed and
+carefully paced proof would be preferable.
+}
+
+\revresponse{ We thank the reviewer for this suggestion. In the
+  revised version, we have expanded the proof of Theorem 1 and made
+  its structure more explicit, in particular by spelling out the
+  interaction case in detail and by making clear the key invariants on
+  the extended state $S_+$ used in the correspondence argument. To
+  keep the exposition readable, we do not enumerate every PRISM
+  semantic step.  }
+
+\revchanges{ Proof of Theorem 1 rewritten and expanded and interaction
+  case detailed.}
+
+
+
+\revcomment{\textbf{[R1.3]}\\
+I have also some concerns about the way in which the choreography
+state is projected on different participants. I think that the
+presentation will benefit from a careful treatment of this aspect.
+}
+
+\revchanges{ Definitions~4 (CTMC) and~5 (DTMC) have been updated. Now
+  states are pre-generated making it more clear how the projection
+  works. }
+
+% ------------------------------------------------------------
+
+\revcomment{\textbf{[R1.4]}\\
+When giving examples, the use of prime variables is not clear at
+this point.
+}
+
+\revchanges{ We added a brief clarification in the manuscript.  }
+
+
+% \revcomment{
+% “this is the first probabilistic choreography language that is not a type abstraction”.
+% What does this mean?
+% }
+
+% \revchanges{ Comment removed.  }
+
+
+\revcomment{\textbf{[R1.5]}\\
+I did not understand the explanation of foreach. What is the role of
+k in such an expression? What is op? A formal encoding would be
+welcome.
+}
+
+\revresponse{
+  We apologise for the limited explanation of this construct. The basic idea is to provide an operator that quantifies over indices via the predicate $op(i)$. The formal translation is straightforward: we add one update for each role, assuming that the relevant roles can be determined statically.
+}
+
+\revchanges{ We have updated the text where the foreach construct is
+  discussed, with a more precise explanation of what it does.  }
+
+
+\revcomment{\textbf{[R1.6]}\\
+I am puzzled about the notion of Non-deterministic Synchronization.
+The encoding shown for the example looks quite deterministic to me.
+Moreover, as written, it seems that you are lifting features of the
+implementation language (PRISM) to the choreography level. The
+encoding then arbitrarily introduces a synchronization. I have a
+couple of questions here:
+  \begin{enumerate}
+  \item Does the specification determine the direction of
+    communication? In the provided example, it seems that the
+    interaction could also be expressed in the opposite direction,
+    i.e., $q \rightarrow \{p\}$. Is the direction of the interaction
+    relevant, or is it never relevant?
+  \item Does any synchronization specification yield a correct
+    choreography? Should there not be a requirement for some
+    well-formedness condition on the allsync constructor?
+  \item Could you provide a formal definition of the encoding?
+  \end{enumerate}
+}
+
+\revresponse{The terminology we used is incorrect, thanks for pointing
+  this out.  $\allsynchName$ is not "nondeterministic" but it is still
+  a probabilistic choice. We have rewritten (and expanded) the entire
+  paragraph with a clearer explanation. As for the detailed questions:
+  \begin{enumerate}
+    
+  \item in our choreography language, writing
+    $\nrr\longrightarrow\{\nr\}$ or $\nr\longrightarrow\{\nrr\}$ is
+    the same. However, it has an impact on the projection, since we
+    need to distinguish one of the modules (the one on the left)
+    because it has a different projection.
+    
+  \item The notion of strong connectedness can be extended to
+    $\allsynchName$, as it is, after all, an interaction between the
+    modules $\nr_i$. However, this is not necessary if we first
+    translate it into standard interactions (and if-then-else
+    constructs), since strong connectedness can then be checked at
+    that level. In the new example we have provided, strong
+    connectedness does not hold because the nested if-then-else
+    constructs are not connected. As this part is not a formal
+    development but rather a section justifying how our implementation
+    extends the theoretical framework, we do not consider it necessary
+    to present a connected choreography here. In any case (as noted in
+    a comment added to the projection section), these choreographies
+    can be transformed into connected ones by introducing additional
+    interactions.
+
+    
+  \item the translation should be straightforward once there is a
+    precisely defined language for guards. See new text added. 
+ \end{enumerate}
+}
+
+\revchanges{ The paragraph has been rewritten.  }
+
+
+\revcomment{\textbf{[R1.7]}\\
+Example 3: The modules in this example share variables (y and x). I
+wonder whether there is a choreography that describes their
+behavior, since my understanding is that variables are local to
+modules in choreographies.
+}
+
+\revresponse{
+In the example, $x$ and $y$ are indeed owned by two different modules and are therefore shared only in read mode. In PRISM, all modules can read all variables, but only the owning module can modify its own variable. This is consistent with our choreographic reading, where updates are only performed as part of an interaction, so the write is still attributed to a specific role in that interaction. The only caveat is that, in choreographies, guards in conditionals must be local (i.e., evaluated by a single role). Thus, for this example, we could simulate the interactive execution (sync on $a$) by nesting two if-then-else constructs. However, since choreographies focus only on interactions, the internal actions (no label) cannot be simulated.
+}
+
+\revcomment{\textbf{[R1.8]}\\
+The choice of annotating choreographies with labels seems somewhat
+ad hoc. Why are they not introduced as a syntactic element of
+choreographies (as is often done with communication channels in
+standard choreographies), given that they are necessary and play a
+role in the implementation?
+}
+
+\revresponse{ It is certainly true that labels are a key aspect of the
+  implementation. However, the purpose of this work is to define a
+  higher-level language that abstracts away from such implementation
+  details. Therefore, labels are part of the projection algorithm and
+  are irrelevant to the programmer who writes a
+  choreography. Nevertheless, we now use an intermediate choreographic
+  language and a function for annotating choreographies in a ``safe''
+  way. }
+
+
+\revcomment{\textbf{[R1.9]}\\
+Projection of conditionals: I do not understand why the conditional
+is not projected. I would expect that E should be evaluated locally
+by p (hence all relevant information must be local to p). This
+contrasts with the statement on page 5: ``The term if E@p then C1
+else C2 denotes a system where module p evaluates the guard E
+(which can contain variables located at other modules) and then
+(deterministically) branches accordingly.'' I presume that there is
+some underlying assumption on the projection, but I could not find
+its definition.
+}
+
+\revresponse{
+We believe this is a misunderstanding, and we are grateful for the opportunity to clarify it. The conditional \emph{is} projected, but only in the module of the evaluating role $\mathsf p$. This is consistent with the intended semantics: the guard $E$ is evaluated by $\mathsf p$ and the result deterministically selects the branch. The point that may be confusing is that we do \emph{not} require $E$ to be local to $\mathsf p$. As stated on page 5, $E$ may mention variables owned by other modules; in PRISM, all modules can read all variables, while only the owning module can modify them. Therefore, the projection places the conditional in $\mathsf p$'s module, and the guard can still refer to remote variables, exactly as in the PRISM syntax.
+}
+
+\revcomment{\textbf{[R1.10]}\\
+Projection of choreography variable X: This relies on defs(X). I
+presume that this function should be explicitly included in the
+definition. Moreover, I assume that you need to impose some
+conditions, such as requiring that the image of any X\_i is distinct
+from nodes(C) and also distinct from the nodes in all definitions.
+The passage on page 13 (``For recursive calls\ldots\ defs'') appears
+somewhat rushed, and I believe defs deserves a formal definition.
+}
+
+\revresponse{
+We agree with the reviewer. }
+
+\revchanges{
+In the revised formulation, counters are replaced by
+explicit labels on choreographies, which makes the treatment of variables cleaner and more uniform. We have also expanded the proof for this case and
+included more details to make the reasoning fully explicit.
+}
+
+
+\revcomment{\textbf{[R1.11]}\\
+Projection of updates: Are you assuming that updates at the
+choreography level are well-formed in some way? For instance, could
+an assignment $y' = x$ occur where $y$ belongs to $\nr$ and $x$ to
+$\nrr$? If not, this restriction should be stated clearly. Moreover,
+from which element of the choreography is the assignment derived? If
+I have missed this, it should nonetheless be clarified explicitly in
+the paper.
+}
+
+\revresponse{
+As discussed above, assignments such as $y' = x$ are permitted even when $x$ is located at $\nr$ and $y$ is located at $\nrr$. At the choreography level, the restriction is simply that, in an interaction $\interact{\nr}{\nr_1,\ldots,\nr_n}$, every update in each $u_j$ assigns to a variable owned by one of $\nr, \nr_1,\ldots,\nr_n$.
+}
+\revchanges{
+We have added a clear assumption on page 6 (new PDF).
+}
+
+\revcomment{\textbf{[R1.12]}\\
+Definition 4: Is it not the case that the choreography is annotated?
+Hence, the interaction $p \rightarrow \{p_1,\ldots,p_n\}$ should
+also be labeled. Furthermore, from where are the labels $l_j$
+drawn? Does this mean that every interaction uses the same set of
+labels $l_1, \ldots$?
+}
+
+\revresponse{ Interactions are now also annotated. See new version.  }
+
+
+\revcomment{\textbf{[R1.13]}\\
+How are variables quantified? Are $S$, $S'$, and $\iota$ universally
+quantified?
+}
+
+\revresponse{
+  Yes, although now $\iota$ has disappeared.
+}
+
+\revcomment{\textbf{[R1.14]}\\
+The correspondence theorem (Theorem 1) appears somewhat weak, since
+it merely shows that projections can mimic the first computational
+step, as far as the state is concerned. It does not provide evidence
+that subsequent steps preserve equivalence. I am particularly
+concerned that the projections may become misaligned with respect to
+$\iota$. Thus, it is not the case that the second step necessarily
+advances all projections corresponding to a given $\iota$. This
+issue is clear in the case of conditionals, and I also wonder about
+process variables.
+}
+
+\revresponse{ See our reply about your first comment.  }
+
+\revcomment{\textbf{[R1.15]}\\
+Although I can follow the reasoning, I wonder what the fundamental
+limitation is here. Is it because the choreographies are purely
+probabilistic, without non-deterministic choices? Would the dining
+cryptographers require some form of non-determinism?
+}
+
+\revchanges{
+Added explanation on page 24.
+}
+
+\newpage
+
+% ============================================================
+\section*{Reviewer 2}
+
+
+\revcomment{\textbf{[R2.1]}\\
+The main changes as stated by the authors at the end of the
+Introduction are:
+\begin{itemize}
+\item Previously omitted details in definitions and proofs. I consider
+  this a minor extension. The paper does explain which specific
+  definitions, details or proofs have been included. Neither does the
+  cover letter.
+\item A thorough analysis of richer language constructs incorporated
+  in the implementation. The Introduction does not explain which
+  specific analysis and constructs they refer to. The paper does not
+  specify in which section this is to be found. In principle, this
+  sounds like a significant extension but with the paper does not help
+  the reader in identifying it (one would need to read both papers and
+  guess). Also here, the cover letter does not provide additional
+  details.
+\item New use cases analysed with the proposed approach. In consider
+  this as a significant extension, and aligned with the recommendation
+  of the COORDINATION reviews. As in the above case, the paper will be
+  more clear if specific pointres to sections would be provided. As it
+  is now, distinguishing the new from the old cases is left as a
+  homework to the reader. My guess is that these are the
+  Peer-To-Peer protocol, the leader election protocol and the dining
+  cryptographers.
+\end{itemize}
+
+[Reviewer's clarification in the second round:]
+``The paragraph `Changes with respect to the conference version' does
+not use references to specific sections where the novel contributions
+are to be found. You should add such references. Moreover, the
+examples of the newly introduced additional language constructs must
+be listed in the text.''
+}
+
+\revresponse{ We thank the reviewer for the clarification, and we
+  apologise: in our previous reply we did not address what was
+  actually being asked. We have now revised the
+  ``Changes with respect to the conference version'' paragraph at the
+  end of the Introduction to include explicit section references for
+  each change. We kept the edit minimal: the original prose is
+  preserved and only the section pointers were added inline
+  (highlighted in blue); the paragraph is tagged \textbf{[R2.1]} in
+  the margin.  The explicit naming of the three additional language
+  constructs is addressed in the ``optional expansion'' at the end of
+  this item.}
+
+\revchanges{ In the paragraph ``Changes with respect to the
+  conference version'' at the end of Section~1, we inserted the
+  following explicit section pointers (each shown in blue in the
+  highlighted PDF):
+  \begin{itemize}
+  \item ``\ldots complete proof of the main theorem
+    \textbf{(Section~5)}, which were previously omitted\ldots''
+  \item ``\ldots revised projection function \textbf{(Section~5)}
+    that provides a cleaner formalisation\ldots''
+  \item ``\ldots additional language constructs
+    \textbf{(Section~3.3)}, which are also supported by the
+    implementation\ldots''
+  \item ``\ldots expand the related work section
+    \textbf{(Section~7)}\ldots''
+  \item ``\ldots new use cases analysed through choreographies
+    \textbf{(Section~6)}\ldots''
+  \end{itemize}
+
+  \medskip\noindent\textbf{Optional, more verbose expansion.} The
+  reviewer also asked that the three new language constructs be
+  listed by name in the text. We deliberately did \emph{not} inline
+  the construct names in the current revision because we felt it
+  would make the paragraph cumbersome for an introduction. If the
+  reviewer prefers a fully itemised and more explicit version of
+  this paragraph, we are happy to replace the current one with the
+  following expanded version, which also lists the new constructs
+  explicitly:
+  \begin{quote}\small
+    This article is an expanded version of our paper presented at
+    COORDINATION 2024. With respect to that version, the main
+    differences are the following.
+    \begin{itemize}
+    \item \emph{Complete proof of the main theorem (Section~5).}
+      Theorem~1, which was given only as a sketch in the conference
+      version, is now accompanied by a full proof, including a
+      detailed treatment of the interaction case.
+    \item \emph{Revised projection function (Section~5).} The
+      projection no longer relies on natural-number counters for the
+      control state. Instead, choreographies are first decorated with
+      explicit control and state labels through the annotation
+      function $\mathsf{annot}$ (Definition~3); the projection is
+      then defined directly on annotated choreographies, yielding a
+      cleaner formalisation.
+    \item \emph{Additional language constructs (Section~3.3).} A new
+      subsection introduces three constructs that are syntactic sugar
+      for the core language and are supported by our implementation:
+      (i) parametric modules $\mathtt{p}[i]$, which allow indexing
+      modules over a finite set; (ii) the $\mathsf{foreach}$
+      construct, of the form $\mathsf{foreach}\ (k\ \mathit{op}\ i)\
+      u@\mathtt{A}[k]$, which iterates an update over a set of
+      indexed modules; and (iii) the $\allsynchName$ construct, which
+      expresses a synchronisation in which several modules
+      independently choose a branch among multiple alternatives.
+    \item \emph{New case studies (Section~6).} The experimental
+      evaluation includes three new case studies: the Simple
+      Peer-to-Peer Protocol, the Synchronous Leader Election
+      Protocol, and the Dining Cryptographers Protocol. We also added
+      a table comparing the size of choreographies with that of the
+      corresponding generated PRISM models.
+    \item \emph{Extended Related Work and Discussion (Section~7).}
+      The Related Work part has been extended with a new paragraph
+      relating our setting to the implementability/realisability
+      literature. The Discussion part has been expanded with a more
+      precise characterisation of the class of systems amenable to
+      our framework, and with a new discussion of the trade-offs of
+      choreographic programming with respect to process-oriented
+      programming.
+    \end{itemize}
+  \end{quote}
+}
+
+
+\revcomment{\textbf{[R2.2]}\\
+For the COORDINATION paper the following remark was done in the
+reviews: ``The introduction should be more clear about which kind of
+concurrent process is amenable for choreographies, and for which
+class of concurrent processes choreographies are not suitable.'' The
+comment still applies for the new introduction.
+}
+
+\revresponse{ We added a dedicated paragraph in Section~1 that makes
+  explicit which kind of concurrent systems our approach targets and
+  which kinds of systems are less suited to it. The new paragraph is
+  highlighted in blue and tagged \textbf{[R2.2]} in the margin of the
+  revised PDF.}
+
+\revchanges{ The following paragraph was added to Section~1, just
+  before the presentation of the language (highlighted in blue and
+  tagged \textbf{[R2.2]} in the margin):
+  \begin{quote}\small
+    Choreographic programming naturally applies to distributed
+    systems whose behaviour can be described through structured
+    interaction protocols. Systems whose dynamics rely heavily on
+    loosely coordinated, highly unstructured, or unpredictable
+    communication patterns are generally less amenable to this
+    approach. Within its intended scope, however, choreographic
+    programming has proved effective in practice, since
+    choreographies enable the automatic generation of decentralised
+    implementations that are correct by construction.
+  \end{quote}
+}
+
+  
+\revcomment{\textbf{[R2.3]}\\
+The experimental analysis in Section 7 needs to be improved. What I
+miss the most is an overview of the results, with some measurable
+criteria.
+}
+
+\revresponse{ We have extended the experimental analysis in what is
+  now Section~\ref{sec:bench} (the section was Section~7 in the
+  submitted version and is now Section~6 after the removal of the
+  old Section~6 -- see our reply to comment~\textbf{[R2.4]}). The
+  changes, each highlighted in blue and tagged \textbf{[R2.3]} in the
+  margin of the revised PDF, are the following:
+  \begin{enumerate}
+  \item A new opening paragraph at the beginning of
+    Section~\ref{sec:bench} that explicitly frames the experimental
+    evaluation as an \emph{executable validation of the formal
+    projection}: the benchmarks shown in the section are all
+    automatically produced from a single global choreography
+    specification by the tool, which realises the projection
+    formally defined in Section~\ref{sec:proj}.
+  \item A clarification of the quantitative criterion used in the
+    evaluation (equi-satisfaction on the reference benchmark
+    properties, rather than bisimilarity or model-level semantic
+    equivalence). This is discussed in detail under
+    \textbf{[R2.18/R3.3]}.
+  \item A new ``Code Size Comparison'' subsection at the end of
+    Section~\ref{sec:bench} that provides the measurable overview
+    the reviewer was asking for. It contains
+    Table~\ref{tab:codesize}, which compares the number of lines of
+    code between each choreography and the corresponding generated
+    PRISM model across all six benchmarks, together with a short
+    discussion of the observed structural differences between the
+    two formalisms.
+  \end{enumerate}
+}
+
+\revchanges{ Changes to Section~\ref{sec:bench}:
+  \begin{itemize}
+  \item New opening paragraph (highlighted in blue, tagged
+    \textbf{[R2.3]}) that frames the experimental evaluation as an
+    executable validation of the projection.
+  \item New ``Code Size Comparison'' subsection (highlighted in blue,
+    tagged \textbf{[R2.3]}) with a summary
+    Table~\ref{tab:codesize} comparing choreography and PRISM lines
+    of code for all six benchmarks (thinkteam, peer-to-peer, Bitcoin
+    PoW, Hybrid Casper, Leader Election, Dining Cryptographers).
+  \item The item~(ii) of the introductory paragraph of
+    Section~\ref{sec:bench} was rewritten to make precise the
+    criterion of equivalence adopted in the evaluation (see
+    \textbf{[R2.18/R3.3]}).
+  \end{itemize}
+}
+
+\revcomment{\textbf{[R2.4]}\\
+Section 6 is irrelevant and can be removed.
+}
+
+\revresponse{ We agree and we removed it. The old Section~6
+  (``Implementation'') of the submitted version is no longer part of
+  the paper; its few pieces of information that are still relevant
+  (e.g.\ that the projection is implemented in Java using ANTLR) were
+  moved into the opening paragraph of the experimental evaluation
+  section (now Section~\ref{sec:bench}), which is highlighted in blue
+  and tagged \textbf{[R2.3]}.  As a consequence of this removal, the
+  old Section~7 (``Benchmarking'') is now Section~\ref{sec:bench}
+  (Section~6 in the revised PDF), and the old Section~8 (``Related
+  Work and Discussion'') is now Section~\ref{sec:relwork}
+  (Section~7 in the revised PDF). This explains the one-off shift in
+  section numbers that the reviewer may notice between the submitted
+  version and the revised version.}
+
+\revchanges{ The old Section~6 (``Implementation'') has been
+  completely removed. The one sentence still worth keeping --
+  about the Java/ANTLR implementation -- was relocated into the new
+  opening paragraph of Section~\ref{sec:bench} (tagged
+  \textbf{[R2.3]}). All subsequent section numbers have shifted
+  down by one with respect to the submitted version. }
+
+
+\revcomment{\textbf{[R2.5]}\\
+It is confusing that you use lambda1,2 as label in page 2 (encoded
+then as a an b), and later in page 3 lambda is the rate of the CTMC
+actions. I recommend trying to make the use of symbols more coherent.
+}
+
+\revresponse{ We agree. We rewrote the entire motivating example
+  paragraph in Section~1 so that $\lambda_1, \lambda_2$ are
+  consistently presented as \emph{rates} from the very first mention
+  on page~2, matching the usage in Section~3 onwards. The labels
+  $a$ and $b$ are now clearly introduced as PRISM command labels
+  (used for synchronisation), not as encodings of $\lambda_i$. The
+  paragraph is tagged \textbf{[R2.5]} in the margin of the revised
+  PDF; the textual changes are not highlighted word-by-word because
+  the whole paragraph was rewritten.}
+
+\revchanges{ The example paragraph in Section~1 was rewritten. Key
+  changes:
+  \begin{itemize}
+  \item The wording ``branch $\lambda_1$ / branch $\lambda_2$'' was
+    replaced by ``the first branch \emph{with rate} $\lambda_1$''
+    and ``the second branch \emph{with rate} $\lambda_2$'', so that
+    $\lambda_i$ is explicitly identified as a rate from its first
+    occurrence.
+  \item A new explanatory sentence was added: ``\ldots$a$ is a
+    label over which the module can synchronise with other modules,
+    $s_{\role{p}}=0$ is a guard, $\lambda_1$ is a rate, and
+    $(x'=1)\,\&\,(s_{\role{p}}'=1)$ is a list of commands for
+    modifying the state.''
+  \item The sentence ``Here, we use labels $a$ and $b$ for
+    simulating the two branches of the choreography'' was added,
+    which makes the role of $a, b$ (labels) separate from the role
+    of $\lambda_1, \lambda_2$ (rates).
+  \end{itemize}
+}
+
+\revcomment{\textbf{[R2.6]}\\
+Relate to this: the text uses somtimes the math symbols and
+sometimes the full name of the greek laters lambda, mu, theta. If
+you refer to code snippets, where the latter is used, I would use
+that in the main text too to ease readability. Note that you refer
+to other code symbols using the code format (e.g.\ CheckOutState).
+}
+
+\revresponse{ We agree and we made the usage consistent with
+  the code snippets. In the running example of Section~\ref{sec:example},
+  all textual mentions of the rates $\lambda, \mu, \theta$ that are
+  part of the PRISM code were replaced with the code-formatted
+  forms \codeprism{lambda}, \codeprism{mu}, \codeprism{theta},
+  matching the convention already used for other code symbols such
+  as \codeprism{CheckOutState}. The changes are highlighted in blue
+  and tagged \textbf{[R2.6]} in the margin.}
+
+\revchanges{ In Section~\ref{sec:example} (two locations, both
+  highlighted in blue and tagged \textbf{[R2.6]}): the inline math
+  $\lambda, \mu, \theta$ was replaced by \codeprism{lambda},
+  \codeprism{mu}, \codeprism{theta} to match the convention used
+  for the other code symbols in the same paragraph. In the rest of
+  the paper (where $\lambda, \mu, \theta$ refer to rate symbols in
+  the formal language rather than to concrete PRISM identifiers),
+  we kept the math formatting, as the two usages denote different
+  objects and should not be merged.}
+
+\revcomment{\textbf{[R2.7]}\\
+I don't know if this intentional, but if one wants to specify no
+update, one has to write $x' = x$ (a void update). In PRISM one can
+simply write true, if I recall properly. This is related also to
+the syntax of PRISM introduced in 4.1.
+}
+
+\revresponse{
+  From a theoretical point of view, there is no difference, therefore we will leave this as it is. Our implementation allows also True. 
+}
+
+\revcomment{\textbf{[R2.8]}\\
+Are you sure Def.~1 works as intended? What happens if $x$ appears
+in $u$? For example, $[x' = 0, y' = x]$. In Prism, $y$ will be
+updated to the value of $x$ in $S$ (see remark at the bottom of
+\url{https://www.prismmodelchecker.org/manual/ThePRISMLanguage/Commands}),
+but in your case it will be set to the new value of $x$ (0). This
+is also relevant to the definition of $\mu$ in page 9 and needs to
+be fixed.
+}
+
+\revresponse{
+ Yes sorry, our definition is incorrect. 
+}
+
+\revchanges{
+ We have now updated the definition so that it handles multiple updates at the same time. 
+}
+
+\revcomment{\textbf{[R2.12]}\\
+General remark: the way you define unique identifiers for the
+control points in the choreographies is not self-explainable.
+Readers familiar with building control flow graphs and similar
+graphical structures from code will get it, but other readers may
+find it cryptic. I would suggest enriching the explaination of how
+control points sq are correctly created.
+}
+
+\revresponse{ The entire mechanism for generating control-point
+  identifiers has been reworked in this revision: we no longer use
+  natural-number counters to track control states during projection.
+  Instead, Section~\ref{sec:proj} now begins with a dedicated block
+  of machinery (pages at the beginning of the section, before any
+  projection rule) that introduces \emph{annotated choreographies}
+  and explains how control and state labels are generated. More
+  precisely:
+  \begin{itemize}
+  \item We introduce two disjoint classes of labels explicitly:
+    \emph{control labels} $a,b,\ldots$ (used as PRISM
+    synchronisation labels) and \emph{state labels}
+    $\iota,\ldots$ (used as local control states of the modules).
+  \item Definition~2 (``Annotated Choreography'') specifies how
+    each syntactic construct is decorated with one control label
+    and, for every module occurrence, one state label.
+  \item Definition~\ref{def:annot} (``Annotation'') gives the
+    function $\mathsf{annot}$ that actually computes a valid
+    annotation of a plain choreography, using $\mathsf{fresh}_c$
+    and $\mathsf{fresh}_s$ to draw fresh control and state labels.
+    This is now the formal object that answers the question ``how
+    are the control points correctly created''.
+  \item The projection function is then defined directly on
+    annotated choreographies, which makes the role of each label
+    in the generated PRISM code self-evident.
+  \end{itemize}
+  Because Section~\ref{sec:proj} has been substantially rewritten
+  (this was in fact the largest single change in this revision --
+  see the response to \textbf{[R1.xx]} on the projection), and
+  because the new machinery replaces the old counter-based
+  construction end-to-end, we have not surgically highlighted
+  individual sentences in the section. Instead, we kindly ask the
+  reviewer to read the opening of Section~\ref{sec:proj} (from its
+  first page up to Definition~\ref{def:annot} inclusive) as a
+  self-contained explanation of how control-point identifiers are
+  generated and used. The rewrite was also designed to address
+  several concerns raised by Reviewer~1 about the projection.}
+
+\revchanges{ Section~\ref{sec:proj} has been rewritten from
+  scratch. The mechanism answering this comment is the new
+  introductory machinery -- ``control labels''/``state labels'' --
+  together with Definition~2 (Annotated Choreography) and
+  Definition~\ref{def:annot} (Annotation), which together replace
+  the previous counter-based presentation. No inline blue
+  highlighting was added to this section because the rewrite
+  affects essentially every paragraph; we ask the reviewer to read
+  Section~\ref{sec:proj} afresh.}
+
+
+\revcomment{\textbf{[R2.13]}\\
+``The projected update $u_j \downarrow q$ acts as a filter on the
+list of updates in $u_j$'' -- is this defined in the paper?
+}
+
+\revresponse{ The projection $\projE{u_j}{\role q}$ is not given an
+  explicit syntactic definition in the paper, but in the rewritten
+  Section~\ref{sec:proj} we now state the intended semantics and
+  the assumptions under which it is well-defined. Specifically,
+  just after the first projection rule (the rule for the role
+  $\role q$ that owns the interaction), the paper now contains the
+  following paragraph (inside the explanation of the rule's
+  components):
+  \begin{quote}\small
+    The projected update $\projE{u_j}{\role q}$ acts as a filter
+    on the list of updates in $u_j$, ensuring that only those
+    variables local to $\role q$ are updated. We do not define
+    $\projE{u_j}{\role q}$ explicitly, but we assume that it
+    adheres to the allocation of variables fixed prior to
+    projection. Since PRISM would reject an input in which
+    multiple modules update the same variables, our projection is
+    undefined in such cases.
+  \end{quote}
+  In addition, the precondition that guarantees this is
+  well-defined -- every update in $u_j$ assigns only to variables
+  owned by one of the roles involved in the interaction -- is
+  stated explicitly as the assumption on the choreography syntax
+  in Section~\ref{sec:chor} (see also our reply to the related
+  Reviewer~1 comment about ``Projection of updates''). As
+  Section~\ref{sec:proj} has been entirely rewritten, no inline
+  blue highlighting is added for this item; we kindly ask the
+  reviewer to read the paragraph immediately after the first
+  projection rule of Section~\ref{sec:proj}.}
+
+\revchanges{ The relevant explanation now lives in
+  Section~\ref{sec:proj}, immediately after the first projection
+  rule. As for the rest of Section~\ref{sec:proj}, this was part of
+  the full rewrite of the projection and is not individually tagged
+  in the margin.}
+
+
+\revcomment{\textbf{[R2.18]}\\
+``we demonstrate that PRISM behaves similarly'' -- be more precise
+about what you mean by ``similarly''. Some notion of bisimilation for
+CTMCs/DTMCs? Equi-satisfaction of some subset of properties? You may
+want to try out STORM's bisimulation support. It could give you
+higher confidence than just checking that the models behave
+similarly for some specific properties.
+}
+
+\revresponse{We apologise: this comment was not directly addressed in
+  our previous reply letter, although the text of the paper had
+  already been updated to respond to it. We take the opportunity to
+  make the response explicit here, and we also clarify that the
+  reviewer's guess that the relevant discussion was ``Remark~1'' is
+  only partially correct: Remark~1 (at the end of
+  Section~\ref{sec:proj}) addresses a related but distinct issue
+  raised by Reviewer~1 (the asymmetry of the correspondence theorem);
+  the direct answer to the present comment is instead the clarifying
+  paragraph at the beginning of Section~\ref{sec:bench}.
+  \smallskip
+
+  Concretely, we rephrased the statement ``we demonstrate that PRISM
+  behaves similarly'' as ``PRISM exhibits equivalent behaviour on
+  both the projected and original models'', and we added a new
+  sentence making precise what ``equivalent behaviour'' means in our
+  setting: we mean \emph{equi-satisfaction on the quantitative
+  properties the benchmarks were designed to analyse} (reachability,
+  time-bounded probabilities, expected values), not bisimilarity or
+  model-level semantic equivalence. Our projection targets a
+  structured fragment of PRISM and is not meant to reproduce the
+  exact syntactic form or the full nondeterminism of some
+  hand-written PRISM models, so bisimilarity would in general fail
+  for uninteresting reasons while the relevant analyses still agree.
+  As for STORM's bisimulation support: we did not use it because the
+  notion of equivalence we care about in the evaluation is
+  property-based, not bisimulation-based; for the same reason we do
+  not view STORM's bisimulation checker as the right tool for this
+  particular question.
+  \smallskip
+
+  We note, however, that the Remark at the end of
+  Section~\ref{sec:proj} does discuss probabilistic bisimulation,
+  but in a different sense: there it is proposed as a candidate
+  equivalence for \emph{strengthening Theorem~\ref{thm:epp}} to
+  capture the asymmetry between projecting-after-reducing and
+  reducing-after-projecting (a point originally raised by
+  Reviewer~1). This is a separate, theoretical question from the
+  empirical comparison in Section~\ref{sec:bench}.}
+
+\revchanges{ In Section~\ref{sec:bench} (in the introductory
+  paragraph of the experimental evaluation, highlighted in blue and
+  tagged \textbf{[R2.18/R3.3]} in the margin), we rewrote item~(ii)
+  from ``we demonstrate that PRISM behaves similarly\ldots'' to
+  ``PRISM exhibits equivalent behaviour on both the projected and
+  original models'', and we added the following clarifying sentences
+  (also highlighted in blue):
+  \begin{quote}\small
+    In this context, ``equivalent behaviour'' refers to agreement on
+    the quantitative properties that the original case studies were
+    designed to analyse, such as reachability and time-bounded
+    probabilities or expected values. Our projection targets a
+    structured fragment of PRISM and is not intended to reproduce
+    the exact syntactic form or the full range of nondeterminism
+    present in some hand-written models. As a consequence, we do not
+    aim for bisimilarity or semantic equivalence at the model
+    level. Instead, we verify that the projected and reference
+    models lead to the same results for the relevant benchmark
+    properties, which is the criterion of equivalence we adopt in
+    this evaluation.
+  \end{quote}
+}
+
+
+\revcomment{\textbf{[R2.19]}\\
+``Any discrepancies between the original and generated models are
+due to inherent variations in the simulation-based calculation of
+probability.'' -- have you tried not to use simulations but to use
+exact calculations? Perhaps also with rationals instead of floating
+points.
+}
+
+\revresponse{ We thank the reviewer for this comment and we apologise
+  that it was not explicitly addressed in our previous reply. The
+  sentence the reviewer quotes belongs to the Bitcoin Proof-of-Work
+  paragraph of the experimental evaluation, and the ``discrepancies''
+  it refers to are specifically the differences between the curves
+  obtained by running the reference PRISM model and our generated
+  model.
+  \smallskip
+
+  We did not use simulation by preference: we used it because, for
+  the two larger protocols in our benchmark set (Bitcoin PoW and
+  Hybrid Casper), the underlying state space is prohibitively large
+  for exact probabilistic model checking. This is the standard
+  choice in PRISM for this class of models, and it is indeed the
+  choice also made in the papers from which these benchmarks are
+  taken. Both the reference model and our generated model are
+  therefore analysed by PRISM's discrete-event simulation engine
+  (statistical model checking), and the ``discrepancies'' between
+  the resulting curves are the expected Monte Carlo sampling noise
+  between independent simulation runs: running the same model twice
+  already produces slightly different curves, and running two
+  probabilistically equivalent models produces curves that are
+  indistinguishable up to that noise. This is what we meant by
+  ``inherent variations in the simulation-based calculation of
+  probability''; the phrase is perhaps too terse, and we are happy
+  to expand it in the paper if the reviewer prefers (see the
+  optional edit proposed in the ``Changes'' block below).
+  \smallskip
+
+  For the remaining smaller benchmarks (thinkteam, simple
+  peer-to-peer, synchronous leader election, dining cryptographers),
+  the state space is tractable and PRISM performs full
+  probabilistic model checking with its default engines; no
+  simulation is involved there, and the results agree with the
+  reference models in the precise sense we adopt in
+  Section~\ref{sec:bench} (see our reply to \textbf{[R2.18/R3.3]}).
+  \smallskip
+
+  Regarding the reviewer's specific suggestion to use PRISM's
+  \texttt{-exact} option (rational arithmetic): we did not run
+  \texttt{prism -exact} in this evaluation. For Bitcoin~PoW and
+  Hybrid Casper the suggestion is not applicable, as
+  \texttt{-exact} is incompatible with the simulation engine and
+  those models cannot be handled exactly in any case. For the
+  smaller benchmarks, PRISM's default floating-point computation
+  already produces values that match the reference probabilities
+  well within the precision reported in the benchmark papers, so
+  we did not see a concrete reason to switch to rational
+  arithmetic. We are, however, happy to add such experiments to the
+  paper (on the smaller benchmarks where it is feasible) if the
+  reviewer considers them necessary for the publication.}
+
+\revchanges{ No change was made to the paper body for this item, as
+  the paper already describes what was actually done: for the large
+  benchmarks the only feasible option in PRISM is statistical model
+  checking, and this is the method we (and the reference papers)
+  used. We are however happy to (i)~rephrase the sentence at the end
+  of the Bitcoin PoW paragraph (currently: ``Any discrepancies
+  between the original and generated models are due to inherent
+  variations in the simulation-based calculation of probability'')
+  to something more precise, such as:
+  \begin{quote}\small
+    ``Both the reference model and our generated model are analysed
+    using PRISM's statistical model-checking engine, as exact
+    verification is not feasible for this state space. The small
+    differences between the two curves in Figure~\ref{ex3-res} are
+    therefore the expected Monte Carlo sampling noise between
+    independent simulation runs, and are not caused by any
+    structural mismatch between the choreography and its
+    projection.''
+  \end{quote}
+  and/or (ii)~add, for the smaller benchmarks where it is tractable,
+  a set of \texttt{prism -exact} runs alongside the default-engine
+  results. Both edits can be included in a subsequent revision if
+  the reviewer considers them essential.
+}
+
+
+% (Continue similarly for remaining detailed comments as needed.)
+
+\newpage
+
+% ============================================================
+\section*{Reviewer 3}
+
+
+\revcomment{\textbf{[R3.1]}\\
+The pros and cons of choreographic programming as opposed to
+process-oriented programming are not elaborated upon very much. I
+understand that flexibility is sacrificed in favour of
+predictability with the advantage of guaranteeing
+correctness-by-construction. What is lost by doing so? And while
+the authors mention in the Introduction that their ``approach can
+be used for a proper subset of distributed systems'', the size of
+this subset and type of systems populating it is not even hinted
+at. The authors only write that ``Some of the case studies
+presented in the PRISM documentation [2] cannot be modeled'' and
+then provide two concrete examples of what cannot be modelled.
+Could the authors state something more general?
+}
+
+\revresponse{ The comment contains two related but distinct asks:
+  (i) characterise more generally the class of systems our
+  framework is intended for, and (ii) state what is lost by
+  adopting a choreographic discipline with respect to a
+  process-oriented formulation. Both are addressed in the revised
+  version, and we apologise that the original reply's ``Added
+  discussion on pages 2 and 25--26'' was too vague and referred to
+  page numbers that shifted in the revised PDF.  The two relevant
+  paragraphs are the following:
+  \begin{itemize}
+  \item \textbf{In Section~1 (Introduction),} a new paragraph
+    characterises the kinds of distributed systems our approach is
+    intended for and explicitly names the kinds it is \emph{not}
+    suited for. This paragraph is tagged \textbf{[R2.2]} in the
+    margin of the revised PDF -- it was added in direct response to
+    Reviewer~2's closely related comment \textbf{[R2.2]} -- and it
+    also serves as the general statement Reviewer~3 asks for here.
+    We cross-reference it to avoid duplicating the text in two
+    places.
+  \item \textbf{In Section~\ref{sec:relwork} (Discussion),} a new
+    paragraph discusses explicitly what is structurally lost when
+    adopting the choreographic discipline: namely, the
+    impossibility of expressing systems based on multiple
+    independently enabled transitions, nondeterministic
+    interleavings, or asynchronous local evolution. This paragraph
+    is tagged \textbf{[R3.1]} in the margin of the revised PDF.
+    Together with the two concrete examples already discussed in
+    the paper (asynchronous leader election; probabilistic
+    broadcast / cyclic server polling), this paragraph provides the
+    general characterisation the reviewer asked for.
+  \end{itemize}
+}
+
+\revchanges{
+  \begin{itemize}
+  \item A new paragraph was added in Section~\ref{sec:relwork}
+    (highlighted in blue, tagged \textbf{[R3.1]}), which reads:
+    \begin{quote}\small
+      A choreography prescribes a single global interaction
+      structure that determines, for each role, a unique enabled
+      action at any control state. This discipline is crucial for
+      correctness-by-construction but also limits the class of
+      systems that can be expressed: models that rely on multiple
+      independently enabled transitions, nondeterministic
+      interleavings, or asynchronous local evolution cannot, in
+      general, be captured by our current framework. The systems
+      supported by our approach are therefore those whose
+      behaviour can be organised around explicitly coordinated
+      interactions with a globally determined branching
+      structure.
+    \end{quote}
+  \item The paragraph tagged \textbf{[R2.2]} in Section~1 (the
+    general characterisation of the class of systems) is also part
+    of the answer to this comment; see the response to
+    \textbf{[R2.2]} above.
+  \end{itemize}
+}
+
+
+
+
+\revcomment{\textbf{[R3.2]}\\
+How does this relate to the notions of implementability and
+realisability as studied for transition systems and (team) automata?
+In the following papers from the literature, a global transition
+system or (team) automaton is given and the main question is whether
+or not there exists a distributed set of local (cooperating,
+synchronously communicating) transition systems or (component)
+automata, whose composition is equivalent or bisimilar to the global
+one.
+\begin{itemize}
+\item I.~Castellani, M.~Mukund, and P.S.~Thiagarajan, Synthesizing
+  Distributed Transition Systems from Global Specifications. In:
+  FSTTCS 1999. LNCS 1738, pp.~219--231. Springer, 1999.
+\item M.~Mukund, From Global Specifications to Distributed
+  Implementations. In: Synthesis and Control of Discrete Event
+  Systems. Springer, 2002.
+\item M.H.~ter Beek, R.~Hennicker, and J.~Proen\c{c}a, Realisability
+  of Global Models of Interaction. In: ICTAC 2023. LNCS 14446,
+  Springer, 2023, pp.~236--255.
+\item M.H.~ter Beek, R.~Hennicker, and J.~Proen\c{c}a, Team Automata:
+  Overview and Roadmap. In: COORDINATION 2024. LNCS 14676, Springer,
+  2024, pp.~161--198.
+\end{itemize}
+}
+
+\revresponse{ We thank the reviewer for the pointer to this line of
+  work, which indeed provides a natural reference frame for positioning
+  the choreographic approach. We added a new paragraph that explicitly
+  relates our setting to the implementability/realisability literature
+  and cites the four references above.  The paragraph appears at the
+  end of the ``Related Work'' part of Section~7 (in the current PDF it
+  falls on page~28, not page~25 as inaccurately stated in our previous
+  reply -- we apologise for the imprecision). In the highlighted
+  revision it is marked in blue with the margin tag \textbf{[R3.2]}.}
+
+\revchanges{ Added the following new paragraph (highlighted in blue and
+  marked \textbf{[R3.2]} in the margin) at the end of the Related Work
+  portion of Section~7, just before ``Discussion and Future Work'':
+  \begin{quote}\small
+    A complementary line of research concerns the implementability
+    and realisability of global specifications, where the central
+    question is whether a given global transition system can be
+    decomposed into synchronously communicating local components
+    whose composition preserves the intended behaviour [Castellani et
+    al.\ 1999; Mukund 2002; ter Beek et al.\ 2023, 2024]. In those
+    settings, the global description is typically unconstrained and
+    substantial effort goes into characterising which behaviours
+    admit a distributed realisation. By contrast, choreographies
+    impose a structured form of global specification in which all
+    interactions are explicitly declared. This discipline ensures
+    that every choreography is directly realisable via projection,
+    but it also restricts the kinds of distributed behaviours that
+    can be expressed, placing our approach within a well-behaved
+    subspace of the broader realisability landscape.
+  \end{quote}
+}
+
+\revcomment{\textbf{[R3.3]}\\
+Finally, during the experimental evaluation, the models generated
+by the authors' approach are only compared to the original PRISM
+benchmarks with respect to certain properties and functionality,
+but not semantically. Could the authors imagine a more thorough
+comparison, e.g., whether or not the models are bisimilar, and why?
+}
+
+\revresponse{ We thank the reviewer for this comment and we
+  apologise that our previous reply pointed to ``the end of
+  Section~5'', which was misleading: the discussion the reviewer may
+  have been looking for is actually located at the \emph{beginning
+  of Section~\ref{sec:bench}} (``Benchmarking''), in the paragraph
+  that introduces the experimental evaluation. That paragraph is
+  now highlighted in blue and tagged \textbf{[R2.18/R3.3]} in the
+  margin of the highlighted revision.
+  \smallskip
+
+  In that paragraph, we make explicit that the criterion of
+  equivalence we adopt in the evaluation is \emph{agreement on the
+  quantitative properties that each benchmark was designed to
+  analyse} (reachability, time-bounded probabilities, expected
+  values), and that we deliberately do \emph{not} aim for
+  bisimilarity or semantic equivalence at the model level. The
+  reason is that our projection targets a structured fragment of
+  PRISM and does not try to reproduce the exact syntactic form or
+  the full range of nondeterminism present in some hand-written
+  PRISM models; bisimilarity would therefore typically fail for
+  reasons that are irrelevant to the benchmarks we care about,
+  whereas the relevant quantitative analyses still agree.
+  \smallskip
+
+  We also note (to avoid confusion with our earlier reply) that the
+  Remark at the end of Section~\ref{sec:proj} is a \emph{different}
+  discussion: it addresses the asymmetry of
+  Theorem~\ref{thm:epp} with respect to projecting-after-reducing
+  and reducing-after-projecting (a point originally raised by
+  Reviewer~1), and it mentions probabilistic bisimulation only as a
+  candidate notion for a future strengthening of that theorem --
+  not as the form of comparison used in the experimental
+  evaluation.}
+
+\revchanges{ The reply for this comment has been corrected to point
+  to the correct paragraph in Section~\ref{sec:bench} (tagged
+  \textbf{[R2.18/R3.3]}). The text of that paragraph is quoted in
+  full under item~\textbf{[R2.18]} in the Reviewer~2 section of
+  this reply. No further changes to the paper body were made for
+  this item beyond those already described under~\textbf{[R2.18]}.
+}
+
+\end{document}
