@@ -27,8 +27,7 @@ following syntax:
 \end{displaymath}
 The syntactic category $C$ denotes choreographic programs. The
 interaction term
-$\nr\rightarrow \{\nr_1,\ldots,\nr_n\}:\,\Sigma\{\lambda_j: x_j=E_j.\
-C_j\}_{j\in J}$ denotes an interaction initiated by module $\nr$ with
+$\interact{\nr}{\nr_1,\ldots,\nr_n}$ denotes an interaction initiated by module $\nr$ with
 modules $\nr_i$'s, with $\nr$ and $\nr_i$'s all distinct. A
 choreography specifies what interaction must be executed next,
 shifting the focus from what can happen to what must happen. When the
@@ -53,13 +52,14 @@ The term $\ifTE {E}{\nr}{C_1}{C_2}$ denotes a system where module
   accordingly.  The term $X$ is a (possibly recursive) procedure call:
   in the semantics, we assume that such procedure names are defined
   separately. Moreover, we assume that such definitions are
-  non-contractive, i.e., we avoid definitions of the form
+  contractive (guarded), i.e., the body of a definition is never
+  itself a procedure call: this excludes definitions such as
   $X\stackrel{\textcolor{sh_keyword}{\mathsf{def}}}{=}X$. The term
   $\CEnd$ denotes the system finishing its computation.
 
   \newmark{R1.11}%
   \begin{asm}\label{ass:0}
-    \new{We assume that every writable choreography is such that, for
+    \new{We assume that every well-formed choreography is such that, for
     every interaction $\interact{\nr}{\nr_1,\ldots,\nr_n}$, all
     updates in each $u_j$ are assignments to variables located at
     $\nr, \nr_1,\ldots,\nr_n$.}
@@ -158,7 +158,7 @@ remainder, we implicitly adopt this program-indexed view.
   \end{displaymath}
   The semantics of $C$ induces a Markov chain with states $(S_0,C)$,
   $(S_1,C')$, and $(S_1,\CEnd)$ such that
-  $C'= \interactBase{\nr}{\nrr}\ \lambda_1: (x'=1);\CEnd$, $S_0(x)=0$,
+  $C'= \interactBase{\nr}{\nrr}\ \lambda_2: (x'=1);\CEnd$, $S_0(x)=0$,
   and $S_1(x)=1$. The chain can be depicted as
   \begin{center}
     \begin{tikzpicture}[ scale=0.8, transform shape, node distance=0cm
@@ -423,9 +423,12 @@ Below, we discuss each of them:
         \right.
       \\
       & \phantom{\mathtt{else}\ }\quad\mathtt{else}\ \CEnd
+      \\
+      & \phantom{\mathtt{else}\ }\mathtt{else}\ \CEnd
     \end{array}
   \end{displaymath}
-  \new{The two formulations are equivalent, with the $\allsynchName$
+  \new{The two formulations are equivalent, up to the evaluation steps
+  of the conditionals, with the $\allsynchName$
   syntax acting as syntactic sugar that provides a structured and
   readable representation of synchronisation. In general, its
   encoding into the core choreographic language requires determining

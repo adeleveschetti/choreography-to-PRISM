@@ -36,7 +36,7 @@ the projection of a choreography.
     \anno{C} ::= 
       \interactl{\nr^{\iota}}a{\nr_1^{\iota_1},\ldots,\nr_n^{\iota_n}}
       \ \mid\ 
-      a:\ifTE{E}{\nr^{\iota}}{\anno{C}_1}{\anno{C}_2}
+      \ifTEl{E}a{\nr^{\iota}}{\anno{C}_1}{\anno{C}_2}
       \ \mid\ 
       X^{a,\sigma}
       \ \mid\ 
@@ -156,7 +156,9 @@ choreography.  Formally, it is defined as:
 
     \toprole_{\nrr}\ ( \interactl{\nr^{\iota}}a{\nr_1^{\iota_1},\ldots,\nr_n^{\iota_n}})
     = \toprole_{\nrr}(\anno C_1)
-    &  \quad (\forall i,j.\
+    &  \quad (\nrr\not\in\{\nr,\nr_1,\ldots,\nr_n\},
+    \\
+    &  \quad\ \forall i,j.\
       \toprole_{\nrr}(\anno C_i)=\toprole_{\nrr}(\anno C_j))
     \\[2mm]
 
@@ -166,7 +168,9 @@ choreography.  Formally, it is defined as:
 
     \toprole_{\nrr}\ ( \ifTEl{E}a{\nr^{\iota}}{\anno C_1}{\anno C_2})
     = \toprole_{\nrr}(\anno C_1)
-    & \qquad (\toprole_{\nrr}(\anno C_1)=\toprole_{\nrr}(\anno C_2))
+    & \quad (\nrr\neq\nr,
+    \\
+    & \quad\ \toprole_{\nrr}(\anno C_1)=\toprole_{\nrr}(\anno C_2))
     \\[2mm]
 
     \toprole_{\nr}\ ( X^{a,\sigma})
@@ -319,16 +323,17 @@ every definition in $\defin$:
   \bigcup_{(X \defrec \anno C_X)\in\defin} \proj(\nrr,\anno C_X)
 \]
 The \emph{projected network} of $\anno C$ is then
-$\mathcal N(\anno C) = \pp_{\nrr\in\anno C}\ \projD(\nrr,\anno C)$,
-where $\pp$ denotes alphabetised parallel composition, in which
-modules synchronise only on shared labels.
+$\mathcal N(\anno C) = \pp_{\nrr}\ \nrr:\projD(\nrr,\anno C)$, where
+$\nrr$ ranges over the modules occurring in $\anno C$ or in $\defin$,
+and $\pp$ denotes alphabetised parallel composition, in which modules
+synchronise only on shared labels.
 
 \begin{exa}\label{example-proj}
   In order to illustrate how our projection works, consider the
   following example, in which we apply the projection to the
   choreography $X$ from Example~\ref{example2}. This yields PRISM
   modules that are slightly different from those presented in
-  Example~\ref{example3}, but which implement the same behaviour.
+  Example~\ref{example3}, but which implement a similar behaviour.
   In Example \ref{example2}, we defined a recursive choreography in
   which module \(\nr\) interacts with module \(\nrr\) through two
   branches. Its annotated form can be written as:
@@ -345,8 +350,9 @@ modules synchronise only on shared labels.
     \end{array}
   \end{displaymath}
   where
-  $\sigma_1,\sigma_2=\sigma[\nr\mapsto\mathsf{fresh}_{\mathsf
-    s},\nrr\mapsto\mathsf{fresh}_{\mathsf s}]$ for some $\sigma$ such
+  $\sigma_i=\sigma[\nr\mapsto\mathsf{fresh}_{\mathsf
+    s},\nrr\mapsto\mathsf{fresh}_{\mathsf s}]$ for $i\in\{1,2\}$ and
+  for some $\sigma$ such
   that $\sigma(\nr)=\iota_1$ and $\sigma(\nrr)=\iota_2$. Our
   projection, as defined in Definition~\ref{def:projCTMC}, when
   applied to a given choreography $X^{d,\sigma'}$ (which essentially
@@ -432,11 +438,14 @@ modules synchronise only on shared labels.
 The projection from Definition~\ref{def:projCTMC} works only with
 rates. In the case of probabilities, we must ensure that the
 probabilities of a branching sum to~1, which is not guaranteed by
-Definition~\ref{def:projCTMC}.
-This is because we cannot enforce both $\nr$ and
-$\{\nr_1,\ldots,\nr_n\}$ to take the same branch according to the
-probability distribution given by the \(\lambda_i\)’s. To address this
-issue, we introduce the following definition instead:
+Definition~\ref{def:projCTMC}, since it generates, for each branch
+$j$, a separate command whose single update carries probability
+$\lambda_j$. Using instead a single command carrying the whole
+distribution would require a single synchronisation label, so that we
+could not enforce both $\nr$ and $\{\nr_1,\ldots,\nr_n\}$ to take the
+same branch according to the probability distribution given by the
+\(\lambda_i\)’s. To address this issue, we introduce the following
+definition instead:
 \begin{defi}[Projection, DTMC]\label{def:projDTMC} Given
   an annotated choreography with probabilities $\anno C$ and a module
   $\nrr$, we define $\proj$ as:
@@ -456,8 +465,9 @@ issue, we introduce the following definition instead:
       \end{array}
     \end{array}
   \end{displaymath}
-  The other cases of the definition are equivalent to those in
-  Definition \ref{def:projCTMC}.
+  The other cases of the definition are as in
+  Definition~\ref{def:projCTMC}, except that in the case $\nrr=\nr_i$
+  the guard is $s_{\nrr}=\iota_i'$.
 \end{defi}
 The main intuition behind the above definition is that module $\nr$
 takes a (probabilistic) internal decision on the $j^{\text{th}}$
@@ -491,15 +501,16 @@ choreography:
 Then, the property of strongly connected is defined below.
 \begin{defi}[Strongly Connected Choreography]
   A choreography $C$ is \emph{strongly connected}, written
-  $\sconnected(C)$, if it satisfies the following conditions:
+  $\sconnected(C)$, if it satisfies the following conditions (the
+  rules are read coinductively):
   \begin{displaymath}\small
     \begin{array}{c}
       \infer {
       \sconnected(\interact{\nr}{\nr_1,\ldots,\nr_n})
       } {
-      \forall j\in J.\ \sconnected(C_j)\ \land\ \hmodules(C_j)\neq\emptyset\Rightarrow
-      \hmodules(C_j)\cap\{\nr, \nr_1,\dots,\nr_n\}\neq\emptyset
-      }      
+      \forall j\in J.\ \sconnected(C_j)\ \land\ \big(\hmodules(C_j)\neq\emptyset\Rightarrow
+      \hmodules(C_j)\cap\{\nr, \nr_1,\dots,\nr_n\}\neq\emptyset\big)
+      }
       \qquad\qquad
       \infer {
       \sconnected(\CEnd)
@@ -510,9 +521,9 @@ Then, the property of strongly connected is defined below.
       \infer {
       \sconnected(\ifTE {E}{\nr}{C_1}{C_2})
       } {
-      \forall j\in \{1,2\}.\ \sconnected(C_j)\ \land\ \hmodules(C_j)
-      \neq\emptyset\Rightarrow \nr\in\hmodules(C_j)
-      }      
+      \forall j\in \{1,2\}.\ \sconnected(C_j)\ \land\ \big(\hmodules(C_j)
+      \neq\emptyset\Rightarrow \nr\in\hmodules(C_j)\big)
+      }
       \qquad\qquad
       \infer {
       \sconnected(X)
@@ -529,10 +540,9 @@ we follow the same approach as that of Carbone et
 al.~\cite{CHY12}. The basic idea is that each interaction shares at
 least one module with the subsequent choreography. In particular, in
 every branch of a probabilistic choice or an if-then-else involving
-modules $\nr_1, \ldots, \nr_n$, the first action (if any) of every
-other module $\nrr$ must be an interaction with one of
-$\nr_1, \ldots, \nr_n$, possibly after unfolding recursive
-calls. Connectedness guarantees a form of causality between
+modules $\nr, \nr_1, \ldots, \nr_n$, the next action (if any) must
+involve one of $\nr, \nr_1, \ldots, \nr_n$, possibly after unfolding
+recursive calls. Connectedness guarantees a form of causality between
 interactions: subsequent interactions between modules always depend on
 previous ones.
 As an example of strongly connected choreography, the choreography
@@ -603,18 +613,18 @@ each module $\nrr$), introduced by the projection.
     By definition of projection, we obtain the following PRISM
     commands.  Module \(\nr\) is projected as:
     \[
-      \left\{\commandBase {a_j} {\ s_{\nrr}\!=\! \iota} {\lambda_j:}
-      \ s_{\nrr}'\!=\! \mathsf{top}_{\nrr}(\anno{C}_j)\ 
-      \&\ \projE {u_j}\nrr\right\}_{j\in J}
-      \,\cup\, \bigcup_{j\in J} \proj (\nrr, \anno{C}_j)
+      \left\{\commandBase {a_j} {\ s_{\nr}\!=\! \iota} {\lambda_j:}
+      \ s_{\nr}'\!=\! \mathsf{top}_{\nr}(\anno{C}_j)\
+      \&\ \projE {u_j}\nr\right\}_{j\in J}
+      \,\cup\, \bigcup_{j\in J} \proj (\nr, \anno{C}_j)
     \]
     Modules \(\nr_i\) are projected as:
     \[
-      \left\{\commandBase {a_j} {\ s_{\nrr}\!=\! \iota_i} {1:\ s_{\nrr}'\!=\!
-      \mathsf{top}_{\nrr}(\anno{C}_j)
+      \left\{\commandBase {a_j} {\ s_{\nr_i}\!=\! \iota_i} {1:\ s_{\nr_i}'\!=\!
+      \mathsf{top}_{\nr_i}(\anno{C}_j)
       }
-      \ \&\ \projE {u_j}\nrr\right\}_{j\in J}
-      \,\cup\, \bigcup_{j\in J} \proj (\role q, \anno{C}_j)
+      \ \&\ \projE {u_j}{\nr_i}\right\}_{j\in J}
+      \,\cup\, \bigcup_{j\in J} \proj (\nr_i, \anno{C}_j)
     \]
     Any other role $\nrr$ is projected as:
     \[
@@ -626,12 +636,12 @@ each module $\nrr$), introduced by the projection.
     choreography above.
     Observe that, since our annotated choreography is obtained from
     $\mathsf{annot}$, the state of the generated CTMC is uniquely
-    identified by the labels $\iota$, $\iota_1$, \dots, $\iota_n$ that
-    can only synchronise on one of the labels $a_j$. Any other command
-    among these modules must be enabled by a different state label.
+    identified by the labels $\iota$, $\iota_1$, \dots, $\iota_n$
+    which, by strong connectedness, can only synchronise on one of the
+    labels $a_j$.
 
     Therefore, the only-if direction of the theorem follows directly
-    by applying rule \textsf{(Interact)}, whose premise is satisfied
+    by applying rule \textsf{(Transition)}, whose premises are satisfied
     by deriving, via rule \textsf{(P$_2$)}, the command:
     \[
       \begin{array}{l}
@@ -771,9 +781,11 @@ modules.
   matched with this two-step transition of its projection.
 
   We also note that no normalisation (see~\S~\ref{sec:prism}) is ever
-  required for projected networks: by uniqueness of state labels and
-  strong connectedness, in every reachable state exactly one (possibly
-  synchronised) command is enabled, and its probabilities sum to~$1$,
+  required for networks projected according to
+  Definition~\ref{def:projDTMC}: by uniqueness of state labels and
+  strong connectedness, in every reachable non-terminal state exactly
+  one (possibly synchronised) command is enabled, and its
+  probabilities sum to~$1$,
   while every other generated command carries probability~$1$.
 \end{rem}
 
@@ -800,8 +812,8 @@ modules.
       \end{array}
       \right.\right)
       \\\\
-      \mathcal N(X^{d,\sigma'})\vdash S_{+}
-      \red{\lambda} S_{+}[s_{\nr}'=\iota_1][s_{\nrr}'=\iota_2]
+      \mathcal N(X^{d,\sigma'})\vdash S_0^{+}
+      \red{1} S_0^{+}[s_{\nr}'=\iota_1][s_{\nrr}'=\iota_2]
     \end{array}
   \end{displaymath}
   Clearly, the projection of the unfolding is strictly contained in

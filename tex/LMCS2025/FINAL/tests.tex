@@ -1,11 +1,12 @@
 \newmark{R2.4}\newid{R2.3}{To evaluate our approach, we implemented the projection
 from choreographies to PRISM in Java, using ANTLR to parse our
 language and automatically generate the corresponding PRISM
-modules. This implementation realises the projection formally defined
-in Section~\ref{sec:proj} and ensures that each benchmark presented
+modules. This implementation follows the projection formally defined
+in Section~\ref{sec:proj} (folding recursive calls into the preceding
+command) and ensures that each benchmark presented
 below is automatically produced from a single global choreography
 specification. The tool thus serves as an executable validation of
-our formal framework: it guarantees that the semantics of the
+our formal framework: it is designed so that the semantics of the
 generated PRISM models coincide with those of the original
 choreographies and provides the basis for the empirical analysis
 reported in this section.}
@@ -13,8 +14,9 @@ reported in this section.}
 In the following, we present an experimental evaluation of our
 language.  The examples highlight two main points: \emph{(i)} the
 choreographic representation is significantly more concise than the
-corresponding PRISM code, and \emph{(ii)} \new{PRISM exhibits
-equivalent behaviour on both the projected and original models}.
+corresponding PRISM code, and \emph{(ii)} \new{in all but one case,
+PRISM exhibits equivalent behaviour on both the projected and
+original models}.
 \newmark{R2.18/R3.3}%
 \new{In this context, ``equivalent behaviour'' refers to agreement on
 the quantitative properties that the original case studies were
@@ -38,7 +40,7 @@ and a modelisation of the dining cryptographers \cite{Cha88}.
 The generated PRISM files are available in our online repository
 \cite{repository}.
 \newmark{R2.19}%
-\new{For the first four benchmarks, PRISM performs exact
+\new{For four of the benchmarks, PRISM performs exact
 probabilistic model checking; for the two larger protocols (Bitcoin
 Proof-of-Work and Hybrid Casper), exact verification is infeasible
 due to state-space size and we resort to PRISM's statistical
@@ -50,10 +52,10 @@ In this modified version of the thinkteam protocol introduced in the earlier sec
  In the first branch, \codechor{User1} increments the variable \codechor{x} by 1, while \codechor{User2} decrements the variable \codechor{y} by 1. Conversely, in the second branch, the roles are reversed, with \codechor{User1} decrementing \codechor{x} and \codechor{User2} incrementing \codechor{y}.
 
  \begin{lstlisting}[style=chor-color,breaklines=true, postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},caption={Choreography for the Modified thinkteam Protocol},captionpos=b,label={ex1-chor}]
-   C0 := CheckOut $\rightarrow$ User1, User2 : (+["1*lambda"] " " "(x=x+1)"  "(y=y-1)"; C1
-                                       	+["1*lambda"]  " " "(x=x-1)"  "(y=y+1)";  C2)
-   C1 :=  CheckOut $\rightarrow$ User1, User2 : (+["1*theta"] ; C0)  
-   C2 :=  CheckOut $\rightarrow$ User1, User2 : (+["1*mu "] ; C1   +["1*mu "] ;  C2)
+   C0 := CheckOut $\rightarrow$ User1, User2 : (+["lambda*1"] " " "(x=x+1)"  "(y=y-1)"; C1
+                                       	+["lambda*1"]  " " "(x=x-1)"  "(y=y+1)";  C2)
+   C1 :=  CheckOut $\rightarrow$ User1, User2 : (+["mu*1"] ; C0)  
+   C2 :=  CheckOut $\rightarrow$ User1, User2 : (+["theta*1"] ; C1   +["theta*1"] ;  C2)
  \end{lstlisting}
 
  Part of the generated PRISM model is reported in Listing \ref{ex1-gen}. 
@@ -65,20 +67,20 @@ rather than reading a single global specification as in the choreographic repres
 \begin{lstlisting}[style=prism-color,caption={Part of the generated PRISM model for the Modified thinkteam Protocol},captionpos=b,label={ex1-gen}]
    module CheckOut
       CheckOut_STATE : [0..2] init 0;
-      [MMHOL]  (CheckOut_STATE=0) -> 1 :  (CheckOut_STATE'=1);
-      [FFSFW]  (CheckOut_STATE=0) -> 1 :  (CheckOut_STATE'=2);
-      [ULCFN]  (CheckOut_STATE=1) -> 1 : (CheckOut_STATE'=0);
-      [YHHWG]  (CheckOut_STATE=2) -> 1 : (CheckOut_STATE'=1);
-      [XWSAO]  (CheckOut_STATE=2) -> 1 : (CheckOut_STATE'=2);
+      [MMHOL]  (CheckOut_STATE=0) -> lambda :  (CheckOut_STATE'=1);
+      [FFSFW]  (CheckOut_STATE=0) -> lambda :  (CheckOut_STATE'=2);
+      [ULCFN]  (CheckOut_STATE=1) -> mu : (CheckOut_STATE'=0);
+      [YHHWG]  (CheckOut_STATE=2) -> theta : (CheckOut_STATE'=1);
+      [XWSAO]  (CheckOut_STATE=2) -> theta : (CheckOut_STATE'=2);
    endmodule
 $\ldots$
    module User2
       User2_STATE : [0..2] init 0;
-      [MMHOL]  (User2_STATE=0) -> lambda : (y'=y-1)&(User2_STATE'=1);
-      [FFSFW]  (User2_STATE=0) -> lambda : (y'=y+1)&(User2_STATE'=2);
-      [ULCFN]  (User2_STATE=1) -> mu : (User2_STATE'=0);
-      [YHHWG]  (User2_STATE=2) -> theta : (User2_STATE'=1);
-      [XWSAO]  (User2_STATE=2) -> theta : (User2_STATE'=2);
+      [MMHOL]  (User2_STATE=0) -> 1 : (y'=y-1)&(User2_STATE'=1);
+      [FFSFW]  (User2_STATE=0) -> 1 : (y'=y+1)&(User2_STATE'=2);
+      [ULCFN]  (User2_STATE=1) -> 1 : (User2_STATE'=0);
+      [YHHWG]  (User2_STATE=2) -> 1 : (User2_STATE'=1);
+      [XWSAO]  (User2_STATE=2) -> 1 : (User2_STATE'=2);
 endmodule
 \end{lstlisting}
 
@@ -166,7 +168,7 @@ In \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, the authors extended the 
    \caption{Probability that a block is created within $T$ time units, $0\leq T\leq 1000$}
    \label{ex3-res}
 \end{figure}
-The PRISM model we created is more verbose than the one in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, mainly because we consistently generate the else branch for if-then-else expressions, resulting in a higher number of instructions. Despite this, the experimental results for block creation probability within a bound time $T$ (Figure \ref{ex3-res}) remain unaffected. Any discrepancies between the original and generated models are due to inherent variations in the simulation-based calculation of probability.
+The PRISM model we created is more verbose than the one in \cite{DBLP:journals/concurrency/BistarelliNGLMV23}, mainly because we consistently generate the else branch for if-then-else expressions, resulting in a higher number of instructions. Despite this, the experimental results for block creation probability within a bound time $T$ (Figure \ref{ex3-res}) remain close. Any discrepancies between the original and generated models are due to inherent variations in the simulation-based calculation of probability.
 
 
 \paragraph{Hybrid Casper Protocol.}
@@ -216,12 +218,12 @@ For illustration, we considered the case where $ N=4 $ and $ K=8 $, following th
 \begin{lstlisting}[style=chor-color,caption={Choreography for the Synchronous Leader Election Protocol},captionpos=b,label={leader-code}]
    Election := allSynch{ j in [1...4]
                      Process[j] : (true -> "1/K" : "(p[i]'=0)&(v[i]'=0)&(u[i]'=true)"+ 
-                                 $\ldots$ + "1/K" : "(p[i]'=0)&(v[i]'=7)&(u[i]'=true)") }.
+                                 $\ldots$ + "1/K" : "(p[i]'=7)&(v[i]'=7)&(u[i]'=true)") }.
       allSynch{
          Counter : ("(c<N-1)" -> "1" : "(c'=c+1)")
          Counter : ("(c=N-1)" -> "1" : "(c'=c)")
-         Process1 : ("u1&!(p1=2)&(c<N-1)" -> "1" : "(u1'=true)&(v1'=v2)")
-         Process1 : ("u1&(p1=2)&(c<N-1)" -> "1" : "(u1'=false)&(v1'=v2)&(p1'=0)")
+         Process1 : ("u1&!(p1=v2)&(c<N-1)" -> "1" : "(u1'=true)&(v1'=v2)")
+         Process1 : ("u1&(p1=v2)&(c<N-1)" -> "1" : "(u1'=false)&(v1'=v2)&(p1'=0)")
          Process1 : ("!u1&(c<N-1)" -> "1" : "(u1'=false)&(v1'=v2)")
          Process1 : ("u1&!(p1=v2)&(c=N-1)" -> "1" : "(u1'=true)&(v1'=0)&(p1'=0)")
          Process1 : ("u1&(p1=v2)&(c=N-1)" -> "1" : "(u1'=false)&(v1'=0)&(p1'=0)")
@@ -243,7 +245,7 @@ For illustration, we considered the case where $ N=4 $ and $ K=8 $, following th
    structure of the two representations. 
    Specifically, the generated model adopts a simplified modular design by 
    grouping transitions more compactly in certain modules, such as the \codeprism{Counter} module. 
-   This simplification reduces redundancy and may improve readability without altering the correctness or outcomes of the protocol. Importantly, this structural refinement does not impact the behaviour of the system, as the generated model remains functionally equivalent to the original PRISM repository model, as displayed in Figure \ref{leader-res}.
+   This simplification reduces redundancy and may improve readability without altering the correctness or outcomes of the protocol. Importantly, this structural refinement does not impact the behaviour of the system, as the generated model remains functionally equivalent to the original PRISM repository model, as displayed in Figure \ref{leader-res}, where the two curves coincide for $L\geq 3$.
    \begin{figure}[h]
       \centering
       \includegraphics[scale=0.3]{leader.pdf}	
@@ -268,13 +270,13 @@ For illustration, we considered the case where $ N=4 $ and $ K=8 $, following th
       [BKKXT](Process1 = 0) ->  1/K:(p1'=0)&(v1'=0)&(u1'=true)&(Process1'=1) 
                                  + 1/K:(p1'=1)&(v1'=1)&(u1'=true)&(Process1'=1) 
                                  + 1/K:(p1'=2)&(v1'=2)&(u1'=true)&(Process1'=1) 
-                                 + 1/K:(p1'=2)&(v1'=3)&(u1'=true)&(Process1'=1) 
-                                 + 1/K:(p1'=2)&(v1'=4)&(u1'=true)&(Process1'=1) 
-                                 + 1/K:(p1'=2)&(v1'=5)&(u1'=true)&(Process1'=1) 
-                                 + 1/K:(p1'=2)&(v1'=6)&(u1'=true)&(Process1'=1) 
-                                 + 1/K:(p1'=2)&(v1'=7)&(u1'=true)&(Process1'=1);
-      [YQBDX] (Process1 = 1)&u1&!(p1=2)&(c<N-1) -> 1 : (u1'=true)&(v1'=v2)&(Process1'=2);
-      [YQBDX] (Process1 = 1)&u1&(p1=2)&(c<N-1) -> 1 : (u1'=false)&(v1'=v2)&(p1'=0)&(Process1'=2);
+                                 + 1/K:(p1'=3)&(v1'=3)&(u1'=true)&(Process1'=1) 
+                                 + 1/K:(p1'=4)&(v1'=4)&(u1'=true)&(Process1'=1) 
+                                 + 1/K:(p1'=5)&(v1'=5)&(u1'=true)&(Process1'=1) 
+                                 + 1/K:(p1'=6)&(v1'=6)&(u1'=true)&(Process1'=1) 
+                                 + 1/K:(p1'=7)&(v1'=7)&(u1'=true)&(Process1'=1);
+      [YQBDX] (Process1 = 1)&u1&!(p1=v2)&(c<N-1) -> 1 : (u1'=true)&(v1'=v2)&(Process1'=2);
+      [YQBDX] (Process1 = 1)&u1&(p1=v2)&(c<N-1) -> 1 : (u1'=false)&(v1'=v2)&(p1'=0)&(Process1'=2);
       [YQBDX] (Process1 = 1)&!u1&(c<N-1) -> 1 : (u1'=false)&(v1'=v2)&(Process1'=2);
       [YQBDX] (Process1 = 1)&u1&!(p1=v2)&(c=N-1) -> 1 : (u1'=true)&(v1'=0)&(p1'=0)&(Process1'=2);
       [YQBDX] (Process1 = 1)&u1&(p1=v2)&(c=N-1) -> 1 : (u1'=false)&(v1'=0)&(p1'=0)&(Process1'=2);
@@ -296,7 +298,7 @@ to include it in the paper to demonstrate the limitations of our approach,
 specifically in cases where the abstraction may not fully capture the behaviour of the original protocol. 
 This allows us to analyze and understand where discrepancies may arise, 
 highlighting areas for improvement in the model generation process.
-This case study explores the dining cryptographers protocol introduced by Chaum~\cite{Cha88}, which allows a group of $N$ cryptographers to determine whether their master has anonymously paid for dinner without revealing the identity of the payer. The protocol functions by having each cryptographer flip a fair coin and share the outcome with their right-hand neighbour. Each cryptographer then publicly declares whether the two coins they observe—one they flipped and one received from the left—match or differ. If a cryptographer is the payer, they deliberately alter their response. The final count of $\lq\lq$agree$\lq\lq$ statements follows a predictable pattern: for an odd number of cryptographers, an odd count indicates that one of them paid, while an even count means the master paid. This pattern reverses for an even number of participants.
+This case study explores the dining cryptographers protocol introduced by Chaum~\cite{Cha88}, which allows a group of $N$ cryptographers to determine whether their master has anonymously paid for dinner without revealing the identity of the payer. The protocol functions by having each cryptographer flip a fair coin and share the outcome with their right-hand neighbour. Each cryptographer then publicly declares whether the two coins they observe—one they flipped and one received from the left—match or differ. If a cryptographer is the payer, they deliberately alter their response. The final count of ``differ'' statements follows a predictable pattern: an odd count indicates that one of the cryptographers paid, while an even count means the master paid.
 
 
 To illustrate the protocol, we examined the case where $N=3$, using the PRISM model\footnote{\url{https://www.prismmodelchecker.org/casestudies/dining_cryptographers.php}} reported in the official repository. We expressed this scenario in our choreographic language, as shown in Listing~\ref{dc-code}.
@@ -390,13 +392,9 @@ control discipline absent in such models.}
 \new{To complement the qualitative discussion of the benchmarks, we
 provide a quantitative comparison of the size of each choreography
 and the corresponding generated PRISM models. Table~\ref{tab:codesize}
-summarises the number of lines of code (LoC) taken from the listings
-shown in this article. The measurements reflect only the fragments
-printed in the paper and exclude all variable declarations in both
-the choreography and the corresponding PRISM models. Moreover,
-complete PRISM models are typically larger, as each interaction from
-the global choreography expands into multiple module-specific
-commands.}
+summarises the number of lines of code (LoC) of each choreography and
+of the corresponding generated PRISM model, excluding variable
+declarations.}
 
 
 \begin{table}[h]

@@ -32,7 +32,7 @@ documentation\footnote{\url{https://www.prismmodelchecker.org/casestudies/thinkt
   based on the granted or denied access to the file with corresponding
   rates \new{\codeprism{lambda}, \codeprism{mu}, and
   \codeprism{theta}}\newmark{R2.6}; the \codeprism{CheckOut} process
-  transitions between two states (0 or 1):
+  transitions between two states (0 or 1).
 
 In PRISM, modules are individual processes whose behaviour is
 specified by a collection of commands, in a declarative fashion.
@@ -56,8 +56,8 @@ which makes the communication pattern directly visible.
 \begin{lstlisting}[style=chor-color,% caption={Example of Listing \ref{example1} in our choreographic language},captionpos=b,
   frame=none, label={lst:chorexample}]
   C0 := CheckOut $\rightarrow$ User : (+["1*lambda"] ; C1	 +["1*lambda"]  ;  C2)
-  C1 := CheckOut $\rightarrow$ User : (+["1*theta"] ; C0)  
-  C2 := CheckOut $\rightarrow$ User : (+["1*mu"] ; C1   +["1*mu"] ;  C2)
+  C1 := CheckOut $\rightarrow$ User : (+["1*mu"] ; C0)  
+  C2 := CheckOut $\rightarrow$ User : (+["1*theta"] ; C1   +["1*theta"] ;  C2)
 \end{lstlisting}
 In this model, we define three distinct choreographies, namely
 \codechor{C0}, \codechor{C1}, and \codechor{C2}. These choreographies
